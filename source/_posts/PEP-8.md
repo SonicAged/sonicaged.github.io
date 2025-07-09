@@ -1,9 +1,15 @@
 ---
 title: PEP 8
 date: 2025-07-08 11:41:30
-categories:
+tags:
+  - CDR
   - Python
+  - PEP
+  - 闲🉐无聊
+  - 大概率没用
+categories:
   - CDR-pre
+  - Python
 ---
 
 # Style Guide for Python Code

@@ -1,6 +1,11 @@
 ---
 title: CDR Input Data Analysis
 date: 2025-07-09 21:24:58
+tags:
+  - CDR
+  - Data Analysis
+  - 可能有点用
+  - 还没写完捏
 categories:
   - CDR-pre
   - Data Analysis
