@@ -19,16 +19,22 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒">
+    <meta name="description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning📄 Lee 等 - 2018 - Attention Models in Graphs A Survey">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Attention">
 <meta property="og:url" content="http://example.com/2025/07/10/Attention/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒">
+<meta property="og:description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning📄 Lee 等 - 2018 - Attention Models in Graphs A Survey">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-10T11:56:23.000Z">
-<meta property="article:modified_time" content="2025-07-10T11:56:23.551Z">
+<meta property="article:modified_time" content="2025-07-10T12:06:21.023Z">
 <meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="model">
+<meta property="article:tag" content="Basic">
+<meta property="article:tag" content="还没写完捏">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="graph theory">
 <meta name="twitter:card" content="summary">
 
 
@@ -228,8 +234,22 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2025-07-10 19:56:23" itemprop="dateCreated datePublished" datetime="2025-07-10T19:56:23+08:00">2025-07-10</time>
+      <time title="Created: 2025-07-10 19:56:23 / Modified: 20:06:21" itemprop="dateCreated datePublished" datetime="2025-07-10T19:56:23+08:00">2025-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
     </span>
 
   
@@ -241,7 +261,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+    <div class="post-body" itemprop="articleBody"><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a><br><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
+<hr>
+
     </div>
 
     
@@ -249,6 +271,14 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/model/" rel="tag"># model</a>
+              <a href="/tags/Basic/" rel="tag"># Basic</a>
+              <a href="/tags/%E8%BF%98%E6%B2%A1%E5%86%99%E5%AE%8C%E6%8D%8F/" rel="tag"># 还没写完捏</a>
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/graph-theory/" rel="tag"># graph theory</a>
+          </div>
 
         
 
