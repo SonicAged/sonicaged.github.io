@@ -18,4 +18,3 @@ git push -u origin main
 
 echo.
 echo Done!
-pause 
