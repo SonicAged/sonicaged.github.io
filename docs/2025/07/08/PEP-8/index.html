@@ -27,7 +27,7 @@
 <meta property="og:description" content="Style Guide for Python Code PEP8 是 Python 社群共通的風格指南，一開始是 Python 之父 Guido van Rossum 自己的撰碼風格，慢慢後來演變至今，目的在於幫助開發者寫出可讀性高且風格一致的程式。許多開源計畫，例如 Django 、 OpenStack 等都是以 PEP8 為基礎再加上自己的風格建議。  这篇博客主要是为了在搭建自己的模型之前学">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-08T03:41:30.000Z">
-<meta property="article:modified_time" content="2025-07-10T07:57:11.320Z">
+<meta property="article:modified_time" content="2025-07-10T13:36:28.887Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="Python">
@@ -241,7 +241,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-10 15:57:11" itemprop="dateModified" datetime="2025-07-10T15:57:11+08:00">2025-07-10</time>
+      <time title="Modified: 2025-07-10 21:36:28" itemprop="dateModified" datetime="2025-07-10T21:36:28+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -271,6 +271,8 @@
 </blockquote>
 <p>这篇博客主要是为了在搭建自己的模型之前学习一下一些统一的规范是做的记录 <del>主要是目前读到的大多数论文的源码目命名没有规律</del> ，以加强之后搭建模型时代码的可读性</p>
 <p>另外，本博客只展示本人不太熟悉的捏</p>
+<span id="more"></span>
+
 <h2 id="代码布局"><a href="#代码布局" class="headerlink" title="代码布局"></a>代码布局</h2><h3 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h3><p><strong>每个缩进级别使用 4 个空格</strong></p>
 <p>对于比较臭长的函数，可以使用<em>悬挂缩进</em></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Aligned with opening delimiter.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">                         var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add 4 spaces (an extra level of indentation) to distinguish arguments from the rest.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">        var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">        var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hanging indents should add a level.</span></span><br><span class="line">foo = long_function_name(</span><br><span class="line">    var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br></pre></td></tr></table></figure>

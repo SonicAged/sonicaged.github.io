@@ -214,7 +214,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/07/10/Attention/" class="post-title-link" itemprop="url">Attention</a>
+          <a href="/2025/07/10/Attention/" class="post-title-link" itemprop="url">Attention in Graph</a>
         </h2>
 
         <div class="post-meta-container">
@@ -226,7 +226,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-07-10 19:56:23 / Modified: 20:06:21" itemprop="dateCreated datePublished" datetime="2025-07-10T19:56:23+08:00">2025-07-10</time>
+      <time title="Created: 2025-07-10 19:56:23 / Modified: 21:36:00" itemprop="dateCreated datePublished" datetime="2025-07-10T19:56:23+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,9 +252,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a><br><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
-<hr>
-
+          <h1 id="🌟-图中的注意力机制"><a href="#🌟-图中的注意力机制" class="headerlink" title="🌟 图中的注意力机制"></a>🌟 图中的注意力机制</h1><blockquote>
+<p>注意力机制在图神经网络中扮演着越来越重要的角色。本文将深入探讨注意力机制在图结构数据处理中的应用，从基础概念到实际实现。</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/10/Attention/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -310,7 +318,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-07-10 15:36:46 / Modified: 17:23:02" itemprop="dateCreated datePublished" datetime="2025-07-10T15:36:46+08:00">2025-07-10</time>
+      <time title="Created: 2025-07-10 15:36:46 / Modified: 21:36:17" itemprop="dateCreated datePublished" datetime="2025-07-10T15:36:46+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -339,123 +347,14 @@
           <h1 id="🌟-GNN-与-GCN"><a href="#🌟-GNN-与-GCN" class="headerlink" title="🌟 GNN 与 GCN"></a>🌟 GNN 与 GCN</h1><blockquote>
 <p>图神经网络（Graph Neural Networks, GNN）和图卷积网络（Graph Convolutional Networks, GCN）是处理图数据的强大工具。本文将从理论到实践，全面介绍这两种重要的深度学习模型。</p>
 </blockquote>
-<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如CNN、RNN）在处理欧几里得空间中的数据表现出色，但对于图这种非欧几里得结构的数据却显得力不从心。GNN和GCN的出现，为我们提供了处理图数据的有力工具。</p>
-<p>而在DRP领域，由于涉及到大量的Embedding，GCN现在几乎已经成为了必不可少的模块。</p>
-<p>但在开始各种各样的奇形怪状的GCN之前，了解GNN和GCN本身的实现仍然是非常必要的。<del>于鼠鼠而言</del>大致有以下理由：</p>
-<ol>
-<li>部分抽象的基于GCN的模块第三方库不一定支持</li>
-<li>由于反应表示数据的不平衡，我们可以构建的模型的层数是非常有限的（因为会过平滑）。因此对层内的改造就显得非常必要了。而这一切的前提便是理解原理捏</li>
-</ol>
-<p>在这里强烈建议去看一下<a target="_blank" rel="noopener" href="https://distill.pub/">Distill</a>的两篇有关图神经网络的博客，非常易懂。</p>
-<hr>
-<h2 id="📚-理论基础"><a href="#📚-理论基础" class="headerlink" title="📚 理论基础"></a>📚 理论基础</h2><h3 id="图的基本概念"><a href="#图的基本概念" class="headerlink" title="图的基本概念"></a>图的基本概念</h3><p>在开始之前，我们需要理解图的基本表示：</p>
-<ul>
-<li>图 $G &#x3D; (V, E)$，其中 $V$ 是节点集合，$E$ 是边集合</li>
-<li>邻接矩阵 $A \in \mathbb{R}^{n \times n}$</li>
-<li>度矩阵 $D &#x3D; diag(d_1,…,d_n)$，其中 $d_i &#x3D; \sum_j A_{ij}$</li>
-<li>节点特征矩阵 $X \in \mathbb{R}^{n \times d}$</li>
-</ul>
-<h3 id="GNN框架"><a href="#GNN框架" class="headerlink" title="GNN框架"></a>GNN框架</h3><p>GNN的基本框架遵循消息传递范式（Message Passing Neural Network, MPNN），可以用以下数学公式表示：</p>
-<ol>
-<li><p><strong>消息传递阶段</strong>（Message Passing）：</p>
-<p>对于节点 $v$，从其邻居节点 $u \in \mathcal{N}(v)$ 收集信息：</p>
-<p>$$m_v^{(l)} &#x3D; \sum_{u \in \mathcal{N}(v)} M_l(h_v^{(l-1)}, h_u^{(l-1)}, e_{uv})$$</p>
-<p>其中：</p>
-<ul>
-<li>$h_v^{(l-1)}$ 是节点 $v$ 在第 $l-1$ 层的特征</li>
-<li>$e_{uv}$ 是边 $(u,v)$ 的特征</li>
-<li>$M_l$ 是可学习的消息函数</li>
-</ul>
-</li>
-<li><p><strong>消息聚合阶段</strong>（Aggregation）：</p>
-<p>将收集到的消息进行聚合：</p>
-<p>$$a_v^{(l)} &#x3D; AGG({m_v^{(l)} | u \in \mathcal{N}(v)})$$</p>
-<p>常见的聚合函数包括：</p>
-<ul>
-<li>求和：$AGG_{sum} &#x3D; \sum_{u \in \mathcal{N}(v)} m_u$</li>
-<li>平均：$AGG_{mean} &#x3D; \frac{1}{|\mathcal{N}(v)|} \sum_{u \in \mathcal{N}(v)} m_u$</li>
-<li>最大：$AGG_{max} &#x3D; max_{u \in \mathcal{N}(v)} m_u$</li>
-</ul>
-</li>
-<li><p><strong>节点更新阶段</strong>（Update）：</p>
-<p>更新节点的表示：</p>
-<p>$$h_v^{(l)} &#x3D; U_l(h_v^{(l-1)}, a_v^{(l)})$$</p>
-<p>其中 $U_l$ 是可学习的更新函数，通常是MLP或其他神经网络。</p>
-</li>
-</ol>
-<h3 id="GCN实现"><a href="#GCN实现" class="headerlink" title="GCN实现"></a>GCN实现</h3><h4 id="拉普拉斯矩阵-🔍"><a href="#拉普拉斯矩阵-🔍" class="headerlink" title="拉普拉斯矩阵 🔍"></a>拉普拉斯矩阵 🔍</h4><p>拉普拉斯矩阵是图信号处理中的核心概念，有多种形式：</p>
-<ol>
-<li><p><strong>组合拉普拉斯矩阵</strong>：$L &#x3D; D - A$</p>
-</li>
-<li><p><strong>标准化拉普拉斯矩阵</strong>：$L_{sym} &#x3D; D^{-\frac{1}{2}}LD^{-\frac{1}{2}} &#x3D; I - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$</p>
-</li>
-<li><p><strong>随机游走拉普拉斯矩阵</strong>：$L_{rw} &#x3D; D^{-1}L &#x3D; I - D^{-1}A$</p>
-</li>
-</ol>
-<p>拉普拉斯矩阵的特性：</p>
-<ul>
-<li>对称性：$L &#x3D; L^T$</li>
-<li>半正定性：所有特征值非负</li>
-<li>最小特征值为0，对应的特征向量是常数向量</li>
-<li>特征值的重数对应图的连通分量数</li>
-</ul>
-<h4 id="从传统卷积到图卷积-🔄"><a href="#从传统卷积到图卷积-🔄" class="headerlink" title="从传统卷积到图卷积 🔄"></a>从传统卷积到图卷积 🔄</h4><h5 id="传统卷积回顾"><a href="#传统卷积回顾" class="headerlink" title="传统卷积回顾"></a>传统卷积回顾</h5><p>在欧几里得空间中，卷积操作定义为：</p>
-<p>$$(f * g)(p) &#x3D; \sum_{q \in \mathcal{N}(p)} f(q) \cdot g(p-q)$$</p>
-<p>这里的关键特点是：</p>
-<ul>
-<li>平移不变性</li>
-<li>局部性</li>
-<li>参数共享</li>
-</ul>
-<h5 id="图上的卷积定义"><a href="#图上的卷积定义" class="headerlink" title="图上的卷积定义"></a>图上的卷积定义</h5><p>在图域中，我们需要重新定义这些特性：</p>
-<ol>
-<li><p><strong>空间域卷积</strong>：<br>$$h_v &#x3D; \sum_{u \in \mathcal{N}(v)} W(e_{u,v})h_u$$<br>其中 $W(e_{u,v})$ 是边的权重函数</p>
-</li>
-<li><p><strong>谱域卷积</strong>：<br>$$g_\theta * x &#x3D; Ug_\theta U^T x$$<br>其中 $U$ 是拉普拉斯矩阵的特征向量矩阵</p>
-</li>
-</ol>
-<h4 id="GCN的数学推导-⚙️"><a href="#GCN的数学推导-⚙️" class="headerlink" title="GCN的数学推导 ⚙️"></a>GCN的数学推导 ⚙️</h4><p>Kipf &amp; Welling提出的GCN模型中，单层传播规则为：</p>
-<p>$$H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})$$</p>
-<p>其中：</p>
-<ul>
-<li>$\tilde{A} &#x3D; A + I_N$ 是添加了自环的邻接矩阵</li>
-<li>$\tilde{D}<em>{ii} &#x3D; \sum_j \tilde{A}</em>{ij}$ 是对应的度矩阵</li>
-<li>$H^{(l)}$ 是第 $l$ 层的激活值</li>
-<li>$W^{(l)}$ 是可学习的权重矩阵</li>
-<li>$\sigma$ 是非线性激活函数</li>
-</ul>
-<p><del>一些自己的理解</del></p>
-<ol>
-<li>引入$L_{sym} &#x3D; \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
-<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
-<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
-</ul>
-</li>
-<li>特征变换：$H^{(l)}W^{(l)}$</li>
-<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
-<li>非线性变换：$\sigma(\cdot)$</li>
-</ol>
-<hr>
-<h2 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h2><p>基于这个理论框架的简单实现如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">message_passing</span>(<span class="params">nodes, edges</span>):</span><br><span class="line">    messages = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> edge <span class="keyword">in</span> edges:</span><br><span class="line">        src, dst = edge</span><br><span class="line">        msg = compute_message(nodes[src], nodes[dst])</span><br><span class="line">        messages.setdefault(dst, []).append(msg)</span><br><span class="line">    <span class="keyword">return</span> messages</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aggregate_messages</span>(<span class="params">messages</span>):</span><br><span class="line">    aggregated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, msgs <span class="keyword">in</span> messages.items():</span><br><span class="line">        aggregated[node] = <span class="built_in">sum</span>(msgs) / <span class="built_in">len</span>(msgs)  <span class="comment"># 平均聚合</span></span><br><span class="line">    <span class="keyword">return</span> aggregated</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update_nodes</span>(<span class="params">nodes, aggregated</span>):</span><br><span class="line">    updated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, agg_msg <span class="keyword">in</span> aggregated.items():</span><br><span class="line">        updated[node] = nodes[node] + agg_msg  <span class="comment"># 残差连接</span></span><br><span class="line">    <span class="keyword">return</span> updated</span><br></pre></td></tr></table></figure>
-
-<h3 id="PyTorch-Geometric实现-🚀"><a href="#PyTorch-Geometric实现-🚀" class="headerlink" title="PyTorch Geometric实现 🚀"></a>PyTorch Geometric实现 🚀</h3><blockquote>
-<p>本节代码基于 PyTorch 2.1.0 和 PyTorch Geometric 2.4.0 版本</p>
-</blockquote>
-<p>使用PyTorch Geometric库的GCN实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GCNConv</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_features, num_classes</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.conv1 = GCNConv(num_features, <span class="number">16</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = GCNConv(<span class="number">16</span>, num_classes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, edge_index</span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.conv1(x, edge_index)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = F.dropout(x, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.conv2(x, edge_index)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="原生PyTorch实现-🔧"><a href="#原生PyTorch实现-🔧" class="headerlink" title="原生PyTorch实现 🔧"></a>原生PyTorch实现 🔧</h3><blockquote>
-<p>本节代码基于 PyTorch 2.1.0、NumPy 1.24.0 和 SciPy 1.11.0 版本</p>
-</blockquote>
-<p>不使用PyG，我们可以手动实现GCN：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> scipy.sparse <span class="keyword">as</span> sp</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCNLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCNLayer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.FloatTensor(in_features, out_features))</span><br><span class="line">        <span class="variable language_">self</span>.reset_parameters()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reset_parameters</span>(<span class="params">self</span>):</span><br><span class="line">        nn.init.kaiming_uniform_(<span class="variable language_">self</span>.W)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment"># adj: 归一化的邻接矩阵</span></span><br><span class="line">        support = torch.mm(x, <span class="variable language_">self</span>.W)</span><br><span class="line">        output = torch.sparse.mm(adj, support)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, nfeat, nhid, nclass, dropout</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.gc1 = GCNLayer(nfeat, nhid)</span><br><span class="line">        <span class="variable language_">self</span>.gc2 = GCNLayer(nhid, nclass)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.relu(<span class="variable language_">self</span>.gc1(x, adj))</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.gc2(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize_adj</span>(<span class="params">adj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;归一化邻接矩阵&quot;&quot;&quot;</span></span><br><span class="line">    adj = sp.coo_matrix(adj)</span><br><span class="line">    rowsum = np.array(adj.<span class="built_in">sum</span>(<span class="number">1</span>))</span><br><span class="line">    d_inv_sqrt = np.power(rowsum, -<span class="number">0.5</span>).flatten()</span><br><span class="line">    d_inv_sqrt[np.isinf(d_inv_sqrt)] = <span class="number">0.</span></span><br><span class="line">    d_mat_inv_sqrt = sp.diags(d_inv_sqrt)</span><br><span class="line">    <span class="keyword">return</span> adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p><del>Building</del></p>
-<h2 id="🎮-应用场景"><a href="#🎮-应用场景" class="headerlink" title="🎮 应用场景"></a>🎮 应用场景</h2><h2 id="🔧-优化与改进"><a href="#🔧-优化与改进" class="headerlink" title="🔧 优化与改进"></a>🔧 优化与改进</h2><h2 id="🎯-总结与展望"><a href="#🎯-总结与展望" class="headerlink" title="🎯 总结与展望"></a>🎯 总结与展望</h2><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a><br><a href="https://pytorch-geometric.readthedocs.io/" target="_blank">PyTorch Geometric 官方文档</a><br><a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a><br><a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a><br><a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">知乎：图卷积网络（GCN）入门详解</a><br><a href="https://github.com/tkipf/gcn" target="_blank">GCN 论文官方代码（GitHub）</a></p>
-<hr>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/10/GNN-and-GCN/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -517,7 +416,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-10 17:23:14" itemprop="dateModified" datetime="2025-07-10T17:23:14+08:00">2025-07-10</time>
+      <time title="Modified: 2025-07-10 21:36:11" itemprop="dateModified" datetime="2025-07-10T21:36:11+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -544,344 +443,14 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
-<h2 id="CDR-Cancer-Drug-Response"><a href="#CDR-Cancer-Drug-Response" class="headerlink" title="CDR &#x3D; Cancer Drug Response"></a>CDR &#x3D; Cancer Drug Response</h2><p>我们的数据源有三种：</p>
-<ul>
-<li><em>Cancer Representations</em>（癌症特征的表示）</li>
-<li><em>Representations of Drug Compounds</em>（药物特征的表示）</li>
-<li><em>Representations of Treatment Response</em>（治疗响应的表示）</li>
-</ul>
-<p>接下来会按顺序进行说明</p>
-<hr>
-<h3 id="Cancer-Representations"><a href="#Cancer-Representations" class="headerlink" title="Cancer Representations"></a>Cancer Representations</h3><p>癌症的特征是多组学的 <del>这不是理所应当吗</del></p>
-<h4 id="多组学类型"><a href="#多组学类型" class="headerlink" title="多组学类型"></a>多组学类型</h4><p>通常基于以下四类组学数据：</p>
-<ul>
-<li><p>基因组（Genomic）</p>
-<ul>
-<li>突变（Mutation）：体细胞突变（如单核苷酸变异 SNVs）可能驱动癌症进展，并影响药物靶点。</li>
-<li>拷贝数变异（CNV）：基因拷贝数的增加或缺失可能影响药物敏感性（如 HER2 扩增与曲妥珠单抗疗效相关）。</li>
-</ul>
-</li>
-<li><p>转录组（Transcriptomic）</p>
-<ul>
-<li>基因表达（Gene Expression）：通过微阵列或 RNA 测序（RNA-Seq）量化基因的 mRNA 水平。例如，高表达的耐药基因可能预示治疗失败。</li>
-</ul>
-</li>
-<li><p>表观组（Epigenomic）</p>
-<ul>
-<li>DNA 甲基化（Methylation）：启动子区域的甲基化可能沉默抑癌基因，影响药物反应。</li>
-</ul>
-</li>
-<li><p>蛋白质组（Proteomic）</p>
-<ul>
-<li>蛋白质表达（RPPA 等）：直接测量蛋白质丰度（如激酶活性），更接近功能表型。</li>
-</ul>
-</li>
-</ul>
-<p>对于同一种组学数据，他们被表示成一组 <strong>维数相同的向量</strong></p>
-<h4 id="预处理与整合"><a href="#预处理与整合" class="headerlink" title="预处理与整合"></a>预处理与整合</h4><ol>
-<li>数据预处理</li>
-</ol>
-<ul>
-<li>包括标准化（normalization）、批次效应校正（batch effect correction）和质量控制（QC）。例如，RNA-Seq 数据需通过 RPKM 或 TPM 标准化。</li>
-</ul>
-<ol start="2">
-<li>多组学整合方法 ：<ul>
-<li>早期整合（Early Integration）：直接拼接不同组学特征为单一向量，但可能因维度灾难（curse of dimensionality）导致过拟合。</li>
-<li>晚期整合（Late Integration）：通过独立子网络处理每组学数据（如 CNN 处理突变，GNN 处理表达数据），再融合特征。例如，MOLI 模型通过三重损失函数整合多组学数据，显著提升跨癌症模型的泛化能力。</li>
-</ul>
-</li>
-</ol>
-<h4 id="基因特征具有优势及新兴趋势"><a href="#基因特征具有优势及新兴趋势" class="headerlink" title="基因特征具有优势及新兴趋势"></a>基因特征具有优势及新兴趋势</h4><blockquote>
-<p>2014 年 NCI-DREAM 挑战赛表明， 基因表达数据在预测乳腺癌细胞系药物敏感性时最具预测力（优于突变或 CNV）。因此，约 90%的 DRP 模型使用基因表达（单独或联合其他组学）<br><img src="/img/CDR-data-analysis/gene.png" alt="gene" width="50%"></p>
-</blockquote>
-<h5 id="新兴趋势"><a href="#新兴趋势" class="headerlink" title="新兴趋势"></a>新兴趋势</h5><ol>
-<li><strong>结构生物学整合</strong>：如利用蛋白质-蛋白质相互作用（PPI）网络（STRING 数据库）或通路信息（GSEA）构建生物网络，增强模型可解释性。</li>
-<li><strong>图神经网络（GNN）</strong>：将基因视为节点、相互作用为边，学习拓扑特征（如 GraOmicDRP 模型）。</li>
-</ol>
-<hr>
-<h3 id="Representations-of-Drug-Compounds"><a href="#Representations-of-Drug-Compounds" class="headerlink" title="Representations of Drug Compounds"></a>Representations of Drug Compounds</h3><p>对药物的表示主要分为三种，一般只选取其中的一种 <del>虽然也有选用几种的 <strong>创新</strong> 方式</del>。值得一提的是，在选定药物的表示方式后，之后的特征工程的方式目前来看非常的统一。接下来一一说明每一种表示方式。</p>
-<h4 id="SMILES（简化分子输入行条目系统）"><a href="#SMILES（简化分子输入行条目系统）" class="headerlink" title="SMILES（简化分子输入行条目系统）"></a>SMILES（简化分子输入行条目系统）</h4><ol>
-<li><em>定义</em>：SMILES 是一种<strong>线性字符串</strong>表示法，通过符号编码分子结构（如<code>CCO</code>表示乙醇）。</li>
-<li><em>优势</em>：<ul>
-<li>易于存储和处理，广泛用于化学信息学工具（如 RDKit）。</li>
-<li>可直接用于序列模型（如 RNN、Transformer）或通过预处理转换为其他表示（如图结构）。</li>
-</ul>
-</li>
-</ol>
-<h4 id="分子指纹（Fingerprints-FPs）和描述符（Descriptors）"><a href="#分子指纹（Fingerprints-FPs）和描述符（Descriptors）" class="headerlink" title="分子指纹（Fingerprints, FPs）和描述符（Descriptors）"></a>分子指纹（Fingerprints, FPs）和描述符（Descriptors）</h4><ol>
-<li><p>分子指纹</p>
-<ul>
-<li><em>定义</em>：<strong>二进制向量</strong>，表示分子中是否存在特定子结构（如药效团或官能团）。</li>
-<li><em>常用类型</em>：<ul>
-<li><strong>Morgan 指纹（ECFP）</strong>：基于原子邻域的圆形拓扑指纹，长度通常为 512 或 1024 位。</li>
-<li><strong>RDKit 指纹</strong>：开源工具生成的二进制指纹。</li>
-</ul>
-</li>
-<li><em>优势</em>：固定长度，适合传统机器学习模型（如随机森林）。</li>
-</ul>
-</li>
-<li><p>分子描述符</p>
-<ul>
-<li><em>定义</em>：<strong>数值向量</strong>，编码物理化学性质（如分子量、疏水性、极性表面积等）。</li>
-<li><em>工具</em>：PaDEL、Mordred、Dragon 等软件可自动计算数百至数千个描述符。</li>
-</ul>
-</li>
-</ol>
-<h4 id="图结构表示（Graph-based-Representations）"><a href="#图结构表示（Graph-based-Representations）" class="headerlink" title="图结构表示（Graph-based Representations）"></a>图结构表示（Graph-based Representations）</h4><ol>
-<li><em>定义</em> ：将分子表示为<strong>图</strong>，其中原子为<strong>节点</strong>，化学键为<strong>边</strong>，节点和边可附加属性（如原子类型、键类型）。</li>
-<li><em>优势</em> ：<ul>
-<li>更自然地表征分子拓扑结构，适合图神经网络（GNN）。</li>
-<li>可捕捉局部和全局分子特征（如官能团相互作用）。</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="Representations-of-Treatment-Response"><a href="#Representations-of-Treatment-Response" class="headerlink" title="Representations of Treatment Response"></a>Representations of Treatment Response</h3><p>从构造模型的角度出发，这是 DRP 的核心数据源</p>
-<ul>
-<li>它决定了模型最后完成的<strong>任务类型</strong>：训练连续值的<strong>回归任务</strong>和训练离散值的<strong>分类任务</strong></li>
-<li>他的数据质量很大程度上决定了模型的结果的优劣，即对该数据源对模型的好坏影响很大</li>
-</ul>
-<p>此外，很少有从数据分析的角度出发分析这个数据源的文献，于是在这里给出简要的说明</p>
-<h4 id="连续值表示（Continuous-Measures）"><a href="#连续值表示（Continuous-Measures）" class="headerlink" title="连续值表示（Continuous Measures）"></a>连续值表示（Continuous Measures）</h4><ol>
-<li><p><strong>IC50</strong></p>
-<ul>
-<li>半数抑制浓度，即抑制 50%细胞活力所需的药物浓度。</li>
-<li><em>优势</em>：直观反映药物效力，广泛用于回归模型（如预测 IC50 的数值）。</li>
-<li><em>局限性</em>：仅反映单一浓度点的效果，可能忽略剂量-反应曲线的整体形状。</li>
-</ul>
-</li>
-<li><p><strong>AUC&#x2F;AAC</strong></p>
-<ul>
-<li>剂量-反应曲线下面积（Area Under the Curve）或曲线上面积（Activity Area）。</li>
-<li><em>优势</em>：全局度量，综合所有浓度点的效果，对噪声更鲁棒。</li>
-<li><em>应用</em>：如 DeepCDR 等模型使用 AUC 作为回归目标，实证表明其泛化性优于 IC50。</li>
-</ul>
-</li>
-</ol>
-<h4 id="分类表示（Categorical-Measures）"><a href="#分类表示（Categorical-Measures）" class="headerlink" title="分类表示（Categorical Measures）"></a>分类表示（Categorical Measures）</h4><ol>
-<li><p><strong>二分类（敏感&#x2F;耐药）</strong></p>
-<ul>
-<li>通过阈值（如瀑布算法、LOBICO）将连续反应（如 IC50）转化为离散标签。</li>
-<li><em>优势</em>：更贴近临床决策需求（如选择敏感药物）。</li>
-<li><em>示例</em>：Sharifi-Noghabi et al. (2021) 使用二分类训练深度神经网络，预测患者肿瘤的敏感性。</li>
-</ul>
-</li>
-<li><p><strong>多分类</strong></p>
-<ul>
-<li>如低&#x2F;中&#x2F;高反应性，适用于更细粒度的临床分级。</li>
-</ul>
-</li>
-</ol>
-<h4 id="排序表示（Ranking）"><a href="#排序表示（Ranking）" class="headerlink" title="排序表示（Ranking）"></a>排序表示（Ranking）</h4><ol>
-<li><p><em>目标</em></p>
-<ul>
-<li>为个性化治疗推荐药物排序（如 Top-k 最有效药物）。</li>
-</ul>
-</li>
-<li><p><em>方法</em></p>
-<ul>
-<li>Prasse et al. (2022)：将 IC50 转化为相关性分数，设计可微排序损失函数。</li>
-<li>PPORank：利用强化学习动态优化排序，适应新增数据。</li>
-</ul>
-</li>
-<li><p><em>优势</em></p>
-<ul>
-<li>直接支持临床优先级排序，优于传统回归或分类。</li>
-</ul>
-</li>
-</ol>
-<h4 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h4><p>由于本人大概率会做个分类模型，所以会将主要分析的是<strong>分类表示</strong>的数据在<strong>图神经网络</strong>中比较重视的几个指标，这里分析 <em>CCLE</em> 和 <em>GDSC</em> 两个数据集在选用主流阈值选取方法之后的表示。</p>
-<p>直接先看结果捏（这里画了两个小图）</p>
-<ul>
-<li>CCLE</li>
-</ul>
-<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_ccle.png" alt="CCLE" style="max-width: 100%; height: auto;">
-
-<ul>
-<li>GDSC</li>
-</ul>
-<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
-
-<p>
-  👉 <a href="/code/data_analysis/visualize_graph_analysis.py" target="_blank">查看用于生成上述图表的本地 Python 脚本：visualize_graph_analysis.py</a>
-</p>
-
-<h5 id="🔍-关键数据对比"><a href="#🔍-关键数据对比" class="headerlink" title="🔍 关键数据对比"></a>🔍 关键数据对比</h5><table>
-<thead>
-<tr>
-<th>特征</th>
-<th>CCLE</th>
-<th>GDSC</th>
-<th>倍数差异</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>数据规模</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>总节点数</td>
-<td>341</td>
-<td>783</td>
-<td>2.3×</td>
-</tr>
-<tr>
-<td>第一类节点</td>
-<td>317</td>
-<td>561</td>
-<td>1.8×</td>
-</tr>
-<tr>
-<td>第二类节点</td>
-<td>24</td>
-<td>222</td>
-<td>9.3×</td>
-</tr>
-<tr>
-<td>总边数</td>
-<td>7,307</td>
-<td>100,572</td>
-<td>13.8×</td>
-</tr>
-<tr>
-<td><strong>图结构</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>密度</td>
-<td>0.9604</td>
-<td>0.8075</td>
-<td>0.84×</td>
-</tr>
-<tr>
-<td>稀疏性</td>
-<td>0.0396</td>
-<td>0.1925</td>
-<td>4.9×</td>
-</tr>
-<tr>
-<td>平均度</td>
-<td>42.86</td>
-<td>256.89</td>
-<td>6.0×</td>
-</tr>
-<tr>
-<td>图直径</td>
-<td>3</td>
-<td>4</td>
-<td>1.3×</td>
-</tr>
-<tr>
-<td><strong>边分布</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>正边数量</td>
-<td>1,375</td>
-<td>11,591</td>
-<td>8.4×</td>
-</tr>
-<tr>
-<td>负边数量</td>
-<td>5,932</td>
-<td>88,981</td>
-<td>15.0×</td>
-</tr>
-<tr>
-<td>正边比例</td>
-<td>18.8%</td>
-<td>11.5%</td>
-<td>0.61×</td>
-</tr>
-<tr>
-<td>正负边比例</td>
-<td>1:4.3</td>
-<td>1:7.7</td>
-<td>1.8× 不平衡</td>
-</tr>
-</tbody></table>
-<h5 id="📊-GNN-训练挑战分析"><a href="#📊-GNN-训练挑战分析" class="headerlink" title="📊 GNN 训练挑战分析"></a>📊 GNN 训练挑战分析</h5><h6 id="过平滑风险评估"><a href="#过平滑风险评估" class="headerlink" title="过平滑风险评估"></a>过平滑风险评估</h6><ul>
-<li><strong>CCLE</strong>: ⚠️ 高风险 (平均度 42.86)</li>
-<li><strong>GDSC</strong>: 🚨 极高风险 (平均度 256.89)</li>
-</ul>
-<h6 id="样本不平衡程度"><a href="#样本不平衡程度" class="headerlink" title="样本不平衡程度"></a>样本不平衡程度</h6><ul>
-<li><strong>CCLE</strong>: 正负边比例 1:4.3 (中等不平衡)</li>
-<li><strong>GDSC</strong>: 正负边比例 1:7.7 (严重不平衡)</li>
-</ul>
-<h6 id="邻居相似度分析"><a href="#邻居相似度分析" class="headerlink" title="邻居相似度分析"></a>邻居相似度分析</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 邻居重叠度对比</span></span><br><span class="line">CCLE_similarity = &#123;</span><br><span class="line">    <span class="string">&quot;第一类节点&quot;</span>: <span class="number">0.9374</span>,  <span class="comment"># 高度相似</span></span><br><span class="line">    <span class="string">&quot;第二类节点&quot;</span>: <span class="number">0.9274</span>   <span class="comment"># 高度相似</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GDSC_similarity = &#123;</span><br><span class="line">    <span class="string">&quot;第一类节点&quot;</span>: <span class="number">0.7659</span>,  <span class="comment"># 中等相似</span></span><br><span class="line">    <span class="string">&quot;第二类节点&quot;</span>: <span class="number">0.7143</span>   <span class="comment"># 中等相似</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>结论</strong>: CCLE 结构更均匀但多样性不足，GDSC 结构更复杂但多样性更好</p>
-<h5 id="🎯-GNN-架构建议对比"><a href="#🎯-GNN-架构建议对比" class="headerlink" title="🎯 GNN 架构建议对比"></a>🎯 GNN 架构建议对比</h5><h6 id="推荐架构优先级"><a href="#推荐架构优先级" class="headerlink" title="推荐架构优先级"></a>推荐架构优先级</h6><ul>
-<li><p>CCLE 推荐架构</p>
-<ol>
-<li><strong>Bipartite GNN</strong> + Signed GCN</li>
-<li><strong>简单异构图 GNN</strong> (HetGNN)</li>
-<li><strong>标准 GCN</strong> + 强正则化</li>
-</ol>
-</li>
-<li><p>GDSC 推荐架构</p>
-<ol>
-<li><strong>采样型 GNN</strong> (GraphSAINT, FastGCN) + SGCN</li>
-<li><strong>大规模异构图 GNN</strong> (HGT, RGCN)</li>
-<li><strong>图 Transformer</strong> (处理复杂结构)</li>
-</ol>
-</li>
-</ul>
-<h6 id="具体参数建议"><a href="#具体参数建议" class="headerlink" title="具体参数建议"></a>具体参数建议</h6><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>CCLE</th>
-<th>GDSC</th>
-<th>原因</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>网络深度</strong></td>
-<td>2-3 层</td>
-<td>严格 2 层</td>
-<td>GDSC 过平滑风险更高</td>
-</tr>
-<tr>
-<td><strong>隐藏维度</strong></td>
-<td>64-128</td>
-<td>128-256</td>
-<td>GDSC 需要更大容量</td>
-</tr>
-<tr>
-<td><strong>Dropout 率</strong></td>
-<td>0.3-0.5</td>
-<td>0.5-0.7</td>
-<td>GDSC 需要更强正则化</td>
-</tr>
-<tr>
-<td><strong>学习率</strong></td>
-<td>0.001-0.01</td>
-<td>0.0001-0.001</td>
-<td>GDSC 需要更保守训练</td>
-</tr>
-<tr>
-<td><strong>批次大小</strong></td>
-<td>32-64 个子图</td>
-<td>16-32 个子图</td>
-<td>GDSC 内存限制</td>
-</tr>
-<tr>
-<td><strong>采样策略</strong></td>
-<td>可选</td>
-<td>必须</td>
-<td>GDSC 无法全图训练</td>
-</tr>
-</tbody></table>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Partin - Deep learning methods for drug response prediction in cancer Predominant and emerging trends.pdf" target="_blank">📄 Partin - Deep learning methods for drug response prediction in cancer Predominant and emerging trends</a></p>
-<hr>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/09/CDR-data-analysis/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -943,7 +512,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-10 15:57:11" itemprop="dateModified" datetime="2025-07-10T15:57:11+08:00">2025-07-10</time>
+      <time title="Modified: 2025-07-10 21:36:28" itemprop="dateModified" datetime="2025-07-10T21:36:28+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -974,66 +543,14 @@
 </blockquote>
 <p>这篇博客主要是为了在搭建自己的模型之前学习一下一些统一的规范是做的记录 <del>主要是目前读到的大多数论文的源码目命名没有规律</del> ，以加强之后搭建模型时代码的可读性</p>
 <p>另外，本博客只展示本人不太熟悉的捏</p>
-<h2 id="代码布局"><a href="#代码布局" class="headerlink" title="代码布局"></a>代码布局</h2><h3 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h3><p><strong>每个缩进级别使用 4 个空格</strong></p>
-<p>对于比较臭长的函数，可以使用<em>悬挂缩进</em></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Aligned with opening delimiter.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">                         var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add 4 spaces (an extra level of indentation) to distinguish arguments from the rest.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">        var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">        var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hanging indents should add a level.</span></span><br><span class="line">foo = long_function_name(</span><br><span class="line">    var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Arguments on first line forbidden when not using vertical alignment.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Further indentation required as indentation is not distinguishable.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">    var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">    var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br></pre></td></tr></table></figure>
-
-<p>优先使用 <em>Tabs</em> 进行缩进， <em>Tabs</em> 和 <em>Spaces</em> 不能混用</p>
-<h3 id="每行最多字符数量"><a href="#每行最多字符数量" class="headerlink" title="每行最多字符数量"></a>每行最多字符数量</h3><p><strong>79</strong> 个</p>
-<p>合理使用反斜杠</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/you/want/to/read&#x27;</span>) <span class="keyword">as</span> file_1, \</span><br><span class="line">     <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/being/written&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> file_2:</span><br><span class="line">    file_2.write(file_1.read())</span><br></pre></td></tr></table></figure>
-
-<h3 id="二元运算符之前换行"><a href="#二元运算符之前换行" class="headerlink" title="二元运算符之前换行"></a>二元运算符之前换行</h3><p>为了更好的确定该 <code>item</code> 采取的是什么运算</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"><span class="comment"># operators sit far away from their operands</span></span><br><span class="line">income = (gross_wages +</span><br><span class="line">          taxable_interest +</span><br><span class="line">          (dividends - qualified_dividends) -</span><br><span class="line">          ira_deduction -</span><br><span class="line">          student_loan_interest)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"><span class="comment"># easy to match operators with operands</span></span><br><span class="line">income = (gross_wages</span><br><span class="line">          + taxable_interest</span><br><span class="line">          + (dividends - qualified_dividends)</span><br><span class="line">          - ira_deduction</span><br><span class="line">          - student_loan_interest)</span><br></pre></td></tr></table></figure>
-
-<h3 id="如何空行（Blank-Lines）"><a href="#如何空行（Blank-Lines）" class="headerlink" title="如何空行（Blank Lines）"></a>如何空行（Blank Lines）</h3><p><em>顶级函数</em> 和 <em>类</em> 之间空 <strong>2</strong> 行</p>
-<p><em>类中的函数</em> 空 <strong>1</strong> 行</p>
-<h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><ul>
-<li>通常每一个库 <strong>单独一行</strong>（也有例外）</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> Popen, PIPE</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>按以下顺序分组，每组间空行<ol>
-<li><strong>标准库</strong>导入</li>
-<li><strong>相关第三方库</strong>导入</li>
-<li><strong>特定的本地库</strong>导入</li>
-</ol>
-</li>
-</ul>
-<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><blockquote>
-<p>Comments that contradict the code are worse than no comments.</p>
-</blockquote>
-<h2 id="命名约定"><a href="#命名约定" class="headerlink" title="命名约定"></a>命名约定</h2><ol>
-<li><p><strong>类名</strong> 用 <strong>大驼峰</strong></p>
-</li>
-<li><p><strong>函数名</strong> 用 <strong>小写下划线</strong></p>
-</li>
-<li><p>关于 <em>下划线</em></p>
-<ul>
-<li><em>单下划线</em> 用于占位</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(random.randint(<span class="number">1</span>, <span class="number">100</span>))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><em>单下划线</em> 用于变量前表示该变量为 <strong>弱私有</strong> （语义上的 private），能调用但不能 import</li>
-<li><em>双下划线</em> 用于变量前表示该变量为 <strong>强私有</strong> （实际上也不能调用<del>实现方式是重名名</del>）<br>为了更好的说明这两点，给出以下两个测试程序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_private_vars.py</span></span><br><span class="line"><span class="string">This file is used to test the private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.public_var = <span class="string">&quot;这是公有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>._weak_private = <span class="string">&quot;这是弱私有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.__strong_private = <span class="string">&quot;这是强私有变量&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">print_all_vars</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;从内部访问:&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;公有变量: <span class="subst">&#123;self.public_var&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;弱私有变量: <span class="subst">&#123;self._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;强私有变量: <span class="subst">&#123;self.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建测试实例</span></span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 测试从类内部访问（通过方法）</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试1: 从类内部访问所有变量 ===&quot;</span>)</span><br><span class="line">test.print_all_vars()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 测试从外部直接访问</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试2: 从外部访问变量 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)  <span class="comment"># 能访问，但IDE会警告</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 测试名称改写机制</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试3: 验证强私有变量的名称改写机制 ===&quot;</span>)</span><br><span class="line"><span class="comment"># 实际上Python会将__strong_private改写为_TestClass__strong_private</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 测试导入行为</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n=== 测试4: 创建第二个文件并尝试导入 ===&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请创建 test_import.py 并运行来测试导入行为&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_import.py</span></span><br><span class="line"><span class="string">This file is used to test the import of private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> test_private_vars <span class="keyword">import</span> TestClass</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 测试导入后的访问行为 ===&quot;</span>)</span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问公有变量</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问弱私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能访问弱私有变量，但这违反了Python的约定&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试通过名称改写访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写名称访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>以下是运行 <code>python test_private_vars.py</code> 的结果</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试4: 创建第二个文件并尝试导入 ===</span><br><span class="line">请创建 test_import.py 并运行来测试导入行为</span><br></pre></td></tr></table></figure>
-
-<p>以下是运行 <code>python test_import.py</code> 的结果</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">=== 测试导入后的访问行为 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">注意：虽然能访问弱私有变量，但这违反了Python的约定</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法</span><br></pre></td></tr></table></figure></li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/08/PEP-8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
