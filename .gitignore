@@ -3,3 +3,5 @@
 node_modules/
 .deploy*/
 __pycache__/
+.prettierignore
+.vscode/

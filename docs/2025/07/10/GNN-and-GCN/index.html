@@ -19,24 +19,33 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="A blog about Shit and more Shit">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Sonic Aged&#39;s Blog">
-<meta property="og:url" content="http://example.com/tags/%E9%97%B2%F0%9F%89%90%E6%97%A0%E8%81%8A/index.html">
+    <meta name="description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKSPyTorch Geometric 官方文档Distill: A Gentle Introduction to Graph Neural NetworksDistill: Understanding Con">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What Is GNN and GCN ?">
+<meta property="og:url" content="http://example.com/2025/07/10/GNN-and-GCN/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="A blog about Shit and more Shit">
+<meta property="og:description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKSPyTorch Geometric 官方文档Distill: A Gentle Introduction to Graph Neural NetworksDistill: Understanding Con">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-10T07:36:46.000Z">
+<meta property="article:modified_time" content="2025-07-10T07:58:16.446Z">
 <meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="graph theory">
+<meta property="article:tag" content="model">
+<meta property="article:tag" content="embedding">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="Basic">
+<meta property="article:tag" content="还没写完捏">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/tags/%E9%97%B2%F0%9F%89%90%E6%97%A0%E8%81%8A/">
+<link rel="canonical" href="http://example.com/2025/07/10/GNN-and-GCN/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":"","permalink":"","path":"tags/闲🉐无聊/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/07/10/GNN-and-GCN/","path":"2025/07/10/GNN-and-GCN/","title":"What Is GNN and GCN ?"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Tag: 闲🉐无聊 | Sonic Aged's Blog</title>
+<title>What Is GNN and GCN ? | Sonic Aged's Blog</title>
   
 
 
@@ -124,7 +133,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -137,6 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">1.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -186,50 +196,110 @@
 
     </div>
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">闲🉐无聊
-          <small>Tag</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/10/GNN-and-GCN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="What Is GNN and GCN ? | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          What Is GNN and GCN ?
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2025</span>
+
+      <time title="Created: 2025-07-10 15:36:46 / Modified: 15:58:16" itemprop="dateCreated datePublished" datetime="2025-07-10T15:36:46+08:00">2025-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a><br><a href="https://pytorch-geometric.readthedocs.io/" target="_blank">PyTorch Geometric 官方文档</a><br><a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a><br><a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a><br><a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">知乎：图卷积网络（GCN）入门详解</a><br><a href="https://github.com/tkipf/gcn" target="_blank">GCN 论文官方代码（GitHub）</a></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2025-07-08T11:41:30+08:00"
-              content="2025-07-08">
-          07-08
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2025/07/08/PEP-8/" itemprop="url">
-            <span itemprop="name">PEP 8</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/graph-theory/" rel="tag"># graph theory</a>
+              <a href="/tags/model/" rel="tag"># model</a>
+              <a href="/tags/embedding/" rel="tag"># embedding</a>
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/Basic/" rel="tag"># Basic</a>
+              <a href="/tags/%E8%BF%98%E6%B2%A1%E5%86%99%E5%AE%8C%E6%8D%8F/" rel="tag"># 还没写完捏</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/09/CDR-data-analysis/" rel="prev" title="CDR Input Data Analysis">
+                  <i class="fa fa-angle-left"></i> CDR Input Data Analysis
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>

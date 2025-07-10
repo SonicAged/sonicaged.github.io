@@ -8,7 +8,7 @@ tags:
   - 闲🉐无聊
   - 大概率没用
 categories:
-  - CDR-pre
+  - CDR
   - Python
 ---
 

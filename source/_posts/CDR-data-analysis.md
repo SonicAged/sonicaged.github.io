@@ -5,8 +5,9 @@ tags:
   - CDR
   - Data Analysis
   - 可能有点用
+  - graph theory
 categories:
-  - CDR-pre
+  - CDR
   - Data Analysis
 ---
 
