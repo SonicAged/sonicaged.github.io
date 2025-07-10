@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKSPyTorch Geometric 官方文档Distill: A Gentle Introduction to Graph Neural NetworksDistill: Understanding Con">
+    <meta name="description" content="🌟 GNN 与 GCN 图神经网络（Graph Neural Networks, GNN）和图卷积网络（Graph Convolutional Networks, GCN）是处理图数据的强大工具。本文将从理论到实践，全面介绍这两种重要的深度学习模型。  🎯 引言在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如CNN、RNN）在处理欧几里得空间中的数据表现出色，但">
 <meta property="og:type" content="article">
 <meta property="og:title" content="What Is GNN and GCN ?">
 <meta property="og:url" content="http://example.com/2025/07/10/GNN-and-GCN/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKSPyTorch Geometric 官方文档Distill: A Gentle Introduction to Graph Neural NetworksDistill: Understanding Con">
+<meta property="og:description" content="🌟 GNN 与 GCN 图神经网络（Graph Neural Networks, GNN）和图卷积网络（Graph Convolutional Networks, GCN）是处理图数据的强大工具。本文将从理论到实践，全面介绍这两种重要的深度学习模型。  🎯 引言在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如CNN、RNN）在处理欧几里得空间中的数据表现出色，但">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-10T07:36:46.000Z">
-<meta property="article:modified_time" content="2025-07-10T07:58:16.446Z">
+<meta property="article:modified_time" content="2025-07-10T09:13:43.699Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="graph theory">
@@ -146,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">1.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%8C%9F-GNN-%E4%B8%8E-GCN"><span class="nav-number">1.</span> <span class="nav-text">🌟 GNN 与 GCN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%E5%BC%95%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">🎯 引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="nav-number">1.2.</span> <span class="nav-text">📚 理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">图的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNN%E6%A1%86%E6%9E%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">GNN框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GCN%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.3.</span> <span class="nav-text">GCN实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%89%E6%99%AE%E6%8B%89%E6%96%AF%E7%9F%A9%E9%98%B5-%F0%9F%94%8D"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">拉普拉斯矩阵 🔍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8E%E4%BC%A0%E7%BB%9F%E5%8D%B7%E7%A7%AF%E5%88%B0%E5%9B%BE%E5%8D%B7%E7%A7%AF-%F0%9F%94%84"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">从传统卷积到图卷积 🔄</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%8D%B7%E7%A7%AF%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.2.3.2.1.</span> <span class="nav-text">传统卷积回顾</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9B%BE%E4%B8%8A%E7%9A%84%E5%8D%B7%E7%A7%AF%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.3.2.2.</span> <span class="nav-text">图上的卷积定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GCN%E7%9A%84%E6%95%B0%E5%AD%A6%E6%8E%A8%E5%AF%BC-%E2%9A%99%EF%B8%8F"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">GCN的数学推导 ⚙️</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%92%BB-%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">1.3.</span> <span class="nav-text">💻 实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PyTorch-Geometric%E5%AE%9E%E7%8E%B0-%F0%9F%9A%80"><span class="nav-number">1.3.1.</span> <span class="nav-text">PyTorch Geometric实现 🚀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%94%9FPyTorch%E5%AE%9E%E7%8E%B0-%F0%9F%94%A7"><span class="nav-number">1.3.2.</span> <span class="nav-text">原生PyTorch实现 🔧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AE-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.4.</span> <span class="nav-text">🎮 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%94%A7-%E4%BC%98%E5%8C%96%E4%B8%8E%E6%94%B9%E8%BF%9B"><span class="nav-number">1.5.</span> <span class="nav-text">🔧 优化与改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%8E%AF-%E6%80%BB%E7%BB%93%E4%B8%8E%E5%B1%95%E6%9C%9B"><span class="nav-number">1.6.</span> <span class="nav-text">🎯 总结与展望</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -237,7 +237,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-07-10 15:36:46 / Modified: 15:58:16" itemprop="dateCreated datePublished" datetime="2025-07-10T15:36:46+08:00">2025-07-10</time>
+      <time title="Created: 2025-07-10 15:36:46 / Modified: 17:13:43" itemprop="dateCreated datePublished" datetime="2025-07-10T15:36:46+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -262,7 +262,124 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a><br><a href="https://pytorch-geometric.readthedocs.io/" target="_blank">PyTorch Geometric 官方文档</a><br><a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a><br><a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a><br><a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">知乎：图卷积网络（GCN）入门详解</a><br><a href="https://github.com/tkipf/gcn" target="_blank">GCN 论文官方代码（GitHub）</a></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="🌟-GNN-与-GCN"><a href="#🌟-GNN-与-GCN" class="headerlink" title="🌟 GNN 与 GCN"></a>🌟 GNN 与 GCN</h1><blockquote>
+<p>图神经网络（Graph Neural Networks, GNN）和图卷积网络（Graph Convolutional Networks, GCN）是处理图数据的强大工具。本文将从理论到实践，全面介绍这两种重要的深度学习模型。</p>
+</blockquote>
+<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如CNN、RNN）在处理欧几里得空间中的数据表现出色，但对于图这种非欧几里得结构的数据却显得力不从心。GNN和GCN的出现，为我们提供了处理图数据的有力工具。</p>
+<p>而在DRP领域，由于涉及到大量的Embedding，GCN现在几乎已经成为了必不可少的模块。</p>
+<p>但在开始各种各样的奇形怪状的GCN之前，了解GNN和GCN本身的实现仍然是非常必要的。<del>于鼠鼠而言</del>大致有以下理由：</p>
+<ol>
+<li>部分抽象的基于GCN的模块第三方库不一定支持</li>
+<li>由于反应表示数据的不平衡，我们可以构建的模型的层数是非常有限的（因为会过平滑）。因此对层内的改造就显得非常必要了。而这一切的前提便是理解原理捏</li>
+</ol>
+<p>在这里强烈建议去看一下<a target="_blank" rel="noopener" href="https://distill.pub/">Distill</a>的两篇有关图神经网络的博客，非常易懂。</p>
+<hr>
+<h2 id="📚-理论基础"><a href="#📚-理论基础" class="headerlink" title="📚 理论基础"></a>📚 理论基础</h2><h3 id="图的基本概念"><a href="#图的基本概念" class="headerlink" title="图的基本概念"></a>图的基本概念</h3><p>在开始之前，我们需要理解图的基本表示：</p>
+<ul>
+<li>图 $G &#x3D; (V, E)$，其中 $V$ 是节点集合，$E$ 是边集合</li>
+<li>邻接矩阵 $A \in \mathbb{R}^{n \times n}$</li>
+<li>度矩阵 $D &#x3D; diag(d_1,…,d_n)$，其中 $d_i &#x3D; \sum_j A_{ij}$</li>
+<li>节点特征矩阵 $X \in \mathbb{R}^{n \times d}$</li>
+</ul>
+<h3 id="GNN框架"><a href="#GNN框架" class="headerlink" title="GNN框架"></a>GNN框架</h3><p>GNN的基本框架遵循消息传递范式（Message Passing Neural Network, MPNN），可以用以下数学公式表示：</p>
+<ol>
+<li><p><strong>消息传递阶段</strong>（Message Passing）：</p>
+<p>对于节点 $v$，从其邻居节点 $u \in \mathcal{N}(v)$ 收集信息：</p>
+<p>$$m_v^{(l)} &#x3D; \sum_{u \in \mathcal{N}(v)} M_l(h_v^{(l-1)}, h_u^{(l-1)}, e_{uv})$$</p>
+<p>其中：</p>
+<ul>
+<li>$h_v^{(l-1)}$ 是节点 $v$ 在第 $l-1$ 层的特征</li>
+<li>$e_{uv}$ 是边 $(u,v)$ 的特征</li>
+<li>$M_l$ 是可学习的消息函数</li>
+</ul>
+</li>
+<li><p><strong>消息聚合阶段</strong>（Aggregation）：</p>
+<p>将收集到的消息进行聚合：</p>
+<p>$$a_v^{(l)} &#x3D; AGG({m_v^{(l)} | u \in \mathcal{N}(v)})$$</p>
+<p>常见的聚合函数包括：</p>
+<ul>
+<li>求和：$AGG_{sum} &#x3D; \sum_{u \in \mathcal{N}(v)} m_u$</li>
+<li>平均：$AGG_{mean} &#x3D; \frac{1}{|\mathcal{N}(v)|} \sum_{u \in \mathcal{N}(v)} m_u$</li>
+<li>最大：$AGG_{max} &#x3D; max_{u \in \mathcal{N}(v)} m_u$</li>
+</ul>
+</li>
+<li><p><strong>节点更新阶段</strong>（Update）：</p>
+<p>更新节点的表示：</p>
+<p>$$h_v^{(l)} &#x3D; U_l(h_v^{(l-1)}, a_v^{(l)})$$</p>
+<p>其中 $U_l$ 是可学习的更新函数，通常是MLP或其他神经网络。</p>
+</li>
+</ol>
+<h3 id="GCN实现"><a href="#GCN实现" class="headerlink" title="GCN实现"></a>GCN实现</h3><h4 id="拉普拉斯矩阵-🔍"><a href="#拉普拉斯矩阵-🔍" class="headerlink" title="拉普拉斯矩阵 🔍"></a>拉普拉斯矩阵 🔍</h4><p>拉普拉斯矩阵是图信号处理中的核心概念，有多种形式：</p>
+<ol>
+<li><p><strong>组合拉普拉斯矩阵</strong>：$L &#x3D; D - A$</p>
+</li>
+<li><p><strong>标准化拉普拉斯矩阵</strong>：$L_{sym} &#x3D; D^{-\frac{1}{2}}LD^{-\frac{1}{2}} &#x3D; I - D^{-\frac{1}{2}}AD^{-\frac{1}{2}}$</p>
+</li>
+<li><p><strong>随机游走拉普拉斯矩阵</strong>：$L_{rw} &#x3D; D^{-1}L &#x3D; I - D^{-1}A$</p>
+</li>
+</ol>
+<p>拉普拉斯矩阵的特性：</p>
+<ul>
+<li>对称性：$L &#x3D; L^T$</li>
+<li>半正定性：所有特征值非负</li>
+<li>最小特征值为0，对应的特征向量是常数向量</li>
+<li>特征值的重数对应图的连通分量数</li>
+</ul>
+<h4 id="从传统卷积到图卷积-🔄"><a href="#从传统卷积到图卷积-🔄" class="headerlink" title="从传统卷积到图卷积 🔄"></a>从传统卷积到图卷积 🔄</h4><h5 id="传统卷积回顾"><a href="#传统卷积回顾" class="headerlink" title="传统卷积回顾"></a>传统卷积回顾</h5><p>在欧几里得空间中，卷积操作定义为：</p>
+<p>$$(f * g)(p) &#x3D; \sum_{q \in \mathcal{N}(p)} f(q) \cdot g(p-q)$$</p>
+<p>这里的关键特点是：</p>
+<ul>
+<li>平移不变性</li>
+<li>局部性</li>
+<li>参数共享</li>
+</ul>
+<h5 id="图上的卷积定义"><a href="#图上的卷积定义" class="headerlink" title="图上的卷积定义"></a>图上的卷积定义</h5><p>在图域中，我们需要重新定义这些特性：</p>
+<ol>
+<li><p><strong>空间域卷积</strong>：<br>$$h_v &#x3D; \sum_{u \in \mathcal{N}(v)} W(e_{u,v})h_u$$<br>其中 $W(e_{u,v})$ 是边的权重函数</p>
+</li>
+<li><p><strong>谱域卷积</strong>：<br>$$g_\theta * x &#x3D; Ug_\theta U^T x$$<br>其中 $U$ 是拉普拉斯矩阵的特征向量矩阵</p>
+</li>
+</ol>
+<h4 id="GCN的数学推导-⚙️"><a href="#GCN的数学推导-⚙️" class="headerlink" title="GCN的数学推导 ⚙️"></a>GCN的数学推导 ⚙️</h4><p>Kipf &amp; Welling提出的GCN模型中，单层传播规则为：</p>
+<p>$$H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})$$</p>
+<p>其中：</p>
+<ul>
+<li>$\tilde{A} &#x3D; A + I_N$ 是添加了自环的邻接矩阵</li>
+<li>$\tilde{D}<em>{ii} &#x3D; \sum_j \tilde{A}</em>{ij}$ 是对应的度矩阵</li>
+<li>$H^{(l)}$ 是第 $l$ 层的激活值</li>
+<li>$W^{(l)}$ 是可学习的权重矩阵</li>
+<li>$\sigma$ 是非线性激活函数</li>
+</ul>
+<p><del>一些自己的理解</del></p>
+<ol>
+<li>引入$L_{sym} &#x3D; \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
+<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
+<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+</ul>
+</li>
+<li>特征变换：$H^{(l)}W^{(l)}$</li>
+<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
+<li>非线性变换：$\sigma(\cdot)$</li>
+</ol>
+<hr>
+<h2 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h2><p>基于这个理论框架的简单实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">message_passing</span>(<span class="params">nodes, edges</span>):</span><br><span class="line">    messages = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> edge <span class="keyword">in</span> edges:</span><br><span class="line">        src, dst = edge</span><br><span class="line">        msg = compute_message(nodes[src], nodes[dst])</span><br><span class="line">        messages.setdefault(dst, []).append(msg)</span><br><span class="line">    <span class="keyword">return</span> messages</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aggregate_messages</span>(<span class="params">messages</span>):</span><br><span class="line">    aggregated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, msgs <span class="keyword">in</span> messages.items():</span><br><span class="line">        aggregated[node] = <span class="built_in">sum</span>(msgs) / <span class="built_in">len</span>(msgs)  <span class="comment"># 平均聚合</span></span><br><span class="line">    <span class="keyword">return</span> aggregated</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update_nodes</span>(<span class="params">nodes, aggregated</span>):</span><br><span class="line">    updated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, agg_msg <span class="keyword">in</span> aggregated.items():</span><br><span class="line">        updated[node] = nodes[node] + agg_msg  <span class="comment"># 残差连接</span></span><br><span class="line">    <span class="keyword">return</span> updated</span><br></pre></td></tr></table></figure>
+
+<h3 id="PyTorch-Geometric实现-🚀"><a href="#PyTorch-Geometric实现-🚀" class="headerlink" title="PyTorch Geometric实现 🚀"></a>PyTorch Geometric实现 🚀</h3><blockquote>
+<p>本节代码基于 PyTorch 2.1.0 和 PyTorch Geometric 2.4.0 版本</p>
+</blockquote>
+<p>使用PyTorch Geometric库的GCN实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GCNConv</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_features, num_classes</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.conv1 = GCNConv(num_features, <span class="number">16</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = GCNConv(<span class="number">16</span>, num_classes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, edge_index</span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.conv1(x, edge_index)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = F.dropout(x, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.conv2(x, edge_index)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="原生PyTorch实现-🔧"><a href="#原生PyTorch实现-🔧" class="headerlink" title="原生PyTorch实现 🔧"></a>原生PyTorch实现 🔧</h3><blockquote>
+<p>本节代码基于 PyTorch 2.1.0、NumPy 1.24.0 和 SciPy 1.11.0 版本</p>
+</blockquote>
+<p>不使用PyG，我们可以手动实现GCN：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> scipy.sparse <span class="keyword">as</span> sp</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCNLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCNLayer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.FloatTensor(in_features, out_features))</span><br><span class="line">        <span class="variable language_">self</span>.reset_parameters()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reset_parameters</span>(<span class="params">self</span>):</span><br><span class="line">        nn.init.kaiming_uniform_(<span class="variable language_">self</span>.W)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment"># adj: 归一化的邻接矩阵</span></span><br><span class="line">        support = torch.mm(x, <span class="variable language_">self</span>.W)</span><br><span class="line">        output = torch.sparse.mm(adj, support)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, nfeat, nhid, nclass, dropout</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.gc1 = GCNLayer(nfeat, nhid)</span><br><span class="line">        <span class="variable language_">self</span>.gc2 = GCNLayer(nhid, nclass)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.relu(<span class="variable language_">self</span>.gc1(x, adj))</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.gc2(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize_adj</span>(<span class="params">adj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;归一化邻接矩阵&quot;&quot;&quot;</span></span><br><span class="line">    adj = sp.coo_matrix(adj)</span><br><span class="line">    rowsum = np.array(adj.<span class="built_in">sum</span>(<span class="number">1</span>))</span><br><span class="line">    d_inv_sqrt = np.power(rowsum, -<span class="number">0.5</span>).flatten()</span><br><span class="line">    d_inv_sqrt[np.isinf(d_inv_sqrt)] = <span class="number">0.</span></span><br><span class="line">    d_mat_inv_sqrt = sp.diags(d_inv_sqrt)</span><br><span class="line">    <span class="keyword">return</span> adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><del>Building</del></p>
+<h2 id="🎮-应用场景"><a href="#🎮-应用场景" class="headerlink" title="🎮 应用场景"></a>🎮 应用场景</h2><h2 id="🔧-优化与改进"><a href="#🔧-优化与改进" class="headerlink" title="🔧 优化与改进"></a>🔧 优化与改进</h2><h2 id="🎯-总结与展望"><a href="#🎯-总结与展望" class="headerlink" title="🎯 总结与展望"></a>🎯 总结与展望</h2><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a><br><a href="https://pytorch-geometric.readthedocs.io/" target="_blank">PyTorch Geometric 官方文档</a><br><a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a><br><a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a><br><a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">知乎：图卷积网络（GCN）入门详解</a><br><a href="https://github.com/tkipf/gcn" target="_blank">GCN 论文官方代码（GitHub）</a></p>
 
     </div>
 

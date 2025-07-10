@@ -119,7 +119,7 @@ categories:
 
 此外，很少有从数据分析的角度出发分析这个数据源的文献，于是在这里给出简要的说明
 
-#### 2.1 连续值表示（Continuous Measures）
+#### 连续值表示（Continuous Measures）
 
 1. **IC50**
 
