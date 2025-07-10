@@ -5,7 +5,6 @@ tags:
   - CDR
   - Data Analysis
   - 可能有点用
-  - 还没写完捏
 categories:
   - CDR-pre
   - Data Analysis
@@ -70,7 +69,7 @@ categories:
 
 ##### 新兴趋势
 
-1. ** 结构生物学整合**：如利用蛋白质-蛋白质相互作用（PPI）网络（STRING 数据库）或通路信息（GSEA）构建生物网络，增强模型可解释性。
+1. **结构生物学整合**：如利用蛋白质-蛋白质相互作用（PPI）网络（STRING 数据库）或通路信息（GSEA）构建生物网络，增强模型可解释性。
 2. **图神经网络（GNN）**：将基因视为节点、相互作用为边，学习拓扑特征（如 GraOmicDRP 模型）。
 
 ---
@@ -170,6 +169,10 @@ categories:
 - GDSC
 
 <img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
+
+<p>
+  👉 <a href="/code/data_analysis/visualize_graph_analysis.py" target="_blank">查看用于生成上述图表的本地 Python 脚本：visualize_graph_analysis.py</a>
+</p>
 
 ##### 🔍 关键数据对比
 
