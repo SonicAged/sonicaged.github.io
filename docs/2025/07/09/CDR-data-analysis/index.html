@@ -19,24 +19,25 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="CDR 数据源分析本文主要是介绍一下 深度学习 在 药物反应预测 中运用到的数据源。但由于本人比较捞本文主要从 深度学习 角度来看待这些数据源，对其在医学方面的意义（主要是鼠鼠也不会捏）不会有太多的描述 CDR &#x3D; Cancer Drug Response先放两张图片看一下捏">
+    <meta name="description" content="CDR 数据源分析本文主要是介绍一下 深度学习 在 药物反应预测 中运用到的数据源。但由于本人比较捞 本文主要从 深度学习 角度来看待这些数据源，对其在医学方面的意义（主要是鼠鼠也不会捏）不会有太多的描述 CDR &#x3D; Cancer Drug Response我们的数据源有三种：  Cancer Representations（癌症特征的表示） Representations of Dru">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CDR Input Data Analysis">
 <meta property="og:url" content="http://example.com/2025/07/09/CDR-data-analysis/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="CDR 数据源分析本文主要是介绍一下 深度学习 在 药物反应预测 中运用到的数据源。但由于本人比较捞本文主要从 深度学习 角度来看待这些数据源，对其在医学方面的意义（主要是鼠鼠也不会捏）不会有太多的描述 CDR &#x3D; Cancer Drug Response先放两张图片看一下捏">
+<meta property="og:description" content="CDR 数据源分析本文主要是介绍一下 深度学习 在 药物反应预测 中运用到的数据源。但由于本人比较捞 本文主要从 深度学习 角度来看待这些数据源，对其在医学方面的意义（主要是鼠鼠也不会捏）不会有太多的描述 CDR &#x3D; Cancer Drug Response我们的数据源有三种：  Cancer Representations（癌症特征的表示） Representations of Dru">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/img/comprehensive_bipartite_analysis_ccle.png">
-<meta property="og:image" content="http://example.com/img/comprehensive_bipartite_analysis_gdsc.png">
+<meta property="og:image" content="http://example.com/img/CDR-data-analysis/gene.png">
+<meta property="og:image" content="http://example.com/img/CDR-data-analysis/comprehensive_bipartite_analysis_ccle.png">
+<meta property="og:image" content="http://example.com/img/CDR-data-analysis/comprehensive_bipartite_analysis_gdsc.png">
 <meta property="article:published_time" content="2025-07-09T13:24:58.000Z">
-<meta property="article:modified_time" content="2025-07-10T03:14:04.604Z">
+<meta property="article:modified_time" content="2025-07-10T05:58:25.674Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="Data Analysis">
 <meta property="article:tag" content="可能有点用">
 <meta property="article:tag" content="还没写完捏">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/comprehensive_bipartite_analysis_ccle.png">
+<meta name="twitter:image" content="http://example.com/img/CDR-data-analysis/gene.png">
 
 
 <link rel="canonical" href="http://example.com/2025/07/09/CDR-data-analysis/">
@@ -146,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CDR-%E6%95%B0%E6%8D%AE%E6%BA%90%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">CDR 数据源分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CDR-Cancer-Drug-Response"><span class="nav-number">1.1.</span> <span class="nav-text">CDR &#x3D; Cancer Drug Response</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E6%94%BE%E4%B8%A4%E5%BC%A0%E5%9B%BE%E7%89%87%E7%9C%8B%E4%B8%80%E4%B8%8B%E6%8D%8F"><span class="nav-number">1.1.1.</span> <span class="nav-text">先放两张图片看一下捏</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CDR-%E6%95%B0%E6%8D%AE%E6%BA%90%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">CDR 数据源分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CDR-Cancer-Drug-Response"><span class="nav-number">1.1.</span> <span class="nav-text">CDR &#x3D; Cancer Drug Response</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cancer-Representations"><span class="nav-number">1.1.1.</span> <span class="nav-text">Cancer Representations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%BB%84%E5%AD%A6%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">多组学类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E5%A4%84%E7%90%86%E4%B8%8E%E6%95%B4%E5%90%88"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">预处理与整合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%9B%A0%E7%89%B9%E5%BE%81%E5%85%B7%E6%9C%89%E4%BC%98%E5%8A%BF%E5%8F%8A%E6%96%B0%E5%85%B4%E8%B6%8B%E5%8A%BF"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">基因特征具有优势及新兴趋势</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B0%E5%85%B4%E8%B6%8B%E5%8A%BF"><span class="nav-number">1.1.1.3.1.</span> <span class="nav-text">新兴趋势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Representations-of-Drug-Compounds"><span class="nav-number">1.1.2.</span> <span class="nav-text">Representations of Drug Compounds</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SMILES%EF%BC%88%E7%AE%80%E5%8C%96%E5%88%86%E5%AD%90%E8%BE%93%E5%85%A5%E8%A1%8C%E6%9D%A1%E7%9B%AE%E7%B3%BB%E7%BB%9F%EF%BC%89"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">SMILES（简化分子输入行条目系统）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E5%AD%90%E6%8C%87%E7%BA%B9%EF%BC%88Fingerprints-FPs%EF%BC%89%E5%92%8C%E6%8F%8F%E8%BF%B0%E7%AC%A6%EF%BC%88Descriptors%EF%BC%89"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">分子指纹（Fingerprints, FPs）和描述符（Descriptors）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E7%BB%93%E6%9E%84%E8%A1%A8%E7%A4%BA%EF%BC%88Graph-based-Representations%EF%BC%89"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">图结构表示（Graph-based Representations）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Representations-of-Treatment-Response"><span class="nav-number">1.1.3.</span> <span class="nav-text">Representations of Treatment Response</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E8%BF%9E%E7%BB%AD%E5%80%BC%E8%A1%A8%E7%A4%BA%EF%BC%88Continuous-Measures%EF%BC%89"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">2.1 连续值表示（Continuous Measures）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E7%B1%BB%E8%A1%A8%E7%A4%BA%EF%BC%88Categorical-Measures%EF%BC%89"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">分类表示（Categorical Measures）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E8%A1%A8%E7%A4%BA%EF%BC%88Ranking%EF%BC%89"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">排序表示（Ranking）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">数据分析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%F0%9F%94%8D-%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.3.4.1.</span> <span class="nav-text">🔍 关键数据对比</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%F0%9F%93%8A-GNN-%E8%AE%AD%E7%BB%83%E6%8C%91%E6%88%98%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.4.2.</span> <span class="nav-text">📊 GNN 训练挑战分析</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%BF%87%E5%B9%B3%E6%BB%91%E9%A3%8E%E9%99%A9%E8%AF%84%E4%BC%B0"><span class="nav-number">1.1.3.4.2.1.</span> <span class="nav-text">过平滑风险评估</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC%E4%B8%8D%E5%B9%B3%E8%A1%A1%E7%A8%8B%E5%BA%A6"><span class="nav-number">1.1.3.4.2.2.</span> <span class="nav-text">样本不平衡程度</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%82%BB%E5%B1%85%E7%9B%B8%E4%BC%BC%E5%BA%A6%E5%88%86%E6%9E%90"><span class="nav-number">1.1.3.4.2.3.</span> <span class="nav-text">邻居相似度分析</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%F0%9F%8E%AF-GNN-%E6%9E%B6%E6%9E%84%E5%BB%BA%E8%AE%AE%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.3.4.3.</span> <span class="nav-text">🎯 GNN 架构建议对比</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E6%9E%B6%E6%9E%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">1.1.3.4.3.1.</span> <span class="nav-text">推荐架构优先级</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%85%B7%E4%BD%93%E5%8F%82%E6%95%B0%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.1.3.4.3.2.</span> <span class="nav-text">具体参数建议</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -243,7 +244,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-10 11:14:04" itemprop="dateModified" datetime="2025-07-10T11:14:04+08:00">2025-07-10</time>
+      <time title="Modified: 2025-07-10 13:58:25" itemprop="dateModified" datetime="2025-07-10T13:58:25+08:00">2025-07-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -268,9 +269,339 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del>本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
-<h2 id="CDR-Cancer-Drug-Response"><a href="#CDR-Cancer-Drug-Response" class="headerlink" title="CDR &#x3D; Cancer Drug Response"></a>CDR &#x3D; Cancer Drug Response</h2><h3 id="先放两张图片看一下捏"><a href="#先放两张图片看一下捏" class="headerlink" title="先放两张图片看一下捏"></a>先放两张图片看一下捏</h3><img src="/img/comprehensive_bipartite_analysis_ccle.png" alt="CCLE" style="max-width: 100%; height: auto;">
-<img src="/img/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
+    <div class="post-body" itemprop="articleBody"><h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
+<h2 id="CDR-Cancer-Drug-Response"><a href="#CDR-Cancer-Drug-Response" class="headerlink" title="CDR &#x3D; Cancer Drug Response"></a>CDR &#x3D; Cancer Drug Response</h2><p>我们的数据源有三种：</p>
+<ul>
+<li><em>Cancer Representations</em>（癌症特征的表示）</li>
+<li><em>Representations of Drug Compounds</em>（药物特征的表示）</li>
+<li><em>Representations of Treatment Response</em>（治疗响应的表示）</li>
+</ul>
+<p>接下来会按顺序进行说明</p>
+<hr>
+<h3 id="Cancer-Representations"><a href="#Cancer-Representations" class="headerlink" title="Cancer Representations"></a>Cancer Representations</h3><p>癌症的特征是多组学的 <del>这不是理所应当吗</del></p>
+<h4 id="多组学类型"><a href="#多组学类型" class="headerlink" title="多组学类型"></a>多组学类型</h4><p>通常基于以下四类组学数据：</p>
+<ul>
+<li><p>基因组（Genomic）</p>
+<ul>
+<li>突变（Mutation）：体细胞突变（如单核苷酸变异 SNVs）可能驱动癌症进展，并影响药物靶点。</li>
+<li>拷贝数变异（CNV）：基因拷贝数的增加或缺失可能影响药物敏感性（如 HER2 扩增与曲妥珠单抗疗效相关）。</li>
+</ul>
+</li>
+<li><p>转录组（Transcriptomic）</p>
+<ul>
+<li>基因表达（Gene Expression）：通过微阵列或 RNA 测序（RNA-Seq）量化基因的 mRNA 水平。例如，高表达的耐药基因可能预示治疗失败。</li>
+</ul>
+</li>
+<li><p>表观组（Epigenomic）</p>
+<ul>
+<li>DNA 甲基化（Methylation）：启动子区域的甲基化可能沉默抑癌基因，影响药物反应。</li>
+</ul>
+</li>
+<li><p>蛋白质组（Proteomic）</p>
+<ul>
+<li>蛋白质表达（RPPA 等）：直接测量蛋白质丰度（如激酶活性），更接近功能表型。</li>
+</ul>
+</li>
+</ul>
+<p>对于同一种组学数据，他们被表示成一组 <strong>维数相同的向量</strong></p>
+<h4 id="预处理与整合"><a href="#预处理与整合" class="headerlink" title="预处理与整合"></a>预处理与整合</h4><ol>
+<li>数据预处理</li>
+</ol>
+<ul>
+<li>包括标准化（normalization）、批次效应校正（batch effect correction）和质量控制（QC）。例如，RNA-Seq 数据需通过 RPKM 或 TPM 标准化。</li>
+</ul>
+<ol start="2">
+<li>多组学整合方法 ：<ul>
+<li>早期整合（Early Integration）：直接拼接不同组学特征为单一向量，但可能因维度灾难（curse of dimensionality）导致过拟合。</li>
+<li>晚期整合（Late Integration）：通过独立子网络处理每组学数据（如 CNN 处理突变，GNN 处理表达数据），再融合特征。例如，MOLI 模型通过三重损失函数整合多组学数据，显著提升跨癌症模型的泛化能力。</li>
+</ul>
+</li>
+</ol>
+<h4 id="基因特征具有优势及新兴趋势"><a href="#基因特征具有优势及新兴趋势" class="headerlink" title="基因特征具有优势及新兴趋势"></a>基因特征具有优势及新兴趋势</h4><blockquote>
+<p>2014 年 NCI-DREAM 挑战赛表明， 基因表达数据在预测乳腺癌细胞系药物敏感性时最具预测力（优于突变或 CNV）。因此，约 90%的 DRP 模型使用基因表达（单独或联合其他组学）<br><img src="/img/CDR-data-analysis/gene.png" alt="gene" width="50%"></p>
+</blockquote>
+<h5 id="新兴趋势"><a href="#新兴趋势" class="headerlink" title="新兴趋势"></a>新兴趋势</h5><ol>
+<li>** 结构生物学整合**：如利用蛋白质-蛋白质相互作用（PPI）网络（STRING 数据库）或通路信息（GSEA）构建生物网络，增强模型可解释性。</li>
+<li><strong>图神经网络（GNN）</strong>：将基因视为节点、相互作用为边，学习拓扑特征（如 GraOmicDRP 模型）。</li>
+</ol>
+<hr>
+<h3 id="Representations-of-Drug-Compounds"><a href="#Representations-of-Drug-Compounds" class="headerlink" title="Representations of Drug Compounds"></a>Representations of Drug Compounds</h3><p>对药物的表示主要分为三种，一般只选取其中的一种 <del>虽然也有选用几种的 <strong>创新</strong> 方式</del>。值得一提的是，在选定药物的表示方式后，之后的特征工程的方式目前来看非常的统一。接下来一一说明每一种表示方式。</p>
+<h4 id="SMILES（简化分子输入行条目系统）"><a href="#SMILES（简化分子输入行条目系统）" class="headerlink" title="SMILES（简化分子输入行条目系统）"></a>SMILES（简化分子输入行条目系统）</h4><ol>
+<li><em>定义</em>：SMILES 是一种<strong>线性字符串</strong>表示法，通过符号编码分子结构（如<code>CCO</code>表示乙醇）。</li>
+<li><em>优势</em>：<ul>
+<li>易于存储和处理，广泛用于化学信息学工具（如 RDKit）。</li>
+<li>可直接用于序列模型（如 RNN、Transformer）或通过预处理转换为其他表示（如图结构）。</li>
+</ul>
+</li>
+</ol>
+<h4 id="分子指纹（Fingerprints-FPs）和描述符（Descriptors）"><a href="#分子指纹（Fingerprints-FPs）和描述符（Descriptors）" class="headerlink" title="分子指纹（Fingerprints, FPs）和描述符（Descriptors）"></a>分子指纹（Fingerprints, FPs）和描述符（Descriptors）</h4><ol>
+<li><p>分子指纹</p>
+<ul>
+<li><em>定义</em>：<strong>二进制向量</strong>，表示分子中是否存在特定子结构（如药效团或官能团）。</li>
+<li><em>常用类型</em>：<ul>
+<li><strong>Morgan 指纹（ECFP）</strong>：基于原子邻域的圆形拓扑指纹，长度通常为 512 或 1024 位。</li>
+<li><strong>RDKit 指纹</strong>：开源工具生成的二进制指纹。</li>
+</ul>
+</li>
+<li><em>优势</em>：固定长度，适合传统机器学习模型（如随机森林）。</li>
+</ul>
+</li>
+<li><p>分子描述符</p>
+<ul>
+<li><em>定义</em>：<strong>数值向量</strong>，编码物理化学性质（如分子量、疏水性、极性表面积等）。</li>
+<li><em>工具</em>：PaDEL、Mordred、Dragon 等软件可自动计算数百至数千个描述符。</li>
+</ul>
+</li>
+</ol>
+<h4 id="图结构表示（Graph-based-Representations）"><a href="#图结构表示（Graph-based-Representations）" class="headerlink" title="图结构表示（Graph-based Representations）"></a>图结构表示（Graph-based Representations）</h4><ol>
+<li><em>定义</em> ：将分子表示为<strong>图</strong>，其中原子为<strong>节点</strong>，化学键为<strong>边</strong>，节点和边可附加属性（如原子类型、键类型）。</li>
+<li><em>优势</em> ：<ul>
+<li>更自然地表征分子拓扑结构，适合图神经网络（GNN）。</li>
+<li>可捕捉局部和全局分子特征（如官能团相互作用）。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="Representations-of-Treatment-Response"><a href="#Representations-of-Treatment-Response" class="headerlink" title="Representations of Treatment Response"></a>Representations of Treatment Response</h3><p>从构造模型的角度出发，这是 DRP 的核心数据源</p>
+<ul>
+<li>它决定了模型最后完成的<strong>任务类型</strong>：训练连续值的<strong>回归任务</strong>和训练离散值的<strong>分类任务</strong></li>
+<li>他的数据质量很大程度上决定了模型的结果的优劣，即对该数据源对模型的好坏影响很大</li>
+</ul>
+<p>此外，很少有从数据分析的角度出发分析这个数据源的文献，于是在这里给出简要的说明</p>
+<h4 id="2-1-连续值表示（Continuous-Measures）"><a href="#2-1-连续值表示（Continuous-Measures）" class="headerlink" title="2.1 连续值表示（Continuous Measures）"></a>2.1 连续值表示（Continuous Measures）</h4><ol>
+<li><p><strong>IC50</strong></p>
+<ul>
+<li>半数抑制浓度，即抑制 50%细胞活力所需的药物浓度。</li>
+<li><em>优势</em>：直观反映药物效力，广泛用于回归模型（如预测 IC50 的数值）。</li>
+<li><em>局限性</em>：仅反映单一浓度点的效果，可能忽略剂量-反应曲线的整体形状。</li>
+</ul>
+</li>
+<li><p><strong>AUC&#x2F;AAC</strong></p>
+<ul>
+<li>剂量-反应曲线下面积（Area Under the Curve）或曲线上面积（Activity Area）。</li>
+<li><em>优势</em>：全局度量，综合所有浓度点的效果，对噪声更鲁棒。</li>
+<li><em>应用</em>：如 DeepCDR 等模型使用 AUC 作为回归目标，实证表明其泛化性优于 IC50。</li>
+</ul>
+</li>
+</ol>
+<h4 id="分类表示（Categorical-Measures）"><a href="#分类表示（Categorical-Measures）" class="headerlink" title="分类表示（Categorical Measures）"></a>分类表示（Categorical Measures）</h4><ol>
+<li><p><strong>二分类（敏感&#x2F;耐药）</strong></p>
+<ul>
+<li>通过阈值（如瀑布算法、LOBICO）将连续反应（如 IC50）转化为离散标签。</li>
+<li><em>优势</em>：更贴近临床决策需求（如选择敏感药物）。</li>
+<li><em>示例</em>：Sharifi-Noghabi et al. (2021) 使用二分类训练深度神经网络，预测患者肿瘤的敏感性。</li>
+</ul>
+</li>
+<li><p><strong>多分类</strong></p>
+<ul>
+<li>如低&#x2F;中&#x2F;高反应性，适用于更细粒度的临床分级。</li>
+</ul>
+</li>
+</ol>
+<h4 id="排序表示（Ranking）"><a href="#排序表示（Ranking）" class="headerlink" title="排序表示（Ranking）"></a>排序表示（Ranking）</h4><ol>
+<li><p><em>目标</em></p>
+<ul>
+<li>为个性化治疗推荐药物排序（如 Top-k 最有效药物）。</li>
+</ul>
+</li>
+<li><p><em>方法</em></p>
+<ul>
+<li>Prasse et al. (2022)：将 IC50 转化为相关性分数，设计可微排序损失函数。</li>
+<li>PPORank：利用强化学习动态优化排序，适应新增数据。</li>
+</ul>
+</li>
+<li><p><em>优势</em></p>
+<ul>
+<li>直接支持临床优先级排序，优于传统回归或分类。</li>
+</ul>
+</li>
+</ol>
+<h4 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h4><p>由于本人大概率会做个分类模型，所以会将主要分析的是<strong>分类表示</strong>的数据在<strong>图神经网络</strong>中比较重视的几个指标，这里分析 <em>CCLE</em> 和 <em>GDSC</em> 两个数据集在选用主流阈值选取方法之后的表示。</p>
+<p>直接先看结果捏（这里画了两个小图）</p>
+<ul>
+<li>CCLE</li>
+</ul>
+<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_ccle.png" alt="CCLE" style="max-width: 100%; height: auto;">
+
+<ul>
+<li>GDSC</li>
+</ul>
+<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
+
+<h5 id="🔍-关键数据对比"><a href="#🔍-关键数据对比" class="headerlink" title="🔍 关键数据对比"></a>🔍 关键数据对比</h5><table>
+<thead>
+<tr>
+<th>特征</th>
+<th>CCLE</th>
+<th>GDSC</th>
+<th>倍数差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据规模</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>总节点数</td>
+<td>341</td>
+<td>783</td>
+<td>2.3×</td>
+</tr>
+<tr>
+<td>第一类节点</td>
+<td>317</td>
+<td>561</td>
+<td>1.8×</td>
+</tr>
+<tr>
+<td>第二类节点</td>
+<td>24</td>
+<td>222</td>
+<td>9.3×</td>
+</tr>
+<tr>
+<td>总边数</td>
+<td>7,307</td>
+<td>100,572</td>
+<td>13.8×</td>
+</tr>
+<tr>
+<td><strong>图结构</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>密度</td>
+<td>0.9604</td>
+<td>0.8075</td>
+<td>0.84×</td>
+</tr>
+<tr>
+<td>稀疏性</td>
+<td>0.0396</td>
+<td>0.1925</td>
+<td>4.9×</td>
+</tr>
+<tr>
+<td>平均度</td>
+<td>42.86</td>
+<td>256.89</td>
+<td>6.0×</td>
+</tr>
+<tr>
+<td>图直径</td>
+<td>3</td>
+<td>4</td>
+<td>1.3×</td>
+</tr>
+<tr>
+<td><strong>边分布</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>正边数量</td>
+<td>1,375</td>
+<td>11,591</td>
+<td>8.4×</td>
+</tr>
+<tr>
+<td>负边数量</td>
+<td>5,932</td>
+<td>88,981</td>
+<td>15.0×</td>
+</tr>
+<tr>
+<td>正边比例</td>
+<td>18.8%</td>
+<td>11.5%</td>
+<td>0.61×</td>
+</tr>
+<tr>
+<td>正负边比例</td>
+<td>1:4.3</td>
+<td>1:7.7</td>
+<td>1.8× 不平衡</td>
+</tr>
+</tbody></table>
+<h5 id="📊-GNN-训练挑战分析"><a href="#📊-GNN-训练挑战分析" class="headerlink" title="📊 GNN 训练挑战分析"></a>📊 GNN 训练挑战分析</h5><h6 id="过平滑风险评估"><a href="#过平滑风险评估" class="headerlink" title="过平滑风险评估"></a>过平滑风险评估</h6><ul>
+<li><strong>CCLE</strong>: ⚠️ 高风险 (平均度 42.86)</li>
+<li><strong>GDSC</strong>: 🚨 极高风险 (平均度 256.89)</li>
+</ul>
+<h6 id="样本不平衡程度"><a href="#样本不平衡程度" class="headerlink" title="样本不平衡程度"></a>样本不平衡程度</h6><ul>
+<li><strong>CCLE</strong>: 正负边比例 1:4.3 (中等不平衡)</li>
+<li><strong>GDSC</strong>: 正负边比例 1:7.7 (严重不平衡)</li>
+</ul>
+<h6 id="邻居相似度分析"><a href="#邻居相似度分析" class="headerlink" title="邻居相似度分析"></a>邻居相似度分析</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 邻居重叠度对比</span></span><br><span class="line">CCLE_similarity = &#123;</span><br><span class="line">    <span class="string">&quot;第一类节点&quot;</span>: <span class="number">0.9374</span>,  <span class="comment"># 高度相似</span></span><br><span class="line">    <span class="string">&quot;第二类节点&quot;</span>: <span class="number">0.9274</span>   <span class="comment"># 高度相似</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GDSC_similarity = &#123;</span><br><span class="line">    <span class="string">&quot;第一类节点&quot;</span>: <span class="number">0.7659</span>,  <span class="comment"># 中等相似</span></span><br><span class="line">    <span class="string">&quot;第二类节点&quot;</span>: <span class="number">0.7143</span>   <span class="comment"># 中等相似</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>结论</strong>: CCLE 结构更均匀但多样性不足，GDSC 结构更复杂但多样性更好</p>
+<h5 id="🎯-GNN-架构建议对比"><a href="#🎯-GNN-架构建议对比" class="headerlink" title="🎯 GNN 架构建议对比"></a>🎯 GNN 架构建议对比</h5><h6 id="推荐架构优先级"><a href="#推荐架构优先级" class="headerlink" title="推荐架构优先级"></a>推荐架构优先级</h6><ul>
+<li><p>CCLE 推荐架构</p>
+<ol>
+<li><strong>Bipartite GNN</strong> + Signed GCN</li>
+<li><strong>简单异构图 GNN</strong> (HetGNN)</li>
+<li><strong>标准 GCN</strong> + 强正则化</li>
+</ol>
+</li>
+<li><p>GDSC 推荐架构</p>
+<ol>
+<li><strong>采样型 GNN</strong> (GraphSAINT, FastGCN) + SGCN</li>
+<li><strong>大规模异构图 GNN</strong> (HGT, RGCN)</li>
+<li><strong>图 Transformer</strong> (处理复杂结构)</li>
+</ol>
+</li>
+</ul>
+<h6 id="具体参数建议"><a href="#具体参数建议" class="headerlink" title="具体参数建议"></a>具体参数建议</h6><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>CCLE</th>
+<th>GDSC</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>网络深度</strong></td>
+<td>2-3 层</td>
+<td>严格 2 层</td>
+<td>GDSC 过平滑风险更高</td>
+</tr>
+<tr>
+<td><strong>隐藏维度</strong></td>
+<td>64-128</td>
+<td>128-256</td>
+<td>GDSC 需要更大容量</td>
+</tr>
+<tr>
+<td><strong>Dropout 率</strong></td>
+<td>0.3-0.5</td>
+<td>0.5-0.7</td>
+<td>GDSC 需要更强正则化</td>
+</tr>
+<tr>
+<td><strong>学习率</strong></td>
+<td>0.001-0.01</td>
+<td>0.0001-0.001</td>
+<td>GDSC 需要更保守训练</td>
+</tr>
+<tr>
+<td><strong>批次大小</strong></td>
+<td>32-64 个子图</td>
+<td>16-32 个子图</td>
+<td>GDSC 内存限制</td>
+</tr>
+<tr>
+<td><strong>采样策略</strong></td>
+<td>可选</td>
+<td>必须</td>
+<td>GDSC 无法全图训练</td>
+</tr>
+</tbody></table>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Partin - Deep learning methods for drug response prediction in cancer Predominant and emerging trends.pdf" target="_blank">📄 Partin - Deep learning methods for drug response prediction in cancer Predominant and emerging trends</a></p>
 
     </div>
 
