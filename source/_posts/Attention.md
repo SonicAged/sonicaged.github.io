@@ -16,7 +16,10 @@ tags:
 # 🌟 图中的注意力机制
 
 > 注意力机制在图神经网络中扮演着越来越重要的角色。本文将深入探讨注意力机制在图结构数据处理中的应用，从基础概念到实际实现。
-
+>
+$$
+\underset{d\_{k} \times n\_{f}}{\boldsymbol{K}}=\underset{d\_{k} \times d\_{f}}{\boldsymbol{W}\_{K}} \times \underset{d\_{f} \times n\_{f}}{\boldsymbol{F}}, \quad \underset{d\_{v} \times n\_{f}}{\boldsymbol{V}}=\underset{d\_{v} \times d\_{f}}{\boldsymbol{W}\_{V}} \times \underset{d\_{f} \times n\_{f}}{\boldsymbol{F}} .
+$$
 <!-- more -->
 
 ## 🎯 引言
