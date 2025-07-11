@@ -1,10 +1,3 @@
----
-title: test_pdf
-date: 2025-07-11 14:57:55
-categories:
-tags:
----
-
 # 测试hexo-pdf效果
 
 让鼠鼠看看怎么个事儿捏
