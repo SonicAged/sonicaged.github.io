@@ -1,6 +1,6 @@
 .DS_Store
 *.log
 node_modules/
-.deploy*/
+.deploy_git/
 __pycache__/
 db.json

@@ -9,6 +9,8 @@ echo.
 echo Generating...
 call hexo g
 
-echo.
-echo Starting server...
-call hexo s 
+IF "%1"=="-s" (
+    echo.
+    echo Starting server...
+    call hexo s
+) 

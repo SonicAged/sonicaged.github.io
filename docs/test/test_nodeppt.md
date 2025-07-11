@@ -41,6 +41,9 @@ $ nodeppt serve slide.md
 
 # to build a slide
 $ nodeppt build slide.md
+
+# if use nodeppt, remember to do it
+set NODE_OPTIONS=--openssl-legacy-provider
 ```
 
 <slide class="bg-gradient-r" :class=" size-40 aligncenter" image="https://cn.bing.com/az/hprichbg/rb/WinterLynx_ZH-CN7158207296_1920x1080.jpg .dark">
