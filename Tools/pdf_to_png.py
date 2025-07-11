@@ -1,4 +1,6 @@
 import os
+import sys
+sys.path.append("../")
 import fitz
 from pathlib import Path
 
