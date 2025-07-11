@@ -17,7 +17,7 @@
         python pdf_to_png.py path/to/your.pdf -o output/directory
 
     - 自定义缩放比例：
-    python pdf_to_png.py path/to/your.pdf -x 2 -y 2
+        python pdf_to_png.py path/to/your.pdf -x 2 -y 2
 """
 import os
 os.chdir("../source/img")

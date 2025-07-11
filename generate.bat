@@ -14,3 +14,9 @@ IF "%1"=="-s" (
     echo Starting server...
     call hexo s
 ) 
+
+IF "%1"=="-d" (
+    echo.
+    echo Deploying...
+    call deploy.bat
+)
