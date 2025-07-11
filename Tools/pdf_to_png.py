@@ -1,6 +1,26 @@
+"""
+将PDF文件转换为PNG图片
+
+1. 注意：
+    - 需要安装pymupdf库
+    pip install pymupdf
+    - 请在当前目录下运行，并将pdf文件放在"../source/img"目录下
+
+2. 使用方法：
+    - 转换单个PDF文件：
+        python pdf_to_png.py path/to/your.pdf
+
+    - 转换整个文件夹中的PDF：
+        python pdf_to_png.py path/to/folder
+
+    - 指定输出目录：
+        python pdf_to_png.py path/to/your.pdf -o output/directory
+
+    - 自定义缩放比例：
+    python pdf_to_png.py path/to/your.pdf -x 2 -y 2
+"""
 import os
-import sys
-sys.path.append("../")
+os.chdir("../source/img")
 import fitz
 from pathlib import Path
 
