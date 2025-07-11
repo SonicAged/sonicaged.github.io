@@ -11,6 +11,8 @@ tags:
   - 还没写完捏
   - PyTorch
   - graph theory
+js:
+  - https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js
 ---
 
 # 🌟 图中的注意力机制
