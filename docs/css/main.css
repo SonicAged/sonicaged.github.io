@@ -893,6 +893,11 @@ pre code {
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
 }
+.pdfobject-container iframe,
+.pdfobject-container embed {
+  height: 500px;
+  width: 100%;
+}
 .post-body .tabs {
   margin-bottom: 20px;
 }
@@ -1278,7 +1283,7 @@ pre code {
   transition: all 0.2s ease-in-out;
 }
 .links-of-author a::before {
-  background: #ff8a55;
+  background: #815583;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
