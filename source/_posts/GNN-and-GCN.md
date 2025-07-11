@@ -130,7 +130,7 @@ $$H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^
 
 其中：
 - $\tilde{A} = A + I_N$ 是添加了自环的邻接矩阵
-- $\tilde{D}_{ii} = \sum_j \tilde{A}_{ij}$ 是对应的度矩阵
+- $\tilde{D}\_{ii} = \sum\_{j} \tilde{A}\_{ij}$ 是对应的度矩阵
 - $H^{(l)}$ 是第 $l$ 层的激活值
 - $W^{(l)}$ 是可学习的权重矩阵
 - $\sigma$ 是非线性激活函数
