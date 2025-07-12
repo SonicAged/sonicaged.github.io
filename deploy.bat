@@ -3,7 +3,7 @@ echo Git Push Script
 echo.
 
 echo Adding files...
-git add .
+git add --all
 
 echo.
 echo Committing...
