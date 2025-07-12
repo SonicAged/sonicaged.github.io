@@ -1,5 +1,13 @@
 @echo off
-echo Starting local deployment...
+
+IF "%1"=="-s" (
+    echo Starting local deployment...
+) 
+
+IF "%1"=="-d" (
+    echo Starting global deployment...
+)
+
 echo.
 
 echo Cleaning...
