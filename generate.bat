@@ -26,5 +26,5 @@ IF "%1"=="-s" (
 IF "%1"=="-g" (
     echo.
     echo Deploying...
-    call deploy.bat %~2
+    call deploy.bat %*
 )
