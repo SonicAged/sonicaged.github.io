@@ -4,7 +4,7 @@ IF "%1"=="-s" (
     echo Starting local deployment...
 ) 
 
-IF "%1"=="-d" (
+IF "%1"=="-g" (
     echo Starting global deployment...
 )
 
@@ -23,8 +23,8 @@ IF "%1"=="-s" (
     call hexo s
 ) 
 
-IF "%1"=="-d" (
+IF "%1"=="-g" (
     echo.
     echo Deploying...
-    call deploy.bat
+    call deploy.bat %~2
 )
