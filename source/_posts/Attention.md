@@ -35,7 +35,7 @@ tags:
 
 本章节主要参考了论文[📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning](/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf)有兴趣的话可以看看原文捏
 
-<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="40%" height="550" type="application/pdf">
+<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="45%" height="400" type="application/pdf">
 
 ### Attention的一般结构
 
@@ -103,7 +103,7 @@ $$
 
 ### Attention分类
 
-<img src="/img/Attention/Taxonomy.png" style="max-width: 130%; height: auto;">
+<img src="/img/Attention/Taxonomy.png" style="max-width: 100%; height: auto;">
 
 论文按照上图的方式给Attention进行了分类
 
@@ -274,3 +274,4 @@ def train():
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 <a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>
 <a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a>
+<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a>
