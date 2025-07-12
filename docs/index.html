@@ -159,7 +159,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -216,7 +216,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/07/10/Attention/" class="post-title-link" itemprop="url">Attention in Graph</a>
+          <a href="/2025/07/10/Attention/" class="post-title-link" itemprop="url">Attention Overview</a>
         </h2>
 
         <div class="post-meta-container">
@@ -234,7 +234,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-12 11:40:14" itemprop="dateModified" datetime="2025-07-12T11:40:14+08:00">2025-07-12</time>
+      <time title="Modified: 2025-07-12 15:33:26" itemprop="dateModified" datetime="2025-07-12T15:33:26+08:00">2025-07-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,6 +247,10 @@
           , 
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/attention/" itemprop="url" rel="index"><span itemprop="name">attention</span></a>
         </span>
     </span>
 
@@ -261,10 +265,9 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="Is-Attention-All-My-Need"><a href="#Is-Attention-All-My-Need" class="headerlink" title="Is Attention All My Need ?"></a>Is Attention All My Need ?</h1><blockquote>
-<p>注意力机制在图神经网络中扮演着越来越重要的角色。本文将深入探讨注意力机制在图结构数据处理中的应用，从基础概念到实际实现。</p>
+<p>注意力机制在图神经网络中扮演着越来越重要的角色。<del>但鼠鼠现在连正常的Attention有哪些都不清楚捏</del>本文鼠鼠将从一般的Attention出发，给出Attention的总体结构，然后按分类介绍现有的主要的Attention</p>
 </blockquote>
-<p>本文鼠鼠计划从一般的Attention出发，到图结构中的Attention的作用，最后讨论Attention是否真的可以按照期望解决DRP中鼠鼠期待它能够解决的所有问题。</p>
-<p>$$<br>\underset{d_{k} \times n_{f}}{\boldsymbol{K}}&#x3D;\underset{d_{k} \times d_{f}}{\boldsymbol{W}_{K}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}}, \quad \underset{d_{v} \times n_{f}}{\boldsymbol{V}}&#x3D;\underset{d_{v} \times d_{f}}{\boldsymbol{W}_{V}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}} .<br>$$</p>
+<p>本文主要来自于一篇论文，基本可以看作<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">那篇论文</a>的阅读笔记</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/07/10/Attention/#more" rel="contents">
@@ -334,7 +337,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-11 13:18:56" itemprop="dateModified" datetime="2025-07-11T13:18:56+08:00">2025-07-11</time>
+      <time title="Modified: 2025-07-12 14:52:36" itemprop="dateModified" datetime="2025-07-12T14:52:36+08:00">2025-07-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -347,6 +350,10 @@
           , 
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/GNN/" itemprop="url" rel="index"><span itemprop="name">GNN</span></a>
         </span>
     </span>
 
@@ -529,7 +536,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-11 11:07:36" itemprop="dateModified" datetime="2025-07-11T11:07:36+08:00">2025-07-11</time>
+      <time title="Modified: 2025-07-12 15:33:33" itemprop="dateModified" datetime="2025-07-12T15:33:33+08:00">2025-07-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -537,11 +544,7 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
         </span>
     </span>
 

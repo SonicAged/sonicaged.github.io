@@ -4,6 +4,7 @@ date: 2025-07-10 15:36:46
 categories:
   - CDR
   - model
+  - GNN
 tags:
   - CDR
   - model
