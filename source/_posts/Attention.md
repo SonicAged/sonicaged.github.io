@@ -107,6 +107,8 @@ $$
 
 论文按照上图的方式给Attention进行了分类
 
+$$\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{A}=\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})$$
+
 
 #### 基本注意力机制
 
@@ -274,4 +276,4 @@ def train():
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 <a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>
 <a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a>
-<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a>
+<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a> 
