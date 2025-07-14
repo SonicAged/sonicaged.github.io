@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="在输入特征上做文章的Attention本文将接着详细说明一种基于输入特征分类Attention的方式，并介绍在这种分类方式下关注到的不同的Attention的架构。 具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Feature-Related Attention">
+<meta property="og:url" content="http://example.com/2025/07/14/Feature-Related-Attention/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="在输入特征上做文章的Attention本文将接着详细说明一种基于输入特征分类Attention的方式，并介绍在这种分类方式下关注到的不同的Attention的架构。 具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
+<meta property="article:published_time" content="2025-07-14T14:30:57.000Z">
+<meta property="article:modified_time" content="2025-07-14T15:40:28.077Z">
+<meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="model">
+<meta property="article:tag" content="Basic">
+<meta property="article:tag" content="还没写完捏">
+<meta property="article:tag" content="deep learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
+
+
+<link rel="canonical" href="http://example.com/2025/07/14/Feature-Related-Attention/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/07/14/Feature-Related-Attention/","path":"2025/07/14/Feature-Related-Attention/","title":"Feature-Related Attention"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Feature-Related Attention | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81%E4%B8%8A%E5%81%9A%E6%96%87%E7%AB%A0%E7%9A%84Attention"><span class="nav-number">1.</span> <span class="nav-text">在输入特征上做文章的Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%A4%9A%E9%87%8D%E6%80%A7-Multiplicity-of-Features"><span class="nav-number">1.1.</span> <span class="nav-text">特征多重性(Multiplicity of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B-Singular-Features-Attention"><span class="nav-number">1.1.1.</span> <span class="nav-text">单一特征注意力(Singular Features Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">多特征注意力机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%97%E9%A2%97%E7%B2%92%E5%BA%A6%E5%8D%8F%E5%90%8C"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">粗颗粒度协同</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#alternating-co-attention"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">alternating co-attention</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#interactive-co-attention"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">interactive co-attention</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%8D%8F%E5%90%8C%E6%B3%A8%E6%84%8F%E5%8A%9B-Parallel-Co-attention"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">并行协同注意力(Parallel Co-attention)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E6%B3%A8%E6%84%8F%E5%8A%9B-Rotatory-Attention"><span class="nav-number">1.1.2.1.4.</span> <span class="nav-text">旋转注意力(Rotatory Attention)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B1%82%E7%BA%A7-Levels-of-Features"><span class="nav-number">1.2.</span> <span class="nav-text">特征层级(Levels of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Level-Attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">单层级注意力(Single-Level Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">多层级注意力机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E7%A4%BA-Feature-Representations"><span class="nav-number">1.3.</span> <span class="nav-text">特征表示(Feature Representations)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Representational-Attention"><span class="nav-number">1.3.1.</span> <span class="nav-text">单一表示注意力(Single-Representational Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Multi-Representational-Attention"><span class="nav-number">1.3.2.</span> <span class="nav-text">多表示注意力(Multi-Representational Attention)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-number">1.4.</span> <span class="nav-text">应用领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/14/Feature-Related-Attention/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Feature-Related Attention | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Feature-Related Attention
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-14 22:30:57 / Modified: 23:40:28" itemprop="dateCreated datePublished" datetime="2025-07-14T22:30:57+08:00">2025-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/attention/" itemprop="url" rel="index"><span itemprop="name">attention</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/model/attention/feature-related/" itemprop="url" rel="index"><span itemprop="name">feature related</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="在输入特征上做文章的Attention"><a href="#在输入特征上做文章的Attention" class="headerlink" title="在输入特征上做文章的Attention"></a>在输入特征上做文章的Attention</h1><p>本文将接着详细说明一种基于输入特征分类Attention的方式，并介绍在这种分类方式下关注到的不同的Attention的架构。</p>
+<p>具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。</p>
+<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+<span id="more"></span>
+
+<h2 id="特征多重性-Multiplicity-of-Features"><a href="#特征多重性-Multiplicity-of-Features" class="headerlink" title="特征多重性(Multiplicity of Features)"></a>特征多重性(Multiplicity of Features)</h2><p>这部分讨论了如何处理多个输入源的特征，主要分为单一特征注意力和多特征注意力机制。</p>
+<h3 id="单一特征注意力-Singular-Features-Attention"><a href="#单一特征注意力-Singular-Features-Attention" class="headerlink" title="单一特征注意力(Singular Features Attention)"></a>单一特征注意力(Singular Features Attention)</h3><p>大多数任务模型只处理单一输入(如图像、句子或声音序列)，使用单一特征注意力机制。这种机制直接对单个输入的特征向量进行注意力计算。</p>
+<h3 id="多特征注意力机制"><a href="#多特征注意力机制" class="headerlink" title="多特征注意力机制"></a>多特征注意力机制</h3><p>当模型需要同时处理多个输入源时，需要特殊的多特征注意力机制：</p>
+<p><strong>协同注意力(Co-attention)</strong></p>
+<ul>
+<li>分为 <strong>粗科粒度(Coarse-grained)</strong> 和 <strong>细颗粒度(Fine-grained)</strong> 两种</li>
+<li><strong>粗颗粒度协同</strong>注意力使用一个输入的<em>紧凑表示</em>作为查询来关注另一个输入</li>
+<li><strong>细颗粒度协同</strong>注意力使用一个输入的所有特征向量作为查询</li>
+</ul>
+<h4 id="粗颗粒度协同"><a href="#粗颗粒度协同" class="headerlink" title="粗颗粒度协同"></a>粗颗粒度协同</h4><p>论文给出的粗颗粒度协同的实例是<strong>alternating co-attention</strong></p>
+<h5 id="alternating-co-attention"><a href="#alternating-co-attention" class="headerlink" title="alternating co-attention"></a>alternating co-attention</h5><img src="/img/Attention/AlternatingCo-Attention.png" alt="alternating co-attention" width="60%" height="auto">
+
+<p>如上图所示，这是alternating co-attention的架构图，该机制交替使用两个输入的特征矩阵，先计算第一个输入的注意力，将其上下文向量作为查询计算第二个输入的注意力，然后再用第二个输入的上下文向量重新计算第一个输入的注意力。</p>
+<p>这里现给出他的score函数</p>
+<p>对于有序列输入的Attention：</p>
+<p>$$<br>\mathrm{score}(\underset{d_{q}\times1}{\boldsymbol{q}},\underset{d_{k}\times1}{\boldsymbol{k}_{l}})&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{T}}\times\mathrm{act}(\underset{d_{w}\times d_{q}}{\boldsymbol{W}_{1}}\times\underset{d_{q}\times1}{\boldsymbol{q}}+\underset{d_{w}\times d_{k}}{\boldsymbol{W}_{2}}\times\underset{d_{k}\times1}{\boldsymbol{k}_{l}}+\underset{d_{w}\times1}{\boldsymbol{b}})<br>$$</p>
+<p>对于无序列输入的Attention <del>（这是一种自注意力机制，后面会提到）</del> ：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(0)}}&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{(1)T}}\times\operatorname{act}(\underset{d_{w}\times d_{k}^{(1)}}{\boldsymbol{W}^{(1)}}\times\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}}+\underset{d_{w}\times1}{\boldsymbol{b}^{(1)}})<br>$$</p>
+<p>对于第二层Attention：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(2)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(1)}\times 1}{\boldsymbol{c}^{(0)}},\underset{d_{k}^{(2)}\times1}{\boldsymbol{k}_{l}^{(2)}})<br>$$</p>
+<p>对于第三层Attention：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(1)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(2)}\times 1}{\boldsymbol{c}^{(2)}},\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}})<br>$$</p>
+<p>生成的上下文向量$\boldsymbol{c}^{(1)}$和$\boldsymbol{c}^{(2)}$被连接起来，并在输出模型中用于预测。交替协同注意力由于需要一个接一个地计算上下文向量，因此本质上包含了<em>一种顺序性</em>。这可能会带来计算上的劣势，因为<em>无法并行</em>化。 </p>
+<h5 id="interactive-co-attention"><a href="#interactive-co-attention" class="headerlink" title="interactive co-attention"></a>interactive co-attention</h5><ul>
+<li>并行计算两个输入的注意力</li>
+<li>使用未加权平均的关键向量作为查询</li>
+<li>计算效率更高，可以并行处理</li>
+</ul>
+<h5 id="并行协同注意力-Parallel-Co-attention"><a href="#并行协同注意力-Parallel-Co-attention" class="headerlink" title="并行协同注意力(Parallel Co-attention)"></a>并行协同注意力(Parallel Co-attention)</h5><ul>
+<li>同时计算两个输入的注意力</li>
+<li>使用亲和矩阵(Affinity Matrix)转换关键向量空间</li>
+<li>通过聚合形式计算注意力分数</li>
+</ul>
+<h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><ul>
+<li>主要用于情感分析任务</li>
+<li>处理三个输入：目标短语、左上下文和右上下文</li>
+<li>通过注意力机制迭代改进表示</li>
+</ul>
+<h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。</p>
+<h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
+<h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><ol>
+<li><p><strong>注意力叠加(Attention-via-Attention)</strong></p>
+<ul>
+<li>同时处理字符级和词级特征</li>
+<li>先计算词级注意力，用其上下文向量辅助计算字符级注意力</li>
+<li>最终拼接两个层级的上下文向量</li>
+</ul>
+</li>
+<li><p><strong>层级注意力(Hierarchical Attention)</strong></p>
+<ul>
+<li>从最低层级开始，逐步构建高层级表示</li>
+<li>常用于文档分类：词→句→文档</li>
+<li>每个层级通过注意力机制生成摘要表示</li>
+</ul>
+</li>
+</ol>
+<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示方式的注意力机制变体，主要分为单一表示注意力和多表示注意力。</p>
+<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>传统方法使用单一嵌入或表示模型生成特征表示。</p>
+<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><ol>
+<li><p><strong>元嵌入(Meta-embeddings)</strong></p>
+<ul>
+<li>整合多个嵌入表示</li>
+<li>通过注意力机制加权平均不同表示</li>
+<li>生成更高质量的特征表示</li>
+</ul>
+</li>
+<li><p><strong>自注意力机制</strong></p>
+<ul>
+<li>学习特征向量之间的关系</li>
+<li>通过注意力改进特征表示</li>
+<li>常用于Transformer架构中</li>
+</ul>
+</li>
+</ol>
+<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><p>3.1节讨论的特征相关注意力机制在多个领域有广泛应用：</p>
+<ul>
+<li>医学数据分析(多特征协同注意力)</li>
+<li>推荐系统(多层级注意力)</li>
+<li>情感分析(旋转注意力)</li>
+<li>文档分类(层级注意力)</li>
+<li>多语言处理(多表示注意力)</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>3.1节系统性地分类了基于输入特征特性的注意力机制变体，为研究者提供了清晰的框架来选择适合特定任务和数据类型的最佳注意力机制。这些机制通过充分利用输入特征的多重性、层级结构和表示多样性，显著提升了模型在各种任务上的表现。</p>
+<p>图3展示了完整的注意力机制分类体系，其中3.1节讨论的特征相关注意力机制是该体系的重要组成部分。</p>
+<p>$$<br>\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{A}&#x3D;\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})<br>$$</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/model/" rel="tag"># model</a>
+              <a href="/tags/Basic/" rel="tag"># Basic</a>
+              <a href="/tags/%E8%BF%98%E6%B2%A1%E5%86%99%E5%AE%8C%E6%8D%8F/" rel="tag"># 还没写完捏</a>
+              <a href="/tags/deep-learning/" rel="tag"># deep learning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/14/GAT/" rel="prev" title="GAT">
+                  <i class="fa fa-angle-left"></i> GAT
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">10k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">37 mins.</span>
+  </span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
