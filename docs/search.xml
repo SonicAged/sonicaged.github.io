@@ -1,96 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Attention Overview</title>
-    <url>/2025/07/10/Attention/</url>
-    <content><![CDATA[<h1 id="Is-Attention-All-My-Need"><a href="#Is-Attention-All-My-Need" class="headerlink" title="Is Attention All My Need ?"></a>Is Attention All My Need ?</h1><blockquote>
-<p>注意力机制在图神经网络中扮演着越来越重要的角色。<del>但鼠鼠现在连正常的Attention有哪些都不清楚捏</del>本文鼠鼠将从一般的Attention出发，给出Attention的总体结构，然后按分类介绍现有的主要的Attention</p>
-</blockquote>
-<p>本文主要来自于一篇论文，基本可以看作<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">那篇论文</a>的阅读笔记</p>
-<span id="more"></span>
-
-<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，注意力机制已经成为一个革命性的创新，特别是在处理序列数据和图像数据方面取得了巨大成功。而在图神经网络中，注意力机制的引入不仅提高了模型的表现力，还增强了模型的可解释性。</p>
-<p>在图结构数据中应用注意力机制主要有以下优势：</p>
-<ol>
-<li>自适应性：能够根据任务动态调整不同邻居节点的重要性</li>
-<li>可解释性：通过注意力权重可以直观理解模型的决策过程</li>
-<li>长程依赖：有效缓解了传统GNN中的过平滑问题</li>
-<li>异质性处理：更好地处理异质图中的不同类型节点和边</li>
-</ol>
-<h2 id="📚-总览Attention"><a href="#📚-总览Attention" class="headerlink" title="📚 总览Attention"></a>📚 总览Attention</h2><p>本章节主要参考了论文<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>有兴趣的话可以看看原文捏</p>
-<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="45%" height="400" type="application/pdf">
-
-<h3 id="Attention的一般结构"><a href="#Attention的一般结构" class="headerlink" title="Attention的一般结构"></a>Attention的一般结构</h3><img src="/img/Attention/TotalModel.png" alt="TotalModel" width="60%" height="auto">
-
-<p>上图是从总体上看Attention在整个任务模型框架中的位置</p>
-<p>框架包含四个核心组件：</p>
-<ol>
-<li><strong>特征模型</strong>：负责输入数据的特征提取</li>
-<li><strong>查询模型</strong>：生成注意力查询向量</li>
-<li><strong>注意力模型</strong>：计算注意力权重</li>
-<li><strong>输出模型</strong>：生成最终预测结果</li>
-</ol>
-<p>接下来，我们会从 <em>输入</em> 的角度来看<strong>特征模型</strong>和<strong>查询模型</strong>，从 <em>输出</em> 的角度来看<strong>注意力模型</strong>和<strong>输出模型</strong></p>
-<h4 id="输入处理机制"><a href="#输入处理机制" class="headerlink" title="输入处理机制"></a>输入处理机制</h4><ol>
-<li><p><strong>特征模型</strong>，即将任务的输入进行embedding</p>
-<p> 对于输入矩阵$ X \in \mathbb{R}^{d_x \times n_x} $，特征模型提取特征向量：$\boldsymbol{F} &#x3D; [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
-</li>
-<li><p><strong>查询模型</strong>，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的</p>
-</li>
-</ol>
-<p>一般情况下，这两个模型可以用CNN或RNN</p>
-<h4 id="输出计算机制"><a href="#输出计算机制" class="headerlink" title="输出计算机制"></a>输出计算机制</h4><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
-
-<p>上图是Attention模型总体结构的说明，下面对这张图进行详细的说明</p>
-<ol>
-<li>特征矩阵$\boldsymbol{F} &#x3D; [\boldsymbol{f}_1, \ldots, \boldsymbol{f}_{n_f}] \in \mathbb{R}^{d_f \times n_f}$，通过<em>某些方法</em>将其分为Keys矩阵$\boldsymbol{K} &#x3D; [\boldsymbol{k}_1, \ldots, \boldsymbol{k}_{n_f}] \in \mathbb{R}^{d_k \times n_f}$和Values矩阵$\boldsymbol{V} &#x3D; [\boldsymbol{v}_1, \ldots, \boldsymbol{v}_{n_f}] \in \mathbb{R}^{d_v \times n_f}$，这里的<em>某些方法</em>，一般情况下，按以下的方式通过<strong>线性变换</strong>得到：</li>
-</ol>
-<p>$$<br>\underset{d_{k} \times n_{f}}{\boldsymbol{K}}&#x3D;\underset{d_{k} \times d_{f}}{\boldsymbol{W}_{K}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}}, \quad \underset{d_{v} \times n_{f}}{\boldsymbol{V}}&#x3D;\underset{d_{v} \times d_{f}}{\boldsymbol{W}_{V}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}} .<br>$$</p>
-<ol start="2">
-<li><p><code>Attention Scores</code>模块根据 $\boldsymbol{q}$ 计算每一个key向量对应的分数$\boldsymbol{e} &#x3D; [e_1, \ldots, e_{n_f}] \in \mathbb{R}^{n_f}$：</p>
-<p> $$<br> \underset{1\times 1}{e_l} &#x3D; \text{score}(\underset{d_q \times 1}{\boldsymbol{q}}, \underset{d_k \times 1}{\boldsymbol{k}_l})<br> $$</p>
-<p> 如前所述，查询象征着对信息的请求。注意力分数$e_l$表示根据查询，关键向量$\boldsymbol{k}_l$中包含的信息的重要性。如果查询和关键向量的维度相同，则得分函数的一个例子是取向量的点积。</p>
-</li>
-<li><p>由于经过这么一堆操作之后，分数有很大的可能已经飞起来了捏，这个时候就需要<code>Attention Alignment</code>模块对其进行<strong>归一化</strong>之类的操作了捏</p>
-<p> $$<br> \underset{1\times 1}{a_l} &#x3D; \text{align}(\underset{d_q \times 1}{\boldsymbol{e_l}}, \underset{n_f \times 1}{\boldsymbol{e}})<br> $$</p>
-</li>
-</ol>
-<p>注意力权重$\boldsymbol{a} &#x3D; [a_1, \ldots, a_{n_f}] \in \mathbb{R}^{n_f}$为注意力模块提供了一个相当直观的解释。每个权重直接表明了每个特征向量相对于其他特征向量对于这个问题的重要性。 </p>
-<ol start="4">
-<li><p>在<code>Weight Average</code>模块完成<strong>上下文生成</strong>：</p>
-<p> $$<br> \underset{d_v \times 1}{\boldsymbol{c}} &#x3D; \sum_{l &#x3D; 1}^{n_f} \underset{1 \times 1}{a_l}\times \underset{d_v \times 1}{\boldsymbol{v}_l}<br> $$</p>
-</li>
-<li><p>输出处理就想怎么搞就怎么搞了捏，例如 用于分类</p>
-<p> $$<br> \underset{d_y \times 1}{\hat{\boldsymbol{y}}} &#x3D; \text{softmax}( \underset{d_y \times d_v}{\boldsymbol{W}_c}\times \underset{d_v \times 1}{\boldsymbol{c}} + \underset{d_y \times 1}{\boldsymbol{b}_c})<br> $$</p>
-</li>
-</ol>
-<h3 id="Attention分类"><a href="#Attention分类" class="headerlink" title="Attention分类"></a>Attention分类</h3><img src="/img/Attention/Taxonomy.png" style="max-width: 100%; height: auto;">
-
-<p>论文按照上图的方式给Attention进行了分类</p>
-<p>由于篇幅限制，这里决定重开几个博文来分别介绍这些Attention，链接如下：</p>
-<a href="/2025/07/14/Feature-Related-Attention/" title="Feature-Related Attention">Feature-Related Attention</a>
-
-
-
-
-
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>model</category>
-        <category>attention</category>
-      </categories>
-      <tags>
-        <tag>CDR</tag>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>还没写完捏</tag>
-        <tag>deep learning</tag>
-        <tag>PyTorch</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CDR Input Data Analysis</title>
     <url>/2025/07/09/CDR-data-analysis/</url>
     <content><![CDATA[<h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
@@ -447,7 +357,7 @@
   <entry>
     <title>Feature-Related Attention</title>
     <url>/2025/07/14/Feature-Related-Attention/</url>
-    <content><![CDATA[<h1 id="在输入特征上做文章的Attention"><a href="#在输入特征上做文章的Attention" class="headerlink" title="在输入特征上做文章的Attention"></a>在输入特征上做文章的Attention</h1><p>本文将接着详细说明一种基于输入特征分类Attention的方式，并介绍在这种分类方式下关注到的不同的Attention的架构。</p>
+    <content><![CDATA[<h1 id="在输入特征上做文章的-Attention"><a href="#在输入特征上做文章的-Attention" class="headerlink" title="在输入特征上做文章的 Attention"></a>在输入特征上做文章的 Attention</h1><p>本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。</p>
 <p>具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。</p>
 <p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
 <span id="more"></span>
@@ -464,50 +374,167 @@
 <h4 id="粗颗粒度协同"><a href="#粗颗粒度协同" class="headerlink" title="粗颗粒度协同"></a>粗颗粒度协同</h4><p>论文给出的粗颗粒度协同的实例是<strong>alternating co-attention</strong></p>
 <h5 id="alternating-co-attention"><a href="#alternating-co-attention" class="headerlink" title="alternating co-attention"></a>alternating co-attention</h5><img src="/img/Attention/AlternatingCo-Attention.png" alt="alternating co-attention" width="60%" height="auto">
 
-<p>如上图所示，这是alternating co-attention的架构图，该机制交替使用两个输入的特征矩阵，先计算第一个输入的注意力，将其上下文向量作为查询计算第二个输入的注意力，然后再用第二个输入的上下文向量重新计算第一个输入的注意力。</p>
-<p>这里现给出他的score函数</p>
-<p>对于有序列输入的Attention：</p>
+<p>如上图所示，这是 alternating co-attention 的架构图，该机制交替使用两个输入的特征矩阵，先计算第一个输入的注意力，将其上下文向量作为查询计算第二个输入的注意力，然后再用第二个输入的上下文向量重新计算第一个输入的注意力。</p>
+<p>这里现给出他的 score 函数</p>
+<p>对于有序列输入的 Attention：</p>
 <p>$$<br>\mathrm{score}(\underset{d_{q}\times1}{\boldsymbol{q}},\underset{d_{k}\times1}{\boldsymbol{k}_{l}})&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{T}}\times\mathrm{act}(\underset{d_{w}\times d_{q}}{\boldsymbol{W}_{1}}\times\underset{d_{q}\times1}{\boldsymbol{q}}+\underset{d_{w}\times d_{k}}{\boldsymbol{W}_{2}}\times\underset{d_{k}\times1}{\boldsymbol{k}_{l}}+\underset{d_{w}\times1}{\boldsymbol{b}})<br>$$</p>
-<p>对于无序列输入的Attention <del>（这是一种自注意力机制，后面会提到）</del> ：</p>
+<p>对于无序列输入的 Attention <del>（这是一种自注意力机制，后面会提到）</del> ：</p>
 <p>$$<br>\underset{1\times1}{e_{l}^{(0)}}&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{(1)T}}\times\operatorname{act}(\underset{d_{w}\times d_{k}^{(1)}}{\boldsymbol{W}^{(1)}}\times\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}}+\underset{d_{w}\times1}{\boldsymbol{b}^{(1)}})<br>$$</p>
-<p>对于第二层Attention：</p>
+<p>对于第二层 Attention：</p>
 <p>$$<br>\underset{1\times1}{e_{l}^{(2)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(1)}\times 1}{\boldsymbol{c}^{(0)}},\underset{d_{k}^{(2)}\times1}{\boldsymbol{k}_{l}^{(2)}})<br>$$</p>
-<p>对于第三层Attention：</p>
+<p>对于第三层 Attention：</p>
 <p>$$<br>\underset{1\times1}{e_{l}^{(1)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(2)}\times 1}{\boldsymbol{c}^{(2)}},\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}})<br>$$</p>
-<p>生成的上下文向量$\boldsymbol{c}^{(1)}$和$\boldsymbol{c}^{(2)}$被连接起来，并在输出模型中用于预测。交替协同注意力由于需要一个接一个地计算上下文向量，因此本质上包含了<em>一种顺序性</em>。这可能会带来计算上的劣势，因为<em>无法并行</em>化。 </p>
-<h5 id="interactive-co-attention"><a href="#interactive-co-attention" class="headerlink" title="interactive co-attention"></a>interactive co-attention</h5><ul>
+<p>生成的上下文向量$\boldsymbol{c}^{(1)}$和$\boldsymbol{c}^{(2)}$被连接起来，并在输出模型中用于预测。交替协同注意力由于需要一个接一个地计算上下文向量，因此本质上包含了<em>一种顺序性</em>。这可能会带来计算上的劣势，因为<em>无法并行</em>化。</p>
+<h5 id="interactive-co-attention"><a href="#interactive-co-attention" class="headerlink" title="interactive co-attention"></a>interactive co-attention</h5><img src="/img/Attention/InteractiveCo-Attention.png" alt="interactive co-attention" width="60%" height="auto">
+
+<ul>
 <li>并行计算两个输入的注意力</li>
 <li>使用未加权平均的关键向量作为查询</li>
 <li>计算效率更高，可以并行处理</li>
 </ul>
-<h5 id="并行协同注意力-Parallel-Co-attention"><a href="#并行协同注意力-Parallel-Co-attention" class="headerlink" title="并行协同注意力(Parallel Co-attention)"></a>并行协同注意力(Parallel Co-attention)</h5><ul>
+<p>$$<br>\underset{d_k^{(i)}\times1}{\bar{\boldsymbol{k}}^{(i)}}&#x3D;\frac{1}{n_f^{(i)}}\sum\limits_{l&#x3D;1}^{n_f^{(i)}}\underset{d_k^{(i)}\times1}{\boldsymbol{k}_l^{(i)}}, \quad \underset{1\times1}{e_{l}^{(i)}}&#x3D;\mathrm{score}(\underset{d_{k}^{(3-i)}\times1}{\bar{\boldsymbol{k}}^{(3-i)}},\underset{d_{k}^{(i)}\times1}{\boldsymbol{k}_{l}^{(i)}}) , \qquad i&#x3D;1,2<br>$$</p>
+<h4 id="细颗粒度协同"><a href="#细颗粒度协同" class="headerlink" title="细颗粒度协同"></a>细颗粒度协同</h4><p>虽然粗粒度的共同注意力机制使用一个输入的紧凑表示作为查询，以计算另一个输入的注意力，但细粒度的共同注意力在计算注意力分数时会单独考虑每个输入的每个元素。在这种情况下，查询变成了一个矩阵。</p>
+<h5 id="并行协同注意力-Parallel-Co-attention"><a href="#并行协同注意力-Parallel-Co-attention" class="headerlink" title="并行协同注意力(Parallel Co-attention)"></a>并行协同注意力(Parallel Co-attention)</h5><img src="/img/Attention/ParallelCo-Attention.png" alt="parallel co-attention" width="60%" height="auto">
+
+<ul>
 <li>同时计算两个输入的注意力</li>
 <li>使用亲和矩阵(Affinity Matrix)转换关键向量空间</li>
 <li>通过聚合形式计算注意力分数</li>
 </ul>
-<h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><ul>
+<p>我们有两种方式生成矩阵 $\mathbf{A}$</p>
+<p>$$<br>\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{\mathbf{A}}&#x3D;\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})<br>$$</p>
+<p>$$<br>\underset{1\times1}{A_{i,j}}&#x3D;\underset{1\times3d_{k}}{\boldsymbol{w}_{A}^{T}}\times\mathrm{concat}(\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}},\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}},\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}}\circ\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}})<br>$$</p>
+<p>其中，$\circ$表示哈德曼积</p>
+<p>Affinity Matrix 可以解释为两个键矩阵列的相似性矩阵，并有助于将图像键转换到与句子中单词的键相同的空间，反之亦然。</p>
+<p>由于现在查询由向量变成了矩阵，因此 score 函数也发生了变化</p>
+<p>$$<br>e^{(1)} &#x3D;\boldsymbol{w}_{1}\times\mathrm{act}(\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)}\times\boldsymbol{A}^{T}+\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)})<br>$$</p>
+<p>$$<br>e^{(2)} &#x3D;\boldsymbol{w}_{2}\times\mathrm{act}(\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)}\times\boldsymbol{A}^{::}+\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)})<br>$$</p>
+<p>值得一提的是，之前的 score 函数实际是现在这一形式的特殊表达，也就是说，这个表达更具一般性</p>
+<p>如前所述，亲和矩阵本质上是两个注意力模块 1 和 2 的关键向量的相似性矩阵。这个意味着一种不同的确定注意力分数的方法。即，可以将一行或一列中的最大相似度值作为注意力分数。</p>
+<p>$$<br>e_{i}^{(1)}&#x3D;\max_{j&#x3D;1,\ldots,n_{f}^{(2)}}A_{i,j},\quad e_{j}^{(2)}&#x3D;\max_{i&#x3D;1,\ldots,n_{f}^{(1)}}A_{i,j}.<br>$$</p>
+<h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><p>Rotatory Attention 是一种用于处理多输入数据的注意力机制，特别适用于情感分析任务中同时考虑目标短语、左上下文和右上下文的场景。该机制通过交替关注不同输入来构建更丰富的表示。</p>
+<ul>
 <li>主要用于情感分析任务</li>
-<li>处理三个输入：目标短语、左上下文和右上下文</li>
+<li>处理三个输入：目标短语 $\boldsymbol{F}^{t} &#x3D; [ \boldsymbol{f}_{1}^{t}, \ldots , \boldsymbol{f}_{n_{f}^{t}}^{t}] \in \mathbb{R} ^{d_{f}^{t}\times n_{f}^{t}}$ 、左上下文 $F^{l} &#x3D; [ f_{1}^{l}, \ldots , f_{n_{f}^{l}}^{l}]\in\mathbb{R} ^{d_{f}^{l}\times n_{f}^{l}}$ 和右上下文 $F^{r} &#x3D; [ f_{1}^{r}, \ldots , f_{n_{f}^{r}}^{r}]\in\mathbb{R}^{d_f^r\times n_f^r}$</li>
 <li>通过注意力机制迭代改进表示</li>
 </ul>
+<p>其大致的过程如下：</p>
+<ol>
+<li><p><strong>初始特征提取</strong></p>
+<p>首先，模型从三个输入中提取特征向量：</p>
+<ul>
+<li>目标短语特征矩阵：$F^{t}&#x3D;[f_{1}^{t},\ldots,f_{n_{f}^{t}}^{t}]\in R^{d_{f}^{t}\times n_{f}^{t}}$</li>
+<li>左上下文特征矩阵：$F^{l}&#x3D;[f_{1}^{l},\ldots,f_{n_{f}^{l}}^{l}]\in R^{d_{f}^{l}\times n_{f}^{l}}$</li>
+<li>右上下文特征矩阵：$F^{r}&#x3D;[f_{1}^{r},\ldots,f_{n_{f}^{r}}^{r}]\in R^{d_{f}^{r}\times n_{f}^{r}}$</li>
+</ul>
+</li>
+<li><p><strong>目标短语初始表示</strong></p>
+<p>计算目标短语的初始表示向量$r^{t}$，通过对特征向量取平均：</p>
+<p>$$<br>r^{t}&#x3D;\frac{1}{n_{f}^{t}}\sum_{i&#x3D;1}^{n_{f}^{t}} f_{i}^{t}<br>$$</p>
+</li>
+<li><p><strong>左上下文注意力计算</strong></p>
+<p>使用$r^{t}$作为查询，计算左上下文的注意力：</p>
+<ol>
+<li><p>提取键向量和值向量：</p>
+<ul>
+<li>键向量：$k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in R^{d_{k}^{l}}$</li>
+<li>值向量：$v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in R^{d_{v}^{l}}$</li>
+</ul>
+</li>
+<li><p>计算注意力分数：</p>
+</li>
+</ol>
+<p>$$<br>e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)<br>$$</p>
+<ol start="3">
+<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{l}$</p>
+</li>
+<li><p>计算左上下文表示向量：</p>
+</li>
+</ol>
+<p>$$<br>r^{l}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{l}} a_{i}^{l}v_{i}^{l}<br>$$</p>
+</li>
+<li><p><strong>右上下文注意力计算</strong></p>
+<p>类似地，计算右上下文的表示向量$r^{r}$：</p>
+<ol>
+<li><p>提取键向量和值向量：</p>
+<ul>
+<li>键向量：$k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in R^{d_{k}^{r}}$</li>
+<li>值向量：$v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in R^{d_{v}^{r}}$</li>
+</ul>
+</li>
+<li><p>计算注意力分数：</p>
+</li>
+</ol>
+<p>$$<br>e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)<br>$$</p>
+<ol start="3">
+<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{r}$</p>
+</li>
+<li><p>计算右上下文表示向量：</p>
+</li>
+</ol>
+<p>$$<br>r^{r}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{r}} a_{i}^{r}v_{i}^{r}<br>$$</p>
+</li>
+<li><p><strong>目标短语更新表示</strong></p>
+<p>使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：</p>
+<ol>
+<li><p>提取目标短语的键向量和值向量：</p>
+<ul>
+<li>键向量：$k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in R^{d_{k}^{t}}$</li>
+<li>值向量：$v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in R^{d_{v}^{t}}$</li>
+</ul>
+</li>
+<li><p>计算左感知目标表示$r^{l_{t}}$：</p>
+<ul>
+<li>注意力分数：$e_{i}^{l_{t}}&#x3D;\operatorname{score}\left(r^{l}, k_{i}^{t}\right)$</li>
+<li>使用 softmax 对齐函数计算注意力权重$a_{i}^{l_{t}}$</li>
+<li>计算表示向量：$r^{l_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{l_{t}}v_{i}^{t}$</li>
+</ul>
+</li>
+<li><p>计算右感知目标表示$r^{r_{t}}$：</p>
+<ul>
+<li>注意力分数：$e_{i}^{r_{t}}&#x3D;\operatorname{score}\left(r^{r}, k_{i}^{t}\right)$</li>
+<li>使用 softmax 对齐函数计算注意力权重$a_{i}^{r_{t}}$</li>
+<li>计算表示向量：$r^{r_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{r_{t}}v_{i}^{t}$</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>最终表示</p>
+</li>
+</ol>
+<p>$$<br>r&#x3D;\operatorname{concat}\left(r^{l},r^{r},r^{l_{t}},r^{r_{t}}\right)<br>$$</p>
+<p>Rotatory Attention 具有以下特点：</p>
+<ol>
+<li><p><strong>双向信息流动</strong>：通过从目标短语到上下文，再从上下文回到目标短语的信息流动，实现了双向的信息交互。</p>
+</li>
+<li><p><strong>层次化表示</strong>：构建了多层次的特征表示，从原始特征到上下文感知特征。</p>
+</li>
+<li><p><strong>特定任务优化</strong>：特别适合情感分析任务，能够捕捉目标短语与上下文之间的复杂关系。</p>
+</li>
+</ol>
+<p>Rotatory Attention 通过这种交替关注的方式，能够更好地理解目标短语在特定上下文中的情感倾向，从而提高了情感分类的准确性。</p>
 <h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。</p>
 <h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
 <h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><ol>
-<li><p><strong>注意力叠加(Attention-via-Attention)</strong></p>
+<li><strong>注意力叠加(Attention-via-Attention)</strong></li>
+</ol>
+<img src="img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
+
 <ul>
 <li>同时处理字符级和词级特征</li>
 <li>先计算词级注意力，用其上下文向量辅助计算字符级注意力</li>
 <li>最终拼接两个层级的上下文向量</li>
 </ul>
-</li>
-<li><p><strong>层级注意力(Hierarchical Attention)</strong></p>
+<ol start="2">
+<li><strong>层级注意力(Hierarchical Attention)</strong></li>
+</ol>
+<img src="img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
+
 <ul>
 <li>从最低层级开始，逐步构建高层级表示</li>
-<li>常用于文档分类：词→句→文档</li>
+<li>常用于文档分类：词 → 句 → 文档</li>
 <li>每个层级通过注意力机制生成摘要表示</li>
 </ul>
-</li>
-</ol>
 <h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示方式的注意力机制变体，主要分为单一表示注意力和多表示注意力。</p>
 <h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>传统方法使用单一嵌入或表示模型生成特征表示。</p>
 <h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><ol>
@@ -522,11 +549,11 @@
 <ul>
 <li>学习特征向量之间的关系</li>
 <li>通过注意力改进特征表示</li>
-<li>常用于Transformer架构中</li>
+<li>常用于 Transformer 架构中</li>
 </ul>
 </li>
 </ol>
-<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><p>3.1节讨论的特征相关注意力机制在多个领域有广泛应用：</p>
+<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><p>3.1 节讨论的特征相关注意力机制在多个领域有广泛应用：</p>
 <ul>
 <li>医学数据分析(多特征协同注意力)</li>
 <li>推荐系统(多层级注意力)</li>
@@ -534,11 +561,11 @@
 <li>文档分类(层级注意力)</li>
 <li>多语言处理(多表示注意力)</li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>3.1节系统性地分类了基于输入特征特性的注意力机制变体，为研究者提供了清晰的框架来选择适合特定任务和数据类型的最佳注意力机制。这些机制通过充分利用输入特征的多重性、层级结构和表示多样性，显著提升了模型在各种任务上的表现。</p>
-<p>图3展示了完整的注意力机制分类体系，其中3.1节讨论的特征相关注意力机制是该体系的重要组成部分。</p>
-<p>$$<br>\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{A}&#x3D;\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})<br>$$</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>]]></content>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>3.1 节系统性地分类了基于输入特征特性的注意力机制变体，为研究者提供了清晰的框架来选择适合特定任务和数据类型的最佳注意力机制。这些机制通过充分利用输入特征的多重性、层级结构和表示多样性，显著提升了模型在各种任务上的表现。</p>
+<p>图 3 展示了完整的注意力机制分类体系，其中 3.1 节讨论的特征相关注意力机制是该体系的重要组成部分。</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+]]></content>
       <categories>
         <category>CDR</category>
         <category>model</category>
@@ -549,8 +576,8 @@
         <tag>CDR</tag>
         <tag>model</tag>
         <tag>Basic</tag>
-        <tag>还没写完捏</tag>
         <tag>deep learning</tag>
+        <tag>还没写完捏</tag>
       </tags>
   </entry>
   <entry>
@@ -735,57 +762,12 @@
       </categories>
       <tags>
         <tag>CDR</tag>
+        <tag>graph theory</tag>
         <tag>model</tag>
         <tag>Basic</tag>
-        <tag>PyTorch</tag>
-        <tag>graph theory</tag>
         <tag>embedding</tag>
+        <tag>PyTorch</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>hwadee</title>
-    <url>/2025/07/13/hwadee/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
-<span id="more"></span>
-
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
-<ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
-</li>
-</ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
-</ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
   </entry>
   <entry>
     <title>PEP 8</title>
@@ -866,6 +848,141 @@
         <tag>PEP</tag>
         <tag>闲🉐无聊</tag>
         <tag>大概率没用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hwadee</title>
+    <url>/2025/07/13/hwadee/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+<span id="more"></span>
+
+<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<ul>
+<li>引用 7 篇资料作为参考<ol>
+<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
+<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
+<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
+<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
+<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
+<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
+<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+</ul>
+<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
+<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
+<li>类似燃烧塑料或化学药品的味道；</li>
+<li>锯木屑混合酸味（家具中甲醛）；</li>
+<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
+<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
+<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
+</ul>
+<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
+<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
+<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
+</ul>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
+<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
+<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+  </entry>
+  <entry>
+    <title>Attention Overview</title>
+    <url>/2025/07/10/Attention/</url>
+    <content><![CDATA[<h1 id="Is-Attention-All-My-Need"><a href="#Is-Attention-All-My-Need" class="headerlink" title="Is Attention All My Need ?"></a>Is Attention All My Need ?</h1><blockquote>
+<p>注意力机制在图神经网络中扮演着越来越重要的角色。<del>但鼠鼠现在连正常的Attention有哪些都不清楚捏</del>本文鼠鼠将从一般的Attention出发，给出Attention的总体结构，然后按分类介绍现有的主要的Attention</p>
+</blockquote>
+<p>本文主要来自于一篇论文，基本可以看作<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">那篇论文</a>的阅读笔记</p>
+<span id="more"></span>
+
+<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，注意力机制已经成为一个革命性的创新，特别是在处理序列数据和图像数据方面取得了巨大成功。而在图神经网络中，注意力机制的引入不仅提高了模型的表现力，还增强了模型的可解释性。</p>
+<p>在图结构数据中应用注意力机制主要有以下优势：</p>
+<ol>
+<li>自适应性：能够根据任务动态调整不同邻居节点的重要性</li>
+<li>可解释性：通过注意力权重可以直观理解模型的决策过程</li>
+<li>长程依赖：有效缓解了传统GNN中的过平滑问题</li>
+<li>异质性处理：更好地处理异质图中的不同类型节点和边</li>
+</ol>
+<h2 id="📚-总览Attention"><a href="#📚-总览Attention" class="headerlink" title="📚 总览Attention"></a>📚 总览Attention</h2><p>本章节主要参考了论文<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>有兴趣的话可以看看原文捏</p>
+<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="45%" height="400" type="application/pdf">
+
+<h3 id="Attention的一般结构"><a href="#Attention的一般结构" class="headerlink" title="Attention的一般结构"></a>Attention的一般结构</h3><img src="/img/Attention/TotalModel.png" alt="TotalModel" width="60%" height="auto">
+
+<p>上图是从总体上看Attention在整个任务模型框架中的位置</p>
+<p>框架包含四个核心组件：</p>
+<ol>
+<li><strong>特征模型</strong>：负责输入数据的特征提取</li>
+<li><strong>查询模型</strong>：生成注意力查询向量</li>
+<li><strong>注意力模型</strong>：计算注意力权重</li>
+<li><strong>输出模型</strong>：生成最终预测结果</li>
+</ol>
+<p>接下来，我们会从 <em>输入</em> 的角度来看<strong>特征模型</strong>和<strong>查询模型</strong>，从 <em>输出</em> 的角度来看<strong>注意力模型</strong>和<strong>输出模型</strong></p>
+<h4 id="输入处理机制"><a href="#输入处理机制" class="headerlink" title="输入处理机制"></a>输入处理机制</h4><ol>
+<li><p><strong>特征模型</strong>，即将任务的输入进行embedding</p>
+<p> 对于输入矩阵$ X \in \mathbb{R}^{d_x \times n_x} $，特征模型提取特征向量：$\boldsymbol{F} &#x3D; [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
+</li>
+<li><p><strong>查询模型</strong>，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的</p>
+</li>
+</ol>
+<p>一般情况下，这两个模型可以用CNN或RNN</p>
+<h4 id="输出计算机制"><a href="#输出计算机制" class="headerlink" title="输出计算机制"></a>输出计算机制</h4><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
+
+<p>上图是Attention模型总体结构的说明，下面对这张图进行详细的说明</p>
+<ol>
+<li>特征矩阵$\boldsymbol{F} &#x3D; [\boldsymbol{f}_1, \ldots, \boldsymbol{f}_{n_f}] \in \mathbb{R}^{d_f \times n_f}$，通过<em>某些方法</em>将其分为Keys矩阵$\boldsymbol{K} &#x3D; [\boldsymbol{k}_1, \ldots, \boldsymbol{k}_{n_f}] \in \mathbb{R}^{d_k \times n_f}$和Values矩阵$\boldsymbol{V} &#x3D; [\boldsymbol{v}_1, \ldots, \boldsymbol{v}_{n_f}] \in \mathbb{R}^{d_v \times n_f}$，这里的<em>某些方法</em>，一般情况下，按以下的方式通过<strong>线性变换</strong>得到：</li>
+</ol>
+<p>$$<br>\underset{d_{k} \times n_{f}}{\boldsymbol{K}}&#x3D;\underset{d_{k} \times d_{f}}{\boldsymbol{W}_{K}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}}, \quad \underset{d_{v} \times n_{f}}{\boldsymbol{V}}&#x3D;\underset{d_{v} \times d_{f}}{\boldsymbol{W}_{V}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}} .<br>$$</p>
+<ol start="2">
+<li><p><code>Attention Scores</code>模块根据 $\boldsymbol{q}$ 计算每一个key向量对应的分数$\boldsymbol{e} &#x3D; [e_1, \ldots, e_{n_f}] \in \mathbb{R}^{n_f}$：</p>
+<p> $$<br> \underset{1\times 1}{e_l} &#x3D; \text{score}(\underset{d_q \times 1}{\boldsymbol{q}}, \underset{d_k \times 1}{\boldsymbol{k}_l})<br> $$</p>
+<p> 如前所述，查询象征着对信息的请求。注意力分数$e_l$表示根据查询，关键向量$\boldsymbol{k}_l$中包含的信息的重要性。如果查询和关键向量的维度相同，则得分函数的一个例子是取向量的点积。</p>
+</li>
+<li><p>由于经过这么一堆操作之后，分数有很大的可能已经飞起来了捏，这个时候就需要<code>Attention Alignment</code>模块对其进行<strong>归一化</strong>之类的操作了捏</p>
+<p> $$<br> \underset{1\times 1}{a_l} &#x3D; \text{align}(\underset{d_q \times 1}{\boldsymbol{e_l}}, \underset{n_f \times 1}{\boldsymbol{e}})<br> $$</p>
+</li>
+</ol>
+<p>注意力权重$\boldsymbol{a} &#x3D; [a_1, \ldots, a_{n_f}] \in \mathbb{R}^{n_f}$为注意力模块提供了一个相当直观的解释。每个权重直接表明了每个特征向量相对于其他特征向量对于这个问题的重要性。 </p>
+<ol start="4">
+<li><p>在<code>Weight Average</code>模块完成<strong>上下文生成</strong>：</p>
+<p> $$<br> \underset{d_v \times 1}{\boldsymbol{c}} &#x3D; \sum_{l &#x3D; 1}^{n_f} \underset{1 \times 1}{a_l}\times \underset{d_v \times 1}{\boldsymbol{v}_l}<br> $$</p>
+</li>
+<li><p>输出处理就想怎么搞就怎么搞了捏，例如 用于分类</p>
+<p> $$<br> \underset{d_y \times 1}{\hat{\boldsymbol{y}}} &#x3D; \text{softmax}( \underset{d_y \times d_v}{\boldsymbol{W}_c}\times \underset{d_v \times 1}{\boldsymbol{c}} + \underset{d_y \times 1}{\boldsymbol{b}_c})<br> $$</p>
+</li>
+</ol>
+<h3 id="Attention分类"><a href="#Attention分类" class="headerlink" title="Attention分类"></a>Attention分类</h3><img src="/img/Attention/Taxonomy.png" style="max-width: 100%; height: auto;">
+
+<p>论文按照上图的方式给Attention进行了分类</p>
+<p>由于篇幅限制，这里决定重开几个博文来分别介绍这些Attention，链接如下：</p>
+<a href="/2025/07/14/Feature-Related-Attention/" title="Feature-Related Attention">Feature-Related Attention</a>
+
+
+
+
+
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>model</category>
+        <category>attention</category>
+      </categories>
+      <tags>
+        <tag>CDR</tag>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>还没写完捏</tag>
+        <tag>PyTorch</tag>
       </tags>
   </entry>
 </search>
