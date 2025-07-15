@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://example.com/2025/07/14/Feature-Related-Attention/img/Attention/AttentionViaAttention.png">
 <meta property="og:image" content="http://example.com/2025/07/14/Feature-Related-Attention/img/Attention/HierarchicalAttention.png">
 <meta property="article:published_time" content="2025-07-14T14:30:57.000Z">
-<meta property="article:modified_time" content="2025-07-15T16:31:10.521Z">
+<meta property="article:modified_time" content="2025-07-15T16:38:32.939Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="model">
@@ -278,7 +278,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-16 00:31:10" itemprop="dateModified" datetime="2025-07-16T00:31:10+08:00">2025-07-16</time>
+      <time title="Modified: 2025-07-16 00:38:32" itemprop="dateModified" datetime="2025-07-16T00:38:32+08:00">2025-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -404,53 +404,33 @@
 <li><p><strong>左上下文注意力计算</strong></p>
 <p>使用$r^{t}$作为查询，计算左上下文的注意力：</p>
 <ol>
-<li><p>提取键向量和值向量：</p>
-<ul>
-<li>键向量：$k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in R^{d_{k}^{l}}$</li>
-<li>值向量：$v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in R^{d_{v}^{l}}$</li>
-</ul>
+<li><p>提取键向量 $k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in R^{d_{k}^{l}}$ 和值向量 $v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in R^{d_{v}^{l}}$</p>
 </li>
-<li><p>计算注意力分数：</p>
+<li><p>计算注意力分数 $e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)$</p>
 </li>
-</ol>
-<p>$$<br>e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)<br>$$</p>
-<ol start="3">
 <li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{l}$</p>
 </li>
-<li><p>计算左上下文表示向量：</p>
+<li><p>计算左上下文表示向量 $r^{l}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{l}} a_{i}^{l}v_{i}^{l}$</p>
 </li>
 </ol>
-<p>$$<br>r^{l}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{l}} a_{i}^{l}v_{i}^{l}<br>$$</p>
 </li>
 <li><p><strong>右上下文注意力计算</strong></p>
 <p>类似地，计算右上下文的表示向量$r^{r}$：</p>
 <ol>
-<li><p>提取键向量和值向量：</p>
-<ul>
-<li>键向量：$k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in R^{d_{k}^{r}}$</li>
-<li>值向量：$v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in R^{d_{v}^{r}}$</li>
-</ul>
+<li><p>提取键向量 $k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in R^{d_{k}^{r}}$ 和值向量 $v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in R^{d_{v}^{r}}$</p>
 </li>
-<li><p>计算注意力分数：</p>
+<li><p>计算注意力分数 $e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)$</p>
 </li>
-</ol>
-<p>$$<br>e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)<br>$$</p>
-<ol start="3">
 <li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{r}$</p>
 </li>
-<li><p>计算右上下文表示向量：</p>
+<li><p>计算右上下文表示向量 $r^{r}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{r}} a_{i}^{r}v_{i}^{r}$</p>
 </li>
 </ol>
-<p>$$<br>r^{r}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{r}} a_{i}^{r}v_{i}^{r}<br>$$</p>
 </li>
 <li><p><strong>目标短语更新表示</strong></p>
 <p>使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：</p>
 <ol>
-<li><p>提取目标短语的键向量和值向量：</p>
-<ul>
-<li>键向量：$k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in R^{d_{k}^{t}}$</li>
-<li>值向量：$v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in R^{d_{v}^{t}}$</li>
-</ul>
+<li><p>提取目标短语的键向量 $k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in R^{d_{k}^{t}}$ 和值向量 $v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in R^{d_{v}^{t}}$</p>
 </li>
 <li><p>计算左感知目标表示$r^{l_{t}}$：</p>
 <ul>
@@ -468,10 +448,9 @@
 </li>
 </ol>
 </li>
-<li><p>最终表示</p>
+<li><p>最终表示为 $r&#x3D;\operatorname{concat}\left(r^{l},r^{r},r^{l_{t}},r^{r_{t}}\right)$</p>
 </li>
 </ol>
-<p>$$<br>r&#x3D;\operatorname{concat}\left(r^{l},r^{r},r^{l_{t}},r^{r_{t}}\right)<br>$$</p>
 <p>Rotatory Attention 具有以下特点：</p>
 <ol>
 <li><p><strong>双向信息流动</strong>：通过从目标短语到上下文，再从上下文回到目标短语的信息流动，实现了双向的信息交互。</p>
