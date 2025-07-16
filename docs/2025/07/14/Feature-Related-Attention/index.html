@@ -29,16 +29,15 @@
 <meta property="og:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
 <meta property="og:image" content="http://example.com/img/Attention/InteractiveCo-Attention.png">
 <meta property="og:image" content="http://example.com/img/Attention/ParallelCo-Attention.png">
-<meta property="og:image" content="http://example.com/2025/07/14/Feature-Related-Attention/img/Attention/AttentionViaAttention.png">
-<meta property="og:image" content="http://example.com/2025/07/14/Feature-Related-Attention/img/Attention/HierarchicalAttention.png">
+<meta property="og:image" content="http://example.com/img/Attention/AttentionViaAttention.png">
+<meta property="og:image" content="http://example.com/img/Attention/HierarchicalAttention.png">
 <meta property="article:published_time" content="2025-07-14T14:30:57.000Z">
-<meta property="article:modified_time" content="2025-07-15T16:38:32.939Z">
+<meta property="article:modified_time" content="2025-07-16T03:19:27.866Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="model">
 <meta property="article:tag" content="Basic">
 <meta property="article:tag" content="deep learning">
-<meta property="article:tag" content="还没写完捏">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
 
@@ -181,7 +180,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81%E4%B8%8A%E5%81%9A%E6%96%87%E7%AB%A0%E7%9A%84-Attention"><span class="nav-number">1.</span> <span class="nav-text">在输入特征上做文章的 Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%A4%9A%E9%87%8D%E6%80%A7-Multiplicity-of-Features"><span class="nav-number">1.1.</span> <span class="nav-text">特征多重性(Multiplicity of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B-Singular-Features-Attention"><span class="nav-number">1.1.1.</span> <span class="nav-text">单一特征注意力(Singular Features Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">多特征注意力机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%97%E9%A2%97%E7%B2%92%E5%BA%A6%E5%8D%8F%E5%90%8C"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">粗颗粒度协同</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#alternating-co-attention"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">alternating co-attention</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#interactive-co-attention"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">interactive co-attention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%86%E9%A2%97%E7%B2%92%E5%BA%A6%E5%8D%8F%E5%90%8C"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">细颗粒度协同</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%8D%8F%E5%90%8C%E6%B3%A8%E6%84%8F%E5%8A%9B-Parallel-Co-attention"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">并行协同注意力(Parallel Co-attention)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E6%B3%A8%E6%84%8F%E5%8A%9B-Rotatory-Attention"><span class="nav-number">1.1.2.2.2.</span> <span class="nav-text">旋转注意力(Rotatory Attention)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B1%82%E7%BA%A7-Levels-of-Features"><span class="nav-number">1.2.</span> <span class="nav-text">特征层级(Levels of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Level-Attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">单层级注意力(Single-Level Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">多层级注意力机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E7%A4%BA-Feature-Representations"><span class="nav-number">1.3.</span> <span class="nav-text">特征表示(Feature Representations)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Representational-Attention"><span class="nav-number">1.3.1.</span> <span class="nav-text">单一表示注意力(Single-Representational Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Multi-Representational-Attention"><span class="nav-number">1.3.2.</span> <span class="nav-text">多表示注意力(Multi-Representational Attention)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-number">1.4.</span> <span class="nav-text">应用领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81%E4%B8%8A%E5%81%9A%E6%96%87%E7%AB%A0%E7%9A%84-Attention"><span class="nav-number">1.</span> <span class="nav-text">在输入特征上做文章的 Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%A4%9A%E9%87%8D%E6%80%A7-Multiplicity-of-Features"><span class="nav-number">1.1.</span> <span class="nav-text">特征多重性(Multiplicity of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B-Singular-Features-Attention"><span class="nav-number">1.1.1.</span> <span class="nav-text">单一特征注意力(Singular Features Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%89%B9%E5%BE%81%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.2.</span> <span class="nav-text">多特征注意力机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%97%E9%A2%97%E7%B2%92%E5%BA%A6%E5%8D%8F%E5%90%8C"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">粗颗粒度协同</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#alternating-co-attention"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">alternating co-attention</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#interactive-co-attention"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">interactive co-attention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%86%E9%A2%97%E7%B2%92%E5%BA%A6%E5%8D%8F%E5%90%8C"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">细颗粒度协同</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%8D%8F%E5%90%8C%E6%B3%A8%E6%84%8F%E5%8A%9B-Parallel-Co-attention"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">并行协同注意力(Parallel Co-attention)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E6%B3%A8%E6%84%8F%E5%8A%9B-Rotatory-Attention"><span class="nav-number">1.1.2.2.2.</span> <span class="nav-text">旋转注意力(Rotatory Attention)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B1%82%E7%BA%A7-Levels-of-Features"><span class="nav-number">1.2.</span> <span class="nav-text">特征层级(Levels of Features)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Level-Attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">单层级注意力(Single-Level Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82%E7%BA%A7%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">多层级注意力机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">应用领域</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E7%A4%BA-Feature-Representations"><span class="nav-number">1.3.</span> <span class="nav-text">特征表示(Feature Representations)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Single-Representational-Attention"><span class="nav-number">1.3.1.</span> <span class="nav-text">单一表示注意力(Single-Representational Attention)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%A1%A8%E7%A4%BA%E6%B3%A8%E6%84%8F%E5%8A%9B-Multi-Representational-Attention"><span class="nav-number">1.3.2.</span> <span class="nav-text">多表示注意力(Multi-Representational Attention)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E5%B5%8C%E5%85%A5-Meta-embeddings"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">元嵌入(Meta-embeddings)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E8%AE%A1%E7%AE%97"><span class="nav-number">1.3.2.1.1.</span> <span class="nav-text">注意力计算</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E4%BC%98%E5%8A%BF"><span class="nav-number">1.3.3.</span> <span class="nav-text">技术优势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -278,7 +277,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-16 00:38:32" itemprop="dateModified" datetime="2025-07-16T00:38:32+08:00">2025-07-16</time>
+      <time title="Modified: 2025-07-16 11:19:27" itemprop="dateModified" datetime="2025-07-16T11:19:27+08:00">2025-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -309,14 +308,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>3.2k</span>
+      <span>4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>12 mins.</span>
+      <span>14 mins.</span>
     </span>
 </div>
 
@@ -384,18 +383,13 @@
 <h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><p>Rotatory Attention 是一种用于处理多输入数据的注意力机制，特别适用于情感分析任务中同时考虑目标短语、左上下文和右上下文的场景。该机制通过交替关注不同输入来构建更丰富的表示。</p>
 <ul>
 <li>主要用于情感分析任务</li>
-<li>处理三个输入：目标短语 $\boldsymbol{F}^{t} &#x3D; [ \boldsymbol{f}_{1}^{t}, \ldots , \boldsymbol{f}_{n_{f}^{t}}^{t}] \in \mathbb{R} ^{d_{f}^{t}\times n_{f}^{t}}$ 、左上下文 $F^{l} &#x3D; [ f_{1}^{l}, \ldots , f_{n_{f}^{l}}^{l}]\in\mathbb{R} ^{d_{f}^{l}\times n_{f}^{l}}$ 和右上下文 $F^{r} &#x3D; [ f_{1}^{r}, \ldots , f_{n_{f}^{r}}^{r}]\in\mathbb{R}^{d_f^r\times n_f^r}$</li>
+<li>处理三个输入：目标短语 $\boldsymbol{F}^{t} &#x3D; [ \boldsymbol{f}_{1}^{t}, \ldots , \boldsymbol{f}_{n_{f}^{t}}^{t}] \in \mathbb{R} ^{d_{f}^{t}\times n_{f}^{t}}$ 、左上下文 $\boldsymbol{F^{l}} &#x3D; [ \boldsymbol{f_{1}^{l}}, \ldots , \boldsymbol{f_{n_{f}^{l}}^{l}}]\in\mathbb{R} ^{d_{f}^{l}\times n_{f}^{l}}$ 和右上下文 $\boldsymbol{F^{r}} &#x3D; [ \boldsymbol{f_{1}^{r}}, \ldots , \boldsymbol{f_{n_{f}^{r}}^{r}}]\in\mathbb{R}^{d_f^r\times n_f^r}$</li>
 <li>通过注意力机制迭代改进表示</li>
 </ul>
 <p>其大致的过程如下：</p>
 <ol>
 <li><p><strong>初始特征提取</strong></p>
-<p>首先，模型从三个输入中提取特征向量：</p>
-<ul>
-<li>目标短语特征矩阵：$F^{t}&#x3D;[f_{1}^{t},\ldots,f_{n_{f}^{t}}^{t}]\in R^{d_{f}^{t}\times n_{f}^{t}}$</li>
-<li>左上下文特征矩阵：$F^{l}&#x3D;[f_{1}^{l},\ldots,f_{n_{f}^{l}}^{l}]\in R^{d_{f}^{l}\times n_{f}^{l}}$</li>
-<li>右上下文特征矩阵：$F^{r}&#x3D;[f_{1}^{r},\ldots,f_{n_{f}^{r}}^{r}]\in R^{d_{f}^{r}\times n_{f}^{r}}$</li>
-</ul>
+<p>首先，模型从三个输入中提取特征向量目标短语特征矩阵 $\boldsymbol{F}^{t}$ 左上下文特征矩阵 $\boldsymbol{F^{l}}$ 右上下文特征矩阵 $\boldsymbol{F^{r}}$ </p>
 </li>
 <li><p><strong>目标短语初始表示</strong></p>
 <p>计算目标短语的初始表示向量$r^{t}$，通过对特征向量取平均：</p>
@@ -404,7 +398,7 @@
 <li><p><strong>左上下文注意力计算</strong></p>
 <p>使用$r^{t}$作为查询，计算左上下文的注意力：</p>
 <ol>
-<li><p>提取键向量 $k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in R^{d_{k}^{l}}$ 和值向量 $v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in R^{d_{v}^{l}}$</p>
+<li><p>提取键向量 $k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{k}^{l}}$ 和值向量 $v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{v}^{l}}$</p>
 </li>
 <li><p>计算注意力分数 $e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)$</p>
 </li>
@@ -417,7 +411,7 @@
 <li><p><strong>右上下文注意力计算</strong></p>
 <p>类似地，计算右上下文的表示向量$r^{r}$：</p>
 <ol>
-<li><p>提取键向量 $k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in R^{d_{k}^{r}}$ 和值向量 $v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in R^{d_{v}^{r}}$</p>
+<li><p>提取键向量 $k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{k}^{r}}$ 和值向量 $v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{v}^{r}}$</p>
 </li>
 <li><p>计算注意力分数 $e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)$</p>
 </li>
@@ -430,19 +424,19 @@
 <li><p><strong>目标短语更新表示</strong></p>
 <p>使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：</p>
 <ol>
-<li><p>提取目标短语的键向量 $k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in R^{d_{k}^{t}}$ 和值向量 $v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in R^{d_{v}^{t}}$</p>
+<li><p>提取目标短语的键向量 $k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{k}^{t}}$ 和值向量 $v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{v}^{t}}$</p>
 </li>
-<li><p>计算左感知目标表示$r^{l_{t}}$：</p>
+<li><p>计算左感知目标表示 $r^{l_{t}}$：</p>
 <ul>
 <li>注意力分数：$e_{i}^{l_{t}}&#x3D;\operatorname{score}\left(r^{l}, k_{i}^{t}\right)$</li>
-<li>使用 softmax 对齐函数计算注意力权重$a_{i}^{l_{t}}$</li>
+<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{l_{t}}$</li>
 <li>计算表示向量：$r^{l_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{l_{t}}v_{i}^{t}$</li>
 </ul>
 </li>
-<li><p>计算右感知目标表示$r^{r_{t}}$：</p>
+<li><p>计算右感知目标表示 $r^{r_{t}}$：</p>
 <ul>
 <li>注意力分数：$e_{i}^{r_{t}}&#x3D;\operatorname{score}\left(r^{r}, k_{i}^{t}\right)$</li>
-<li>使用 softmax 对齐函数计算注意力权重$a_{i}^{r_{t}}$</li>
+<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{r_{t}}$</li>
 <li>计算表示向量：$r^{r_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{r_{t}}v_{i}^{t}$</li>
 </ul>
 </li>
@@ -461,56 +455,91 @@
 </li>
 </ol>
 <p>Rotatory Attention 通过这种交替关注的方式，能够更好地理解目标短语在特定上下文中的情感倾向，从而提高了情感分类的准确性。</p>
-<h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。</p>
+<h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。多层级注意力能够捕捉<strong>不同粒度</strong>上的重要信息。</p>
 <h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
 <h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><ol>
 <li><strong>注意力叠加(Attention-via-Attention)</strong></li>
 </ol>
-<img src="img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
+<img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
 
 <ul>
 <li>同时处理字符级和词级特征</li>
 <li>先计算词级注意力，用其上下文向量辅助计算字符级注意力</li>
 <li>最终拼接两个层级的上下文向量</li>
 </ul>
-<ol start="2">
-<li><strong>层级注意力(Hierarchical Attention)</strong></li>
+<p>用于机器翻译任务，同时利用字符级和词级信息。其核心思想是在预测字符时，先通过词级注意力确定重要词语，再在这些词语对应的字符上施加注意力。</p>
+<p>其大致过程如下：</p>
+<ol>
+<li><p>输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d_{f}^{(c)}\times n_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d_{f}^{(w)}\times n_{f}^{(w)}}$</p>
+</li>
+<li><p>字符级查询 $q^{(c)}\in \mathbb{R}^{d_{q}}$ 通过查询模型生成</p>
+</li>
+<li><p>先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d_{v}^{(w)}}$</p>
+</li>
+<li><p>将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询</p>
+</li>
+<li><p>最终输出是字符级和词级上下文向量的拼接</p>
+</li>
+<li><p><strong>层级注意力(Hierarchical Attention)</strong></p>
+</li>
 </ol>
-<img src="img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
+<img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
 
 <ul>
 <li>从最低层级开始，逐步构建高层级表示</li>
 <li>常用于文档分类：词 → 句 → 文档</li>
 <li>每个层级通过注意力机制生成摘要表示</li>
 </ul>
-<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示方式的注意力机制变体，主要分为单一表示注意力和多表示注意力。</p>
-<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>传统方法使用单一嵌入或表示模型生成特征表示。</p>
-<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><ol>
-<li><p><strong>元嵌入(Meta-embeddings)</strong></p>
+<p>用于文档分类。该方法自底向上构建层级表示：从词级表示构建句级表示，再从句级表示构建文档级表示。</p>
+<p>其大致过程如下：</p>
+<ol>
+<li><p>文档包含 $n_S$ 个句子，第 $s$ 个句子包含 $n_s$ 个词</p>
+</li>
+<li><p>对每个句子计算词级注意力，生成句表示 $c^{(s)}\in \mathbb{R}^{d_{v}^{(S)}}$</p>
+</li>
+<li><p>将所有句表示 $C&#x3D;[c^{(1)},\ldots,c^{(n_{S})}]\in \mathbb{R}^{d_{v}^{(S)} \times n_{S}}$ 作为文档级注意力的输入</p>
+</li>
+<li><p>文档级注意力输出 $c^{(D)}\in \mathbb{R}^{d_{v}^{(D)}}$ 用于分类</p>
+</li>
+</ol>
+<h4 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h4><p>多层级注意力已成功应用于 <del>懒得做链接了捏，可以去原文找捏</del> ：</p>
+<ul>
+<li>推荐系统：建模用户长短期偏好(Ying et al., 2018)</li>
+<li>视频动作识别：捕捉不同时间尺度的运动信息(Wang et al., 2016)</li>
+<li>跨领域情感分类：学习领域共享和特定特征(Li et al., 2018)</li>
+<li>聊天机器人：生成更连贯的响应(Xing et al., 2018)</li>
+<li>人群计数：处理不同尺度的人群密度(Sindagi &amp; Patel, 2019)</li>
+</ul>
+<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示相关的注意力机制（Feature Representations），主要关注如何利用注意力机制来处理和组合不同的特征表示。这部分内容可以分为两类：单表示注意力（Single-representational attention）和多表示注意力（Multi-representational attention）。</p>
+<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>单表示注意力是最基础的注意力形式，它使用单一的特征表示模型（如词嵌入、CNN特征提取器等）来生成特征向量。这些特征向量随后被送入注意力模块进行处理。</p>
+<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><p>多表示注意力是一种更高级的技术，它允许模型同时考虑多种不同的特征表示，并通过注意力机制来学习如何最优地组合这些表示。</p>
+<h4 id="元嵌入-Meta-embeddings"><a href="#元嵌入-Meta-embeddings" class="headerlink" title="元嵌入(Meta-embeddings)"></a>元嵌入(Meta-embeddings)</h4><p>这种方法可以创建所谓的”元嵌入”（meta-embeddings）。</p>
 <ul>
 <li>整合多个嵌入表示</li>
 <li>通过注意力机制加权平均不同表示</li>
 <li>生成更高质量的特征表示</li>
 </ul>
+<p>元嵌入的创建过程大致如下：</p>
+<ol>
+<li><p><strong>输入表示</strong>：对于一个输入 $x$ （如一个词），我们有 $E$ 种不同的嵌入表示： $x^{(e_1)}, \ldots, x^{(e_E)}$ , 其中每种嵌入 $x^{(e_i)}$ 的维度为 $d_{e_i}$（$i&#x3D;1,\ldots,E$ ）。</p>
 </li>
-<li><p><strong>自注意力机制</strong></p>
-<ul>
-<li>学习特征向量之间的关系</li>
-<li>通过注意力改进特征表示</li>
-<li>常用于 Transformer 架构中</li>
-</ul>
+<li><p><strong>维度标准化</strong>：由于不同嵌入可能有不同维度，首先通过线性变换将它们映射到统一维度 $d_t$ ： $x^{(t_i)} &#x3D; W_{e_i} \times x^{(e_i)} + b_{e_i}$ ， 其中 $W_{e_i} \in \mathbb{R}^{d_t \times d_{e_i}}$ 和 $b_{e_i} \in \mathbb{R}^{d_t}$ 是可训练的参数。</p>
+</li>
+<li><p><strong>注意力加权组合</strong>：最终的元嵌入是这些标准化表示的加权和： $x^{(e)} &#x3D; \sum_{i&#x3D;1}^E a_i \times x^{(t_i)}$ 其中权重 $a_i$ 通过注意力机制计算得到。</p>
 </li>
 </ol>
-<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><p>3.1 节讨论的特征相关注意力机制在多个领域有广泛应用：</p>
-<ul>
-<li>医学数据分析(多特征协同注意力)</li>
-<li>推荐系统(多层级注意力)</li>
-<li>情感分析(旋转注意力)</li>
-<li>文档分类(层级注意力)</li>
-<li>多语言处理(多表示注意力)</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>3.1 节系统性地分类了基于输入特征特性的注意力机制变体，为研究者提供了清晰的框架来选择适合特定任务和数据类型的最佳注意力机制。这些机制通过充分利用输入特征的多重性、层级结构和表示多样性，显著提升了模型在各种任务上的表现。</p>
-<p>图 3 展示了完整的注意力机制分类体系，其中 3.1 节讨论的特征相关注意力机制是该体系的重要组成部分。</p>
+<h5 id="注意力计算"><a href="#注意力计算" class="headerlink" title="注意力计算"></a>注意力计算</h5><p>在多表示注意力中，注意力权重的计算可以视为一种自注意力机制，其查询可以理解为”哪些表示对当前任务最重要”。具体计算过程如下：</p>
+<ol>
+<li>将标准化后的表示 $x^{(t_1)}, \ldots, x^{(t_E)}$ 作为特征矩阵F的列向量</li>
+<li>由于没有显式查询，这相当于自注意力机制</li>
+<li>使用适当的注意力评分函数计算权重</li>
+<li>通过对齐函数（如softmax）得到归一化的注意力权重</li>
+</ol>
+<h3 id="技术优势"><a href="#技术优势" class="headerlink" title="技术优势"></a>技术优势</h3><ol>
+<li><strong>灵活性</strong>：可以整合来自不同来源或不同粒度的特征表示</li>
+<li><strong>适应性</strong>：通过注意力权重自动学习不同表示的重要性</li>
+<li><strong>可解释性</strong>：注意力权重可以提供关于哪些特征表示对任务更重要的见解</li>
+</ol>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
 
@@ -526,7 +555,6 @@
               <a href="/tags/model/" rel="tag"># model</a>
               <a href="/tags/Basic/" rel="tag"># Basic</a>
               <a href="/tags/deep-learning/" rel="tag"># deep learning</a>
-              <a href="/tags/%E8%BF%98%E6%B2%A1%E5%86%99%E5%AE%8C%E6%8D%8F/" rel="tag"># 还没写完捏</a>
           </div>
 
         
@@ -568,13 +596,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">12k</span>
+    <span title="Word count total">13k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">43 mins.</span>
+    <span title="Reading time total">46 mins.</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>

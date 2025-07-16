@@ -11,7 +11,6 @@ tags:
   - model
   - Basic
   - deep learning
-  - 还没写完捏
 ---
 
 # 在输入特征上做文章的 Attention
@@ -141,18 +140,14 @@ $$
 Rotatory Attention 是一种用于处理多输入数据的注意力机制，特别适用于情感分析任务中同时考虑目标短语、左上下文和右上下文的场景。该机制通过交替关注不同输入来构建更丰富的表示。
 
 - 主要用于情感分析任务
-- 处理三个输入：目标短语 $\boldsymbol{F}^{t} = [ \boldsymbol{f}\_{1}^{t}, \ldots , \boldsymbol{f}\_{n\_{f}^{t}}^{t}] \in \mathbb{R} ^{d\_{f}^{t}\times n\_{f}^{t}}$ 、左上下文 $F^{l} = [ f\_{1}^{l}, \ldots , f\_{n\_{f}^{l}}^{l}]\in\mathbb{R} ^{d\_{f}^{l}\times n\_{f}^{l}}$ 和右上下文 $F^{r} = [ f\_{1}^{r}, \ldots , f\_{n\_{f}^{r}}^{r}]\in\mathbb{R}^{d\_f^r\times n\_f^r}$
+- 处理三个输入：目标短语 $\boldsymbol{F}^{t} = [ \boldsymbol{f}\_{1}^{t}, \ldots , \boldsymbol{f}\_{n\_{f}^{t}}^{t}] \in \mathbb{R} ^{d\_{f}^{t}\times n\_{f}^{t}}$ 、左上下文 $\boldsymbol{F^{l}} = [ \boldsymbol{f\_{1}^{l}}, \ldots , \boldsymbol{f\_{n\_{f}^{l}}^{l}}]\in\mathbb{R} ^{d\_{f}^{l}\times n\_{f}^{l}}$ 和右上下文 $\boldsymbol{F^{r}} = [ \boldsymbol{f\_{1}^{r}}, \ldots , \boldsymbol{f\_{n\_{f}^{r}}^{r}}]\in\mathbb{R}^{d\_f^r\times n\_f^r}$
 - 通过注意力机制迭代改进表示
 
 其大致的过程如下：
 
 1. **初始特征提取**
 
-   首先，模型从三个输入中提取特征向量：
-
-   - 目标短语特征矩阵：$F^{t}=[f\_{1}^{t},\ldots,f\_{n\_{f}^{t}}^{t}]\in R^{d\_{f}^{t}\times n\_{f}^{t}}$
-   - 左上下文特征矩阵：$F^{l}=[f\_{1}^{l},\ldots,f\_{n\_{f}^{l}}^{l}]\in R^{d\_{f}^{l}\times n\_{f}^{l}}$
-   - 右上下文特征矩阵：$F^{r}=[f\_{1}^{r},\ldots,f\_{n\_{f}^{r}}^{r}]\in R^{d\_{f}^{r}\times n\_{f}^{r}}$
+   首先，模型从三个输入中提取特征向量目标短语特征矩阵 $\boldsymbol{F}^{t}$ 左上下文特征矩阵 $\boldsymbol{F^{l}}$ 右上下文特征矩阵 $\boldsymbol{F^{r}}$ 
 
 2. **目标短语初始表示**
 
@@ -166,7 +161,7 @@ Rotatory Attention 是一种用于处理多输入数据的注意力机制，特�
 
    使用$r^{t}$作为查询，计算左上下文的注意力：
 
-   1. 提取键向量 $k\_{1}^{l},\ldots,k\_{n\_{f}^{l}}^{l}\in R^{d\_{k}^{l}}$ 和值向量 $v\_{1}^{l},\ldots,v\_{n\_{f}^{l}}^{l}\in R^{d\_{v}^{l}}$
+   1. 提取键向量 $k\_{1}^{l},\ldots,k\_{n\_{f}^{l}}^{l}\in \mathbb{R}^{d\_{k}^{l}}$ 和值向量 $v\_{1}^{l},\ldots,v\_{n\_{f}^{l}}^{l}\in \mathbb{R}^{d\_{v}^{l}}$
 
    2. 计算注意力分数 $e\_{i}^{l}=\operatorname{score}\left(r^{t}, k\_{i}^{l}\right)$
 
@@ -178,7 +173,7 @@ Rotatory Attention 是一种用于处理多输入数据的注意力机制，特�
 
    类似地，计算右上下文的表示向量$r^{r}$：
 
-   1. 提取键向量 $k\_{1}^{r},\ldots,k\_{n\_{f}^{r}}^{r}\in R^{d\_{k}^{r}}$ 和值向量 $v\_{1}^{r},\ldots,v\_{n\_{f}^{r}}^{r}\in R^{d\_{v}^{r}}$
+   1. 提取键向量 $k\_{1}^{r},\ldots,k\_{n\_{f}^{r}}^{r}\in \mathbb{R}^{d\_{k}^{r}}$ 和值向量 $v\_{1}^{r},\ldots,v\_{n\_{f}^{r}}^{r}\in \mathbb{R}^{d\_{v}^{r}}$
 
    2. 计算注意力分数 $e\_{i}^{r}=\operatorname{score}\left(r^{t}, k\_{i}^{r}\right)$
 
@@ -190,18 +185,18 @@ Rotatory Attention 是一种用于处理多输入数据的注意力机制，特�
 
    使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：
 
-   1. 提取目标短语的键向量 $k\_{1}^{t},\ldots,k\_{n\_{f}^{t}}^{t}\in R^{d\_{k}^{t}}$ 和值向量 $v\_{1}^{t},\ldots,v\_{n\_{f}^{t}}^{t}\in R^{d\_{v}^{t}}$
+   1. 提取目标短语的键向量 $k\_{1}^{t},\ldots,k\_{n\_{f}^{t}}^{t}\in \mathbb{R}^{d\_{k}^{t}}$ 和值向量 $v\_{1}^{t},\ldots,v\_{n\_{f}^{t}}^{t}\in \mathbb{R}^{d\_{v}^{t}}$
 
-   2. 计算左感知目标表示$r^{l\_{t}}$：
+   2. 计算左感知目标表示 $r^{l\_{t}}$：
 
       - 注意力分数：$e\_{i}^{l\_{t}}=\operatorname{score}\left(r^{l}, k\_{i}^{t}\right)$
-      - 使用 softmax 对齐函数计算注意力权重$a\_{i}^{l\_{t}}$
+      - 使用 softmax 对齐函数计算注意力权重 $a\_{i}^{l\_{t}}$
       - 计算表示向量：$r^{l\_{t}}=\sum\_{i=1}^{n\_{f}^{t}} a\_{i}^{l\_{t}}v\_{i}^{t}$
 
-   3. 计算右感知目标表示$r^{r\_{t}}$：
+   3. 计算右感知目标表示 $r^{r\_{t}}$：
 
       - 注意力分数：$e\_{i}^{r\_{t}}=\operatorname{score}\left(r^{r}, k\_{i}^{t}\right)$
-      - 使用 softmax 对齐函数计算注意力权重$a\_{i}^{r\_{t}}$
+      - 使用 softmax 对齐函数计算注意力权重 $a\_{i}^{r\_{t}}$
       - 计算表示向量：$r^{r\_{t}}=\sum\_{i=1}^{n\_{f}^{t}} a\_{i}^{r\_{t}}v\_{i}^{t}$
 
 6. 最终表示为 $r=\operatorname{concat}\left(r^{l},r^{r},r^{l\_{t}},r^{r\_{t}}\right)$
@@ -218,7 +213,7 @@ Rotatory Attention 通过这种交替关注的方式，能够更好地理解目�
 
 ## 特征层级(Levels of Features)
 
-这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。
+这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。多层级注意力能够捕捉**不同粒度**上的重要信息。
 
 ### 单层级注意力(Single-Level Attention)
 
@@ -228,56 +223,106 @@ Rotatory Attention 通过这种交替关注的方式，能够更好地理解目�
 
 1. **注意力叠加(Attention-via-Attention)**
 
-<img src="img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
+<img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
 
 - 同时处理字符级和词级特征
 - 先计算词级注意力，用其上下文向量辅助计算字符级注意力
 - 最终拼接两个层级的上下文向量
 
-2. **层级注意力(Hierarchical Attention)**
 
-<img src="img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
+
+用于机器翻译任务，同时利用字符级和词级信息。其核心思想是在预测字符时，先通过词级注意力确定重要词语，再在这些词语对应的字符上施加注意力。
+
+
+
+其大致过程如下：
+
+1. 输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d\_{f}^{(c)}\times n\_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d\_{f}^{(w)}\times n\_{f}^{(w)}}$
+
+2. 字符级查询 $q^{(c)}\in \mathbb{R}^{d\_{q}}$ 通过查询模型生成
+
+3. 先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d\_{v}^{(w)}}$
+
+4. 将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询
+
+5. 最终输出是字符级和词级上下文向量的拼接
+
+
+1. **层级注意力(Hierarchical Attention)**
+
+<img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
 
 - 从最低层级开始，逐步构建高层级表示
 - 常用于文档分类：词 → 句 → 文档
 - 每个层级通过注意力机制生成摘要表示
 
+用于文档分类。该方法自底向上构建层级表示：从词级表示构建句级表示，再从句级表示构建文档级表示。
+
+
+
+其大致过程如下：
+
+1. 文档包含 $n\_S$ 个句子，第 $s$ 个句子包含 $n\_s$ 个词
+
+2. 对每个句子计算词级注意力，生成句表示 $c^{(s)}\in \mathbb{R}^{d\_{v}^{(S)}}$
+
+3. 将所有句表示 $C=[c^{(1)},\ldots,c^{(n\_{S})}]\in \mathbb{R}^{d\_{v}^{(S)} \times n\_{S}}$ 作为文档级注意力的输入
+
+4. 文档级注意力输出 $c^{(D)}\in \mathbb{R}^{d\_{v}^{(D)}}$ 用于分类
+
+#### 应用领域
+
+多层级注意力已成功应用于 ~~懒得做链接了捏，可以去原文找捏~~ ：
+- 推荐系统：建模用户长短期偏好(Ying et al., 2018)
+- 视频动作识别：捕捉不同时间尺度的运动信息(Wang et al., 2016)
+- 跨领域情感分类：学习领域共享和特定特征(Li et al., 2018)
+- 聊天机器人：生成更连贯的响应(Xing et al., 2018)
+- 人群计数：处理不同尺度的人群密度(Sindagi & Patel, 2019)
+
 ## 特征表示(Feature Representations)
 
-这部分讨论了特征表示方式的注意力机制变体，主要分为单一表示注意力和多表示注意力。
+这部分讨论了特征表示相关的注意力机制（Feature Representations），主要关注如何利用注意力机制来处理和组合不同的特征表示。这部分内容可以分为两类：单表示注意力（Single-representational attention）和多表示注意力（Multi-representational attention）。
 
 ### 单一表示注意力(Single-Representational Attention)
 
-传统方法使用单一嵌入或表示模型生成特征表示。
+单表示注意力是最基础的注意力形式，它使用单一的特征表示模型（如词嵌入、CNN特征提取器等）来生成特征向量。这些特征向量随后被送入注意力模块进行处理。
 
 ### 多表示注意力(Multi-Representational Attention)
 
-1. **元嵌入(Meta-embeddings)**
+多表示注意力是一种更高级的技术，它允许模型同时考虑多种不同的特征表示，并通过注意力机制来学习如何最优地组合这些表示。
+
+#### 元嵌入(Meta-embeddings)
+
+这种方法可以创建所谓的"元嵌入"（meta-embeddings）。
 
    - 整合多个嵌入表示
    - 通过注意力机制加权平均不同表示
    - 生成更高质量的特征表示
 
-2. **自注意力机制**
-   - 学习特征向量之间的关系
-   - 通过注意力改进特征表示
-   - 常用于 Transformer 架构中
 
-## 应用领域
+元嵌入的创建过程大致如下：
 
-3.1 节讨论的特征相关注意力机制在多个领域有广泛应用：
+1. **输入表示**：对于一个输入 $x$ （如一个词），我们有 $E$ 种不同的嵌入表示： $x^{(e\_1)}, \ldots, x^{(e\_E)}$ , 其中每种嵌入 $x^{(e\_i)}$ 的维度为 $d\_{e\_i}$（$i=1,\ldots,E$ ）。
 
-- 医学数据分析(多特征协同注意力)
-- 推荐系统(多层级注意力)
-- 情感分析(旋转注意力)
-- 文档分类(层级注意力)
-- 多语言处理(多表示注意力)
+2. **维度标准化**：由于不同嵌入可能有不同维度，首先通过线性变换将它们映射到统一维度 $d\_t$ ： $x^{(t\_i)} = W\_{e\_i} \times x^{(e\_i)} + b\_{e\_i}$ ， 其中 $W\_{e\_i} \in \mathbb{R}^{d\_t \times d\_{e\_i}}$ 和 $b\_{e\_i} \in \mathbb{R}^{d\_t}$ 是可训练的参数。
 
-## 总结
+3. **注意力加权组合**：最终的元嵌入是这些标准化表示的加权和： $x^{(e)} = \sum\_{i=1}^E a\_i \times x^{(t\_i)}$ 其中权重 $a\_i$ 通过注意力机制计算得到。
 
-3.1 节系统性地分类了基于输入特征特性的注意力机制变体，为研究者提供了清晰的框架来选择适合特定任务和数据类型的最佳注意力机制。这些机制通过充分利用输入特征的多重性、层级结构和表示多样性，显著提升了模型在各种任务上的表现。
+##### 注意力计算
 
-图 3 展示了完整的注意力机制分类体系，其中 3.1 节讨论的特征相关注意力机制是该体系的重要组成部分。
+在多表示注意力中，注意力权重的计算可以视为一种自注意力机制，其查询可以理解为"哪些表示对当前任务最重要"。具体计算过程如下：
+
+1. 将标准化后的表示 $x^{(t\_1)}, \ldots, x^{(t\_E)}$ 作为特征矩阵F的列向量
+2. 由于没有显式查询，这相当于自注意力机制
+3. 使用适当的注意力评分函数计算权重
+4. 通过对齐函数（如softmax）得到归一化的注意力权重
+
+### 技术优势
+
+1. **灵活性**：可以整合来自不同来源或不同粒度的特征表示
+2. **适应性**：通过注意力权重自动学习不同表示的重要性
+3. **可解释性**：注意力权重可以提供关于哪些特征表示对任务更重要的见解
+
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 
