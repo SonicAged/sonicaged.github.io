@@ -33,7 +33,7 @@
 <p>接下来，我们会从 <em>输入</em> 的角度来看<strong>特征模型</strong>和<strong>查询模型</strong>，从 <em>输出</em> 的角度来看<strong>注意力模型</strong>和<strong>输出模型</strong></p>
 <h4 id="输入处理机制"><a href="#输入处理机制" class="headerlink" title="输入处理机制"></a>输入处理机制</h4><ol>
 <li><p><strong>特征模型</strong>，即将任务的输入进行 embedding</p>
-<p>对于输入矩阵$ X \in \mathbb{R}^{d<em>x \times n_x} $，特征模型提取特征向量：$\boldsymbol{F} &#x3D; [f_1, \ldots, f</em>{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
+<p>对于输入矩阵 $ X \in \mathbb{R}^{d_x \times n_x} $ ，特征模型提取特征向量： $\boldsymbol{F} &#x3D; [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
 </li>
 <li><p><strong>查询模型</strong>，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的</p>
 </li>
@@ -69,13 +69,93 @@
 <p>论文按照上图的方式给 Attention 进行了分类</p>
 <p>由于篇幅限制，这里决定重开几个博文来分别介绍这些 Attention，链接如下：</p>
 <a href="/2025/07/14/Feature-Related-Attention/" title="Feature-Related Attention">Feature-Related Attention</a>
-
+<br/>
 <a href="/2025/07/16/General-Attention/" title="General-Attention">General-Attention</a>
+<br/>
+<a href="/2025/07/17/Query-Related-Attention/" title="Query-Related-Attention">Query-Related-Attention</a>
 
+<h3 id="怎样评价-Attention"><a href="#怎样评价-Attention" class="headerlink" title="怎样评价 Attention"></a>怎样评价 Attention</h3><h4 id="外在性能评估"><a href="#外在性能评估" class="headerlink" title="外在性能评估"></a>外在性能评估</h4><ol>
+<li><strong>领域特定的评估指标</strong></li>
+</ol>
+<p>不同领域用于评估注意力模型性能的指标：</p>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>常用评估指标</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自然语言处理</td>
+<td>BLEU, METEOR, Perplexity</td>
+<td>机器翻译、文本生成</td>
+</tr>
+<tr>
+<td>语音处理</td>
+<td>词错误率(WER)、音素错误率(PER)</td>
+<td>语音识别</td>
+</tr>
+<tr>
+<td>计算机视觉</td>
+<td>PSNR, SSIM, IoU</td>
+<td>图像生成、分割</td>
+</tr>
+<tr>
+<td>通用分类</td>
+<td>准确率、精确率、召回率、F1</td>
+<td>情感分析、文档分类</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p><strong>消融研究</strong></p>
+<p> 论文强调了消融研究(ablation study)在评估注意力机制重要性方面的价值。典型做法包括：</p>
+<ol>
+<li>移除或替换注意力机制（如用平均池化代替注意力池化）</li>
+<li>比较模型在有无注意力机制时的性能差异</li>
+<li>分析不同注意力变体对最终性能的影响</li>
+</ol>
+<p> 这种评估方法可以明确注意力机制对模型性能的实际贡献，而不仅仅是展示最终结果。</p>
+</li>
+</ol>
+<h4 id="内在特性评估"><a href="#内在特性评估" class="headerlink" title="内在特性评估"></a>内在特性评估</h4><ol>
+<li><p><strong>注意力权重分析</strong></p>
+<ol>
+<li><strong>对齐错误率(AER)</strong>：比较模型生成的注意力权重与人工标注的”黄金”注意力权重之间的差异</li>
+<li><strong>监督注意力训练</strong>：将人工标注的注意力权重作为额外监督信号，与任务损失联合训练</li>
+<li><strong>注意力可视化</strong>：通过热图等方式直观展示模型关注区域</li>
+</ol>
+<p>这些方法可以评估注意力权重是否符合人类直觉或领域知识。</p>
+</li>
+<li><p><strong>基于人类注意力的评估</strong></p>
+<p> 论文提出了”注意力正确性”(Attention Correctness)的概念，将模型的注意力模式与真实人类注意力行为进行比较：</p>
+<ol>
+<li><strong>数据收集</strong>：记录人类在执行相同任务时的注意力模式（如眼动追踪）</li>
+<li><strong>度量计算</strong>：定义模型注意力与人类注意力的相似度指标</li>
+<li><strong>联合训练</strong>：将人类注意力数据作为监督信号</li>
+</ol>
+<p> 这种评估方法基于认知科学原理，认为好的注意力模型应该模拟人类的注意力机制。</p>
+</li>
+</ol>
+<h4 id="4-注意力解释性评估"><a href="#4-注意力解释性评估" class="headerlink" title="4. 注意力解释性评估"></a>4. 注意力解释性评估</h4><pre><code>论文讨论了学术界关于&quot;注意力是否提供解释&quot;的争论：
+
+1. **&quot;Attention is not Explanation&quot;观点**：
+- 注意力权重与模型决策之间缺乏稳定关联
+- 可以构造对抗性注意力分布而不改变模型输出
+- 注意力权重可能反映相关性而非因果性
+
+1. **&quot;Attention is not not Explanation&quot;反驳**：
+- 对抗性注意力分布通常性能更差
+- 注意力权重确实反映了输入的相对重要性
+- 在特定架构下注意力可以提供有意义的解释
+</code></pre>
+<p><del>这段比较难绷，因此把</del>原文贴在下面了捏</p>
+<blockquote>
+<p>However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].</p>
+</blockquote>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
 ]]></content>
       <categories>
-        <category>CDR</category>
         <category>model</category>
         <category>attention</category>
       </categories>
@@ -83,7 +163,6 @@
         <tag>CDR</tag>
         <tag>model</tag>
         <tag>Basic</tag>
-        <tag>还没写完捏</tag>
         <tag>deep learning</tag>
         <tag>PyTorch</tag>
       </tags>
@@ -257,105 +336,95 @@
 </p>
 
 <h5 id="🔍-关键数据对比"><a href="#🔍-关键数据对比" class="headerlink" title="🔍 关键数据对比"></a>🔍 关键数据对比</h5><table>
-<thead>
-<tr>
-<th>特征</th>
-<th>CCLE</th>
-<th>GDSC</th>
-<th>倍数差异</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>数据规模</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>总节点数</td>
-<td>341</td>
-<td>783</td>
-<td>2.3×</td>
-</tr>
-<tr>
-<td>第一类节点</td>
-<td>317</td>
-<td>561</td>
-<td>1.8×</td>
-</tr>
-<tr>
-<td>第二类节点</td>
-<td>24</td>
-<td>222</td>
-<td>9.3×</td>
-</tr>
-<tr>
-<td>总边数</td>
-<td>7,307</td>
-<td>100,572</td>
-<td>13.8×</td>
-</tr>
-<tr>
-<td><strong>图结构</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>密度</td>
-<td>0.9604</td>
-<td>0.8075</td>
-<td>0.84×</td>
-</tr>
-<tr>
-<td>稀疏性</td>
-<td>0.0396</td>
-<td>0.1925</td>
-<td>4.9×</td>
-</tr>
-<tr>
-<td>平均度</td>
-<td>42.86</td>
-<td>256.89</td>
-<td>6.0×</td>
-</tr>
-<tr>
-<td>图直径</td>
-<td>3</td>
-<td>4</td>
-<td>1.3×</td>
-</tr>
-<tr>
-<td><strong>边分布</strong></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>正边数量</td>
-<td>1,375</td>
-<td>11,591</td>
-<td>8.4×</td>
-</tr>
-<tr>
-<td>负边数量</td>
-<td>5,932</td>
-<td>88,981</td>
-<td>15.0×</td>
-</tr>
-<tr>
-<td>正边比例</td>
-<td>18.8%</td>
-<td>11.5%</td>
-<td>0.61×</td>
-</tr>
-<tr>
-<td>正负边比例</td>
-<td>1:4.3</td>
-<td>1:7.7</td>
-<td>1.8× 不平衡</td>
-</tr>
-</tbody></table>
+    <tr>
+        <td>特征</td>
+        <td>CCLE</td>
+        <td>GDSC</td>
+        <td>倍数差异</td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: center;"><b>数据规模</b></td>
+    </tr>
+    <tr>
+        <td>总节点数</td>
+        <td>341</td>
+        <td>783</td>
+        <td>2.3×</td>
+    </tr>
+    <tr>
+        <td>第一类节点</td>
+        <td>317</td>
+        <td>561</td>
+        <td>1.8×</td>
+    </tr>
+    <tr>
+        <td>第二类节点</td>
+        <td>24</td>
+        <td>222</td>
+        <td>9.3×</td>
+    </tr>
+    <tr>
+        <td>总边数</td>
+        <td>7,307</td>
+        <td>100,572</td>
+        <td>13.8×</td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: center;"><b>图结构</b></td>
+    </tr>
+    <tr>
+        <td>密度</td>
+        <td>0.9604</td>
+        <td>0.8075</td>
+        <td>0.84×</td>
+    </tr>
+    <tr>
+        <td>稀疏性</td>
+        <td>0.0396</td>
+        <td>0.1925</td>
+        <td>4.9×</td>
+    </tr>
+    <tr>
+        <td>平均度</td>
+        <td>42.86</td>
+        <td>256.89</td>
+        <td>6.0×</td>
+    </tr>
+    <tr>
+        <td>图直径</td>
+        <td>3</td>
+        <td>4</td>
+        <td>1.3×</td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: center;"><b>边分布</b></td>
+    </tr>
+    <tr>
+        <td>正边数量</td>
+        <td>1,375</td>
+        <td>11,591</td>
+        <td>8.4×</td>
+    </tr>
+    <tr>
+        <td>负边数量</td>
+        <td>5,932</td>
+        <td>88,981</td>
+        <td>15.0×</td>
+    </tr>
+    <tr>
+        <td>正边比例</td>
+        <td>18.8%</td>
+        <td>11.5%</td>
+        <td>0.61×</td>
+    </tr>
+    <tr>
+        <td>正负边比例</td>
+        <td>1:4.3</td>
+        <td>1:7.7</td>
+        <td>1.8× 不平衡</td>
+    </tr>
+</table>
+
 <h5 id="📊-GNN-训练挑战分析"><a href="#📊-GNN-训练挑战分析" class="headerlink" title="📊 GNN 训练挑战分析"></a>📊 GNN 训练挑战分析</h5><h6 id="过平滑风险评估"><a href="#过平滑风险评估" class="headerlink" title="过平滑风险评估"></a>过平滑风险评估</h6><ul>
 <li><strong>CCLE</strong>: ⚠️ 高风险 (平均度 42.86)</li>
 <li><strong>GDSC</strong>: 🚨 极高风险 (平均度 256.89)</li>
@@ -664,7 +733,6 @@
 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
 ]]></content>
       <categories>
-        <category>CDR</category>
         <category>model</category>
         <category>attention</category>
         <category>feature related</category>
@@ -677,43 +745,19 @@
       </tags>
   </entry>
   <entry>
-    <title>GAT</title>
-    <url>/2025/07/14/GAT/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><span id="more"></span>
-
-<h3 id="图注意力机制"><a href="#图注意力机制" class="headerlink" title="图注意力机制"></a>图注意力机制</h3><h4 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h4><p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
-<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
-<p>其中注意力系数$\alpha_{ij}$的计算：</p>
-<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
-<h4 id="多头注意力"><a href="#多头注意力" class="headerlink" title="多头注意力"></a>多头注意力</h4><p>为了提高模型的稳定性和表达能力，GAT使用了多头注意力机制：</p>
-<p>$$h_i^{(l+1)} &#x3D; \sigma(\frac{1}{K} \sum_{k&#x3D;1}^K \sum_{j \in \mathcal{N}_i} \alpha_{ij}^k W^k h_j^{(l)})$$</p>
-<h3 id="变体与扩展"><a href="#变体与扩展" class="headerlink" title="变体与扩展"></a>变体与扩展</h3><h4 id="边注意力"><a href="#边注意力" class="headerlink" title="边注意力"></a>边注意力</h4><p>除了节点之间的注意力，一些模型还引入了边注意力机制：</p>
-<p>$$e_{ij} &#x3D; a^T[Wh_i || Wh_j || We_{ij}]$$</p>
-<p>其中$e_{ij}$是边的特征。</p>
-<h4 id="全局注意力"><a href="#全局注意力" class="headerlink" title="全局注意力"></a>全局注意力</h4><p>通过引入全局节点或池化操作，可以实现全局注意力：</p>
-<p>$$g &#x3D; \sum_{i \in V} \beta_i h_i$$</p>
-<p>其中$\beta_i$是全局注意力权重。</p>
-<h2 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h2><h3 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features, dropout, alpha, concat=<span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.in_features = in_features</span><br><span class="line">        <span class="variable language_">self</span>.out_features = out_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))</span><br><span class="line">        nn.init.xavier_uniform_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier_uniform_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment"># x: 节点特征矩阵 [N, in_features]</span></span><br><span class="line">        <span class="comment"># adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment"># [N, out_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算注意力分数</span></span><br><span class="line">        a_input = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a_input = a_input.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a_input, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 掩码机制</span></span><br><span class="line">        zero_vec = -<span class="number">9e15</span> * torch.ones_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 聚合特征</span></span><br><span class="line">        h_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, nfeat, nhid, nclass, dropout, alpha, nheads</span>):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment"># 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 模型初始化</span></span><br><span class="line">model = GAT(nfeat=input_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll_loss(output[idx_train], labels[idx_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
-
-<h2 id="🔍-注意事项与最佳实践"><a href="#🔍-注意事项与最佳实践" class="headerlink" title="🔍 注意事项与最佳实践"></a>🔍 注意事项与最佳实践</h2><h2 id="📈-未来展望"><a href="#📈-未来展望" class="headerlink" title="📈 未来展望"></a>📈 未来展望</h2><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a><br><a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a> </p>
-]]></content>
-  </entry>
-  <entry>
     <title>What Is GNN and GCN ?</title>
     <url>/2025/07/10/GNN-and-GCN/</url>
     <content><![CDATA[<h1 id="GNN-与-GCN"><a href="#GNN-与-GCN" class="headerlink" title="GNN 与 GCN"></a>GNN 与 GCN</h1><blockquote>
 <p>图神经网络（Graph Neural Networks, GNN）和图卷积网络（Graph Convolutional Networks, GCN）是处理图数据的强大工具。本文将从理论到实践，全面介绍这两种重要的深度学习模型。</p>
 </blockquote>
-<p>本文主要介绍了<em>GNN和GCN的大致原理</em>，<em>GCN在PyG和PyTorch的实现</em> 以及它们在<em>DRP中的应用</em></p>
+<p>本文主要介绍了<em>GNN 和 GCN 的大致原理</em>，<em>GCN 在 PyG 和 PyTorch 的实现</em> 以及它们在<em>DRP 中的应用</em></p>
 <span id="more"></span>
 
-<h2 id="🎯-Intro"><a href="#🎯-Intro" class="headerlink" title="🎯 Intro"></a>🎯 Intro</h2><p>在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如CNN、RNN）在处理欧几里得空间中的数据表现出色，但对于图这种非欧几里得结构的数据却显得力不从心。GNN和GCN的出现，为我们提供了处理图数据的有力工具。</p>
-<p>而在DRP领域，由于涉及到大量的Embedding，GCN现在几乎已经成为了必不可少的模块。</p>
-<p>但在开始各种各样的奇形怪状的GCN之前，了解GNN和GCN本身的实现仍然是非常必要的。<del>于鼠鼠而言</del>大致有以下理由：</p>
+<h2 id="🎯-Intro"><a href="#🎯-Intro" class="headerlink" title="🎯 Intro"></a>🎯 Intro</h2><p>在深度学习领域，处理图结构数据一直是一个具有挑战性的任务。传统的深度学习模型（如 CNN、RNN）在处理欧几里得空间中的数据表现出色，但对于图这种非欧几里得结构的数据却显得力不从心。GNN 和 GCN 的出现，为我们提供了处理图数据的有力工具。</p>
+<p>而在 DRP 领域，由于涉及到大量的 Embedding，GCN 现在几乎已经成为了必不可少的模块。</p>
+<p>但在开始各种各样的奇形怪状的 GCN 之前，了解 GNN 和 GCN 本身的实现仍然是非常必要的。<del>于鼠鼠而言</del>大致有以下理由：</p>
 <ol>
-<li>部分抽象的基于GCN的模块第三方库不一定支持</li>
+<li>部分抽象的基于 GCN 的模块第三方库不一定支持</li>
 <li>由于反应表示数据的不平衡，我们可以构建的模型的层数是非常有限的（因为会过平滑）。因此对层内的改造就显得非常必要了。而这一切的前提便是理解原理捏</li>
 </ol>
 <p>在这里强烈建议去看一下<a href="https://distill.pub/">Distill</a>的两篇有关图神经网络的博客，非常易懂。</p>
@@ -725,7 +769,7 @@
 <li>度矩阵 $D &#x3D; diag(d_1,…,d_n)$，其中 $d_i &#x3D; \sum_j A_{ij}$</li>
 <li>节点特征矩阵 $X \in \mathbb{R}^{n \times d}$</li>
 </ul>
-<h3 id="GNN框架"><a href="#GNN框架" class="headerlink" title="GNN框架"></a>GNN框架</h3><p>GNN的基本框架遵循消息传递范式（Message Passing Neural Network, MPNN），可以用以下数学公式表示：</p>
+<h3 id="GNN-框架"><a href="#GNN-框架" class="headerlink" title="GNN 框架"></a>GNN 框架</h3><p>GNN 的基本框架遵循消息传递范式（Message Passing Neural Network, MPNN），可以用以下数学公式表示：</p>
 <ol>
 <li><p><strong>消息传递阶段</strong>（Message Passing）：</p>
 <p>对于节点 $v$，从其邻居节点 $u \in \mathcal{N}(v)$ 收集信息：</p>
@@ -750,10 +794,10 @@
 <li><p><strong>节点更新阶段</strong>（Update）：</p>
 <p>更新节点的表示：</p>
 <p>$$h_v^{(l)} &#x3D; U_l(h_v^{(l-1)}, a_v^{(l)})$$</p>
-<p>其中 $U_l$ 是可学习的更新函数，通常是MLP或其他神经网络。</p>
+<p>其中 $U_l$ 是可学习的更新函数，通常是 MLP 或其他神经网络。</p>
 </li>
 </ol>
-<h3 id="GCN实现"><a href="#GCN实现" class="headerlink" title="GCN实现"></a>GCN实现</h3><h4 id="拉普拉斯矩阵-🔍"><a href="#拉普拉斯矩阵-🔍" class="headerlink" title="拉普拉斯矩阵 🔍"></a>拉普拉斯矩阵 🔍</h4><p>拉普拉斯矩阵是图信号处理中的核心概念，有多种形式：</p>
+<h3 id="GCN-实现"><a href="#GCN-实现" class="headerlink" title="GCN 实现"></a>GCN 实现</h3><h4 id="拉普拉斯矩阵-🔍"><a href="#拉普拉斯矩阵-🔍" class="headerlink" title="拉普拉斯矩阵 🔍"></a>拉普拉斯矩阵 🔍</h4><p>拉普拉斯矩阵是图信号处理中的核心概念，有多种形式：</p>
 <ol>
 <li><p><strong>组合拉普拉斯矩阵</strong>：$L &#x3D; D - A$</p>
 </li>
@@ -766,7 +810,7 @@
 <ul>
 <li>对称性：$L &#x3D; L^T$</li>
 <li>半正定性：所有特征值非负</li>
-<li>最小特征值为0，对应的特征向量是常数向量</li>
+<li>最小特征值为 0，对应的特征向量是常数向量</li>
 <li>特征值的重数对应图的连通分量数</li>
 </ul>
 <h4 id="从传统卷积到图卷积-🔄"><a href="#从传统卷积到图卷积-🔄" class="headerlink" title="从传统卷积到图卷积 🔄"></a>从传统卷积到图卷积 🔄</h4><h5 id="传统卷积回顾"><a href="#传统卷积回顾" class="headerlink" title="传统卷积回顾"></a>传统卷积回顾</h5><p>在欧几里得空间中，卷积操作定义为：</p>
@@ -784,7 +828,7 @@
 <li><p><strong>谱域卷积</strong>：<br>$$g_\theta * x &#x3D; Ug_\theta U^T x$$<br>其中 $U$ 是拉普拉斯矩阵的特征向量矩阵</p>
 </li>
 </ol>
-<h4 id="GCN的数学推导-⚙️"><a href="#GCN的数学推导-⚙️" class="headerlink" title="GCN的数学推导 ⚙️"></a>GCN的数学推导 ⚙️</h4><p>Kipf &amp; Welling提出的GCN模型中，单层传播规则为：</p>
+<h4 id="GCN-的数学推导-⚙️"><a href="#GCN-的数学推导-⚙️" class="headerlink" title="GCN 的数学推导 ⚙️"></a>GCN 的数学推导 ⚙️</h4><p>Kipf &amp; Welling 提出的 GCN 模型中，单层传播规则为：</p>
 <p>$$H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})$$</p>
 <p>其中：</p>
 <ul>
@@ -809,50 +853,49 @@
 <h2 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h2><p>基于这个理论框架的简单实现如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">message_passing</span>(<span class="params">nodes, edges</span>):</span><br><span class="line">    messages = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> edge <span class="keyword">in</span> edges:</span><br><span class="line">        src, dst = edge</span><br><span class="line">        msg = compute_message(nodes[src], nodes[dst])</span><br><span class="line">        messages.setdefault(dst, []).append(msg)</span><br><span class="line">    <span class="keyword">return</span> messages</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">aggregate_messages</span>(<span class="params">messages</span>):</span><br><span class="line">    aggregated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, msgs <span class="keyword">in</span> messages.items():</span><br><span class="line">        aggregated[node] = <span class="built_in">sum</span>(msgs) / <span class="built_in">len</span>(msgs)  <span class="comment"># 平均聚合</span></span><br><span class="line">    <span class="keyword">return</span> aggregated</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update_nodes</span>(<span class="params">nodes, aggregated</span>):</span><br><span class="line">    updated = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node, agg_msg <span class="keyword">in</span> aggregated.items():</span><br><span class="line">        updated[node] = nodes[node] + agg_msg  <span class="comment"># 残差连接</span></span><br><span class="line">    <span class="keyword">return</span> updated</span><br></pre></td></tr></table></figure>
 
-<h3 id="PyTorch-Geometric实现-🚀"><a href="#PyTorch-Geometric实现-🚀" class="headerlink" title="PyTorch Geometric实现 🚀"></a>PyTorch Geometric实现 🚀</h3><blockquote>
+<h3 id="PyTorch-Geometric-实现-🚀"><a href="#PyTorch-Geometric-实现-🚀" class="headerlink" title="PyTorch Geometric 实现 🚀"></a>PyTorch Geometric 实现 🚀</h3><blockquote>
 <p>本节代码基于 PyTorch 2.1.0 和 PyTorch Geometric 2.4.0 版本</p>
 </blockquote>
-<p>使用PyTorch Geometric库的GCN实现：</p>
+<p>使用 PyTorch Geometric 库的 GCN 实现：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> torch_geometric.nn <span class="keyword">import</span> GCNConv</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_features, num_classes</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.conv1 = GCNConv(num_features, <span class="number">16</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = GCNConv(<span class="number">16</span>, num_classes)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, edge_index</span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.conv1(x, edge_index)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = F.dropout(x, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.conv2(x, edge_index)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
-<h3 id="原生PyTorch实现-🔧"><a href="#原生PyTorch实现-🔧" class="headerlink" title="原生PyTorch实现 🔧"></a>原生PyTorch实现 🔧</h3><blockquote>
+<h3 id="原生-PyTorch-实现-🔧"><a href="#原生-PyTorch-实现-🔧" class="headerlink" title="原生 PyTorch 实现 🔧"></a>原生 PyTorch 实现 🔧</h3><blockquote>
 <p>本节代码基于 PyTorch 2.1.0、NumPy 1.24.0 和 SciPy 1.11.0 版本</p>
 </blockquote>
-<p>不使用PyG，手动实现GCN<del>主要是目前不太清楚主流的HGCN的实现方式捏</del>：</p>
+<p>不使用 PyG，手动实现 GCN<del>主要是目前不太清楚主流的 HGCN 的实现方式捏</del>：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> scipy.sparse <span class="keyword">as</span> sp</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCNLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCNLayer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.FloatTensor(in_features, out_features))</span><br><span class="line">        <span class="variable language_">self</span>.reset_parameters()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">reset_parameters</span>(<span class="params">self</span>):</span><br><span class="line">        nn.init.kaiming_uniform_(<span class="variable language_">self</span>.W)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment"># adj: 归一化的邻接矩阵</span></span><br><span class="line">        support = torch.mm(x, <span class="variable language_">self</span>.W)</span><br><span class="line">        output = torch.sparse.mm(adj, support)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GCN</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, nfeat, nhid, nclass, dropout</span>):</span><br><span class="line">        <span class="built_in">super</span>(GCN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.gc1 = GCNLayer(nfeat, nhid)</span><br><span class="line">        <span class="variable language_">self</span>.gc2 = GCNLayer(nhid, nclass)</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.relu(<span class="variable language_">self</span>.gc1(x, adj))</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.gc2(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">normalize_adj</span>(<span class="params">adj</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;归一化邻接矩阵&quot;&quot;&quot;</span></span><br><span class="line">    adj = sp.coo_matrix(adj)</span><br><span class="line">    rowsum = np.array(adj.<span class="built_in">sum</span>(<span class="number">1</span>))</span><br><span class="line">    d_inv_sqrt = np.power(rowsum, -<span class="number">0.5</span>).flatten()</span><br><span class="line">    d_inv_sqrt[np.isinf(d_inv_sqrt)] = <span class="number">0.</span></span><br><span class="line">    d_mat_inv_sqrt = sp.diags(d_inv_sqrt)</span><br><span class="line">    <span class="keyword">return</span> adj.dot(d_mat_inv_sqrt).transpose().dot(d_mat_inv_sqrt).tocoo()</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="🎮-应用场景"><a href="#🎮-应用场景" class="headerlink" title="🎮 应用场景"></a>🎮 应用场景</h2><p><del>由于鼠鼠就是个臭写DRP的捏</del> 这里只给出GNN在DRP中的应用</p>
+<h2 id="🎮-应用场景"><a href="#🎮-应用场景" class="headerlink" title="🎮 应用场景"></a>🎮 应用场景</h2><p><del>由于鼠鼠就是个臭写 DRP 的捏</del> 这里只给出 GNN 在 DRP 中的应用</p>
 <ol>
 <li><p><strong>药物表示</strong></p>
 <ul>
-<li><em>分子图构建</em>：将药物SMILES字符串转换为图结构，节点表示原子（含原子类型、电荷等特征），边表示化学键（如键类型、距离）。  </li>
-<li><em>GNN编码</em>：使用图卷积网络（GCN）、图注意力网络（GAT）或图同构网络（GIN）等层迭代聚合邻域信息，生成药物嵌入（embedding）。例如，GraTransDRP（2022）结合GAT和Transformer提升药物表征能力。</li>
+<li><em>分子图构建</em>：将药物 SMILES 字符串转换为图结构，节点表示原子（含原子类型、电荷等特征），边表示化学键（如键类型、距离）。</li>
+<li><em>GNN 编码</em>：使用图卷积网络（GCN）、图注意力网络（GAT）或图同构网络（GIN）等层迭代聚合邻域信息，生成药物嵌入（embedding）。例如，GraTransDRP（2022）结合 GAT 和 Transformer 提升药物表征能力。</li>
 </ul>
 </li>
 <li><p><strong>癌症表示</strong></p>
 <ul>
-<li><em>生物网络构建</em>：基于基因互作（如STRING数据库的蛋白-蛋白互作）、基因共表达或通路信息构建异质图。例如，AGMI（2021）整合多组学数据和PPI网络，通过GNN学习癌症样本的联合表征。  </li>
-<li><em>多组学融合</em>：部分模型（如TGSA）利用GNN整合基因组、转录组等数据，通过跨模态注意力机制增强特征交互。</li>
+<li><em>生物网络构建</em>：基于基因互作（如 STRING 数据库的蛋白-蛋白互作）、基因共表达或通路信息构建异质图。例如，AGMI（2021）整合多组学数据和 PPI 网络，通过 GNN 学习癌症样本的联合表征。</li>
+<li><em>多组学融合</em>：部分模型（如 TGSA）利用 GNN 整合基因组、转录组等数据，通过跨模态注意力机制增强特征交互。</li>
 </ul>
 </li>
 <li><p><strong>异构图与联合建模</strong></p>
 <ul>
-<li><em>细胞系-药物异构图</em>：如GraphCDR（2021）将细胞系和药物作为两类节点，通过边连接已知响应对，直接学习跨实体关系。  </li>
-<li><em>知识增强</em>：预训练GNN于大规模生物化学属性预测（如Zhu et al., 2021），再迁移至DRP任务，提升泛化性。</li>
+<li><em>细胞系-药物异构图</em>：如 GraphCDR（2021）将细胞系和药物作为两类节点，通过边连接已知响应对，直接学习跨实体关系。</li>
+<li><em>知识增强</em>：预训练 GNN 于大规模生物化学属性预测（如 Zhu et al., 2021），再迁移至 DRP 任务，提升泛化性。</li>
 </ul>
 </li>
 </ol>
 <h2 id="🎯-总结与展望"><a href="#🎯-总结与展望" class="headerlink" title="🎯 总结与展望"></a>🎯 总结与展望</h2><ul>
-<li><strong>动态图建模</strong>：捕捉治疗过程中动态变化的生物网络。  </li>
-<li><strong>三维分子图</strong>：结合几何深度学习（如SchNet）提升立体化学感知。  </li>
-<li><strong>基准测试</strong>：需统一评估协议（如固定数据集和指标）以公平比较GNN与其他方法。</li>
+<li><strong>动态图建模</strong>：捕捉治疗过程中动态变化的生物网络。</li>
+<li><strong>三维分子图</strong>：结合几何深度学习（如 SchNet）提升立体化学感知。</li>
+<li><strong>基准测试</strong>：需统一评估协议（如固定数据集和指标）以公平比较 GNN 与其他方法。</li>
 </ul>
-<p><del>之后应该会写一些具体模型的博客，有相关的会直接上链接的捏jrm</del></p>
+<p><del>之后应该会写一些具体模型的博客，有相关的会直接上链接的捏 jrm</del></p>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a><br><a href="https://pytorch-geometric.readthedocs.io/" target="_blank">PyTorch Geometric 官方文档</a><br><a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a><br><a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a><br><a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">知乎：图卷积网络（GCN）入门详解</a><br><a href="https://github.com/tkipf/gcn" target="_blank">GCN 论文官方代码（GitHub）</a></p>
 ]]></content>
       <categories>
-        <category>CDR</category>
         <category>model</category>
         <category>GNN</category>
       </categories>
@@ -952,10 +995,9 @@
 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
 ]]></content>
       <categories>
-        <category>CDR</category>
         <category>model</category>
         <category>attention</category>
-        <category>general attention</category>
+        <category>general</category>
       </categories>
       <tags>
         <tag>CDR</tag>
@@ -963,6 +1005,30 @@
         <tag>Basic</tag>
         <tag>deep learning</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>GAT</title>
+    <url>/2025/07/14/GAT/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><span id="more"></span>
+
+<h3 id="图注意力机制"><a href="#图注意力机制" class="headerlink" title="图注意力机制"></a>图注意力机制</h3><h4 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h4><p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
+<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
+<p>其中注意力系数$\alpha_{ij}$的计算：</p>
+<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
+<h4 id="多头注意力"><a href="#多头注意力" class="headerlink" title="多头注意力"></a>多头注意力</h4><p>为了提高模型的稳定性和表达能力，GAT使用了多头注意力机制：</p>
+<p>$$h_i^{(l+1)} &#x3D; \sigma(\frac{1}{K} \sum_{k&#x3D;1}^K \sum_{j \in \mathcal{N}_i} \alpha_{ij}^k W^k h_j^{(l)})$$</p>
+<h3 id="变体与扩展"><a href="#变体与扩展" class="headerlink" title="变体与扩展"></a>变体与扩展</h3><h4 id="边注意力"><a href="#边注意力" class="headerlink" title="边注意力"></a>边注意力</h4><p>除了节点之间的注意力，一些模型还引入了边注意力机制：</p>
+<p>$$e_{ij} &#x3D; a^T[Wh_i || Wh_j || We_{ij}]$$</p>
+<p>其中$e_{ij}$是边的特征。</p>
+<h4 id="全局注意力"><a href="#全局注意力" class="headerlink" title="全局注意力"></a>全局注意力</h4><p>通过引入全局节点或池化操作，可以实现全局注意力：</p>
+<p>$$g &#x3D; \sum_{i \in V} \beta_i h_i$$</p>
+<p>其中$\beta_i$是全局注意力权重。</p>
+<h2 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h2><h3 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_features, out_features, dropout, alpha, concat=<span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.in_features = in_features</span><br><span class="line">        <span class="variable language_">self</span>.out_features = out_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(in_features, out_features)))</span><br><span class="line">        nn.init.xavier_uniform_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier_uniform_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment"># x: 节点特征矩阵 [N, in_features]</span></span><br><span class="line">        <span class="comment"># adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment"># [N, out_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算注意力分数</span></span><br><span class="line">        a_input = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a_input = a_input.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a_input, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 掩码机制</span></span><br><span class="line">        zero_vec = -<span class="number">9e15</span> * torch.ones_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 聚合特征</span></span><br><span class="line">        h_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, nfeat, nhid, nclass, dropout, alpha, nheads</span>):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment"># 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 模型初始化</span></span><br><span class="line">model = GAT(nfeat=input_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll_loss(output[idx_train], labels[idx_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
+
+<h2 id="🔍-注意事项与最佳实践"><a href="#🔍-注意事项与最佳实践" class="headerlink" title="🔍 注意事项与最佳实践"></a>🔍 注意事项与最佳实践</h2><h2 id="📈-未来展望"><a href="#📈-未来展望" class="headerlink" title="📈 未来展望"></a>📈 未来展望</h2><h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a><br><a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a> </p>
+]]></content>
   </entry>
   <entry>
     <title>PEP 8</title>
@@ -1089,5 +1155,339 @@
 <li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
 </ul>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+  </entry>
+  <entry>
+    <title>Query-Related-Attention</title>
+    <url>/2025/07/17/Query-Related-Attention/</url>
+    <content><![CDATA[<h1 id="在查询上做文章的-Attention"><a href="#在查询上做文章的-Attention" class="headerlink" title="在查询上做文章的 Attention"></a>在查询上做文章的 Attention</h1><p>查询是任何注意力模型的重要组成部分，因为它们直接决定了从特征向量中提取哪些信息。这些查询基于任务模型的期望输出，并可以解释为字面问题。一些查询具有特定的特征，需要特定类型的机制来处理它们。因此，这一类别封装了处理特定类型查询特征的注意力机制。这一类别的机制处理以下两种查询特征之一：查询的类型或查询的多重性。</p>
+<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+<span id="more"></span>
+
+<h2 id="查询类型机制-Query-Type-Mechanisms"><a href="#查询类型机制-Query-Type-Mechanisms" class="headerlink" title="查询类型机制(Query Type Mechanisms)"></a>查询类型机制(Query Type Mechanisms)</h2><h3 id="基本查询与特殊查询"><a href="#基本查询与特殊查询" class="headerlink" title="基本查询与特殊查询"></a>基本查询与特殊查询</h3><p>查询(Query)在注意力机制中扮演着关键角色，它决定了模型关注输入数据的哪些部分。3.3 节首先区分了两种基本查询类型：</p>
+<ol>
+<li><p><strong>基本查询(Basic Queries)</strong>：这类查询通常直接来源于模型结构或数据特征。例如：</p>
+<ul>
+<li>RNN 中的隐藏状态作为序列生成过程中的查询</li>
+<li>辅助变量（如医疗图像分类中的患者特征）作为查询</li>
+<li>图像处理中 CNN 提取的特征向量作为查询</li>
+</ul>
+</li>
+<li><p><strong>特殊查询(Specialized Queries)</strong>：用于特定注意力架构的查询，如：</p>
+<ul>
+<li>旋转注意力(Rotatory Attention)中使用上下文向量作为查询</li>
+<li>交互式协同注意力(Interactive Co-attention)中使用平均键向量作为查询</li>
+<li>注意力堆叠(Attention-over-Attention)中的多层查询</li>
+</ul>
+</li>
+</ol>
+<h3 id="自注意力机制-Self-Attention"><a href="#自注意力机制-Self-Attention" class="headerlink" title="自注意力机制(Self-Attention)"></a>自注意力机制(Self-Attention)</h3><p>自注意力（或称内部注意力）是查询相关机制中最重要的创新之一，它允许模型通过数据自身生成查询：</p>
+<ol>
+<li><p><strong>自注意力的两种解释</strong>：</p>
+<ul>
+<li><strong>恒定查询解释</strong>：将查询视为固定问题（如”文档属于哪类？”）</li>
+<li><strong>可学习查询解释</strong>：将查询作为可训练参数，随模型优化</li>
+</ul>
+</li>
+<li><p><strong>技术实现</strong>：<br>自注意力通过线性变换从特征矩阵 F 生成查询矩阵 Q：</p>
+<p>$$<br>Q &#x3D; W_Q \times F<br>$$</p>
+<p>其中 $W_Q \in \mathbb{R}^{d_q \times d_f}$ 是可训练权重矩阵。</p>
+</li>
+<li><p><strong>自注意力的应用价值</strong>：</p>
+<ul>
+<li><p>揭示特征向量间的关系（如词语依赖、图像区域关联）</p>
+</li>
+<li><p>生成改进的特征表示，可通过两种方式：</p>
+<p>$$<br>f^{(new)} &#x3D; c \quad \text{或} \quad f^{(new)} &#x3D; \text{Normalize}(f^{(old)} + c)<br>$$</p>
+</li>
+<li><p>在 Transformer 架构中作为核心组件</p>
+</li>
+</ul>
+</li>
+<li><p><strong>领域应用</strong>：</p>
+<ul>
+<li>计算机视觉：图像识别、GANs 中的区域聚焦</li>
+<li>视频处理：时空关系建模</li>
+<li>语音处理：语音识别</li>
+<li>自然语言处理：情感分析、机器翻译</li>
+<li>图网络：节点关系建模</li>
+</ul>
+</li>
+</ol>
+<h2 id="多重查询机制-Multi-Query-Mechanisms"><a href="#多重查询机制-Multi-Query-Mechanisms" class="headerlink" title="多重查询机制(Multi-Query Mechanisms)"></a>多重查询机制(Multi-Query Mechanisms)</h2><h3 id="多头注意力-Multi-Head-Attention"><a href="#多头注意力-Multi-Head-Attention" class="headerlink" title="多头注意力(Multi-Head Attention)"></a>多头注意力(Multi-Head Attention)</h3><img src="/img/Attention/MultiheadAttention.png" alt="Multi-head Attention" width="60%" height="auto">
+
+<p>多头注意力是处理多重查询的核心技术，其关键特点包括：</p>
+<ol>
+<li><p><strong>并行注意力头</strong>：</p>
+<ul>
+<li>每个头有独立的$W_Q^{(j)}, W_K^{(j)}, W_V^{(j)}$矩阵</li>
+<li>生成不同的查询表示：$q^{(j)} &#x3D; W_Q^{(j)} \times q$</li>
+<li>允许模型同时关注不同方面的信息</li>
+</ul>
+</li>
+<li><p><strong>实现细节</strong>：</p>
+<ul>
+<li>每个头产生独立的上下文向量$c^{(j)}$</li>
+<li>最终输出通过线性变换合并 $c &#x3D; W_O \times \text{concat}(c^{(1)},…,c^{(d)})$</li>
+</ul>
+</li>
+<li><p><strong>优势</strong>：</p>
+<ul>
+<li>增强模型捕捉多样化关系的能力</li>
+<li>在 Transformer 中实现并行计算</li>
+<li>可解释性强（不同头可学习不同关注模式）</li>
+</ul>
+</li>
+</ol>
+<h3 id="多跳注意力-Multi-Hop-Attention"><a href="#多跳注意力-Multi-Hop-Attention" class="headerlink" title="多跳注意力(Multi-Hop Attention)"></a>多跳注意力(Multi-Hop Attention)</h3><img src="/img/Attention/MultihopAttention.png" alt="Multi-hop Attention" width="60%" height="auto">
+
+<p>多跳注意力通过序列化处理逐步精炼查询和上下文：</p>
+<ol>
+<li><p><strong>工作机制</strong>：</p>
+<ul>
+<li>迭代更新查询：$q^{(s+1)} &#x3D; \text{transform}(q^{(s)}, c^{(s)})$</li>
+<li>逐步积累信息：使用$[q^{(s+1)}, c^{(s)}]$作为新查询</li>
+<li>可视为信息传递的”深度”处理</li>
+</ul>
+</li>
+<li><p><strong>与多头注意力的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>多头注意力</th>
+<th>多跳注意力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>处理方式</td>
+<td>并行</td>
+<td>串行</td>
+</tr>
+<tr>
+<td>计算效率</td>
+<td>高</td>
+<td>较低</td>
+</tr>
+<tr>
+<td>信息整合</td>
+<td>拼接</td>
+<td>迭代精炼</td>
+</tr>
+<tr>
+<td>典型应用</td>
+<td>Transformer 编码层</td>
+<td>Transformer 解码层</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>变体实现</strong>：</p>
+<ul>
+<li>使用相同权重矩阵的轻量级版本</li>
+<li>结合自注意力机制的增强版本</li>
+<li>在 LCR-Rot-hop 等模型中的应用</li>
+</ul>
+</li>
+</ol>
+<h4 id="胶囊注意力-Capsule-Based-Attention"><a href="#胶囊注意力-Capsule-Based-Attention" class="headerlink" title="胶囊注意力(Capsule-Based Attention)"></a>胶囊注意力(Capsule-Based Attention)</h4><img src="/img/Attention/CapsuleAttention.png" alt="Capsule Attention" width="60%" height="auto">
+
+<p>Capsule-based attention通过将注意力机制与胶囊网络相结合，在多分类任务中展现出独特的优势，特别是在需要可解释性和细粒度分类的场景中。其模块化设计也便于扩展和调整，是注意力机制研究中的一个重要分支。</p>
+<h5 id="基本概念与核心思想"><a href="#基本概念与核心思想" class="headerlink" title="基本概念与核心思想"></a>基本概念与核心思想</h5><p>Capsule-based attention是一种特殊的注意力机制，它通过为每个类别创建独立的”胶囊”(capsule)来处理多分类问题。每个胶囊本质上是一个独立的注意力模块，专门负责识别和提取与该类别相关的特征信息。</p>
+<h6 id="胶囊网络基础"><a href="#胶囊网络基础" class="headerlink" title="胶囊网络基础"></a>胶囊网络基础</h6><p>Capsule-based attention源自胶囊网络(Capsule Networks)的概念，由Hinton等人于2017年提出。与传统神经网络使用标量神经元不同，胶囊网络使用向量形式的”胶囊”来表示实体及其属性。这种表示方式能够更好地捕捉特征间的空间层次关系。</p>
+<h6 id="注意力机制的结合"><a href="#注意力机制的结合" class="headerlink" title="注意力机制的结合"></a>注意力机制的结合</h6><p>将注意力机制与胶囊网络结合，形成了capsule-based attention。这种机制的核心思想是：</p>
+<ul>
+<li>每个类别对应一个独立的注意力模块(胶囊)</li>
+<li>每个胶囊学习自己独特的”查询”(query)，用于从输入特征中提取相关信息</li>
+<li>通过注意力权重明确显示哪些特征对分类决策最重要</li>
+</ul>
+<h5 id="架构与工作流程"><a href="#架构与工作流程" class="headerlink" title="架构与工作流程"></a>架构与工作流程</h5><p>Capsule-based attention模型通常由三个主要组件构成：</p>
+<ol>
+<li><p><strong>注意力模块</strong></p>
+<p> 每个胶囊c的注意力模块计算过程如下：</p>
+<ol>
+<li><p><strong>键值生成</strong>：将输入特征向量 $f_l$ 转换为键 $k_l$ 和值 $v_l$ ： $k_l &#x3D; W_K^{(c)} f_l, \quad v_l &#x3D; W_V^{(c)} f_l$<br> 其中$W_K^{(c)}$和$W_V^{(c)}$是类别特定的可训练权重矩阵</p>
+</li>
+<li><p><strong>注意力分数计算</strong>：使用查询向量 $q_l$ 计算注意力分数 $e_{c,l} &#x3D; q_c^T k_l$</p>
+</li>
+<li><p><strong>注意力权重计算</strong>：通过softmax归一化 $a_{c,l} &#x3D; \frac{\exp(e_{c,l})}{\sum_j \exp(e_{c,j})}$</p>
+</li>
+<li><p><strong>上下文向量生成</strong>：加权求和得到类别特定的上下文向量 $<br> c_c &#x3D; \sum_l a_{c,l} v_l$</p>
+</li>
+</ol>
+</li>
+<li><p><strong>概率模块</strong></p>
+<p> 上下文向量经过一个简单的分类层，输出该类别的预测概率 $p_c &#x3D; \sigma(w_c^T c_c + b_c)$ ,其中 $\sigma$ 是sigmoid激活函数， $w_c$ 和 $b_c$ 是可训练参数。</p>
+</li>
+<li><p><strong>重构模块</strong></p>
+<p> 最后将概率与上下文向量结合，生成类别表示向量 $r_c &#x3D; p_c \times c_c$</p>
+</li>
+</ol>
+<h5 id="训练机制与损失函数"><a href="#训练机制与损失函数" class="headerlink" title="训练机制与损失函数"></a>训练机制与损失函数</h5><p>Capsule-based attention采用联合训练策略，优化两个目标：</p>
+<ol>
+<li><p><strong>分类损失</strong></p>
+<p> 使用标准的交叉熵损失函数确保分类准确性 $\mathcal{L}_{cls} &#x3D; -\sum_c y_c \log p_c$ ，其中 $y_c$ 是类别 $c$ 的真实标签。</p>
+</li>
+<li><p><strong>重构损失</strong></p>
+<p> 引入重构损失促使模型学习有意义的表示 $\mathcal{L}_{rec} &#x3D; \sum_c |r_c - \bar{f}|^2$ ，其中$\bar{f}$是所有输入特征向量的平均值。</p>
+</li>
+<li><p><strong>联合训练</strong></p>
+<p> 总损失函数是两者的加权和 $\mathcal{L} &#x3D; \mathcal{L}_{cls} + \lambda \mathcal{L}_{rec}$ ，其中 $\lambda$ 是超参数，控制重构损失的重要性。</p>
+</li>
+</ol>
+<h5 id="技术特点与优势"><a href="#技术特点与优势" class="headerlink" title="技术特点与优势"></a>技术特点与优势</h5><ol>
+<li><p><strong>多查询机制</strong>：与传统注意力不同，capsule-based attention为每个类别学习独立的查询向量 $q_c$ ，使得模型能够并行处理多个分类任务，捕捉不同类别关注的不同特征，减少类别间的干扰。</p>
+</li>
+<li><p><strong>可解释性</strong>：通过分析注意力权重a_{c,l}，可以直观理解哪些输入特征对特定类别最重要、模型做出决策的依据以及不同类别关注的特征差异</p>
+</li>
+<li><p><strong>鲁棒性</strong>：重构损失项使模型学习到的表示更加鲁棒，迫使胶囊学习有意义的特征组合，减少对噪声特征的依赖，提高对抗样本的抵抗力</p>
+</li>
+</ol>
+<h5 id="变体与扩展"><a href="#变体与扩展" class="headerlink" title="变体与扩展"></a>变体与扩展</h5><ol>
+<li><p><strong>动态路由capsule</strong></p>
+<p> 引入动态路由机制，迭代调整胶囊间的连接强度：</p>
+<p> $$<br> \text{for iteration } t:<br> \quad b_{i,j} \leftarrow b_{i,j} + \hat{v}_j^T u_{j|i}<br> \quad c_{i,j} &#x3D; \text{softmax}(b_{i,j})<br> \quad s_j &#x3D; \sum_i c_{i,j} u_{j|i}<br> \quad v_j &#x3D; \text{squash}(s_j)<br> $$</p>
+</li>
+<li><p><strong>多头capsule</strong></p>
+</li>
+</ol>
+<p>每个胶囊使用多个注意力头，捕获不同方面的信息 $r_c &#x3D; \text{concat}(r_c^{(1)}, …, r_c^{(h)})$</p>
+<ol start="3">
+<li><strong>层次化capsule</strong></li>
+</ol>
+<p>构建多级胶囊结构，从低级特征到高级语义逐步抽象：</p>
+<p>$$<br>\text{低级胶囊} \rightarrow \text{中级胶囊} \rightarrow \text{高级胶囊}<br>$$</p>
+<h5 id="与其他注意力机制的比较"><a href="#与其他注意力机制的比较" class="headerlink" title="与其他注意力机制的比较"></a>与其他注意力机制的比较</h5><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Capsule-based Attention</th>
+<th>传统注意力</th>
+<th>多头注意力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询数量</td>
+<td>每个类别一个</td>
+<td>通常一个</td>
+<td>固定数量</td>
+</tr>
+<tr>
+<td>参数共享</td>
+<td>胶囊间不共享</td>
+<td>完全共享</td>
+<td>头间共享</td>
+</tr>
+<tr>
+<td>可解释性</td>
+<td>高</td>
+<td>中等</td>
+<td>低</td>
+</tr>
+<tr>
+<td>计算成本</td>
+<td>较高</td>
+<td>低</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>适用任务</td>
+<td>多分类&#x2F;多标签</td>
+<td>通用</td>
+<td>序列处理</td>
+</tr>
+</tbody></table>
+<h2 id="Transformer-架构中的查询机制"><a href="#Transformer-架构中的查询机制" class="headerlink" title="Transformer 架构中的查询机制"></a>Transformer 架构中的查询机制</h2><p>3.3 节特别强调了 Transformer 模型如何整合多种查询机制：</p>
+<ol>
+<li><p><strong>关键整合</strong>：</p>
+<ul>
+<li>多头自注意力并行处理</li>
+<li>层间多跳式信息传递</li>
+<li>查询-键-值分离的灵活设计</li>
+</ul>
+</li>
+<li><p><strong>变体发展</strong>：</p>
+<ul>
+<li><strong>Transformer-XL</strong>：通过循环机制扩展上下文窗口</li>
+<li><strong>Reformer</strong>：通过 LSH 哈希提升计算效率</li>
+<li><strong>Linformer</strong>：低秩近似实现线性复杂度</li>
+<li><strong>Synthesizer</strong>：探索非成对注意力权重</li>
+</ul>
+</li>
+<li><p><strong>应用领域扩展</strong>：</p>
+<ul>
+<li>图像描述生成（Image Captioning）</li>
+<li>医学图像分割</li>
+<li>对话系统响应生成</li>
+<li>推荐系统（如 BERT4Rec）</li>
+</ul>
+</li>
+</ol>
+<h2 id="查询机制的选择与实践建议"><a href="#查询机制的选择与实践建议" class="headerlink" title="查询机制的选择与实践建议"></a>查询机制的选择与实践建议</h2><ol>
+<li><p><strong>机制选择准则</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>任务需求</th>
+<th>推荐机制</th>
+<th>优势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>并行处理</td>
+<td>多头注意力</td>
+<td>计算效率高</td>
+</tr>
+<tr>
+<td>深度特征交互</td>
+<td>多跳注意力</td>
+<td>信息整合深入</td>
+</tr>
+<tr>
+<td>细粒度分类</td>
+<td>胶囊注意力</td>
+<td>可解释性强</td>
+</tr>
+<tr>
+<td>长序列处理</td>
+<td>Transformer-XL</td>
+<td>上下文扩展</td>
+</tr>
+<tr>
+<td>资源受限</td>
+<td>Linformer</td>
+<td>线性复杂度</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>实现注意事项</strong>：</p>
+<ul>
+<li>查询维度$d_q$应与键维度$d_k$匹配</li>
+<li>多头注意力的头数需平衡效果与计算成本</li>
+<li>多跳注意力的深度可能导致梯度消失</li>
+<li>胶囊注意力适合中等规模类别数</li>
+</ul>
+</li>
+<li><p><strong>新兴研究方向</strong>：</p>
+<ul>
+<li>动态查询路由机制</li>
+<li>查询生成的条件控制</li>
+<li>跨模态查询对齐</li>
+<li>基于能量的查询选择</li>
+</ul>
+</li>
+</ol>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+]]></content>
+      <categories>
+        <category>model</category>
+        <category>attention</category>
+        <category>query-related</category>
+      </categories>
+      <tags>
+        <tag>CDR</tag>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+      </tags>
   </entry>
 </search>

@@ -2,7 +2,6 @@
 title: Feature-Related Attention
 date: 2025-07-14 22:30:57
 categories:
-  - CDR
   - model
   - attention
   - feature related

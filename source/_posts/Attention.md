@@ -2,14 +2,12 @@
 title: Attention Overview
 date: 2025-07-10 19:56:23
 categories:
-  - CDR
   - model
   - attention
 tags:
   - CDR
   - model
   - Basic
-  - 还没写完捏
   - deep learning
   - PyTorch
 ---
@@ -58,7 +56,7 @@ tags:
 
 1. **特征模型**，即将任务的输入进行 embedding
 
-   对于输入矩阵$ X \in \mathbb{R}^{d*x \times n_x} $，特征模型提取特征向量：$\boldsymbol{F} = [f_1, \ldots, f*{n_f}] \in \mathbb{R}^{d_f \times n_f}$
+   对于输入矩阵 $ X \in \mathbb{R}^{d_x \times n_x} $ ，特征模型提取特征向量： $\boldsymbol{F} = [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$
 
 2. **查询模型**，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的
 
@@ -113,8 +111,71 @@ $$
 由于篇幅限制，这里决定重开几个博文来分别介绍这些 Attention，链接如下：
 
 {% post_link 'Feature-Related-Attention' %}
-
+<br/>
 {% post_link 'General-Attention' %}
+<br/>
+{% post_link 'Query-Related-Attention' %}
+
+### 怎样评价 Attention
+
+#### 外在性能评估
+
+1. **领域特定的评估指标**
+
+不同领域用于评估注意力模型性能的指标：
+
+| 领域 | 常用评估指标 | 典型应用 |
+|------|------------|---------|
+| 自然语言处理 | BLEU, METEOR, Perplexity | 机器翻译、文本生成 |
+| 语音处理 | 词错误率(WER)、音素错误率(PER) | 语音识别 |
+| 计算机视觉 | PSNR, SSIM, IoU | 图像生成、分割 |
+| 通用分类 | 准确率、精确率、召回率、F1 | 情感分析、文档分类 |
+
+2. **消融研究**
+
+    论文强调了消融研究(ablation study)在评估注意力机制重要性方面的价值。典型做法包括：
+    1. 移除或替换注意力机制（如用平均池化代替注意力池化）
+    2. 比较模型在有无注意力机制时的性能差异
+    3. 分析不同注意力变体对最终性能的影响
+
+    这种评估方法可以明确注意力机制对模型性能的实际贡献，而不仅仅是展示最终结果。
+
+#### 内在特性评估
+
+1. **注意力权重分析**
+
+   1. **对齐错误率(AER)**：比较模型生成的注意力权重与人工标注的"黄金"注意力权重之间的差异
+   2. **监督注意力训练**：将人工标注的注意力权重作为额外监督信号，与任务损失联合训练
+   3. **注意力可视化**：通过热图等方式直观展示模型关注区域
+
+   这些方法可以评估注意力权重是否符合人类直觉或领域知识。
+
+2. **基于人类注意力的评估**
+
+    论文提出了"注意力正确性"(Attention Correctness)的概念，将模型的注意力模式与真实人类注意力行为进行比较：
+
+    1. **数据收集**：记录人类在执行相同任务时的注意力模式（如眼动追踪）
+    2. **度量计算**：定义模型注意力与人类注意力的相似度指标
+    3. **联合训练**：将人类注意力数据作为监督信号
+
+    这种评估方法基于认知科学原理，认为好的注意力模型应该模拟人类的注意力机制。
+
+#### 4. 注意力解释性评估
+    论文讨论了学术界关于"注意力是否提供解释"的争论：
+
+    1. **"Attention is not Explanation"观点**：
+    - 注意力权重与模型决策之间缺乏稳定关联
+    - 可以构造对抗性注意力分布而不改变模型输出
+    - 注意力权重可能反映相关性而非因果性
+
+    1. **"Attention is not not Explanation"反驳**：
+    - 对抗性注意力分布通常性能更差
+    - 注意力权重确实反映了输入的相对重要性
+    - 在特定架构下注意力可以提供有意义的解释
+
+~~这段比较难绷，因此把~~原文贴在下面了捏
+
+>However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 

@@ -17,35 +17,35 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="在输入特征上做文章的 Attention本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。 具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Featur">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Feature-Related Attention">
-<meta property="og:url" content="http://example.com/2025/07/14/Feature-Related-Attention/index.html">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
 <meta property="og:description" content="在输入特征上做文章的 Attention本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。 具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Featur">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
-<meta property="og:image" content="http://example.com/img/Attention/InteractiveCo-Attention.png">
-<meta property="og:image" content="http://example.com/img/Attention/ParallelCo-Attention.png">
-<meta property="og:image" content="http://example.com/img/Attention/AttentionViaAttention.png">
-<meta property="og:image" content="http://example.com/img/Attention/HierarchicalAttention.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/AlternatingCo-Attention.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/InteractiveCo-Attention.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/ParallelCo-Attention.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/AttentionViaAttention.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/HierarchicalAttention.png">
 <meta property="article:published_time" content="2025-07-14T14:30:57.000Z">
-<meta property="article:modified_time" content="2025-07-16T13:13:39.291Z">
+<meta property="article:modified_time" content="2025-07-17T02:21:29.690Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="model">
 <meta property="article:tag" content="Basic">
 <meta property="article:tag" content="deep learning">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/Attention/AlternatingCo-Attention.png">
+<meta name="twitter:image" content="https://blog.sonic-aged.site/img/Attention/AlternatingCo-Attention.png">
 
 
-<link rel="canonical" href="http://example.com/2025/07/14/Feature-Related-Attention/">
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/2025/07/14/Feature-Related-Attention/","path":"2025/07/14/Feature-Related-Attention/","title":"Feature-Related Attention"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/","path":"2025/07/14/Feature-Related-Attention/","title":"Feature-Related Attention"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Feature-Related Attention | Sonic Aged's Blog</title>
@@ -195,18 +195,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -241,7 +241,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/14/Feature-Related-Attention/">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favicon.jpg">
@@ -277,7 +277,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-16 21:13:39" itemprop="dateModified" datetime="2025-07-16T21:13:39+08:00">2025-07-16</time>
+      <time title="Modified: 2025-07-17 10:21:29" itemprop="dateModified" datetime="2025-07-17T10:21:29+08:00">2025-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -285,19 +285,15 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+          <a href="/categories/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
         </span>
           , 
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+          <a href="/categories/model/attention/" itemprop="url" rel="index"><span itemprop="name">attention</span></a>
         </span>
           , 
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/model/attention/" itemprop="url" rel="index"><span itemprop="name">attention</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CDR/model/attention/feature-related/" itemprop="url" rel="index"><span itemprop="name">feature related</span></a>
+          <a href="/categories/model/attention/feature-related/" itemprop="url" rel="index"><span itemprop="name">feature related</span></a>
         </span>
     </span>
 
@@ -599,13 +595,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">14k</span>
+    <span title="Word count total">18k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">49 mins.</span>
+    <span title="Reading time total">1:04</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>

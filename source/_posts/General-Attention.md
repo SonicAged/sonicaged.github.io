@@ -2,10 +2,9 @@
 title: General-Attention
 date: 2025-07-16 22:16:14
 categories:
-  - CDR
   - model
   - attention
-  - general attention
+  - general
 tags:
   - CDR
   - model
