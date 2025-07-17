@@ -160,22 +160,23 @@ $$
 
     这种评估方法基于认知科学原理，认为好的注意力模型应该模拟人类的注意力机制。
 
-#### 4. 注意力解释性评估
-    论文讨论了学术界关于"注意力是否提供解释"的争论：
+#### 注意力解释性评估、
 
-    1. **"Attention is not Explanation"观点**：
-    - 注意力权重与模型决策之间缺乏稳定关联
-    - 可以构造对抗性注意力分布而不改变模型输出
-    - 注意力权重可能反映相关性而非因果性
+论文讨论了学术界关于"注意力是否提供解释"的争论：
 
-    1. **"Attention is not not Explanation"反驳**：
-    - 对抗性注意力分布通常性能更差
-    - 注意力权重确实反映了输入的相对重要性
-    - 在特定架构下注意力可以提供有意义的解释
+1. **"Attention is not Explanation"观点**
+- 注意力权重与模型决策之间缺乏稳定关联
+- 可以构造对抗性注意力分布而不改变模型输出
+- 注意力权重可能反映相关性而非因果性
+
+2. **"Attention is not not Explanation"反驳**
+- 对抗性注意力分布通常性能更差
+- 注意力权重确实反映了输入的相对重要性
+- 在特定架构下注意力可以提供有意义的解释
 
 ~~这段比较难绷，因此把~~原文贴在下面了捏
 
->However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].
+> However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 
