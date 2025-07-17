@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/GeneralAttentionModule.png">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/Taxonomy.png">
 <meta property="article:published_time" content="2025-07-10T11:56:23.000Z">
-<meta property="article:modified_time" content="2025-07-17T14:38:31.469Z">
+<meta property="article:modified_time" content="2025-07-17T14:43:44.496Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
 <meta property="article:tag" content="model">
@@ -276,7 +276,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-17 22:38:31" itemprop="dateModified" datetime="2025-07-17T22:38:31+08:00">2025-07-17</time>
+      <time title="Modified: 2025-07-17 22:43:44" itemprop="dateModified" datetime="2025-07-17T22:43:44+08:00">2025-07-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -452,21 +452,21 @@
 </ol>
 <h4 id="注意力解释性评估、"><a href="#注意力解释性评估、" class="headerlink" title="注意力解释性评估、"></a>注意力解释性评估、</h4><p>论文讨论了学术界关于”注意力是否提供解释”的争论：</p>
 <ol>
-<li><strong>“Attention is not Explanation”观点</strong></li>
-</ol>
+<li><p><strong>“Attention is not Explanation”观点</strong></p>
 <ul>
 <li>注意力权重与模型决策之间缺乏稳定关联</li>
 <li>可以构造对抗性注意力分布而不改变模型输出</li>
 <li>注意力权重可能反映相关性而非因果性</li>
 </ul>
-<ol start="2">
-<li><strong>“Attention is not not Explanation”反驳</strong></li>
-</ol>
+</li>
+<li><p><strong>“Attention is not not Explanation”反驳</strong></p>
 <ul>
 <li>对抗性注意力分布通常性能更差</li>
 <li>注意力权重确实反映了输入的相对重要性</li>
 <li>在特定架构下注意力可以提供有意义的解释</li>
 </ul>
+</li>
+</ol>
 <p><del>这段比较难绷，因此把</del>原文贴在下面了捏</p>
 <blockquote>
 <p>However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].</p>
