@@ -1,5 +1,5 @@
 ---
-title: Feature-Related Attention
+title: Fufufu Relashinala
 date: 2025-07-14 22:30:57
 categories:
   - model
@@ -16,7 +16,14 @@ tags:
 
 本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。
 
-具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。
+<div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Fufufu Relashinala.png" style="width: 200px; margin-right: 20px;">
+  <p>
+  具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。
+  </p>
+</div>
+
+
 
 在阅读这篇博客前请先阅读 {% post_link Attention %}
 

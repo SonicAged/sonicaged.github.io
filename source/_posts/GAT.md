@@ -1,5 +1,5 @@
 ---
-title: GAT
+title: Woc?! GAT? We're Saved!
 date: 2025-07-18 23:16:58
 categories:
   - model
@@ -11,6 +11,7 @@ tags:
   - Basic
   - deep learning
   - PyTorch
+  - graph theory
 ---
 
 # GAT（Graph Attention Networks）

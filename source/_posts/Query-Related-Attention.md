@@ -1,5 +1,5 @@
 ---
-title: Query-Related-Attention
+title: Quaqua Rishinala
 date: 2025-07-17 00:25:30
 categories:
   - model
@@ -14,7 +14,10 @@ tags:
 
 # 在查询上做文章的 Attention
 
-查询是任何注意力模型的重要组成部分，因为它们直接决定了从特征向量中提取哪些信息。这些查询基于任务模型的期望输出，并可以解释为字面问题。一些查询具有特定的特征，需要特定类型的机制来处理它们。因此，这一类别封装了处理特定类型查询特征的注意力机制。这一类别的机制处理以下两种查询特征之一：查询的类型或查询的多重性。
+<div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Quaqua Rishinala.png" style="width: 200px; margin-right: 20px;">
+  <p>查询是任何注意力模型的重要组成部分，因为它们直接决定了从特征向量中提取哪些信息。这些查询基于任务模型的期望输出，并可以解释为字面问题。一些查询具有特定的特征，需要特定类型的机制来处理它们。因此，这一类别封装了处理特定类型查询特征的注意力机制。这一类别的机制处理以下两种查询特征之一：查询的类型或查询的多重性。</p>
+</div>
 
 在阅读这篇博客前请先阅读 {% post_link Attention %}
 

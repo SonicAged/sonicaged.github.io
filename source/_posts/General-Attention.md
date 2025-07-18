@@ -1,5 +1,5 @@
 ---
-title: General-Attention
+title: Gugugu Neralashun
 date: 2025-07-16 22:16:14
 categories:
   - model
@@ -14,7 +14,12 @@ tags:
 
 # 具有一般性的 Attention
 
-详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。
+<div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
+  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
+</div>
+
+
 
 在阅读这篇博客前请先阅读 {% post_link Attention %}
 
