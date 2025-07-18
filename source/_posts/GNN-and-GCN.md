@@ -285,27 +285,46 @@ def normalize_adj(adj):
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 
-<a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a>
-
 <a href="https://pytorch-geometric.readthedocs.io/" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/pyg.svg" alt="pyg" style="height: 1.5em; vertical-align: middle; margin-top: 16px;">
+    <img src="/icon/pyg.svg" alt="pyg" style="height: 1.5em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   PyTorch Geometric 官方文档</a>
 
-<a href="https://distill.pub/2021/gnn-intro/" target="_blank">Distill: A Gentle Introduction to Graph Neural Networks</a>
+<a href="/paper/1609.02907v4.pdf" target="_blank">📄 Thomas - SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLUTIONAL NETWORKS</a>
 
-<a href="https://distill.pub/2021/understanding-gnns/" target="_blank">Distill: Understanding Convolutions on Graphs</a>
+<a href="https://distill.pub/2021/gnn-intro/" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/google.svg" alt="google" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Distill: A Gentle Introduction to Graph Neural Networks
+</a>
+
+<a href="/paper/Feng 等 - 2024 - A Comprehensive Survey of Dynamic Graph Neural Networks Models, Frameworks, Benchmarks, Experiments.pdf" target="_blank">📄 Feng 等 - 2024 - A Comprehensive Survey of Dynamic Graph Neural Networks Models, Frameworks, Benchmarks, Experiments</a>
+
+<a href="https://distill.pub/2021/understanding-gnns/" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/google.svg" alt="google" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Distill: Understanding Convolutions on Graphs
+</a>
+
+<a href="https://arxiv.org/abs/2401.11768" target="_blank">📄 ADA-GNN: Atom-Distance-Angle Graph Neural Network for Crystal Material Property Prediction</a>
+
 
 <a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/zhihu.svg" alt="zhihu" style="height: 1.5em; vertical-align: middle; margin-top: 16px;">
+    <img src="/icon/zhihu.svg" alt="zhihu" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
-  知乎：图卷积网络（GCN）入门详解</a>
+  知乎：图卷积网络（GCN）入门详解
+</a>
+
+<a href="/paper/吴凌飞[等]编. - 2022 - 图神经网络 基础,前沿与应用.pdf" target="_blank">📄 吴凌飞[等]编. - 2022 - 图神经网络 基础,前沿与应用</a>
+
 
 <a href="https://github.com/tkipf/gcn" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.5em; vertical-align: middle; margin-top: 16px;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   GCN 论文官方代码
 </a>
