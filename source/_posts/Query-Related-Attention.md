@@ -4,7 +4,7 @@ date: 2025-07-17 00:25:30
 categories:
   - model
   - attention
-  - query-related
+  - category
 tags:
   - CDR
   - model

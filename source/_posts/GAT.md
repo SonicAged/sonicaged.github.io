@@ -2,7 +2,14 @@
 title: GAT
 date: 2025-07-14 22:26:58
 categories:
+  - model
+  - attention
 tags:
+  - CDR
+  - model
+  - Basic
+  - deep learning
+  - PyTorch
 ---
 
 # 
@@ -156,4 +163,19 @@ def train():
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 
 <a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a>
-<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">github: External-Attention-pytorch</a> 
+
+<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.5em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  External-Attention-pytorch
+</a>
+
+<a href="/paper/Sun 等 - 2023 - Attention-based graph neural networks a survey.pdf" target="_blank">📄 Sun 等 - 2023 - Attention-based graph neural networks a survey</a>
+
+<a href="https://disassemble-channel.com/graph-attention-network-gat/" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/google.svg" alt="github" style="height: 1.5em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  【深層学習】Graph Attention Networks(GAT)を理解する
+</a> 
