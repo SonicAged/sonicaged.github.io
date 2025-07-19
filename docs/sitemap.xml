@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.sonic-aged.site/2025/07/19/K-ON/</loc>
+    
+    <lastmod>2025-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/2025/07/13/hwadee/</loc>
+    
+    <lastmod>2025-07-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/2025/07/19/Graph-Transformer/</loc>
     
     <lastmod>2025-07-19</lastmod>
@@ -77,15 +95,6 @@
     <loc>https://blog.sonic-aged.site/2025/07/09/CDR-data-analysis/</loc>
     
     <lastmod>2025-07-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/2025/07/13/hwadee/</loc>
-    
-    <lastmod>2025-07-13</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -172,14 +181,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
-    <lastmod>2025-07-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
+    <loc>https://blog.sonic-aged.site/tags/embedding/</loc>
     <lastmod>2025-07-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -193,7 +195,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/embedding/</loc>
+    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
     <lastmod>2025-07-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -243,6 +252,27 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/%E5%A4%A7%E6%A6%82%E7%8E%87%E6%B2%A1%E7%94%A8/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/%E4%B9%90%E5%AD%90/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/sb/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/UESTC/</loc>
     <lastmod>2025-07-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -301,6 +331,20 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/categories/Python/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/Fun/</loc>
+    <lastmod>2025-07-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/sb/</loc>
     <lastmod>2025-07-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
