@@ -10,6 +10,7 @@ tags:
   - Basic
   - deep learning
   - PyTorch
+  - attention
 ---
 
 # Is Attention All My Need ?

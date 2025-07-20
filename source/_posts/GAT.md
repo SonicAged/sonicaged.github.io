@@ -12,6 +12,7 @@ tags:
   - deep learning
   - PyTorch
   - graph theory
+  - attention
 ---
 
 # GAT（Graph Attention Networks）

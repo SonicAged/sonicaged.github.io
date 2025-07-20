@@ -11,6 +11,7 @@ tags:
   - PyTorch
   - graph theory
   - Basic
+  - GNN
 ---
 
 # GNN 与 GCN

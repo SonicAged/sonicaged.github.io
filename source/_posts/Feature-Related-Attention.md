@@ -10,6 +10,7 @@ tags:
   - model
   - Basic
   - deep learning
+  - attention
 ---
 
 # 在输入特征上做文章的 Attention

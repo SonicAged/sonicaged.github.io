@@ -10,6 +10,7 @@ tags:
   - model
   - Basic
   - deep learning
+  - attention
 ---
 
 # 具有一般性的 Attention

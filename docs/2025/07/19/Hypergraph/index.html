@@ -19,24 +19,39 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta property="og:type" content="article">
-<meta property="og:title" content="Hypergraph">
+    <meta name="description" content="超图的定义以及构造方式随着CDR预测的精度越来越高，越来越多的人意识到全局信息的提取将会起到非常重要的作用没活硬整了捏。引入超图也就限得十分自然了。也正因如此，我们需要像了解图一样了解超图。 这篇博客主要讨论了超图的定义和构造超图的方式，接下来应该会有专门的一篇博客介绍HGCN和HGAT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hypergraph Introduction">
 <meta property="og:url" content="https://blog.sonic-aged.site/2025/07/19/Hypergraph/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="超图的定义以及构造方式随着CDR预测的精度越来越高，越来越多的人意识到全局信息的提取将会起到非常重要的作用没活硬整了捏。引入超图也就限得十分自然了。也正因如此，我们需要像了解图一样了解超图。 这篇博客主要讨论了超图的定义和构造超图的方式，接下来应该会有专门的一篇博客介绍HGCN和HGAT">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Hypergraph/Distance-based%20hyperedge%20generation.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Hypergraph/Attribute-based%20hypergraph%20generation.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/Hypergraph/Network-based%20hypergraph%20generation.png">
 <meta property="article:published_time" content="2025-07-19T05:38:32.000Z">
-<meta property="article:modified_time" content="2025-07-19T05:38:32.721Z">
+<meta property="article:modified_time" content="2025-07-20T09:32:39.237Z">
 <meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="graph theory">
+<meta property="article:tag" content="model">
+<meta property="article:tag" content="Basic">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="embedding">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="hypergraph">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.sonic-aged.site/img/Hypergraph/Distance-based%20hyperedge%20generation.png">
 
 
 <link rel="canonical" href="https://blog.sonic-aged.site/2025/07/19/Hypergraph/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/19/Hypergraph/","path":"2025/07/19/Hypergraph/","title":"Hypergraph"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/19/Hypergraph/","path":"2025/07/19/Hypergraph/","title":"Hypergraph Introduction"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hypergraph | Sonic Aged's Blog</title>
+<title>Hypergraph Introduction | Sonic Aged's Blog</title>
   
 
 
@@ -168,7 +183,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B6%85%E5%9B%BE%E7%9A%84%E5%AE%9A%E4%B9%89%E4%BB%A5%E5%8F%8A%E6%9E%84%E9%80%A0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">超图的定义以及构造方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B6%85%E5%9B%BE%E6%8D%8F%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是超图捏？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B6%85%E5%9B%BE%E7%94%9F%E6%88%90"><span class="nav-number">1.2.</span> <span class="nav-text">超图生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%B7%9D%E7%A6%BB%E7%9A%84%E8%B6%85%E5%9B%BE%E7%94%9F%E6%88%90"><span class="nav-number">1.2.1.</span> <span class="nav-text">基于距离的超图生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%A1%A8%E7%A4%BA%E7%9A%84%E8%B6%85%E5%9B%BE%E7%94%9F%E6%88%90"><span class="nav-number">1.2.2.</span> <span class="nav-text">基于表示的超图生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%B1%9E%E6%80%A7%E7%9A%84%E8%B6%85%E5%9B%BE%E7%94%9F%E6%88%90"><span class="nav-number">1.2.3.</span> <span class="nav-text">基于属性的超图生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%BD%91%E7%BB%9C%E7%9A%84%E8%B6%85%E5%9B%BE%E7%94%9F%E6%88%90"><span class="nav-number">1.2.4.</span> <span class="nav-text">基于网络的超图生成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -189,12 +204,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -242,12 +257,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Hypergraph | Sonic Aged's Blog">
+      <meta itemprop="name" content="Hypergraph Introduction | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hypergraph
+          Hypergraph Introduction
         </h1>
 
         <div class="post-meta-container">
@@ -260,6 +275,26 @@
 
       <time title="Created: 2025-07-19 13:38:32" itemprop="dateCreated datePublished" datetime="2025-07-19T13:38:32+08:00">2025-07-19</time>
     </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-07-20 17:32:39" itemprop="dateModified" datetime="2025-07-20T17:32:39+08:00">2025-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/model/" itemprop="url" rel="index"><span itemprop="name">model</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/model/hypergraph/" itemprop="url" rel="index"><span itemprop="name">hypergraph</span></a>
+        </span>
+    </span>
 
   
     <span class="post-meta-break"></span>
@@ -268,14 +303,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>2</span>
+      <span>3.3k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>1 mins.</span>
+      <span>12 mins.</span>
     </span>
 </div>
 
@@ -285,10 +320,136 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id=""><a href="#" class="headerlink" title=""></a></h1><span id="more"></span>
+    <div class="post-body" itemprop="articleBody"><h1 id="超图的定义以及构造方式"><a href="#超图的定义以及构造方式" class="headerlink" title="超图的定义以及构造方式"></a>超图的定义以及构造方式</h1><p>随着CDR预测的精度越来越高，越来越多的人意识到全局信息的提取将会起到非常重要的作用<del>没活硬整了捏</del>。引入超图也就限得十分自然了。也正因如此，我们需要像了解图一样了解超图。</p>
+<p>这篇博客主要讨论了超图的定义和构造超图的方式，接下来应该会有专门的一篇博客介绍HGCN和HGAT</p>
+<span id="more"></span>
+
+<h2 id="什么是超图捏？"><a href="#什么是超图捏？" class="headerlink" title="什么是超图捏？"></a>什么是超图捏？</h2><p>首先简要介绍超图的初步知识。一个超图表示为 $\mathcal G$ ，由一组顶点 $\mathcal V$ 和一组超边 $\mathcal E$ 组成。在加权超图中，每个超边 $e \in \mathcal E$ 都被分配了一个权重 $w(e)$ .表示整个超图中连接关系的重要性。令 $\mathbf W$ 表示超边权重的对角矩阵，即 $\text{diag}(\mathbf W)&#x3D;[w(e_1), w(e_2),…,w(e_{|\mathcal E |})]$ 。给定一个超图${\mathcal G}&#x3D;({\mathcal V},{\mathcal E},{\mathbf W})$, 超图的结构通常用一个发生矩阵$\mathbf H \in {0, 1}^{|\mathcal{V}|\times|\mathcal{E}|}$ 表示，其中每个条目 $\mathbf H(v, e)$ 表示顶点 $v$ 是否在超边 $e$ 中</p>
+<p>$$<br>\mathbf{H}(v,e)&#x3D;\begin{cases} 1 &amp;\text{if}\quad v \in e \\ 0 &amp;\text{if}\quad v \notin e \end{cases}<br>$$</p>
+<p>在某些情况下，关联矩阵不是简单的$(0,1)$-矩阵，而是元素在0到1范围内的连续矩阵，其中 $\mathbf H(v, e)$ 项可以表示为顶点$v$分配给超边$e$的可能性，或者顶点$v$对超边$e$的重要性，</p>
+<p>我们可以定义超边$e$和顶点$v$的度数为</p>
+<p>$$\delta(e)&#x3D;\sum_{v\in\mathcal{V}}\mathbf{H}(v,e),$$</p>
+<p>以及</p>
+<p>$$d(v)&#x3D;\sum_{e\in\mathcal{E}}w(e)*\mathbf{H}(v,e),$$</p>
+<p>分别记为$\mathbf D_{e} \in \mathbb{R} ^{| \mathcal{E} | \times | \mathcal{E} | }$ 和$\mathbf{D}_{v} \in \mathbb{R} ^{| \mathcal{V} | \times | \mathcal{V} | }$ ，其中$D_{e}$ 是超边权重的对角矩阵， $D_{v}$ 是顶点度数的对角矩阵。</p>
+<p>拉普拉斯矩阵在图论中起着重要的作用。例如，基于拉普拉斯矩阵的图的谱分析（谱聚类、谱分区）是基于找到图的拉普拉斯矩阵的特征值和特征向量。对于一个简单图，拉普拉斯矩阵定义为$\Delta&#x3D;\mathbf{D}-\mathbf{A}$ ，其中 $\mathbf D$ 是顶点度的对角矩阵， $\mathbf A$ 是邻接矩阵。对于超图，拉普拉斯矩阵更复杂，定义为</p>
+<p>$$\Delta&#x3D;\mathbf{D}_{v}-\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}.$$</p>
+<p>这个拉普拉斯矩阵可以被归一化为</p>
+<p>$$\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}.$$</p>
+<p>下表对刚才的公式进行了总结：</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$X$</td>
+<td>The feature vectors of subject set $X(v)$ indicates the feature vector for vertex $v$.</td>
+</tr>
+<tr>
+<td>${\mathcal G}&#x3D;({\mathcal V},{\mathcal E},{\mathbf W})$</td>
+<td>$\mathcal G$ expresses the hypergraph structure, and $\mathcal V$, $\mathcal E$, and $W$ represent the set of vertices, the set of hyperedges, and diagonal matrix of vertex degrees, respectively.</td>
+</tr>
+<tr>
+<td>$d(v)$</td>
+<td>The degree of vertex $v$.</td>
+</tr>
+<tr>
+<td>$w(e)$</td>
+<td>The weight of hyperedge $e$.</td>
+</tr>
+<tr>
+<td>$\mathbf H$</td>
+<td>The degree of hyperedge $e$.</td>
+</tr>
+<tr>
+<td>$\mathbf H_{i,j}$</td>
+<td>$H_{i,j}$ indicates the incidence strength between the vertex and the hyperedge.</td>
+</tr>
+<tr>
+<td>$\mathbf D_v$</td>
+<td>The diagonal matrix of vertex degrees.</td>
+</tr>
+<tr>
+<td>$\mathbf D_e$</td>
+<td>The diagonal matrix of hyperedge degrees.</td>
+</tr>
+<tr>
+<td>$\Delta$</td>
+<td>The Laplacian of the hypergraph.</td>
+</tr>
+</tbody></table>
+<h2 id="超图生成"><a href="#超图生成" class="headerlink" title="超图生成"></a>超图生成</h2><p><strong>超图学习，一定要有超图</strong>🤚😭✋。</p>
+<p>生成的超图结构的质量直接影响数据关联建模的有效性。如何构建有效的超图的问题并不简单，因此已经进行了广泛的研究。超图生成方法通常可以分为四类，即基于距离的方法、基于表示的方法、基于属性的方法和基于网络的方法。接下来，我们重新审视这些超图生成方法，总结如下表所示。</p>
+<table>
+    <tr>
+        <td><b>Hyperedge Category</b></td>
+        <td><b>Hyperedge Subtypes</b></td>
+        <td><b>Methods</b></td>
+    </tr>
+    <tr>
+        <td rowspan="2" style="text-align: center;">Implicit Hyperedge</td>
+        <td>Distance Based</td>
+        <td>Nearest Neighbor (k-NN), k-ball<br/>Clustering (k-means)</td>
+    </tr>
+    <tr>
+        <td>Representation Based</td>
+        <td>l1 Reconstruction (l1-hypergraph)<br/>Elastic Net (Elastic hypergraph)<br/>l2-hypergraph</td>
+    </tr>
+    <tr>
+        <td rowspan="2" style="text-align: center;">Explicit Hyperedge</td>
+        <td>Attribute Based</td>
+        <td>Attribute Hypergraph,</td>
+    </tr>
+    <tr>
+        <td>Network Based</td>
+        <td>Social Media Network<br/>Brain Network<br/>Reaction Network<br/>Cellular Network</td>
+    </tr>
+</table>
 
 
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+<h3 id="基于距离的超图生成"><a href="#基于距离的超图生成" class="headerlink" title="基于距离的超图生成"></a>基于距离的超图生成</h3><img src="\img\Hypergraph\Distance-based hyperedge generation.png" alt="Distance-based hyperedge generation" width="80%" height="auto">
+
+<p>基于距离的超图生成方法利用特征空间中的距离来探索顶点之间的关系。其主要目标是在特征空间中找到邻近的顶点， 并构造一个超边来连接它们。通常，有两类方法可以构造这个超边，即最近邻搜索和聚类。在基于最近邻的方法中，超边的构造需要为每个顶点找到最近的邻居。也就是说，给定一个顶点（即质心），超边可以将自己和特征空间中的最近邻居连接起来。所选邻居的数量是一个预先定义的参数$k$或由距离范围内的顶点数$e$决定。这种类型的超边可以连接一组连接到相同质心的相似顶点。与基于最近邻的方法不同，基于聚类的方法的目标是直接通过聚类算法（例如$k$均值）将所有顶点分组到簇中，并通过超边连接同一簇中的所有顶点（请注意，可以使用不同规模的聚类结果来生成多个超边）。</p>
+<p>对于这些超边，如何衡量有效性至关重要。每个超边的权重或置信度可以通过下式建立</p>
+<p>$$w(e)&#x3D;\sum_{u,v\in e}\exp\biggl(-\frac{d(\mathbf{X}(u),\mathbf{X}(v))^2}{\sigma^2}\biggr),$$</p>
+<p>其中，$u$和$v$表示超边$e$中的一对顶点，$d(\mathbf X(u), \mathbf X(v))$ 是 $u$ 和 $v$ 之间的距离。参数 $\sigma$ 可以经验地设置为所有顶点对的距离的中位数</p>
+<p>除了特征空间的相似性外，位置（空间）信息也可以用于基于距离的超边生成即每个顶点可以找到其空间部居。在这个例子中，选定的粉红色顶点及其四个橙色邻居可以通过超边连接。</p>
+<p>基于距离的超边可以表示特征空间中的顶点连接，该方法的主要局限性在于由于噪声和离群点的存在，顶点之间的距离在某些情况下可能不准确；另一个问题是应该连接多少邻居，因为最近邻的规模可能会影响超图学习的性能，但在实践中自适应地学习这个数量并不容易。</p>
+<h3 id="基于表示的超图生成"><a href="#基于表示的超图生成" class="headerlink" title="基于表示的超图生成"></a>基于表示的超图生成</h3><p>基于表示的超图生成方法通过特征重构来制定顶点之间的关系，例如$l1$-超图是一种使用稀疏表示来建模超图生成中顶点之间关系的工作。更具体地说，在$l1$-超图中，每个顶点充当质心，并目可以由其最近邻表示为</p>
+<p>$$\underset{\mathbf{z}}{\operatorname*{argmin}}|\mathbf{Bz}-\mathbf{X}(v_{c})|_{2}^{2}+\gamma|\mathbf{z}|_{1}$$</p>
+<p>$$\mathrm{s.t.}:\forall i,\mathbf{z}_{\mathrm{i}}\geq0,$$</p>
+<p>其中，$\mathbf{X}(v_{c})$ 和 $\mathbf B$ 分别表示质心样本 $v_c$ 及其 $k$ 个最近邻的特征向量， $\mathbf z_{i}$ 是与第i个最近邻关联的已学习重建系数。基于这种表示，具有非零重建系数的邻居中的顶点被分组以生成超边并且可以将超边和每个顶点之间的连接强度设置为系数$\mathbf z_{i}$</p>
+<p>$l1$-超图由于使用了$l1$范数正则化，因此在揭示样本的分组信息方面能力较弱。为解决这一问题，引入弹性网通过将$l2$范数惩罚与$l1$范数约束相结合，以增强分组效果，这可以表示为</p>
+<p>$$\operatorname*{argmin}_{\mathbf{z}}|\mathbf{Bz}-\mathbf{X}(v_{c})|_{2}^{2}+\gamma|\mathbf{z}|_{1}+\beta|\mathbf{z}|_{2}^{2}.\\mathrm{s.t.}:\forall i,\mathbf{z}_{i}\geq0.$$</p>
+<p>通过利用$l2$范数和$l1$范数惩罚，弹性网可以将更多的相关邻居分组，以构建超边、其权重可以丛重建系数中导出。</p>
+<p>值得注意的是，这两种基于表示的方法有两个局限性：</p>
+<ol>
+<li>这些方法使用基于$l2$-范数的度量来测量重建误差，这伊然对稀疏重建误差敏感。</li>
+<li>这些方法通过求解线性问题生成超边，这不能处理非线性数据。</li>
+</ol>
+<p>为了解决这些问题，$l2$-超图通过将稀疏噪声分量从原始数据中分离出来，并将局部性整合到线性回归框架中，保留了约束。</p>
+<p>$$<br>\mathrm{argmin}_{\mathbf{C},\mathbf{E}}|\mathbf{X}-\mathbf{X}\mathbf{C}-\mathbf{E}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{C}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{Q}\odot\mathbf{C}|_{F}^{2}+\beta|\mathbf{E}|_{1}<br>\\<br>\mathrm{s.t.}:\mathbf{C}^{T}\mathbf{1}&#x3D;\mathbf{1},\mathrm{diag}(\mathbf{C})&#x3D;\mathbf{0},<br>$$</p>
+<p>其中，$\mathbf C$是系数矩阵，$\mathbf E$ 是数据误差矩阵，$\mathbf Q$是用于保持局部流形结构的邻域适配器矩阵，$\mathbf Q_{ij}&#x3D;\frac{\text{exp}(|\mathbf{x}_i-\mathbf{x}_j|_2)}{\sum_{t \neq i} \text{exp}(|\mathbf{x}_i-\mathbf{x}_j|_2)}$ ， $\odot$ 表示逐元素乘法。然后，系数矩阵$\mathbf C$可用以生成超边。</p>
+<p>基于表示的超边可以评估持机空间中每个原点的电键能通过计算特征向量之间的相关性来建立顶点间的连接与基于距离的方法类似，该方法也可能会受到数据噪声和离截值的影响，此外，该方法的数据采样过程也存在局限性：仅选择部分相关样本进行重建，生成的超边可能无法充分代表数据的相关性。</p>
+<h3 id="基于属性的超图生成"><a href="#基于属性的超图生成" class="headerlink" title="基于属性的超图生成"></a>基于属性的超图生成</h3><img src="\img\Hypergraph\Attribute-based hypergraph generation.png" alt="Attribute-based hypergraph generation" width="30%" height="auto">
+
+
+<p>基于属性的超图生成方法是那些利用属性信息来构建基于属性的超图。在这个例子中，共享相同属性的顶点由一个超边连接。</p>
+<p>在基于属性的超图中、每个超边被视为一个团，然后可以使用该团中成对边的热核权重的平均值作为超边权重</p>
+<p>$$<br>w(e)&#x3D;\frac{1}{\delta(e)(\delta(e)-1)}\sum_{u,v\in e}\exp\left(-\frac{\left|\mathbf{X}(u)-\mathbf{X}(v)\right|_2^2}{\sigma^2}\right)<br>$$</p>
+<p>其中，$\delta(e)$ 表示超边 $e$ 的度。由于属性可能是分层的，因此生成的超边也可以具有不同的级别，从而导致不同超边表示多尺度属性连接，尽管属性信息在表示数据方面具有显著优垫，但在某些情况下，这种信息可能不可用。一种可能的解决方案是定义一组可以从现有数据中学习的属性。</p>
+<h3 id="基于网络的超图生成"><a href="#基于网络的超图生成" class="headerlink" title="基于网络的超图生成"></a>基于网络的超图生成</h3><img src="\img\Hypergraph\Network-based hypergraph generation.png" alt="Network-based hypergraph generation" width="30%" height="auto">
+
+<p>网络数据在许多应用中可用，例如社交网络、反应网络、细胞网络和脑网络。对于这些数据，可以使用网络信息来生成主题相关性。例如，在中的顶点表示月户和图像。超边，包括同质和异质超边，用于捕获多类型关系，包括图像之间的视觉-文本内容关系，以及用户和图像之间的社会链接。通过使用基于最近邻和基于属性的超边生成方法，构建表示图像之间视觉和文本关系的同质超边。异局超边是使用连接图像和用户的社交链接关系构建的。</p>
+<p>在基于位置的社交网络中，Yang等人同时使用用户友谊和移动信息来构建超图。具体来说，它在社交领域内生成经典的友谊超边，在社交、语义、时间和空间域之间生成签到超边。在蛋白质-蛋白质相互作用网络中、串联亲和纯化(TAP)数据自然跨越一个超图.其中复合物可以表示蛋白质基本集的子集(超边)。</p>
+<p>一般来说、除了第一阶相关性之外、更高阶（例如第二和第三阶）相关性在网络也可以用于超边生成。图2e说明了网络数据的超边示例顶点连接。直观地说，如果注意力集中在网络中顶点的局部连接上，我们只需要考虑其低阶邻居。例如，在推荐网络中，用户根据对项目的相似偏好进行连接，仅使用一阶和二阶相关性来生成超图并进行协同过滤以进行推荐。相反，如果顶点的信息在网络中传播很长距离，我们需要使用更高阶的相关性来生成超边。</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
+<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
+<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+
     </div>
 
     
@@ -296,6 +457,17 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/graph-theory/" rel="tag"># graph theory</a>
+              <a href="/tags/model/" rel="tag"># model</a>
+              <a href="/tags/Basic/" rel="tag"># Basic</a>
+              <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/embedding/" rel="tag"># embedding</a>
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/hypergraph/" rel="tag"># hypergraph</a>
+          </div>
 
         
 
@@ -339,13 +511,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">23k</span>
+    <span title="Word count total">26k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:23</span>
+    <span title="Reading time total">1:35</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
