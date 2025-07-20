@@ -145,7 +145,7 @@ $$H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^
 
 ~~一些自己的理解~~
 
-1. 引入$L_{sym} = \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分
+1. 引入$L_{sym} = I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分
    - 添加自环：$\tilde{A} = A + I_N$
    - 计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$
 2. 特征变换：$H^{(l)}W^{(l)}$
@@ -296,7 +296,7 @@ def normalize_adj(adj):
 
 <a href="https://distill.pub/2021/gnn-intro/" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/google.svg" alt="google" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+    <img src="/icon/google.svg" alt="google" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   Distill: A Gentle Introduction to Graph Neural Networks
 </a>
@@ -305,7 +305,7 @@ def normalize_adj(adj):
 
 <a href="https://distill.pub/2021/understanding-gnns/" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/google.svg" alt="google" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+    <img src="/icon/google.svg" alt="google" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   Distill: Understanding Convolutions on Graphs
 </a>
@@ -315,7 +315,7 @@ def normalize_adj(adj):
 
 <a href="https://www.zhihu.com/tardis/zm/art/107162772" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/zhihu.svg" alt="zhihu" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+    <img src="/icon/zhihu.svg" alt="zhihu" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   知乎：图卷积网络（GCN）入门详解
 </a>
@@ -325,7 +325,7 @@ def normalize_adj(adj):
 
 <a href="https://github.com/tkipf/gcn" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: text-bottom; margin-top: 16px;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
   </span>
   GCN 论文官方代码
 </a>

@@ -8,12 +8,10 @@ tags:
   - CDR
   - model
   - embedding
-  - PyTorch
   - graph theory
   - Basic
   - hypergraph
   - GNN
-  - attention
 ---
 
 # 超图的定义以及构造方式
@@ -130,7 +128,12 @@ $$\mathrm{s.t.}\:\forall i,\mathbf{z}\_{\mathrm{i}}\geq0,$$
 
 $l1$-超图由于使用了$l1$范数正则化，因此在揭示样本的分组信息方面能力较弱。为解决这一问题，引入弹性网通过将$l2$范数惩罚与$l1$范数约束相结合，以增强分组效果，这可以表示为
 
-$$\operatorname*{argmin}\_{\mathbf{z}}\|\mathbf{Bz}-\mathbf{X}(v\_{c})\|\_{2}^{2}+\gamma\|\mathbf{z}\|\_{1}+\beta\|\mathbf{z}\|\_{2}^{2}.\\\mathrm{s.t.}\:\forall i,\mathbf{z}\_{i}\geq0.$$
+$$\operatorname*{argmin}\_{\mathbf{z}}\|\mathbf{Bz}-\mathbf{X}(v\_{c})\|\_{2}^{2}+\gamma\|\mathbf{z}\|\_{1}+\beta\|\mathbf{z}\|\_{2}^{2}.
+$$
+
+$$
+\mathrm{s.t.}\:\forall i,\mathbf{z}\_{i}\geq0.
+$$
 
 通过利用$l2$范数和$l1$范数惩罚，弹性网可以将更多的相关邻居分组，以构建超边、其权重可以丛重建系数中导出。
 
@@ -143,7 +146,9 @@ $$\operatorname*{argmin}\_{\mathbf{z}}\|\mathbf{Bz}-\mathbf{X}(v\_{c})\|\_{2}^{2
 
 $$
 \mathrm{argmin}\_{\mathbf{C},\mathbf{E}}\|\mathbf{X}-\mathbf{X}\mathbf{C}-\mathbf{E}\|\_{F}^{2}+\frac{\gamma\_{1}}{2}\|\mathbf{C}\|\_{F}^{2}+\frac{\gamma\_{1}}{2}\|\mathbf{Q}\odot\mathbf{C}\|\_{F}^{2}+\beta\|\mathbf{E}\|\_{1}
-\\\\
+$$
+
+$$
 \mathrm{s.t.}\:\mathbf{C}^{T}\mathbf{1}=\mathbf{1},\mathrm{diag}(\mathbf{C})=\mathbf{0},
 $$
 

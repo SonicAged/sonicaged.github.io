@@ -30,14 +30,12 @@
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Hypergraph/Attribute-based%20hypergraph%20generation.png">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Hypergraph/Network-based%20hypergraph%20generation.png">
 <meta property="article:published_time" content="2025-07-19T05:38:32.000Z">
-<meta property="article:modified_time" content="2025-07-20T09:32:39.237Z">
+<meta property="article:modified_time" content="2025-07-20T12:32:26.412Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="CDR">
-<meta property="article:tag" content="graph theory">
 <meta property="article:tag" content="model">
 <meta property="article:tag" content="Basic">
-<meta property="article:tag" content="attention">
-<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="graph theory">
 <meta property="article:tag" content="embedding">
 <meta property="article:tag" content="GNN">
 <meta property="article:tag" content="hypergraph">
@@ -198,7 +196,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -280,7 +278,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-20 17:32:39" itemprop="dateModified" datetime="2025-07-20T17:32:39+08:00">2025-07-20</time>
+      <time title="Modified: 2025-07-20 20:32:26" itemprop="dateModified" datetime="2025-07-20T20:32:26+08:00">2025-07-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -423,7 +421,8 @@
 <p>$$\mathrm{s.t.}:\forall i,\mathbf{z}_{\mathrm{i}}\geq0,$$</p>
 <p>其中，$\mathbf{X}(v_{c})$ 和 $\mathbf B$ 分别表示质心样本 $v_c$ 及其 $k$ 个最近邻的特征向量， $\mathbf z_{i}$ 是与第i个最近邻关联的已学习重建系数。基于这种表示，具有非零重建系数的邻居中的顶点被分组以生成超边并且可以将超边和每个顶点之间的连接强度设置为系数$\mathbf z_{i}$</p>
 <p>$l1$-超图由于使用了$l1$范数正则化，因此在揭示样本的分组信息方面能力较弱。为解决这一问题，引入弹性网通过将$l2$范数惩罚与$l1$范数约束相结合，以增强分组效果，这可以表示为</p>
-<p>$$\operatorname*{argmin}_{\mathbf{z}}|\mathbf{Bz}-\mathbf{X}(v_{c})|_{2}^{2}+\gamma|\mathbf{z}|_{1}+\beta|\mathbf{z}|_{2}^{2}.\\mathrm{s.t.}:\forall i,\mathbf{z}_{i}\geq0.$$</p>
+<p>$$\operatorname*{argmin}_{\mathbf{z}}|\mathbf{Bz}-\mathbf{X}(v_{c})|_{2}^{2}+\gamma|\mathbf{z}|_{1}+\beta|\mathbf{z}|_{2}^{2}.<br>$$</p>
+<p>$$<br>\mathrm{s.t.}:\forall i,\mathbf{z}_{i}\geq0.<br>$$</p>
 <p>通过利用$l2$范数和$l1$范数惩罚，弹性网可以将更多的相关邻居分组，以构建超边、其权重可以丛重建系数中导出。</p>
 <p>值得注意的是，这两种基于表示的方法有两个局限性：</p>
 <ol>
@@ -431,7 +430,8 @@
 <li>这些方法通过求解线性问题生成超边，这不能处理非线性数据。</li>
 </ol>
 <p>为了解决这些问题，$l2$-超图通过将稀疏噪声分量从原始数据中分离出来，并将局部性整合到线性回归框架中，保留了约束。</p>
-<p>$$<br>\mathrm{argmin}_{\mathbf{C},\mathbf{E}}|\mathbf{X}-\mathbf{X}\mathbf{C}-\mathbf{E}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{C}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{Q}\odot\mathbf{C}|_{F}^{2}+\beta|\mathbf{E}|_{1}<br>\\<br>\mathrm{s.t.}:\mathbf{C}^{T}\mathbf{1}&#x3D;\mathbf{1},\mathrm{diag}(\mathbf{C})&#x3D;\mathbf{0},<br>$$</p>
+<p>$$<br>\mathrm{argmin}_{\mathbf{C},\mathbf{E}}|\mathbf{X}-\mathbf{X}\mathbf{C}-\mathbf{E}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{C}|_{F}^{2}+\frac{\gamma_{1}}{2}|\mathbf{Q}\odot\mathbf{C}|_{F}^{2}+\beta|\mathbf{E}|_{1}<br>$$</p>
+<p>$$<br>\mathrm{s.t.}:\mathbf{C}^{T}\mathbf{1}&#x3D;\mathbf{1},\mathrm{diag}(\mathbf{C})&#x3D;\mathbf{0},<br>$$</p>
 <p>其中，$\mathbf C$是系数矩阵，$\mathbf E$ 是数据误差矩阵，$\mathbf Q$是用于保持局部流形结构的邻域适配器矩阵，$\mathbf Q_{ij}&#x3D;\frac{\text{exp}(|\mathbf{x}_i-\mathbf{x}_j|_2)}{\sum_{t \neq i} \text{exp}(|\mathbf{x}_i-\mathbf{x}_j|_2)}$ ， $\odot$ 表示逐元素乘法。然后，系数矩阵$\mathbf C$可用以生成超边。</p>
 <p>基于表示的超边可以评估持机空间中每个原点的电键能通过计算特征向量之间的相关性来建立顶点间的连接与基于距离的方法类似，该方法也可能会受到数据噪声和离截值的影响，此外，该方法的数据采样过程也存在局限性：仅选择部分相关样本进行重建，生成的超边可能无法充分代表数据的相关性。</p>
 <h3 id="基于属性的超图生成"><a href="#基于属性的超图生成" class="headerlink" title="基于属性的超图生成"></a>基于属性的超图生成</h3><img src="\img\Hypergraph\Attribute-based hypergraph generation.png" alt="Attribute-based hypergraph generation" width="30%" height="auto">
@@ -459,11 +459,9 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/CDR/" rel="tag"># CDR</a>
-              <a href="/tags/graph-theory/" rel="tag"># graph theory</a>
               <a href="/tags/model/" rel="tag"># model</a>
               <a href="/tags/Basic/" rel="tag"># Basic</a>
-              <a href="/tags/attention/" rel="tag"># attention</a>
-              <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
+              <a href="/tags/graph-theory/" rel="tag"># graph theory</a>
               <a href="/tags/embedding/" rel="tag"># embedding</a>
               <a href="/tags/GNN/" rel="tag"># GNN</a>
               <a href="/tags/hypergraph/" rel="tag"># hypergraph</a>
@@ -511,13 +509,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">26k</span>
+    <span title="Word count total">27k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:35</span>
+    <span title="Reading time total">1:36</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
