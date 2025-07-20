@@ -218,20 +218,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/deeplearning/</loc>
-    <lastmod>2025-07-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/graphtheory/</loc>
-    <lastmod>2025-07-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/tags/embedding/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -240,6 +226,20 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/GNN/</loc>
+    <lastmod>2025-07-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/deeplearning/</loc>
+    <lastmod>2025-07-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/graphtheory/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -332,14 +332,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/model/hypergraph/</loc>
+    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
+    <loc>https://blog.sonic-aged.site/categories/model/hypergraph/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -353,7 +353,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/model/attention/graph/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Python/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -367,7 +367,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Python/</loc>
+    <loc>https://blog.sonic-aged.site/categories/model/attention/graph/</loc>
     <lastmod>2025-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

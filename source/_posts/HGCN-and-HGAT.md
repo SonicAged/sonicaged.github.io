@@ -33,8 +33,8 @@ tags:
 >H^{(l+1)} = \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})
 >$$
 >
->1. 引入$L_{sym} = I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分
->       - 添加自环：$\tilde{A} = A + I_N$
+>1. 引入$L\_{sym} = I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分
+>       - 添加自环：$\tilde{A} = A + I\_N$
 >       - 计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$
 >2. 特征变换：$H^{(l)}W^{(l)}$
 >3. 邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$
@@ -43,13 +43,13 @@ tags:
 而超图也有对应的拉普拉斯矩阵
 
 $$
-\Delta=\mathbf{I}-\mathbf{D}_{v}^{-1/2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1/2}
+\Delta=\mathbf{I}-\mathbf{D}\_{v}^{-1/2}\mathbf{HWD}\_{e}^{-1}\mathbf{H}^{T}\mathbf{D}\_{v}^{-1/2}
 $$
 
 我们只需要把前半截一砍，换成超图的，就是HGCN了捏
 
 $$
-\mathbf X^{(l+1)} = \sigma(\mathbf{D}_{v}^{-1/2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1/2}\mathbf X^{(l)}\mathbf P^{(l)})
+\mathbf X^{(l+1)} = \sigma(\mathbf{D}\_{v}^{-1/2}\mathbf{HWD}\_{e}^{-1}\mathbf{H}^{T}\mathbf{D}\_{v}^{-1/2}\mathbf X^{(l)}\mathbf P^{(l)})
 $$
 
 为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$
