@@ -117,7 +117,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -193,7 +193,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -227,7 +227,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/20/CDR-model/">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/20/CDR-model-part1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favicon.jpg">
@@ -245,7 +245,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/07/20/CDR-model/" class="post-title-link" itemprop="url">CDR models From 2020 To 2022</a>
+          <a href="/2025/07/20/CDR-model-part1/" class="post-title-link" itemprop="url">CDR models From 2020 To 2022</a>
         </h2>
 
         <div class="post-meta-container">
@@ -263,7 +263,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-21 11:10:44" itemprop="dateModified" datetime="2025-07-21T11:10:44+08:00">2025-07-21</time>
+      <time title="Modified: 2025-07-21 21:34:24" itemprop="dateModified" datetime="2025-07-21T21:34:24+08:00">2025-07-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -286,14 +286,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>615</span>
+      <span>4.1k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>15 mins.</span>
     </span>
 </div>
 
@@ -305,9 +305,11 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
+<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
+<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2025/07/20/CDR-model/#more" rel="contents">
+              <a class="btn" href="/2025/07/20/CDR-model-part1/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -472,9 +474,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-07-19 22:19:03 / Modified: 22:23:33" itemprop="dateCreated datePublished" datetime="2025-07-19T22:19:03+08:00">2025-07-19</time>
+      <time title="Created: 2025-07-19 22:19:03" itemprop="dateCreated datePublished" datetime="2025-07-19T22:19:03+08:00">2025-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-07-21 11:37:34" itemprop="dateModified" datetime="2025-07-21T11:37:34+08:00">2025-07-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -515,7 +523,7 @@
 <table>
   <tr>
     <td><center><img src="\img\k-on\屏幕截图 2025-07-19 220432.png" width="500"></center></td>
-    <td><center><img src="\img\k-on\kingzhenen.jpg" width="500"></center></td>
+    <td><center><img src="\img\难绷\kingzhenen.jpg" width="500"></center></td>
   </tr>
 </table>
           <!--noindex-->
@@ -1382,13 +1390,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">27k</span>
+    <span title="Word count total">31k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:39</span>
+    <span title="Reading time total">1:51</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>

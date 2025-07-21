@@ -12,7 +12,7 @@ tags:
 <table>
   <tr>
     <td><center><img src="\img\k-on\屏幕截图 2025-07-19 220432.png" width="500"></center></td>
-    <td><center><img src="\img\k-on\kingzhenen.jpg" width="500"></center></td>
+    <td><center><img src="\img\难绷\kingzhenen.jpg" width="500"></center></td>
   </tr>
 </table>
 

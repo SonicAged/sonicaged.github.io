@@ -68,7 +68,7 @@ categories:
 #### 基因特征具有优势及新兴趋势
 
 > 2014 年 NCI-DREAM 挑战赛表明， 基因表达数据在预测乳腺癌细胞系药物敏感性时最具预测力（优于突变或 CNV）。因此，约 90%的 DRP 模型使用基因表达（单独或联合其他组学）
-> <img src="/img/CDR-data-analysis/gene.png" alt="gene" width="50%">
+> <img src="/img/CDR/DataAnalysis/gene.png" alt="gene" width="50%">
 
 ##### 新兴趋势
 
@@ -167,11 +167,11 @@ categories:
 
 - CCLE
 
-<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_ccle.png" alt="CCLE" style="max-width: 100%; height: auto;">
+<img src="/img/CDR/DataAnalysis/comprehensive_bipartite_analysis_ccle.png" alt="CCLE" style="max-width: 100%; height: auto;">
 
 - GDSC
 
-<img src="/img/CDR-data-analysis/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
+<img src="/img/CDR/DataAnalysis/comprehensive_bipartite_analysis_gdsc.png" alt="GDSC" style="max-width: 100%; height: auto;">
 
 <p>
   👉 <a href="/code/data_analysis/visualize_graph_analysis.py" target="_blank">查看用于生成上述图表的本地 Python 脚本：visualize_graph_analysis.py</a>
