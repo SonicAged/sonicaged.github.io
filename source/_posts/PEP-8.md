@@ -2,7 +2,6 @@
 title: PEP 8
 date: 2025-07-08 11:41:30
 tags:
-  - CDR
   - Python
   - PEP
   - 闲🉐无聊

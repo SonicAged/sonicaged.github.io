@@ -6,7 +6,6 @@ categories:
   - attention
   - graph
 tags:
-  - CDR
   - model
   - Basic
   - deep learning

@@ -28,9 +28,8 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/GraphTransformer.png">
 <meta property="article:published_time" content="2025-07-18T16:26:57.917Z">
-<meta property="article:modified_time" content="2025-07-19T07:49:55.666Z">
+<meta property="article:modified_time" content="2025-07-20T15:55:12.730Z">
 <meta property="article:author" content="Sonic Aged">
-<meta property="article:tag" content="CDR">
 <meta property="article:tag" content="model">
 <meta property="article:tag" content="Basic">
 <meta property="article:tag" content="PyTorch">
@@ -194,13 +193,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -268,9 +267,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-07-19 00:26:57 / Modified: 15:49:55" itemprop="dateCreated datePublished" datetime="2025-07-19T00:26:57+08:00">2025-07-19</time>
+      <time title="Created: 2025-07-19 00:26:57" itemprop="dateCreated datePublished" datetime="2025-07-19T00:26:57+08:00">2025-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-07-20 23:55:12" itemprop="dateModified" datetime="2025-07-20T23:55:12+08:00">2025-07-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -297,7 +302,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.8k</span>
+      <span>1.9k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -318,29 +323,31 @@
 <span id="more"></span>
 
 <p>在过去，Transformer（Lin等人，2021年）在许多NLP、CV和GRL任务中取得了卓越的性能。Graph Transformer将Transformer架构推广到图表示学习中，捕捉长距离依赖关系（Ying等人，2021年）。与之前使用局部注意力的方法不同，Graph Transformer通过全局注意力直接学习高阶图属性。Graph Transformer在图深度学习领域发展迅速，特别是在中小型图的图分类任务中。进一步将Graph Transformer分为两个子类别，即标准Transformer（Ying等人，2021年）和GNNTransformer（Nguyen等人，2019年）。标准Transformer通常对输入图的所有节点使用自注意力机制，忽略节点之间的邻接关系，而GNNTransformer则使用GNN层来获取邻接信息。 </p>
-<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="60%" height="auto">
+<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="90%" height="auto">
 
 <p>现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。</p>
 <h3 id="输入特征线性投影公式"><a href="#输入特征线性投影公式" class="headerlink" title="输入特征线性投影公式"></a>输入特征线性投影公式</h3><p>输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha_i \in \mathbb{R}^{d_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta_{ij} \in \mathbb{R}^{d_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta_{ij}$传递以嵌入到$d-$维隐藏特征$h^0_i$和$e^0_{ij}$。</p>
-<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
+<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad\qquad\qquad\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
 <p>其中，$A^{0} \in \mathbb{R}^{d \times d_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha_i$ 和 $\beta_{ij}$ 分别是原始节点和边特征</p>
 <h3 id="2-位置编码融合公式"><a href="#2-位置编码融合公式" class="headerlink" title="2. 位置编码融合公式"></a>2. 位置编码融合公式</h3><p>现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0_i$。</p>
-<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
+<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad\qquad\qquad\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
 <p>其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。</p>
 <h3 id="3-基础图Transformer层公式"><a href="#3-基础图Transformer层公式" class="headerlink" title="3. 基础图Transformer层公式"></a>3. 基础图Transformer层公式</h3><p>与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。</p>
 <p><strong>多头注意力输出</strong>$\hat{h}_{i}^{\ell+1} &#x3D; O_{h}^{\ell} |_{k&#x3D;1}^{H} \left( \sum_{j \in \mathcal{N}_{i}} w_{ij}^{k，\ell} V^{k，\ell} h_{j}^{\ell} \right)$</p>
 <p><strong>注意力权重计算</strong>$w_{ij}^{k，\ell} &#x3D; \text{softmax}_{j} \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right)$</p>
 <p>其中，$|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是各头的查询、键、值矩阵，$O_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵</p>
 <h3 id="4-前馈网络与归一化"><a href="#4-前馈网络与归一化" class="headerlink" title="4. 前馈网络与归一化"></a>4. 前馈网络与归一化</h3><p>为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:</p>
-<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\quad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ <strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
+<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\qquad\qquad\qquad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ </p>
+<p><strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
 <p>其中，$W_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。</p>
 <h3 id="5-带边特征的图Transformer层"><a href="#5-带边特征的图Transformer层" class="headerlink" title="5. 带边特征的图Transformer层"></a>5. 带边特征的图Transformer层</h3><p>带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。</p>
 <p>换句话说，当一个节点$i$在 <em>query</em> 和 <em>key</em> 特征投影相乘后关注节点$j$时，中间注意力得分$\hat{w}_{ij}$在softmax之前被计算出来。让将这个得分$\hat{w}_{ij}$视为关于边$&lt;i，j&gt;$的隐式信息。现在尝试注入边$&lt;i，j&gt;$的可用边信息，并改进已经计算出的隐式注意力得分$\hat{w}_{ij}$。</p>
 <p>这是通过简单地将两个值$\hat{w}_{ij}$和$e_{ij}$相乘来完成的。这种信息注入在NLPTransformer中并没有被广泛探索或应用，因为在两个单词之间通常没有可用的特征信息。</p>
 <p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
-<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\quad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
+<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
 <p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
-<h3 id="6-边特征的前馈网络"><a href="#6-边特征的前馈网络" class="headerlink" title="6. 边特征的前馈网络"></a>6. 边特征的前馈网络</h3><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\quad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})\quad$ <strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})\quad$</p>
+<h3 id="6-边特征的前馈网络"><a href="#6-边特征的前馈网络" class="headerlink" title="6. 边特征的前馈网络"></a>6. 边特征的前馈网络</h3><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
+<p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
 <p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
 <p>实验一致表明，存在：</p>
@@ -349,7 +356,9 @@
 <li>batch normalization，代替层归一化，<br>则在Transformer前馈层周围增强了Transformer在所有实验中的普遍性。</li>
 </ul>
 <p>鉴于这个架构的简单性和通用性以及与标准GNN相比的竞争性能，提出的模型可以作为进一步改进跨图应用中使用节点注意力的基线。</p>
-<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs.pdf" target="_blank">📄 Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs</a></p>
+<p><a href="/paper/Shehzad 等 - 2024 - Graph Transformers A Survey.pdf" target="_blank">📄 Shehzad 等 - 2024 - Graph Transformers A Survey</a></p>
+
     </div>
 
     
@@ -358,7 +367,6 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/CDR/" rel="tag"># CDR</a>
               <a href="/tags/model/" rel="tag"># model</a>
               <a href="/tags/Basic/" rel="tag"># Basic</a>
               <a href="/tags/PyTorch/" rel="tag"># PyTorch</a>
@@ -415,7 +423,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:36</span>
+    <span title="Reading time total">1:37</span>
   </span>
 </div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>

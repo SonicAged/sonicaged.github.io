@@ -5,7 +5,6 @@ categories:
   - model
   - hypergraph
 tags:
-  - CDR
   - model
   - embedding
   - graph theory
