@@ -1,6 +1,6 @@
 @echo off
 
-IF "%1"=="-s" (
+IF "%1"=="-l" (
     echo Starting local deployment...
 ) 
 
@@ -17,10 +17,10 @@ echo.
 echo Generating...
 call hexo g
 
-IF "%1"=="-s" (
+IF "%1"=="-l" (
     echo.
     echo Starting server...
-    call hexo s
+    call hexo s --draft
 ) 
 
 IF "%1"=="-g" (

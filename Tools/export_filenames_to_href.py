@@ -18,7 +18,7 @@ def export_filenames_to_href(folder_path, output_file="hrefs.txt"):
         full_path = os.path.join(folder_path, entry)
         if os.path.isfile(full_path):
             name_without_ext = Path(entry).stem  # 直接去除扩展名[9,10](@ref)
-            href = f"<a href=\"/paper/CDR/2020-2022/{entry}\" target=\"_blank\">📄 {name_without_ext}</a>\n"
+            href = f"<a href=\"/paper/CDR/2023/{entry}\" target=\"_blank\">📄 {name_without_ext}</a>\n"
             file_names.append(href)
 
     # 写入TXT文件
