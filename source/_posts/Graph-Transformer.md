@@ -26,7 +26,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。
 
-### 输入特征线性投影公式
+## 输入特征线性投影公式
 
 输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha\_i \in \mathbb{R}^{d\_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta\_{ij} \in \mathbb{R}^{d\_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta\_{ij}$传递以嵌入到$d-$维隐藏特征$h^0\_i$和$e^0\_{ij}$。
 
@@ -34,7 +34,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$A^{0} \in \mathbb{R}^{d \times d\_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d\_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha\_i$ 和 $\beta\_{ij}$ 分别是原始节点和边特征
 
-### 2. 位置编码融合公式
+## 位置编码融合公式
 
 现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0\_i$。
 
@@ -42,7 +42,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda\_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。
 
-### 3. 基础图Transformer层公式
+## 基础图Transformer层公式
 
 与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。
 
@@ -52,7 +52,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$\|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d\_{k} \times d}$ 是各头的查询、键、值矩阵，$O\_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵
 
-### 4. 前馈网络与归一化
+## 前馈网络与归一化
 
 为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}\_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:
 
@@ -62,7 +62,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$W\_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W\_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。
 
-### 5. 带边特征的图Transformer层
+## 带边特征的图Transformer层
 
 带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。
 
@@ -76,7 +76,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$E^{k，\ell} \in \mathbb{R}^{d\_{k} \times d}$ 是边特征投影矩阵，$O\_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵
 
-### 6. 边特征的前馈网络
+## 边特征的前馈网络
 
 **边特征归一化**$\hat{\hat{e}}\_{ij}^{\ell+1} = \text{Norm}(e\_{ij}^{\ell} + \hat{e}\_{ij}^{\ell+1})\qquad\qquad\qquad$ **边特征变换**$\hat{\hat{\hat{e}}}\_{ij}^{\ell+1} = W\_{e，2}^{\ell} \text{ReLU}(W\_{e，1}^{\ell} \hat{\hat{e}}\_{ij}^{\ell+1})$ 
 
@@ -84,7 +84,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$W\_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W\_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数
 
-### 总结
+## 总结
 
 这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。
 
