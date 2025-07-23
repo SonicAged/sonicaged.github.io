@@ -1,6 +1,6 @@
 ---
 title: Trans?!and Former?!
-date: 2025-07-1900:26:57
+date: 2025-07-19 00:26:57
 categories:
   - model
   - attention
