@@ -1,24 +1,18 @@
-<a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a>
+<a href="/paper/CDR/2024/Dong 等 - ASGCL Adaptive Sparse Mapping-based graph contrastive learning network for cancer drug response pre.pdf" target="_blank">📄 Dong 等 - ASGCL Adaptive Sparse Mapping-based graph contrastive learning network for cancer drug response pre</a>
 
-<a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a>
+<a href="/paper/CDR/2024/Gao 等 - Interpretable Dynamic Directed Graph Convolutional Network for Multi-Relational Prediction of Missen.pdf" target="_blank">📄 Gao 等 - Interpretable Dynamic Directed Graph Convolutional Network for Multi-Relational Prediction of Missen</a>
 
-<a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a>
+<a href="/paper/CDR/2024/Huang 等 - HiRAND A novel GCN semi-supervised deep learning-based framework for classification and feature sel.pdf" target="_blank">📄 Huang 等 - HiRAND A novel GCN semi-supervised deep learning-based framework for classification and feature sel</a>
 
-<a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a>
+<a href="/paper/CDR/2024/Li 等 - 2025 - Integrating edge features and complementary attention mechanism for drug response prediction.pdf" target="_blank">📄 Li 等 - 2025 - Integrating edge features and complementary attention mechanism for drug response prediction</a>
 
-<a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a>
+<a href="/paper/CDR/2024/Shi 等 - DRExplainer Quantifiable interpretability in drug response prediction with directed graph convoluti.pdf" target="_blank">📄 Shi 等 - DRExplainer Quantifiable interpretability in drug response prediction with directed graph convoluti</a>
 
-<a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a>
+<a href="/paper/CDR/2024/Song 等 - 2025 - GNNDRP Graph Neural Network With Multi-Task Learning for Drug Response Prediction.pdf" target="_blank">📄 Song 等 - 2025 - GNNDRP Graph Neural Network With Multi-Task Learning for Drug Response Prediction</a>
 
-<a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a>
+<a href="/paper/CDR/2024/Xiang 等 - 2025 - ExplainMIX Explaining Drug Response Prediction in Directed Graph Neural Networks with Multi-Omics F.pdf" target="_blank">📄 Xiang 等 - 2025 - ExplainMIX Explaining Drug Response Prediction in Directed Graph Neural Networks with Multi-Omics F</a>
 
-<a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a>
+<a href="/paper/CDR/2024/Xu 等 - 2025 - Cancer–drug response prediction via feature aggregation and association graph learning.pdf" target="_blank">📄 Xu 等 - 2025 - Cancer–drug response prediction via feature aggregation and association graph learning</a>
 
-<a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a>
-
-<a href="/paper/CDR/2023/Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning.pdf" target="_blank">📄 Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning</a>
-
-<a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a>
-
-<a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a>
+<a href="/paper/CDR/2024/Yu 等 - 2025 - Adaptive-weighted federated graph convolutional networks with multi-sensor data fusion for drug resp.pdf" target="_blank">📄 Yu 等 - 2025 - Adaptive-weighted federated graph convolutional networks with multi-sensor data fusion for drug resp</a>
 

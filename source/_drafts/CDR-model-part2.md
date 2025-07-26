@@ -1,6 +1,6 @@
 ---
 title: CDR models In 2023
-date: 2025-07-22 10:18:23
+date: 2025-07-26 20:11:14
 categories:
   - CDR
   - models
