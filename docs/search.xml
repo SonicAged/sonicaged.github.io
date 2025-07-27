@@ -173,223 +173,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CDR models From 2020 To 2022</title>
-    <url>/2025/07/20/CDR-model-part1/</url>
-    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
-<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
-<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
-<span id="more"></span>
-
-<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
-<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
-<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
-
-<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
-<ol>
-<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
-<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
-</ol>
-<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
-
-<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
-<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
-<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
-<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
-<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
-
-<p>还是分为两条线来看：</p>
-<ol>
-<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
-<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
-<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
-<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
-<li><img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
-</ul>
-</li>
-</ol>
-<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
-<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
-<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
-<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
-
-<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
-<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
-<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
-<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
-<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
-<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
-<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
-
-<p>单组学，回归模型（虽然叫Classiffier）</p>
-<p>然后就是当时读到的时候有一些小问题：</p>
-<ol>
-<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
-<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
-</ol>
-<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
-<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
-<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
-<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
-<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
-<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
-
-<p>先说明架构图中可能引起误解的地方：</p>
-<ol>
-<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
-<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
-</ol>
-<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
-<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
-<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
-
-<h3 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h3><p><del>这位更是如此捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
-
-<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
-
-<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
-<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
-<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
-
-<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
-<blockquote>
-<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
-<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
-<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
-<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
-<ol>
-<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
-<ul>
-<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
-<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
-<li>确保马尔可夫链的遍历性和平稳分布存在</li>
-</ul>
-</li>
-<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
-<ul>
-<li>游走者只能移动到拓扑邻居节点</li>
-<li>模拟生物系统中局部相互作用占主导的特性</li>
-<li>避免远距离间接关联引入的虚假信号</li>
-</ul>
-</li>
-</ol>
-<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
-<blockquote>
-<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
-<ul>
-<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
-</li>
-<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
-</li>
-<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
-<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
-</li>
-</ul>
-</blockquote>
-<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
-<ol>
-<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
-<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
-</li>
-<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
-<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
-</li>
-<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
-<p>这种设计保证了：</p>
-<ul>
-<li>行标准化(每行和&#x3D;1)</li>
-<li>对角线强化(自环保留)</li>
-<li>全局信息平滑</li>
-</ul>
-</li>
-</ol>
-<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
-<ol>
-<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
-<p>其中$N_i$是节点$i$的邻居集合</p>
-</li>
-<li><p><strong>频域特性</strong>：</p>
-<ul>
-<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
-</li>
-<li><p>特征值分布更集中，突出局部模式</p>
-</li>
-<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
-</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><del>这里顺便说明一下融合过程捏</del></p>
-<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
-<p>混合滤波器设计</p>
-<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
-<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
-<p>这种组合能够：</p>
-<ul>
-<li>低频：由F主导，捕获全局趋势</li>
-<li>中高频：由S主导，提取局部特征</li>
-</ul>
-<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
-<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
-<ol>
-<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
-<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
-<li>平均操作(1&#x2F;2)防止频谱畸变</li>
-</ol>
-<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
-<p>关于实验，他一共做了4个：</p>
-<ul>
-<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-</ul>
-<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
-
-<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
-
-<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
-<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
-<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
-<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
-<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>models</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>graph signal processing</tag>
-        <tag>graph theory</tag>
-        <tag>random walk</tag>
-        <tag>multi-view</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CDR Input Data Analysis</title>
     <url>/2025/07/09/CDR-data-analysis/</url>
     <content><![CDATA[<h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
@@ -728,9 +511,355 @@
       </categories>
       <tags>
         <tag>CDR</tag>
-        <tag>graph theory</tag>
         <tag>Data Analysis</tag>
         <tag>可能有点用</tag>
+        <tag>graph theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CDR models In 2023</title>
+    <url>/2025/07/26/CDR-model-part2/</url>
+    <content><![CDATA[<h1 id="2023年的CDR模型"><a href="#2023年的CDR模型" class="headerlink" title="2023年的CDR模型"></a>2023年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>本文将介绍的是2023年的CDR模型，总的来说23年的模型在之前的基础上变得更复杂了，但感觉和鼠鼠想要的创新还有一些小距离捏<del>（主要是一连看到好多篇拼好模捏）</del></p>
+<span id="more"></span>
+
+<h2 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h2><h3 id="GraTransDRP"><a href="#GraTransDRP" class="headerlink" title="GraTransDRP"></a><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">GraTransDRP</a></h3><p>这应该是第一次将Graph Transformer引入CDR中吧<del>应该吧</del>。</p>
+<p>关于Graph Transformer，鼠鼠专门写过一篇博客<a href="/2025/07/19/Graph-Transformer/" title="Trans?!and Former?!">Trans?!and Former?!</a>。像了解的可以去看一下捏</p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><p><del>这个架构图让鼠鼠想到一位故人<a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">(GraOmicDRP)</a>捏，一看果然是一个团队做的捏，该说不说，这里就直接把两个架构图放在一起捏dddd</del></p>
+<img src="/img/CDR/Framework/CDR-model-part2/GraTransDRP.png" alt="GraTransDRP"  width="80%" height="auto">
+
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>经典出装（CCLE和GDSC）</p>
+<h3 id="MMCL-CDR"><a href="#MMCL-CDR" class="headerlink" title="MMCL CDR"></a><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">MMCL CDR</a></h3><p>这玩意儿引入了<strong>形态学图像</strong>并将其用于与之前的组学数据进行对比学习，鼠鼠并不喜欢先验知识，但鼠鼠现在想知道另一件事（过两天会进行实验，到时候补充）：是否可以直接在组学内部经行对比学习以提高一些东西呢？</p>
+<p>鼠鼠现在设想的改造如下：</p>
+<ol>
+<li>将形态学图像改成另一组组学信息</li>
+<li>改造对比学习公式使其可以对三个组学进行对比学习，所作的修改类似于从二元交叉熵到多元交叉熵</li>
+</ol>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\MMCL-CDR.png" alt="MMCL CDR" style="zoom:50%;" />
+
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC、PubChem、DMSZ</p>
+<h3 id="SubCDR"><a href="#SubCDR" class="headerlink" title="SubCDR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">SubCDR</a></h3><p>这里主要是将药物做成官能团序列一样的东西用于训练</p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\SubCDR.png" alt="SubCDR" style="zoom:33%;" />
+
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="HMM-GDAN"><a href="#HMM-GDAN" class="headerlink" title="HMM GDAN"></a><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">HMM GDAN</a></h3><p>多的不说少的不唠，这其实是鼠鼠看的第一篇Multi-view Attention的论文，之前有过一篇<del>（但感觉只是形式上的）</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\HMM-GDAN.png" alt="HMM-GDAN" style="zoom: 33%;" />
+
+<p>这里给出其multi-view的具体构造过程：</p>
+<h5 id="1-多视图图构建"><a href="#1-多视图图构建" class="headerlink" title="1. 多视图图构建"></a>1. 多视图图构建</h5><h6 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h6><img src="\img\CDR\Framework\CDR-model-part2\multi-view.png" alt="image-20250727105814311" style="zoom: 80%;" />
+
+<ul>
+<li><strong>多组学数据</strong>：构成三维张量<br>$$<br>C \in \mathbb{R}^{N_{cl} \times N_g \times (K-1)}<br>$$<ul>
+<li>$N_{cl}$: 细胞系数量</li>
+<li>$N_g$: 癌症相关基因数量  </li>
+<li>$K-1$: 组学类型数</li>
+</ul>
+</li>
+</ul>
+<h6 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h6><ol>
+<li><p><strong>节点特征生成</strong><br>细胞系$i$的基因特征矩阵：<br>$$<br>X_c^i &#x3D; C(i, :, :) \in \mathbb{R}^{N_g \times (K-1)}<br>$$</p>
+</li>
+<li><p><strong>邻接矩阵生成</strong></p>
+<ul>
+<li><p><strong>组学视图</strong>（$v&#x3D;1,…,K-1$）:<br>$$<br>\rho_{ij}^{(v)} &#x3D; \frac{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})(Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})}{\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})^2}\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})^2}}<br>$$</p>
+<p>阈值化：</p>
+<p>$$<br>E_{ij}^{(v)} &#x3D; \begin{cases}<br>1 &amp; \text{if } |\rho_{ij}^{(v)}| &gt; \tau^{(v)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+<li><p><strong>STRING视图</strong>（$v&#x3D;K$）:<br>$$<br>E_{ij}^{(K)} &#x3D; \begin{cases}<br>1 &amp; \text{if } s_{ij}^{(K)} &gt; \tau^{(K)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>最终图结构</strong><br>$$<br>\mathcal{G}_c &#x3D; \langle V, { E^{(v)} }_{v&#x3D;1}^K \rangle<br>$$</p>
+</li>
+</ol>
+<h5 id="2-双注意力机制"><a href="#2-双注意力机制" class="headerlink" title="2. 双注意力机制"></a>2. 双注意力机制</h5><img src="\img\CDR\Framework\CDR-model-part2\Duplex-attention.png" alt="image-20250727105814311" style="zoom: 25%;" />
+
+<h6 id="多视图自注意力"><a href="#多视图自注意力" class="headerlink" title="多视图自注意力"></a>多视图自注意力</h6><ol>
+<li><p>共享参数投影：<br>$$<br>\Theta &#x3D; [H^{(1)}\theta, …, H^{(K)}\theta] \in \mathbb{R}^{N_g \times K}<br>$$</p>
+</li>
+<li><p>相似度计算：<br>$$<br>\bar{\alpha}_{ij} &#x3D; \text{LeakyReLU}\left( \frac{\langle \Theta_i, \Theta_j \rangle}{|\Theta_i|_2 |\Theta_j|_2}, \beta \right)<br>$$</p>
+</li>
+<li><p>注意力系数：<br>$$<br>\alpha_{ij} &#x3D; \frac{\exp(\bar{\alpha}_{ij})}{\sum_{j&#x3D;1}^K \exp(\bar{\alpha}_{ij})}<br>$$</p>
+</li>
+<li><p>视图表示更新：<br>$$<br>H_s^{(v)} &#x3D; \sum_{j&#x3D;1}^K \alpha_{vj} H^{(j)}<br>$$</p>
+</li>
+</ol>
+<h6 id="视图级注意力"><a href="#视图级注意力" class="headerlink" title="视图级注意力"></a>视图级注意力</h6><ol>
+<li><p>表示拼接：<br>$$<br>H_s &#x3D; [H_s^{(1)}, …, H_s^{(K)}] \in \mathbb{R}^{N_g \times K d_c}<br>$$</p>
+</li>
+<li><p>视图权重计算：<br>$$<br>\bar{w}^{(v)} &#x3D; \text{Avg}(H_s z^{(v)} + b)<br>$$</p>
+</li>
+<li><p>归一化权重：<br>$$<br>w^{(v)} &#x3D; \frac{\exp(\bar{w}^{(v)})}{\sum_{v&#x3D;1}^K \exp(\bar{w}^{(v)})}<br>$$</p>
+</li>
+<li><p>最终融合：<br>$$<br>H &#x3D; \sum_{v&#x3D;1}^K w^{(v)} H_s^{(v)}<br>$$</p>
+</li>
+</ol>
+<p>此外，其还引入了multi-scale学习<del>（比较简单，可以直接去看原文捏）</del></p>
+<h3 id="Emden"><a href="#Emden" class="headerlink" title="Emden"></a><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">Emden</a></h3><p>这感觉没什么有用的信息捏</p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\Emden.png" alt="Emden" style="zoom:50%;" />
+
+<h3 id="AutoCDPR"><a href="#AutoCDPR" class="headerlink" title="AutoCDPR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">AutoCDPR</a></h3><p>采用了类似于AutoML的方式，但对鼠鼠而言，这东西就像将之前应该是超参数的东西也加入了训练，但实际用到CDR的部分只占很小一点<del>（是不是有点舍本逐末了捏）</del></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\AutoCDPR.png" alt="AutoCDPR" style="zoom: 33%;" />
+
+
+
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE外加PubChem</p>
+<h3 id="TSGCNN"><a href="#TSGCNN" class="headerlink" title="TSGCNN"></a><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">TSGCNN</a></h3><p>由于之后有比这个玩意儿更加激进的RedCDR，所以这里只放一个架构图捏</p>
+<img src="\img\CDR\Framework\CDR-model-part2\TSGCNN.png" alt="image-20250727111745618" style="zoom:50%;" />
+
+<h3 id="📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton"><a href="#📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton" class="headerlink" title="📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton"></a><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></h3><p>从各个方面来讲都过于《淳朴》了捏，略过</p>
+<h3 id="HQNN"><a href="#HQNN" class="headerlink" title="HQNN"></a><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">HQNN</a></h3><p>将其他模型最后的FCN换成了一个QNN</p>
+<img src="\img\CDR\Framework\CDR-model-part2\HQNN.png" alt="image-20250727112841044" style="zoom: 50%;" />
+
+<h3 id="GADRP"><a href="#GADRP" class="headerlink" title="GADRP"></a><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">GADRP</a></h3><p>没什么特别的捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GADPR.png" alt="GADPR" style="zoom:50%;" />
+
+<h3 id="GPDRP"><a href="#GPDRP" class="headerlink" title="GPDRP"></a><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">GPDRP</a></h3><p>这位更是如此捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GPDRP.png" alt="image-20250727113526356" style="zoom:50%;" />
+
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a></p>
+<p><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a></p>
+<p><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a></p>
+<p><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a></p>
+<p><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a></p>
+<p><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></p>
+<p><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>models</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>multi-view</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CDR models From 2020 To 2022</title>
+    <url>/2025/07/20/CDR-model-part1/</url>
+    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
+<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
+<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
+<span id="more"></span>
+
+<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
+<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
+
+<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
+<ol>
+<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
+<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
+</ol>
+<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
+
+<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
+<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
+<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
+
+<p>还是分为两条线来看：</p>
+<ol>
+<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
+<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
+<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
+<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
+<li><img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
+</ul>
+</li>
+</ol>
+<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
+<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
+
+<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
+<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
+<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
+<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
+<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
+
+<p>单组学，回归模型（虽然叫Classiffier）</p>
+<p>然后就是当时读到的时候有一些小问题：</p>
+<ol>
+<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
+<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
+</ol>
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
+<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
+<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
+<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
+
+<p>先说明架构图中可能引起误解的地方：</p>
+<ol>
+<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
+<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
+</ol>
+<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
+<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
+<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
+
+<h3 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h3><p><del>这位更是如此捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
+
+<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
+<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
+
+<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
+<blockquote>
+<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
+<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
+<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
+<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
+<ol>
+<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
+<ul>
+<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
+<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
+<li>确保马尔可夫链的遍历性和平稳分布存在</li>
+</ul>
+</li>
+<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
+<ul>
+<li>游走者只能移动到拓扑邻居节点</li>
+<li>模拟生物系统中局部相互作用占主导的特性</li>
+<li>避免远距离间接关联引入的虚假信号</li>
+</ul>
+</li>
+</ol>
+<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
+<blockquote>
+<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
+<ul>
+<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
+</li>
+<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
+</li>
+<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
+<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
+</li>
+</ul>
+</blockquote>
+<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
+<ol>
+<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
+<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
+</li>
+<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
+<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
+</li>
+<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
+<p>这种设计保证了：</p>
+<ul>
+<li>行标准化(每行和&#x3D;1)</li>
+<li>对角线强化(自环保留)</li>
+<li>全局信息平滑</li>
+</ul>
+</li>
+</ol>
+<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
+<ol>
+<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
+<p>其中$N_i$是节点$i$的邻居集合</p>
+</li>
+<li><p><strong>频域特性</strong>：</p>
+<ul>
+<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
+</li>
+<li><p>特征值分布更集中，突出局部模式</p>
+</li>
+<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
+</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p><del>这里顺便说明一下融合过程捏</del></p>
+<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
+<p>混合滤波器设计</p>
+<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
+<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
+<p>这种组合能够：</p>
+<ul>
+<li>低频：由F主导，捕获全局趋势</li>
+<li>中高频：由S主导，提取局部特征</li>
+</ul>
+<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
+<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
+<ol>
+<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
+<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
+<li>平均操作(1&#x2F;2)防止频谱畸变</li>
+</ol>
+<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
+<p>关于实验，他一共做了4个：</p>
+<ul>
+<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+</ul>
+<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
+
+<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
+
+<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
+<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
+<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
+<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
+<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>models</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>graph theory</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>multi-view</tag>
+        <tag>graph signal processing</tag>
+        <tag>random walk</tag>
       </tags>
   </entry>
   <entry>
@@ -876,10 +1005,7 @@
 <p>Rotatory Attention 通过这种交替关注的方式，能够更好地理解目标短语在特定上下文中的情感倾向，从而提高了情感分类的准确性。</p>
 <h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。多层级注意力能够捕捉<strong>不同粒度</strong>上的重要信息。</p>
 <h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
-<h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><ol>
-<li><strong>注意力叠加(Attention-via-Attention)</strong></li>
-</ol>
-<img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
+<h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><h4 id="注意力叠加-Attention-via-Attention"><a href="#注意力叠加-Attention-via-Attention" class="headerlink" title="注意力叠加(Attention-via-Attention)"></a><strong>注意力叠加(Attention-via-Attention)</strong></h4><img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
 
 <ul>
 <li>同时处理字符级和词级特征</li>
@@ -889,79 +1015,13 @@
 <p>用于机器翻译任务，同时利用字符级和词级信息。其核心思想是在预测字符时，先通过词级注意力确定重要词语，再在这些词语对应的字符上施加注意力。</p>
 <p>其大致过程如下：</p>
 <ol>
-<li><p>输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d_{f}^{(c)}\times n_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d_{f}^{(w)}\times n_{f}^{(w)}}$</p>
-</li>
-<li><p>字符级查询 $q^{(c)}\in \mathbb{R}^{d_{q}}$ 通过查询模型生成</p>
-</li>
-<li><p>先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d_{v}^{(w)}}$</p>
-</li>
-<li><p>将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询</p>
-</li>
-<li><p>最终输出是字符级和词级上下文向量的拼接</p>
-</li>
-<li><p><strong>层级注意力(Hierarchical Attention)</strong></p>
-</li>
+<li>输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d_{f}^{(c)}\times n_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d_{f}^{(w)}\times n_{f}^{(w)}}$</li>
+<li>字符级查询 $q^{(c)}\in \mathbb{R}^{d_{q}}$ 通过查询模型生成</li>
+<li>先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d_{v}^{(w)}}$</li>
+<li>将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询</li>
+<li>最终输出是字符级和词级上下文向量的拼接</li>
 </ol>
-<img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
-
-<ul>
-<li>从最低层级开始，逐步构建高层级表示</li>
-<li>常用于文档分类：词 → 句 → 文档</li>
-<li>每个层级通过注意力机制生成摘要表示</li>
-</ul>
-<p>用于文档分类。该方法自底向上构建层级表示：从词级表示构建句级表示，再从句级表示构建文档级表示。</p>
-<p>其大致过程如下：</p>
-<ol>
-<li><p>文档包含 $n_S$ 个句子，第 $s$ 个句子包含 $n_s$ 个词</p>
-</li>
-<li><p>对每个句子计算词级注意力，生成句表示 $c^{(s)}\in \mathbb{R}^{d_{v}^{(S)}}$</p>
-</li>
-<li><p>将所有句表示 $C&#x3D;[c^{(1)},\ldots,c^{(n_{S})}]\in \mathbb{R}^{d_{v}^{(S)} \times n_{S}}$ 作为文档级注意力的输入</p>
-</li>
-<li><p>文档级注意力输出 $c^{(D)}\in \mathbb{R}^{d_{v}^{(D)}}$ 用于分类</p>
-</li>
-</ol>
-<h4 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h4><p>多层级注意力已成功应用于 <del>懒得做链接了捏，可以去原文找捏</del> ：</p>
-<ul>
-<li>推荐系统：建模用户长短期偏好(Ying et al., 2018)</li>
-<li>视频动作识别：捕捉不同时间尺度的运动信息(Wang et al., 2016)</li>
-<li>跨领域情感分类：学习领域共享和特定特征(Li et al., 2018)</li>
-<li>聊天机器人：生成更连贯的响应(Xing et al., 2018)</li>
-<li>人群计数：处理不同尺度的人群密度(Sindagi &amp; Patel, 2019)</li>
-</ul>
-<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示相关的注意力机制（Feature Representations），主要关注如何利用注意力机制来处理和组合不同的特征表示。这部分内容可以分为两类：单表示注意力（Single-representational attention）和多表示注意力（Multi-representational attention）。</p>
-<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>单表示注意力是最基础的注意力形式，它使用单一的特征表示模型（如词嵌入、CNN特征提取器等）来生成特征向量。这些特征向量随后被送入注意力模块进行处理。</p>
-<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><p>多表示注意力是一种更高级的技术，它允许模型同时考虑多种不同的特征表示，并通过注意力机制来学习如何最优地组合这些表示。</p>
-<h4 id="元嵌入-Meta-embeddings"><a href="#元嵌入-Meta-embeddings" class="headerlink" title="元嵌入(Meta-embeddings)"></a>元嵌入(Meta-embeddings)</h4><p>这种方法可以创建所谓的”元嵌入”（meta-embeddings）。</p>
-<ul>
-<li>整合多个嵌入表示</li>
-<li>通过注意力机制加权平均不同表示</li>
-<li>生成更高质量的特征表示</li>
-</ul>
-<p>元嵌入的创建过程大致如下：</p>
-<ol>
-<li><p><strong>输入表示</strong>：对于一个输入 $x$ （如一个词），我们有 $E$ 种不同的嵌入表示： $x^{(e_1)}, \ldots, x^{(e_E)}$ , 其中每种嵌入 $x^{(e_i)}$ 的维度为 $d_{e_i}$（$i&#x3D;1,\ldots,E$ ）。</p>
-</li>
-<li><p><strong>维度标准化</strong>：由于不同嵌入可能有不同维度，首先通过线性变换将它们映射到统一维度 $d_t$ ： $x^{(t_i)} &#x3D; W_{e_i} \times x^{(e_i)} + b_{e_i}$ ， 其中 $W_{e_i} \in \mathbb{R}^{d_t \times d_{e_i}}$ 和 $b_{e_i} \in \mathbb{R}^{d_t}$ 是可训练的参数。</p>
-</li>
-<li><p><strong>注意力加权组合</strong>：最终的元嵌入是这些标准化表示的加权和： $x^{(e)} &#x3D; \sum_{i&#x3D;1}^E a_i \times x^{(t_i)}$ 其中权重 $a_i$ 通过注意力机制计算得到。</p>
-</li>
-</ol>
-<h5 id="注意力计算"><a href="#注意力计算" class="headerlink" title="注意力计算"></a>注意力计算</h5><p>在多表示注意力中，注意力权重的计算可以视为一种自注意力机制，其查询可以理解为”哪些表示对当前任务最重要”。具体计算过程如下：</p>
-<ol>
-<li>将标准化后的表示 $x^{(t_1)}, \ldots, x^{(t_E)}$ 作为特征矩阵F的列向量</li>
-<li>由于没有显式查询，这相当于自注意力机制</li>
-<li>使用适当的注意力评分函数计算权重</li>
-<li>通过对齐函数（如softmax）得到归一化的注意力权重</li>
-</ol>
-<h3 id="技术优势"><a href="#技术优势" class="headerlink" title="技术优势"></a>技术优势</h3><ol>
-<li><strong>灵活性</strong>：可以整合来自不同来源或不同粒度的特征表示</li>
-<li><strong>适应性</strong>：通过注意力权重自动学习不同表示的重要性</li>
-<li><strong>可解释性</strong>：注意力权重可以提供关于哪些特征表示对任务更重要的见解</li>
-</ol>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
-]]></content>
+<h4 id="层级注意力-Hierarchical-Attention"><a href="#层级注意力-Hierarchical-Attention" class="headerlink" title="层级注意力(Hierarchical Attention)"></a><strong>层级注意力(Hierarchical Attention)</strong></h4>]]></content>
       <categories>
         <category>model</category>
         <category>attention</category>
@@ -972,136 +1032,6 @@
         <tag>Basic</tag>
         <tag>deep learning</tag>
         <tag>attention</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CDR models In 2023</title>
-    <url>/2025/07/26/CDR-model-part2/</url>
-    <content><![CDATA[<h1 id="2023年的CDR模型"><a href="#2023年的CDR模型" class="headerlink" title="2023年的CDR模型"></a>2023年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>本文将介绍的是2023年的CDR模型，总的来说23年的模型在之前的基础上变得更复杂了，但感觉和鼠鼠想要的创新还有一些小距离捏<del>（主要是一连看到好多篇拼好模捏）</del></p>
-<span id="more"></span>
-
-<h2 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h2><h3 id="GraTransDRP"><a href="#GraTransDRP" class="headerlink" title="GraTransDRP"></a><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">GraTransDRP</a></h3><p>这应该是第一次将Graph Transformer引入CDR中吧<del>应该吧</del>。</p>
-<p>关于Graph Transformer，鼠鼠专门写过一篇博客<a href="/2025/07/19/Graph-Transformer/" title="Trans?!and Former?!">Trans?!and Former?!</a>。像了解的可以去看一下捏</p>
-<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><p><del>这个架构图让鼠鼠想到一位故人<a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">(GraOmicDRP)</a>捏，一看果然是一个团队做的捏，该说不说，这里就直接把两个架构图放在一起捏dddd</del></p>
-<img src="/img/CDR/Framework/CDR-model-part2/GraTransDRP.png" alt="GraTransDRP"  width="80%" height="auto">
-
-<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
-
-<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>经典出装（CCLE和GDSC）</p>
-<h3 id="MMCL-CDR"><a href="#MMCL-CDR" class="headerlink" title="MMCL CDR"></a><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">MMCL CDR</a></h3><p>这玩意儿引入了<strong>形态学图像</strong>并将其用于与之前的组学数据进行对比学习，鼠鼠并不喜欢先验知识，但鼠鼠现在想知道另一件事（过两天会进行实验，到时候补充）：是否可以直接在组学内部经行对比学习以提高一些东西呢？</p>
-<p>鼠鼠现在设想的改造如下：</p>
-<ol>
-<li>将形态学图像改成另一组组学信息</li>
-<li>改造对比学习公式使其可以对三个组学进行对比学习，所作的修改类似于从二元交叉熵到多元交叉熵</li>
-</ol>
-<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\MMCL-CDR.png" alt="MMCL CDR" style="zoom:50%;" />
-
-<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC、PubChem、DMSZ</p>
-<h3 id="SubCDR"><a href="#SubCDR" class="headerlink" title="SubCDR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">SubCDR</a></h3><p>这里主要是将药物做成官能团序列一样的东西用于训练</p>
-<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\SubCDR.png" alt="SubCDR" style="zoom:33%;" />
-
-<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
-<h3 id="HMM-GDAN"><a href="#HMM-GDAN" class="headerlink" title="HMM GDAN"></a><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">HMM GDAN</a></h3><p>多的不说少的不唠，这其实是鼠鼠看的第一篇Multi-view Attention的论文，之前有过一篇<del>（但感觉只是形式上的）</del></p>
-<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\HMM-GDAN.png" alt="HMM-GDAN" style="zoom: 33%;" />
-
-<p>这里给出其multi-view的具体构造过程：</p>
-<h5 id="1-多视图图构建"><a href="#1-多视图图构建" class="headerlink" title="1. 多视图图构建"></a>1. 多视图图构建</h5><h6 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h6><img src="\img\CDR\Framework\CDR-model-part2\multi-view.png" alt="image-20250727105814311" style="zoom: 80%;" />
-
-<ul>
-<li><strong>多组学数据</strong>：构成三维张量<br>$$<br>C \in \mathbb{R}^{N_{cl} \times N_g \times (K-1)}<br>$$<ul>
-<li>$N_{cl}$: 细胞系数量</li>
-<li>$N_g$: 癌症相关基因数量  </li>
-<li>$K-1$: 组学类型数</li>
-</ul>
-</li>
-</ul>
-<h6 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h6><ol>
-<li><p><strong>节点特征生成</strong><br>细胞系$i$的基因特征矩阵：<br>$$<br>X_c^i &#x3D; C(i, :, :) \in \mathbb{R}^{N_g \times (K-1)}<br>$$</p>
-</li>
-<li><p><strong>邻接矩阵生成</strong></p>
-<ul>
-<li><p><strong>组学视图</strong>（$v&#x3D;1,…,K-1$）:<br>$$<br>\rho_{ij}^{(v)} &#x3D; \frac{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})(Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})}{\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})^2}\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})^2}}<br>$$</p>
-<p>阈值化：</p>
-<p>$$<br>E_{ij}^{(v)} &#x3D; \begin{cases}<br>1 &amp; \text{if } |\rho_{ij}^{(v)}| &gt; \tau^{(v)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
-</li>
-<li><p><strong>STRING视图</strong>（$v&#x3D;K$）:<br>$$<br>E_{ij}^{(K)} &#x3D; \begin{cases}<br>1 &amp; \text{if } s_{ij}^{(K)} &gt; \tau^{(K)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
-</li>
-</ul>
-</li>
-<li><p><strong>最终图结构</strong><br>$$<br>\mathcal{G}_c &#x3D; \langle V, { E^{(v)} }_{v&#x3D;1}^K \rangle<br>$$</p>
-</li>
-</ol>
-<h5 id="2-双注意力机制"><a href="#2-双注意力机制" class="headerlink" title="2. 双注意力机制"></a>2. 双注意力机制</h5><img src="\img\CDR\Framework\CDR-model-part2\Duplex-attention.png" alt="image-20250727105814311" style="zoom: 25%;" />
-
-<h6 id="多视图自注意力"><a href="#多视图自注意力" class="headerlink" title="多视图自注意力"></a>多视图自注意力</h6><ol>
-<li><p>共享参数投影：<br>$$<br>\Theta &#x3D; [H^{(1)}\theta, …, H^{(K)}\theta] \in \mathbb{R}^{N_g \times K}<br>$$</p>
-</li>
-<li><p>相似度计算：<br>$$<br>\bar{\alpha}_{ij} &#x3D; \text{LeakyReLU}\left( \frac{\langle \Theta_i, \Theta_j \rangle}{|\Theta_i|_2 |\Theta_j|_2}, \beta \right)<br>$$</p>
-</li>
-<li><p>注意力系数：<br>$$<br>\alpha_{ij} &#x3D; \frac{\exp(\bar{\alpha}_{ij})}{\sum_{j&#x3D;1}^K \exp(\bar{\alpha}_{ij})}<br>$$</p>
-</li>
-<li><p>视图表示更新：<br>$$<br>H_s^{(v)} &#x3D; \sum_{j&#x3D;1}^K \alpha_{vj} H^{(j)}<br>$$</p>
-</li>
-</ol>
-<h6 id="视图级注意力"><a href="#视图级注意力" class="headerlink" title="视图级注意力"></a>视图级注意力</h6><ol>
-<li><p>表示拼接：<br>$$<br>H_s &#x3D; [H_s^{(1)}, …, H_s^{(K)}] \in \mathbb{R}^{N_g \times K d_c}<br>$$</p>
-</li>
-<li><p>视图权重计算：<br>$$<br>\bar{w}^{(v)} &#x3D; \text{Avg}(H_s z^{(v)} + b)<br>$$</p>
-</li>
-<li><p>归一化权重：<br>$$<br>w^{(v)} &#x3D; \frac{\exp(\bar{w}^{(v)})}{\sum_{v&#x3D;1}^K \exp(\bar{w}^{(v)})}<br>$$</p>
-</li>
-<li><p>最终融合：<br>$$<br>H &#x3D; \sum_{v&#x3D;1}^K w^{(v)} H_s^{(v)}<br>$$</p>
-</li>
-</ol>
-<p>此外，其还引入了multi-scale学习<del>（比较简单，可以直接去看原文捏）</del></p>
-<h3 id="Emden"><a href="#Emden" class="headerlink" title="Emden"></a><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">Emden</a></h3><p>这感觉没什么有用的信息捏</p>
-<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\Emden.png" alt="Emden" style="zoom:50%;" />
-
-<h3 id="AutoCDPR"><a href="#AutoCDPR" class="headerlink" title="AutoCDPR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">AutoCDPR</a></h3><p>采用了类似于AutoML的方式，但对鼠鼠而言，这东西就像将之前应该是超参数的东西也加入了训练，但实际用到CDR的部分只占很小一点<del>（是不是有点舍本逐末了捏）</del></p>
-<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\AutoCDPR.png" alt="AutoCDPR" style="zoom: 33%;" />
-
-
-
-<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE外加PubChem</p>
-<h3 id="TSGCNN"><a href="#TSGCNN" class="headerlink" title="TSGCNN"></a><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">TSGCNN</a></h3><p>由于之后有比这个玩意儿更加激进的RedCDR，所以这里只放一个架构图捏</p>
-<img src="\img\CDR\Framework\CDR-model-part2\TSGCNN.png" alt="image-20250727111745618" style="zoom:50%;" />
-
-<h3 id="📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton"><a href="#📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton" class="headerlink" title="📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton"></a><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></h3><p>从各个方面来讲都过于《淳朴》了捏，略过</p>
-<h3 id="HQNN"><a href="#HQNN" class="headerlink" title="HQNN"></a><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">HQNN</a></h3><p>将其他模型最后的FCN换成了一个QNN</p>
-<img src="\img\CDR\Framework\CDR-model-part2\HQNN.png" alt="image-20250727112841044" style="zoom: 50%;" />
-
-<h3 id="GADRP"><a href="#GADRP" class="headerlink" title="GADRP"></a><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">GADRP</a></h3><p>没什么特别的捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/GADPR.png" alt="GADPR" style="zoom:50%;" />
-
-<h3 id="GPDRP"><a href="#GPDRP" class="headerlink" title="GPDRP"></a><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">GPDRP</a></h3><p>这位更是如此捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/GPDRP.png" alt="image-20250727113526356" style="zoom:50%;" />
-
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a></p>
-<p><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a></p>
-<p><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a></p>
-<p><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a></p>
-<p><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a></p>
-<p><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></p>
-<p><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2023/Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning.pdf" target="_blank">📄 Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning</a></p>
-<p><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>models</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>multi-view</tag>
       </tags>
   </entry>
   <entry>
@@ -1537,66 +1467,9 @@
         <tag>Basic</tag>
         <tag>PyTorch</tag>
         <tag>CDR</tag>
-        <tag>GNN</tag>
         <tag>graph theory</tag>
+        <tag>GNN</tag>
         <tag>embedding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Trans?!and Former?!</title>
-    <url>/2025/07/19/Graph-Transformer/</url>
-    <content><![CDATA[<h1 id="Graph-Transformer"><a href="#Graph-Transformer" class="headerlink" title="Graph Transformer"></a>Graph Transformer</h1><p>Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处理任意结构的图数据（如社交网络、分子结构等）。其既保留了Transformer的强表示能力，又继承了GNN对图结构的归纳偏置，成为图表示学习领域的重要基线模型。</p>
-<span id="more"></span>
-
-<p>在过去，Transformer（Lin等人，2021年）在许多NLP、CV和GRL任务中取得了卓越的性能。Graph Transformer将Transformer架构推广到图表示学习中，捕捉长距离依赖关系（Ying等人，2021年）。与之前使用局部注意力的方法不同，Graph Transformer通过全局注意力直接学习高阶图属性。Graph Transformer在图深度学习领域发展迅速，特别是在中小型图的图分类任务中。进一步将Graph Transformer分为两个子类别，即标准Transformer（Ying等人，2021年）和GNNTransformer（Nguyen等人，2019年）。标准Transformer通常对输入图的所有节点使用自注意力机制，忽略节点之间的邻接关系，而GNNTransformer则使用GNN层来获取邻接信息。 </p>
-<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="90%" height="auto">
-
-<p>现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。</p>
-<h2 id="输入特征线性投影公式"><a href="#输入特征线性投影公式" class="headerlink" title="输入特征线性投影公式"></a>输入特征线性投影公式</h2><p>输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha_i \in \mathbb{R}^{d_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta_{ij} \in \mathbb{R}^{d_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta_{ij}$传递以嵌入到$d-$维隐藏特征$h^0_i$和$e^0_{ij}$。</p>
-<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad\qquad\qquad\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
-<p>其中，$A^{0} \in \mathbb{R}^{d \times d_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha_i$ 和 $\beta_{ij}$ 分别是原始节点和边特征</p>
-<h2 id="位置编码融合公式"><a href="#位置编码融合公式" class="headerlink" title="位置编码融合公式"></a>位置编码融合公式</h2><p>现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0_i$。</p>
-<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad\qquad\qquad\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
-<p>其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。</p>
-<h2 id="基础图Transformer层公式"><a href="#基础图Transformer层公式" class="headerlink" title="基础图Transformer层公式"></a>基础图Transformer层公式</h2><p>与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。</p>
-<p><strong>多头注意力输出</strong>$\hat{h}_{i}^{\ell+1} &#x3D; O_{h}^{\ell} |_{k&#x3D;1}^{H} \left( \sum_{j \in \mathcal{N}_{i}} w_{ij}^{k，\ell} V^{k，\ell} h_{j}^{\ell} \right)$</p>
-<p><strong>注意力权重计算</strong>$w_{ij}^{k，\ell} &#x3D; \text{softmax}_{j} \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right)$</p>
-<p>其中，$|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是各头的查询、键、值矩阵，$O_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵</p>
-<h2 id="前馈网络与归一化"><a href="#前馈网络与归一化" class="headerlink" title="前馈网络与归一化"></a>前馈网络与归一化</h2><p>为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:</p>
-<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\qquad\qquad\qquad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ </p>
-<p><strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
-<p>其中，$W_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。</p>
-<h2 id="带边特征的图Transformer层"><a href="#带边特征的图Transformer层" class="headerlink" title="带边特征的图Transformer层"></a>带边特征的图Transformer层</h2><p>带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。</p>
-<p>换句话说，当一个节点$i$在 <em>query</em> 和 <em>key</em> 特征投影相乘后关注节点$j$时，中间注意力得分$\hat{w}_{ij}$在softmax之前被计算出来。让将这个得分$\hat{w}_{ij}$视为关于边$&lt;i，j&gt;$的隐式信息。现在尝试注入边$&lt;i，j&gt;$的可用边信息，并改进已经计算出的隐式注意力得分$\hat{w}_{ij}$。</p>
-<p>这是通过简单地将两个值$\hat{w}_{ij}$和$e_{ij}$相乘来完成的。这种信息注入在NLPTransformer中并没有被广泛探索或应用，因为在两个单词之间通常没有可用的特征信息。</p>
-<p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
-<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
-<p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
-<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
-<p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
-<p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
-<p>实验一致表明，存在：</p>
-<ul>
-<li>Laplacian特征向量作为节点位置编码</li>
-<li>batch normalization，代替层归一化，<br>则在Transformer前馈层周围增强了Transformer在所有实验中的普遍性。</li>
-</ul>
-<p>鉴于这个架构的简单性和通用性以及与标准GNN相比的竞争性能，提出的模型可以作为进一步改进跨图应用中使用节点注意力的基线。</p>
-<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs.pdf" target="_blank">📄 Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs</a></p>
-<p><a href="/paper/Shehzad 等 - 2024 - Graph Transformers A Survey.pdf" target="_blank">📄 Shehzad 等 - 2024 - Graph Transformers A Survey</a></p>
-]]></content>
-      <categories>
-        <category>model</category>
-        <category>attention</category>
-        <category>graph</category>
-      </categories>
-      <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>PyTorch</tag>
-        <tag>attention</tag>
-        <tag>deeplearning</tag>
-        <tag>graphtheory</tag>
       </tags>
   </entry>
   <entry>
@@ -1704,49 +1577,60 @@
       </tags>
   </entry>
   <entry>
-    <title>HGCN and HGAT</title>
-    <url>/2025/07/20/HGCN-and-HGAT/</url>
-    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
-<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+    <title>Trans?!and Former?!</title>
+    <url>/2025/07/19/Graph-Transformer/</url>
+    <content><![CDATA[<h1 id="Graph-Transformer"><a href="#Graph-Transformer" class="headerlink" title="Graph Transformer"></a>Graph Transformer</h1><p>Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处理任意结构的图数据（如社交网络、分子结构等）。其既保留了Transformer的强表示能力，又继承了GNN对图结构的归纳偏置，成为图表示学习领域的重要基线模型。</p>
 <span id="more"></span>
 
-<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
-<blockquote>
-<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
-<ol>
-<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
-<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
-<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+<p>在过去，Transformer（Lin等人，2021年）在许多NLP、CV和GRL任务中取得了卓越的性能。Graph Transformer将Transformer架构推广到图表示学习中，捕捉长距离依赖关系（Ying等人，2021年）。与之前使用局部注意力的方法不同，Graph Transformer通过全局注意力直接学习高阶图属性。Graph Transformer在图深度学习领域发展迅速，特别是在中小型图的图分类任务中。进一步将Graph Transformer分为两个子类别，即标准Transformer（Ying等人，2021年）和GNNTransformer（Nguyen等人，2019年）。标准Transformer通常对输入图的所有节点使用自注意力机制，忽略节点之间的邻接关系，而GNNTransformer则使用GNN层来获取邻接信息。 </p>
+<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="90%" height="auto">
+
+<p>现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。</p>
+<h2 id="输入特征线性投影公式"><a href="#输入特征线性投影公式" class="headerlink" title="输入特征线性投影公式"></a>输入特征线性投影公式</h2><p>输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha_i \in \mathbb{R}^{d_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta_{ij} \in \mathbb{R}^{d_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta_{ij}$传递以嵌入到$d-$维隐藏特征$h^0_i$和$e^0_{ij}$。</p>
+<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad\qquad\qquad\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
+<p>其中，$A^{0} \in \mathbb{R}^{d \times d_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha_i$ 和 $\beta_{ij}$ 分别是原始节点和边特征</p>
+<h2 id="位置编码融合公式"><a href="#位置编码融合公式" class="headerlink" title="位置编码融合公式"></a>位置编码融合公式</h2><p>现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0_i$。</p>
+<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad\qquad\qquad\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
+<p>其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。</p>
+<h2 id="基础图Transformer层公式"><a href="#基础图Transformer层公式" class="headerlink" title="基础图Transformer层公式"></a>基础图Transformer层公式</h2><p>与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。</p>
+<p><strong>多头注意力输出</strong>$\hat{h}_{i}^{\ell+1} &#x3D; O_{h}^{\ell} |_{k&#x3D;1}^{H} \left( \sum_{j \in \mathcal{N}_{i}} w_{ij}^{k，\ell} V^{k，\ell} h_{j}^{\ell} \right)$</p>
+<p><strong>注意力权重计算</strong>$w_{ij}^{k，\ell} &#x3D; \text{softmax}_{j} \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right)$</p>
+<p>其中，$|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是各头的查询、键、值矩阵，$O_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵</p>
+<h2 id="前馈网络与归一化"><a href="#前馈网络与归一化" class="headerlink" title="前馈网络与归一化"></a>前馈网络与归一化</h2><p>为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:</p>
+<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\qquad\qquad\qquad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ </p>
+<p><strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
+<p>其中，$W_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。</p>
+<h2 id="带边特征的图Transformer层"><a href="#带边特征的图Transformer层" class="headerlink" title="带边特征的图Transformer层"></a>带边特征的图Transformer层</h2><p>带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。</p>
+<p>换句话说，当一个节点$i$在 <em>query</em> 和 <em>key</em> 特征投影相乘后关注节点$j$时，中间注意力得分$\hat{w}_{ij}$在softmax之前被计算出来。让将这个得分$\hat{w}_{ij}$视为关于边$&lt;i，j&gt;$的隐式信息。现在尝试注入边$&lt;i，j&gt;$的可用边信息，并改进已经计算出的隐式注意力得分$\hat{w}_{ij}$。</p>
+<p>这是通过简单地将两个值$\hat{w}_{ij}$和$e_{ij}$相乘来完成的。这种信息注入在NLPTransformer中并没有被广泛探索或应用，因为在两个单词之间通常没有可用的特征信息。</p>
+<p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
+<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
+<p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
+<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
+<p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
+<p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
+<p>实验一致表明，存在：</p>
+<ul>
+<li>Laplacian特征向量作为节点位置编码</li>
+<li>batch normalization，代替层归一化，<br>则在Transformer前馈层周围增强了Transformer在所有实验中的普遍性。</li>
 </ul>
-</li>
-<li>特征变换：$H^{(l)}W^{(l)}$</li>
-<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
-<li>非线性变换：$\sigma(\cdot)$</li>
-</ol>
-</blockquote>
-<p>而超图也有对应的拉普拉斯矩阵</p>
-<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
-<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
-<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
-<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
-<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
-<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
-<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+<p>鉴于这个架构的简单性和通用性以及与标准GNN相比的竞争性能，提出的模型可以作为进一步改进跨图应用中使用节点注意力的基线。</p>
+<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs.pdf" target="_blank">📄 Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs</a></p>
+<p><a href="/paper/Shehzad 等 - 2024 - Graph Transformers A Survey.pdf" target="_blank">📄 Shehzad 等 - 2024 - Graph Transformers A Survey</a></p>
 ]]></content>
       <categories>
         <category>model</category>
-        <category>hypergraph</category>
+        <category>attention</category>
+        <category>graph</category>
       </categories>
       <tags>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>PyTorch</tag>
         <tag>attention</tag>
-        <tag>GNN</tag>
-        <tag>graph theory</tag>
-        <tag>embedding</tag>
-        <tag>hypergraph</tag>
+        <tag>deeplearning</tag>
+        <tag>graphtheory</tag>
       </tags>
   </entry>
   <entry>
@@ -1891,8 +1775,54 @@
       <tags>
         <tag>model</tag>
         <tag>Basic</tag>
-        <tag>GNN</tag>
         <tag>graph theory</tag>
+        <tag>GNN</tag>
+        <tag>embedding</tag>
+        <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HGCN and HGAT</title>
+    <url>/2025/07/20/HGCN-and-HGAT/</url>
+    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
+<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+<span id="more"></span>
+
+<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
+<blockquote>
+<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
+<ol>
+<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
+<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
+<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+</ul>
+</li>
+<li>特征变换：$H^{(l)}W^{(l)}$</li>
+<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
+<li>非线性变换：$\sigma(\cdot)$</li>
+</ol>
+</blockquote>
+<p>而超图也有对应的拉普拉斯矩阵</p>
+<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
+<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
+<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
+<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
+<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
+<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
+<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+]]></content>
+      <categories>
+        <category>model</category>
+        <category>hypergraph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
+        <tag>GNN</tag>
         <tag>embedding</tag>
         <tag>hypergraph</tag>
       </tags>
@@ -1997,58 +1927,6 @@
         <tag>PEP</tag>
         <tag>闲🉐无聊</tag>
         <tag>大概率没用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hwadee</title>
-    <url>/2025/07/13/hwadee/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
-<span id="more"></span>
-
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
-<ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
-</li>
-</ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
-</ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>sb</category>
-      </categories>
-      <tags>
-        <tag>sb</tag>
-        <tag>UESTC</tag>
       </tags>
   </entry>
   <entry>
@@ -2387,6 +2265,58 @@
         <tag>Basic</tag>
         <tag>deep learning</tag>
         <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hwadee</title>
+    <url>/2025/07/13/hwadee/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+<span id="more"></span>
+
+<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<ul>
+<li>引用 7 篇资料作为参考<ol>
+<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
+<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
+<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
+<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
+<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
+<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
+<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+</ul>
+<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
+<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
+<li>类似燃烧塑料或化学药品的味道；</li>
+<li>锯木屑混合酸味（家具中甲醛）；</li>
+<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
+<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
+<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
+</ul>
+<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
+<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
+<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
+</ul>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
+<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
+<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>sb</category>
+      </categories>
+      <tags>
+        <tag>sb</tag>
+        <tag>UESTC</tag>
       </tags>
   </entry>
 </search>

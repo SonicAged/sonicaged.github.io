@@ -227,7 +227,7 @@ Rotatory Attention 通过这种交替关注的方式，能够更好地理解目�
 
 ### 多层级注意力机制
 
-1. **注意力叠加(Attention-via-Attention)**
+#### **注意力叠加(Attention-via-Attention)**
 
 <img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
 
@@ -243,18 +243,14 @@ Rotatory Attention 通过这种交替关注的方式，能够更好地理解目�
 
 其大致过程如下：
 
-1. 输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d\_{f}^{(c)}\times n\_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d\_{f}^{(w)}\times n\_{f}^{(w)}}$
-
-2. 字符级查询 $q^{(c)}\in \mathbb{R}^{d\_{q}}$ 通过查询模型生成
-
-3. 先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d\_{v}^{(w)}}$
-
-4. 将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询
-
-5. 最终输出是字符级和词级上下文向量的拼接
+  1. 输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d\_{f}^{(c)}\times n\_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d\_{f}^{(w)}\times n\_{f}^{(w)}}$
+  2. 字符级查询 $q^{(c)}\in \mathbb{R}^{d\_{q}}$ 通过查询模型生成
+  3. 先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d\_{v}^{(w)}}$
+  4. 将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询
+  5. 最终输出是字符级和词级上下文向量的拼接
 
 
-1. **层级注意力(Hierarchical Attention)**
+#### **层级注意力(Hierarchical Attention)**{#Hierarchical Attention}
 
 <img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
 

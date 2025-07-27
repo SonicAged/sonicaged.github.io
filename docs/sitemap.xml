@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/20/CDR-model-part1/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/</loc>
     
     <lastmod>2025-07-27</lastmod>
     
@@ -12,6 +12,15 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/2025/07/26/CDR-model-part2/</loc>
+    
+    <lastmod>2025-07-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/2025/07/20/CDR-model-part1/</loc>
     
     <lastmod>2025-07-27</lastmod>
     
@@ -74,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/20/HGCN-and-HGAT/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
     
     <lastmod>2025-07-22</lastmod>
     
@@ -83,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/20/HGCN-and-HGAT/</loc>
     
     <lastmod>2025-07-22</lastmod>
     
@@ -111,15 +120,6 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/2025/07/18/GAT/</loc>
-    
-    <lastmod>2025-07-22</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/</loc>
     
     <lastmod>2025-07-22</lastmod>
     
@@ -224,6 +224,27 @@
   </url>
   
   <url>
+    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/graph-theory/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/tags/model-framework/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -252,27 +273,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/graph-signal-processing/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/graph-theory/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/random-walk/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/tags/multi-view/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -280,14 +280,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
+    <loc>https://blog.sonic-aged.site/tags/graph-signal-processing/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
+    <loc>https://blog.sonic-aged.site/tags/random-walk/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -394,7 +394,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/models/</loc>
+    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -408,7 +408,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
+    <loc>https://blog.sonic-aged.site/categories/CDR/models/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -422,14 +422,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/model/attention/category/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Fun/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Fun/</loc>
+    <loc>https://blog.sonic-aged.site/categories/model/attention/category/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
