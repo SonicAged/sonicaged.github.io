@@ -1,5 +1,5 @@
 ---
-title: CDR model In 2024
+title: CDR model In 2024 | Part 1
 date: 2025-07-27 20:11:14
 categories:
   - CDR
@@ -12,11 +12,11 @@ tags:
   - attention
   - contrast learning
   - GAN
-  - Dynamic graph
+  - dynamic graph
   - hypergraph
 ---
 
-# 2024年的CDR模型
+# 2024年的CDR模型~easy come~
 
 想看2020到2022的可以前往{% post_link CDR-model-part1 %}
 
@@ -297,7 +297,7 @@ $$
 
 ### <a href="/paper/CDR/2024/Peng 等 - Hierarchical graph representation learning with multi-granularity features for anti-cancer drug resp.pdf" target="_blank">HLMG</a>
 
-这里用到的Hierarchical graph和之前 .{% post_link Feature-Related-Attention %}#Hierarchical Attention 类似捏，也会详细说明一下这一个模型的架构捏
+这里用到的Hierarchical graph和之前Fufufu Relashinala ~~(Bushi~~ 中提到的 <a href="{% post_path Feature-Related-Attention %}#层级注意力-Hierarchical-Attention">Hierarchical Attention</a> 类似捏，也会详细说明一下这一个模型的架构捏
 
 #### Framework
 

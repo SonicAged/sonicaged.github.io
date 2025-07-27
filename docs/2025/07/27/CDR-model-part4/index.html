@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="2024年的CDR模型easy go原来没有剩多少捏，蚌 想看2020到2022的可以前往CDR models From 2020 To 2022 想看2023的可以前往CDR models In 2023 想看2024（前半截）的可以前往CDR model In 2024 | Part 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CDR-model In 2024 | Part 2">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="2024年的CDR模型easy go原来没有剩多少捏，蚌 想看2020到2022的可以前往CDR models From 2020 To 2022 想看2023的可以前往CDR models In 2023 想看2024（前半截）的可以前往CDR model In 2024 | Part 1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/MCMVDRP.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/RedCDR.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png">
+<meta property="article:published_time" content="2025-07-27T15:12:02.000Z">
+<meta property="article:modified_time" content="2025-07-27T15:35:13.985Z">
+<meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="model framework">
+<meta property="article:tag" content="practice">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="contrast learning">
+<meta property="article:tag" content="GAN">
+<meta property="article:tag" content="dynamic graph">
+<meta property="article:tag" content="hypergraph">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/MCMVDRP.png">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/","path":"2025/07/27/CDR-model-part4/","title":"CDR-model In 2024 | Part 2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CDR-model In 2024 | Part 2 | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2024%E5%B9%B4%E7%9A%84CDR%E6%A8%A1%E5%9E%8Beasy-go"><span class="nav-number">1.</span> <span class="nav-text">2024年的CDR模型easy go</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2024"><span class="nav-number">1.1.</span> <span class="nav-text">2024</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiDRP"><span class="nav-number">1.1.1.</span> <span class="nav-text">MultiDRP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MCMVDRP"><span class="nav-number">1.1.2.</span> <span class="nav-text">MCMVDRP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DAPM-CDR"><span class="nav-number">1.1.3.</span> <span class="nav-text">DAPM CDR</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#XGraphCDS"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">XGraphCDS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RedCDR"><span class="nav-number">1.1.4.</span> <span class="nav-text">RedCDR</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RedCDR%E6%A8%A1%E5%9E%8B%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">RedCDR模型构造过程详解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E6%A8%A1%E5%9E%8B%E6%80%BB%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.4.1.1.</span> <span class="nav-text">1. 模型总体框架</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E5%B1%9E%E6%80%A7%E5%88%86%E6%94%AF%EF%BC%88Attribute-Branch%EF%BC%89"><span class="nav-number">1.1.4.1.2.</span> <span class="nav-text">2. 属性分支（Attribute Branch）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-%E8%87%AA%E9%80%82%E5%BA%94%E4%BA%A4%E4%BA%92%E5%A4%9A%E7%BB%84%E5%AD%A6%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%88Adaptive-Interacting-Multi-omics-Encoder%EF%BC%89"><span class="nav-number">1.1.4.1.2.1.</span> <span class="nav-text">2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-%E8%8D%AF%E7%89%A9%E7%BC%96%E7%A0%81%E5%99%A8%EF%BC%88Drug-Encoder%EF%BC%89"><span class="nav-number">1.1.4.1.2.2.</span> <span class="nav-text">2.2 药物编码器（Drug Encoder）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E5%85%B3%E8%81%94%E5%88%86%E6%94%AF%EF%BC%88Association-Branch%EF%BC%89"><span class="nav-number">1.1.4.1.3.</span> <span class="nav-text">3. 关联分支（Association Branch）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-1-%E4%BA%8C%E5%88%86%E5%9B%BE%E6%9E%84%E5%BB%BA"><span class="nav-number">1.1.4.1.3.1.</span> <span class="nav-text">3.1 二分图构建</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-2-%E8%A1%A8%E7%A4%BA%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.4.1.3.2.</span> <span class="nav-text">3.2 表示学习</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E8%9E%8D%E5%90%88%E6%A8%A1%E5%9D%97%EF%BC%88Fusion-Module%EF%BC%89%E4%B8%8E%E5%8F%8C%E5%85%B3%E7%B3%BB%E8%92%B8%E9%A6%8F"><span class="nav-number">1.1.4.1.4.</span> <span class="nav-text">4. 融合模块（Fusion Module）与双关系蒸馏</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-%E5%88%86%E6%94%AF%E8%9E%8D%E5%90%88"><span class="nav-number">1.1.4.1.4.1.</span> <span class="nav-text">4.1 分支融合</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-%E5%93%8D%E5%BA%94%E9%A2%84%E6%B5%8B"><span class="nav-number">1.1.4.1.4.2.</span> <span class="nav-text">4.2 响应预测</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-%E5%8F%8C%E5%85%B3%E7%B3%BB%E8%92%B8%E9%A6%8F%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.4.1.4.3.</span> <span class="nav-text">4.3 双关系蒸馏机制</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="nav-number">1.1.4.1.5.</span> <span class="nav-text">5. 优化目标</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MFGAN"><span class="nav-number">1.1.5.</span> <span class="nav-text">MFGAN</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CDR-model In 2024 | Part 2 | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CDR-model In 2024 | Part 2<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/CDR-model-part4.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-27 23:12:02 / Modified: 23:35:13" itemprop="dateCreated datePublished" datetime="2025-07-27T23:12:02+08:00">2025-07-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/models/" itemprop="url" rel="index"><span itemprop="name">models</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>9 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
+<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
+<span id="more"></span>
+
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
+<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
+
+<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
+<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
+<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
+<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
+<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
+<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
+<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
+</ul>
+<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
+<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
+<ul>
+<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
+</li>
+<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
+<ul>
+<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
+<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
+<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
+</ul>
+</li>
+<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
+</li>
+</ul>
+<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
+<ul>
+<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
+<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
+</ul>
+<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
+<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
+<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
+<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
+<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
+<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
+<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
+<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
+</ul>
+<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
+<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
+<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
+<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
+<ul>
+<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
+<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
+</ul>
+<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
+<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
+<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
+<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/model-framework/" rel="tag"># model framework</a>
+              <a href="/tags/practice/" rel="tag"># practice</a>
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/contrast-learning/" rel="tag"># contrast learning</a>
+              <a href="/tags/GAN/" rel="tag"># GAN</a>
+              <a href="/tags/dynamic-graph/" rel="tag"># dynamic graph</a>
+              <a href="/tags/hypergraph/" rel="tag"># hypergraph</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/27/CDR-model-part3/" rel="prev" title="CDR model In 2024 | Part 1">
+                  <i class="fa fa-angle-left"></i> CDR model In 2024 | Part 1
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">39k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">2:21</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

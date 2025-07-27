@@ -250,7 +250,7 @@ Rotatory Attention 通过这种交替关注的方式，能够更好地理解目�
   5. 最终输出是字符级和词级上下文向量的拼接
 
 
-#### **层级注意力(Hierarchical Attention)**{#Hierarchical Attention}
+#### **层级注意力(Hierarchical Attention)**
 
 <img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
 
