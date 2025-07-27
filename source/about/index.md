@@ -10,3 +10,5 @@ date: 2025-07-07 16:26:04
 1. 记录自己的 *CDR奇妙生活*
 2. 发现有 *大病* 的东西记录以绷住
 3. 作为 *UESTCer* 记录一些难绷小事
+
+<img src="https://ghchart.rshah.org/SonicAged" alt="Sonic Aged's Github chart" />
