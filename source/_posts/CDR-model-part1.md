@@ -14,6 +14,7 @@ tags:
   - graph signal processing
   - graph theory
   - random walk
+  - multi-view
 ---
 
 # 2020到2022年的CDR模型
@@ -36,7 +37,7 @@ tags:
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
 
 这个架构现在看来是十分朴素的，他大致就分为了两条线：
 
@@ -61,7 +62,7 @@ GDSC，CCLE和TCGA
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//AGMI.png" alt="AGMI" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
 
 还是分为两条线来看：
 
@@ -69,7 +70,7 @@ GDSC，CCLE和TCGA
 2. **组学**：主要有两个新颖的地方：
     - 开始的时候，将组学信息利用先验知识将其连成一张图
     - 处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏~~（鼠鼠对RNN和门控单元不感兴趣捏）~~
-    - <img src="/img/CDR/Framework/CDR-model-part1//AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto">
+    - <img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto">
 
 仍然是一个回归模型，没有什么新颖的实验捏
 
@@ -87,7 +88,7 @@ CCLE和GDSC
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
 
 可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了
 
@@ -107,7 +108,7 @@ GDSC和TCGA
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
 
 单组学，回归模型（虽然叫Classiffier）
 
@@ -132,7 +133,7 @@ GDSC和CCLE
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
 
 先说明架构图中可能引起误解的地方：
 
@@ -151,19 +152,19 @@ CCLE和GDSC
 
 ~~疑似是有点太捞了捏~~所以就放一个架构图就行了捏
 
-<img src="/img/CDR/Framework/CDR-model-part1//DualCDR.png" alt="DualCDR" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
 
-#### <a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a>
+### <a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a>
 
 ~~这位更是如此捏~~
 
-<img src="/img/CDR/Framework/CDR-model-part1//GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
 
 ### <a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a>
 
 ~~又来一个捏~~
 
-<img src="/img/CDR/Framework/CDR-model-part1//GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
 
 ### <a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a>
 
@@ -173,7 +174,7 @@ CCLE和GDSC
 
 #### Framework
 
-<img src="/img/CDR/Framework/CDR-model-part1//MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
 
 关于细胞系相似度矩阵，可以去看一下引用的原文捏[Similarity network fusion for aggregating data types on a genomic scale | Nature Methods](https://www.nature.com/articles/nmeth.2810)，~~由于学校爆的💰好像不太够，鼠鼠好像看不了捏~~，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。
 
@@ -333,13 +334,13 @@ $$
 
 又是一个力大砖飞的典型代表捏，看看架构图就行了捏
 
-<img src="/img/CDR/Framework/CDR-model-part1//NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
 
 ### <a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a>
 
 首次引入了Multi-view attention，可以去看一下{% post_link GAT %}，其他的没什好说的，还是直接一个架构图捏
 
-<img src="/img/CDR/Framework/CDR-model-part1//MvMo.png" alt="MvMo" width="80%" height="auto">
+<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
 
 #### <a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a>
 

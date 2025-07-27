@@ -517,204 +517,120 @@
       </tags>
   </entry>
   <entry>
-    <title>CDR models From 2020 To 2022</title>
-    <url>/2025/07/20/CDR-model-part1/</url>
-    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
-<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
-<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
+    <title>CDR models In 2023</title>
+    <url>/2025/07/26/CDR-model-part2/</url>
+    <content><![CDATA[<h1 id="2023年的CDR模型"><a href="#2023年的CDR模型" class="headerlink" title="2023年的CDR模型"></a>2023年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>本文将介绍的是2023年的CDR模型，总的来说23年的模型在之前的基础上变得更复杂了，但感觉和鼠鼠想要的创新还有一些小距离捏<del>（主要是一连看到好多篇拼好模捏）</del></p>
 <span id="more"></span>
 
-<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
-<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
-<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
+<h2 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h2><h3 id="GraTransDRP"><a href="#GraTransDRP" class="headerlink" title="GraTransDRP"></a><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">GraTransDRP</a></h3><p>这应该是第一次将Graph Transformer引入CDR中吧<del>应该吧</del>。</p>
+<p>关于Graph Transformer，鼠鼠专门写过一篇博客<a href="/2025/07/19/Graph-Transformer/" title="Trans?!and Former?!">Trans?!and Former?!</a>。像了解的可以去看一下捏</p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><p><del>这个架构图让鼠鼠想到一位故人<a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">(GraOmicDRP)</a>捏，一看果然是一个团队做的捏，该说不说，这里就直接把两个架构图放在一起捏dddd</del></p>
+<img src="/img/CDR/Framework/CDR-model-part2/GraTransDRP.png" alt="GraTransDRP"  width="80%" height="auto">
 
-<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>经典出装（CCLE和GDSC）</p>
+<h3 id="MMCL-CDR"><a href="#MMCL-CDR" class="headerlink" title="MMCL CDR"></a><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">MMCL CDR</a></h3><p>这玩意儿引入了<strong>形态学图像</strong>并将其用于与之前的组学数据进行对比学习，鼠鼠并不喜欢先验知识，但鼠鼠现在想知道另一件事（过两天会进行实验，到时候补充）：是否可以直接在组学内部经行对比学习以提高一些东西呢？</p>
+<p>鼠鼠现在设想的改造如下：</p>
 <ol>
-<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
-<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
+<li>将形态学图像改成另一组组学信息</li>
+<li>改造对比学习公式使其可以对三个组学进行对比学习，所作的修改类似于从二元交叉熵到多元交叉熵</li>
 </ol>
-<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\MMCL-CDR.png" alt="MMCL CDR" style="zoom:50%;" />
 
-<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
-<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
-<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
-<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
-<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//AGMI.png" alt="AGMI" width="80%" height="auto">
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC、PubChem、DMSZ</p>
+<h3 id="SubCDR"><a href="#SubCDR" class="headerlink" title="SubCDR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">SubCDR</a></h3><p>这里主要是将药物做成官能团序列一样的东西用于训练</p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\SubCDR.png" alt="SubCDR" style="zoom:33%;" />
 
-<p>还是分为两条线来看：</p>
-<ol>
-<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
-<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
-<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
-<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
-<li><img src="/img/CDR/Framework/CDR-model-part1//AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
-</ul>
-</li>
-</ol>
-<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
-<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
-<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
-<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="HMM-GDAN"><a href="#HMM-GDAN" class="headerlink" title="HMM GDAN"></a><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">HMM GDAN</a></h3><p>多的不说少的不唠，这其实是鼠鼠看的第一篇Multi-view Attention的论文，之前有过一篇<del>（但感觉只是形式上的）</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\HMM-GDAN.png" alt="HMM-GDAN" style="zoom: 33%;" />
 
-<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
-<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
-<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
-<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
-<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
-<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
-<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
+<p>这里给出其multi-view的具体构造过程：</p>
+<h5 id="1-多视图图构建"><a href="#1-多视图图构建" class="headerlink" title="1. 多视图图构建"></a>1. 多视图图构建</h5><h6 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h6><img src="\img\CDR\Framework\CDR-model-part2\multi-view.png" alt="image-20250727105814311" style="zoom: 80%;" />
 
-<p>单组学，回归模型（虽然叫Classiffier）</p>
-<p>然后就是当时读到的时候有一些小问题：</p>
-<ol>
-<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
-<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
-</ol>
-<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
-<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
-<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
-<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
-<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
-<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
-
-<p>先说明架构图中可能引起误解的地方：</p>
-<ol>
-<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
-<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
-</ol>
-<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
-<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
-<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1//DualCDR.png" alt="DualCDR" width="80%" height="auto">
-
-<h4 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h4><p><del>这位更是如此捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1//GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
-
-<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1//GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
-
-<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
-<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
-<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1//MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
-
-<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
-<blockquote>
-<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
-<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
-<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
-<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
-<ol>
-<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
 <ul>
-<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
-<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
-<li>确保马尔可夫链的遍历性和平稳分布存在</li>
+<li><strong>多组学数据</strong>：构成三维张量<br>$$<br>C \in \mathbb{R}^{N_{cl} \times N_g \times (K-1)}<br>$$<ul>
+<li>$N_{cl}$: 细胞系数量</li>
+<li>$N_g$: 癌症相关基因数量  </li>
+<li>$K-1$: 组学类型数</li>
 </ul>
 </li>
-<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
-<ul>
-<li>游走者只能移动到拓扑邻居节点</li>
-<li>模拟生物系统中局部相互作用占主导的特性</li>
-<li>避免远距离间接关联引入的虚假信号</li>
 </ul>
+<h6 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h6><ol>
+<li><p><strong>节点特征生成</strong><br>细胞系$i$的基因特征矩阵：<br>$$<br>X_c^i &#x3D; C(i, :, :) \in \mathbb{R}^{N_g \times (K-1)}<br>$$</p>
+</li>
+<li><p><strong>邻接矩阵生成</strong></p>
+<ul>
+<li><p><strong>组学视图</strong>（$v&#x3D;1,…,K-1$）:<br>$$<br>\rho_{ij}^{(v)} &#x3D; \frac{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})(Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})}{\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})^2}\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})^2}}<br>$$</p>
+<p>阈值化：</p>
+<p>$$<br>E_{ij}^{(v)} &#x3D; \begin{cases}<br>1 &amp; \text{if } |\rho_{ij}^{(v)}| &gt; \tau^{(v)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+<li><p><strong>STRING视图</strong>（$v&#x3D;K$）:<br>$$<br>E_{ij}^{(K)} &#x3D; \begin{cases}<br>1 &amp; \text{if } s_{ij}^{(K)} &gt; \tau^{(K)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>最终图结构</strong><br>$$<br>\mathcal{G}_c &#x3D; \langle V, { E^{(v)} }_{v&#x3D;1}^K \rangle<br>$$</p>
 </li>
 </ol>
-<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
-<blockquote>
-<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
-<ul>
-<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
-</li>
-<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
-</li>
-<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
-<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
-</li>
-</ul>
-</blockquote>
-<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
-<ol>
-<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
-<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
-</li>
-<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
-<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
-</li>
-<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
-<p>这种设计保证了：</p>
-<ul>
-<li>行标准化(每行和&#x3D;1)</li>
-<li>对角线强化(自环保留)</li>
-<li>全局信息平滑</li>
-</ul>
-</li>
-</ol>
-<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
-<ol>
-<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
-<p>其中$N_i$是节点$i$的邻居集合</p>
-</li>
-<li><p><strong>频域特性</strong>：</p>
-<ul>
-<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
-</li>
-<li><p>特征值分布更集中，突出局部模式</p>
-</li>
-<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
-</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><del>这里顺便说明一下融合过程捏</del></p>
-<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
-<p>混合滤波器设计</p>
-<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
-<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
-<p>这种组合能够：</p>
-<ul>
-<li>低频：由F主导，捕获全局趋势</li>
-<li>中高频：由S主导，提取局部特征</li>
-</ul>
-<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
-<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
-<ol>
-<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
-<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
-<li>平均操作(1&#x2F;2)防止频谱畸变</li>
-</ol>
-<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
-<p>关于实验，他一共做了4个：</p>
-<ul>
-<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-</ul>
-<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1//NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
+<h5 id="2-双注意力机制"><a href="#2-双注意力机制" class="headerlink" title="2. 双注意力机制"></a>2. 双注意力机制</h5><img src="\img\CDR\Framework\CDR-model-part2\Duplex-attention.png" alt="image-20250727105814311" style="zoom: 25%;" />
 
-<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1//MvMo.png" alt="MvMo" width="80%" height="auto">
+<h6 id="多视图自注意力"><a href="#多视图自注意力" class="headerlink" title="多视图自注意力"></a>多视图自注意力</h6><ol>
+<li><p>共享参数投影：<br>$$<br>\Theta &#x3D; [H^{(1)}\theta, …, H^{(K)}\theta] \in \mathbb{R}^{N_g \times K}<br>$$</p>
+</li>
+<li><p>相似度计算：<br>$$<br>\bar{\alpha}_{ij} &#x3D; \text{LeakyReLU}\left( \frac{\langle \Theta_i, \Theta_j \rangle}{|\Theta_i|_2 |\Theta_j|_2}, \beta \right)<br>$$</p>
+</li>
+<li><p>注意力系数：<br>$$<br>\alpha_{ij} &#x3D; \frac{\exp(\bar{\alpha}_{ij})}{\sum_{j&#x3D;1}^K \exp(\bar{\alpha}_{ij})}<br>$$</p>
+</li>
+<li><p>视图表示更新：<br>$$<br>H_s^{(v)} &#x3D; \sum_{j&#x3D;1}^K \alpha_{vj} H^{(j)}<br>$$</p>
+</li>
+</ol>
+<h6 id="视图级注意力"><a href="#视图级注意力" class="headerlink" title="视图级注意力"></a>视图级注意力</h6><ol>
+<li><p>表示拼接：<br>$$<br>H_s &#x3D; [H_s^{(1)}, …, H_s^{(K)}] \in \mathbb{R}^{N_g \times K d_c}<br>$$</p>
+</li>
+<li><p>视图权重计算：<br>$$<br>\bar{w}^{(v)} &#x3D; \text{Avg}(H_s z^{(v)} + b)<br>$$</p>
+</li>
+<li><p>归一化权重：<br>$$<br>w^{(v)} &#x3D; \frac{\exp(\bar{w}^{(v)})}{\sum_{v&#x3D;1}^K \exp(\bar{w}^{(v)})}<br>$$</p>
+</li>
+<li><p>最终融合：<br>$$<br>H &#x3D; \sum_{v&#x3D;1}^K w^{(v)} H_s^{(v)}<br>$$</p>
+</li>
+</ol>
+<p>此外，其还引入了multi-scale学习<del>（比较简单，可以直接去看原文捏）</del></p>
+<h3 id="Emden"><a href="#Emden" class="headerlink" title="Emden"></a><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">Emden</a></h3><p>这感觉没什么有用的信息捏</p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\Emden.png" alt="Emden" style="zoom:50%;" />
 
-<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
-<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
-<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
-<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
-<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
+<h3 id="AutoCDPR"><a href="#AutoCDPR" class="headerlink" title="AutoCDPR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">AutoCDPR</a></h3><p>采用了类似于AutoML的方式，但对鼠鼠而言，这东西就像将之前应该是超参数的东西也加入了训练，但实际用到CDR的部分只占很小一点<del>（是不是有点舍本逐末了捏）</del></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\AutoCDPR.png" alt="AutoCDPR" style="zoom: 33%;" />
+
+
+
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE外加PubChem</p>
+<h3 id="TSGCNN"><a href="#TSGCNN" class="headerlink" title="TSGCNN"></a><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">TSGCNN</a></h3><p>由于之后有比这个玩意儿更加激进的RedCDR，所以这里只放一个架构图捏</p>
+<img src="\img\CDR\Framework\CDR-model-part2\TSGCNN.png" alt="image-20250727111745618" style="zoom:50%;" />
+
+<h3 id="📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton"><a href="#📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton" class="headerlink" title="📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton"></a><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></h3><p>从各个方面来讲都过于《淳朴》了捏，略过</p>
+<h3 id="HQNN"><a href="#HQNN" class="headerlink" title="HQNN"></a><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">HQNN</a></h3><p>将其他模型最后的FCN换成了一个QNN</p>
+<img src="\img\CDR\Framework\CDR-model-part2\HQNN.png" alt="image-20250727112841044" style="zoom: 50%;" />
+
+<h3 id="GADRP"><a href="#GADRP" class="headerlink" title="GADRP"></a><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">GADRP</a></h3><p>没什么特别的捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GADPR.png" alt="GADPR" style="zoom:50%;" />
+
+<h3 id="GPDRP"><a href="#GPDRP" class="headerlink" title="GPDRP"></a><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">GPDRP</a></h3><p>这位更是如此捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GPDRP.png" alt="image-20250727113526356" style="zoom:50%;" />
+
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a></p>
+<p><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a></p>
+<p><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a></p>
+<p><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a></p>
+<p><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a></p>
+<p><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></p>
+<p><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning.pdf" target="_blank">📄 Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning</a></p>
+<p><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a></p>
 ]]></content>
       <categories>
         <category>CDR</category>
@@ -723,13 +639,248 @@
       <tags>
         <tag>attention</tag>
         <tag>CDR</tag>
-        <tag>graph theory</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
         <tag>contrast learning</tag>
-        <tag>graph signal processing</tag>
-        <tag>random walk</tag>
+        <tag>multi-view</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Woc?! GAT? We&#39;re Saved!</title>
+    <url>/2025/07/18/GAT/</url>
+    <content><![CDATA[<h1 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h1><p>图神经网络（GNNs）旨在为下游任务学习在低维空间中训练良好的表示，同时保留拓扑结构。近年来，注意力机制在自然语言处理和计算机视觉领域表现出色，被引入到GNNs中，以自适应地选择判别特征并自动过滤噪声信息。本博客将重点介绍GAT </p>
+<span id="more"></span>
+
+<h2 id="层内-GAT-Intra-Layer-GAT"><a href="#层内-GAT-Intra-Layer-GAT" class="headerlink" title="层内 GAT (Intra-Layer GAT)"></a>层内 GAT (Intra-Layer GAT)</h2><p>层内GATs是指在单个神经网络层内应用注意力机制的图神经网络，主要特点是：</p>
+<ul>
+<li>注意力机制作用于局部邻居节点</li>
+<li>在特征聚合步骤中为不同节点分配不同权重</li>
+<li>能够自适应地关注图中最相关的部分</li>
+</ul>
+<p>考虑到不同的局部邻域和不同的功能，层内GATs可以进一步分为六个子类，包括邻居注意力、高阶注意力、关系感知注意力、层次注意力、注意力采样&#x2F;池化和超注意力。</p>
+<h3 id="邻居注意力-Neighbor-Attention"><a href="#邻居注意力-Neighbor-Attention" class="headerlink" title="邻居注意力 (Neighbor Attention)"></a>邻居注意力 (Neighbor Attention)</h3><h4 id="邻居注意力核心思想"><a href="#邻居注意力核心思想" class="headerlink" title="邻居注意力核心思想"></a>邻居注意力核心思想</h4><p>邻居注意力机制的核心是通过学习的方式动态确定图中每个节点对其邻居的重要性权重，而非传统GNN中采用的固定权重策略。其关键创新点包括：</p>
+<ol>
+<li><strong>动态权重分配</strong>：根据节点特征相似性动态计算注意力权重</li>
+<li><strong>局部聚焦</strong>：仅考虑一阶邻居节点的注意力计算</li>
+<li><strong>端到端训练</strong>：注意力权重与网络参数共同优化</li>
+</ol>
+<h4 id="基础GAT模型"><a href="#基础GAT模型" class="headerlink" title="基础GAT模型"></a>基础GAT模型</h4><p>GAT 可以简单概括为一种将 Attention 机制引入 GCN（图卷积网络）的方法，而 GCN 是一种能够在深度学习中进行图结构分类等任务的方法。Attention 机制是指一种根据输入数据动态决定关注焦点的机制，通过将这种 Attention 机制引入 GCN（图卷积网络），可以提高分类、识别和预测的精度。因此，如果对 GCN 的理解不够深入，可能会难以完全理解 GAT。</p>
+<p>GCN 与 GAT 的主要区别在于节点卷积时的系数（这就是所谓的 Attention 系数）存在显著差异。</p>
+<p>在常规 GCN 中，当计算某节点的下一层特征（潜在变量）时，会通过将相邻节点的特征与线性权重相乘后的和，再通过激活函数（如 ReLU 等）传递至下一层。在计算相邻节点的特征量的线性组合时，传统方法将所有相邻节点平等对待，而 GAT 则引入了重要性（Attention 系数）的概念，不再将相邻节点视为同等。</p>
+<p>其概念可以形象地理解为如下：</p>
+<img src="/img/GAT/AttentionInGraphVisualize.png" alt="AttentionInGraphVisualize" width="60%" height="auto">
+
+<blockquote>
+<p>上图展示了节点 1 与其相邻的节点 2、3、4 之间，通过粗线表示的边，节点 3 最为重要，其次为节点 4，然后是节点 2，按重要性顺序排列的示意图。</p>
+</blockquote>
+<p>GAT 正是通过这种方式，将这种概念应用于相邻节点。</p>
+<p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
+<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
+<p>其中注意力系数$\alpha_{ij}$的计算：</p>
+<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
+<h5 id="注意力计算过程"><a href="#注意力计算过程" class="headerlink" title="注意力计算过程"></a>注意力计算过程</h5><p>基础GAT模型(Velickovic et al. 2018)的注意力计算包含三个关键步骤：</p>
+<ol>
+<li><strong>线性变换</strong>：对节点特征进行共享线性变换 $h_i’ &#x3D; W h_i$</li>
+<li><strong>注意力分数计算</strong>：使用单层前馈网络计算注意力分数 $e_{ij} &#x3D; a^T[Wh_i||Wh_j]$</li>
+<li><strong>归一化处理</strong>：通过softmax进行归一化 $\alpha_{ij} &#x3D; \text{softmax}(e_{ij})$</li>
+</ol>
+<h5 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h5><p>GAT引入多头注意力以稳定学习过程：</p>
+<ul>
+<li><strong>连接式多头</strong>：各头输出直接拼接 $h_i’ &#x3D; |_{k&#x3D;1}^K \sigma(\sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
+<li><strong>平均式多头</strong>：各头输出取平均 $h_i’ &#x3D; \sigma(\frac{1}{K}\sum_{k&#x3D;1}^K \sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
+</ul>
+<h4 id="关键改进模型"><a href="#关键改进模型" class="headerlink" title="关键改进模型"></a>关键改进模型</h4><h5 id="GATv2"><a href="#GATv2" class="headerlink" title="GATv2"></a>GATv2</h5><p>GATv2(Brody et al. 2021)解决了原始GAT的静态注意力问题：</p>
+<ul>
+<li>调整计算顺序：先非线性变换再线性投影<br>$e_{ij} &#x3D; a^T \text{LeakyReLU}(W[h_i||h_j])$</li>
+<li>证明原始GAT的注意力排名与查询无关</li>
+<li>在多个基准数据集上表现优于GAT</li>
+</ul>
+<h5 id="PPRGAT"><a href="#PPRGAT" class="headerlink" title="PPRGAT"></a>PPRGAT</h5><p>PPRGAT(Choi 2022)整合个性化PageRank信息：</p>
+<ul>
+<li>在注意力计算中加入PPR分数<br>$e_{ij} &#x3D; \text{LeakyReLU}(a^T[Wh_i||Wh_j||\pi_{ij}])$</li>
+<li>保留原始GAT结构的同时利用全局图信息</li>
+<li>在节点分类任务中表现优异</li>
+</ul>
+<h5 id="SuperGAT"><a href="#SuperGAT" class="headerlink" title="SuperGAT"></a>SuperGAT</h5><p>SuperGAT(Kim and Oh 2021)提出两种自监督变体：</p>
+<ol>
+<li>边预测任务：利用注意力分数预测边存在性</li>
+<li>标签一致性任务：利用注意力分数预测节点标签一致性</li>
+<li>在噪声图上表现更鲁棒</li>
+</ol>
+<h4 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h4><h5 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, <span class="keyword">in</span>\_features, out\_features, dropout, alpha, concat=<span class="literal">True</span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.<span class="keyword">in</span>\_features = <span class="keyword">in</span>\_features</span><br><span class="line">        <span class="variable language_">self</span>.out\_features = out\_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(<span class="keyword">in</span>\_features, out\_features)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out\_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment">### x: 节点特征矩阵 [N, in\_features]</span></span><br><span class="line">        <span class="comment">### adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment">### [N, out\_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 计算注意力分数</span></span><br><span class="line">        a\_<span class="built_in">input</span> = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a\_<span class="built_in">input</span> = a\_<span class="built_in">input</span>.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out\_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a\_<span class="built_in">input</span>, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 掩码机制</span></span><br><span class="line">        zero\_vec = -<span class="number">9e15</span> * torch.ones\_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero\_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 聚合特征</span></span><br><span class="line">        h\_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h\_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h\_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, nfeat, nhid, nclass, dropout, alpha, nheads):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> \_ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out\_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment">### 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out\_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log\_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">### 模型初始化</span></span><br><span class="line">model = GAT(nfeat=<span class="built_in">input</span>\_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num\_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight\_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero\_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll\_loss(output[idx\_train], labels[idx\_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
+
+<h3 id="高阶注意力-High-Order-Attention"><a href="#高阶注意力-High-Order-Attention" class="headerlink" title="高阶注意力 (High-Order Attention)"></a>高阶注意力 (High-Order Attention)</h3><h4 id="高阶注意力核心思想"><a href="#高阶注意力核心思想" class="headerlink" title="高阶注意力核心思想"></a>高阶注意力核心思想</h4><p>高阶注意力机制突破了传统GAT仅关注直接邻居的限制，通过以下方式扩展了注意力范围：</p>
+<ol>
+<li>多跳邻居聚合：考虑k-hop范围内的节点（k&gt;1）</li>
+<li>路径感知：关注节点间的路径信息而不仅是直接连接</li>
+<li>全局感受野：部分模型实现近似全局注意力</li>
+</ol>
+<img src="\img\GAT\HighOrderAttention.png" alt="HighOrderAttention" width="60%" height="auto">
+
+<h4 id="关键技术路线"><a href="#关键技术路线" class="headerlink" title="关键技术路线"></a>关键技术路线</h4><h5 id="基于路径的注意力"><a href="#基于路径的注意力" class="headerlink" title="基于路径的注意力"></a>基于路径的注意力</h5><p>SPAGAN(Yang et al. 2019)开创性地提出路径注意力机制：</p>
+<ul>
+<li>计算节点间最短路径作为注意力传播路径</li>
+<li>路径特征通过LSTM编码 $p_{ij} &#x3D; \text{LSTM}([h_i, h_{i1}, …, h_{j}])$</li>
+<li>注意力分数计算 $\alpha_{ij} &#x3D; \text{softmax}(W_p p_{ij})$</li>
+</ul>
+<h5 id="基于随机游走的注意力"><a href="#基于随机游走的注意力" class="headerlink" title="基于随机游走的注意力"></a>基于随机游走的注意力</h5><p>PaGNN(Yang et al. 2021d)采用个性化PageRank：</p>
+<ul>
+<li>定义转移矩阵P&#x3D;AD⁻¹</li>
+<li>计算PPR分数矩阵 $\Pi &#x3D; \alpha(I - (1-\alpha)P)^{-1}$</li>
+<li>将PPR分数融入注意力计算</li>
+</ul>
+<h5 id="谱域注意力"><a href="#谱域注意力" class="headerlink" title="谱域注意力"></a>谱域注意力</h5><p>MAGNA(Wang et al. 2021)结合谱理论：</p>
+<ul>
+<li>使用低通滤波器平滑高频噪声</li>
+<li>注意力传播公式 $H^{(l+1)} &#x3D; \sigma(\sum_{k&#x3D;0}^K \beta_k T_k(\tilde{L})H^{(l)}W_k)$ ，其中$T_k$为切比雪夫多项式</li>
+</ul>
+<h3 id="关系感知注意力-Relation-Aware-Attention"><a href="#关系感知注意力-Relation-Aware-Attention" class="headerlink" title="关系感知注意力 (Relation-Aware Attention)"></a>关系感知注意力 (Relation-Aware Attention)</h3><p>关系感知注意力机制主要解决图中不同类型关系的差异化处理问题，其核心思想包括：</p>
+<ol>
+<li><strong>关系类型区分</strong>：识别并利用图中不同类型的关系（边）</li>
+<li><strong>关系特定参数</strong>：为每种关系类型学习独立的注意力参数</li>
+<li><strong>关系特征融合</strong>：结合关系特征与节点特征进行注意力计算</li>
+</ol>
+<img src="\img\GAT\RelationAwareAttention.png" alt="RelationAwareAttention" width="60%" height="auto">
+
+<h4 id="关键技术方法"><a href="#关键技术方法" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="带符号图注意力"><a href="#带符号图注意力" class="headerlink" title="带符号图注意力"></a>带符号图注意力</h5><p>SiGAT(Huang et al. 2019b)针对带符号图提出：</p>
+<ul>
+<li>平衡理论建模：朋友的朋友是朋友</li>
+<li>状态理论建模：敌人的朋友是敌人</li>
+<li>注意力分数计算 $α_{ij} &#x3D; \text{softmax}(\text{MLP}([h_i‖h_j‖r_{ij}]))$, 其中$r_{ij}$表示边类型（正&#x2F;负）</li>
+</ul>
+<h5 id="异构图注意力"><a href="#异构图注意力" class="headerlink" title="异构图注意力"></a>异构图注意力</h5><p>RGAT(Busbridge et al. 2019)处理异构图：</p>
+<ul>
+<li>关系特定变换矩阵 $h_i^r &#x3D; W_r h_i$</li>
+<li>关系感知注意力 $e_{ij}^r &#x3D; a_r^T[h_i^r‖h_j^r]$</li>
+</ul>
+<h3 id="层次注意力-Hierarchical-Attention"><a href="#层次注意力-Hierarchical-Attention" class="headerlink" title="层次注意力 (Hierarchical Attention)"></a>层次注意力 (Hierarchical Attention)</h3><p>层次注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
+<ol>
+<li><strong>多层次信息整合</strong>：同时考虑节点级、路径级和图级信息</li>
+<li><strong>分层注意力计算</strong>：在不同层次应用不同的注意力机制</li>
+<li><strong>信息流动控制</strong>：设计信息从低层向高层的传递方式</li>
+</ol>
+<img src="\img\GAT\HierachicalAttention.png" alt="HierachicalAttention" width="60%" height="auto">
+
+<h4 id="关键技术方法-1"><a href="#关键技术方法-1" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-语义双层次注意力"><a href="#节点-语义双层次注意力" class="headerlink" title="节点-语义双层次注意力"></a>节点-语义双层次注意力</h5><p>HAN(Wang et al. 2019d)提出：</p>
+<ul>
+<li><strong>节点级注意力</strong>：学习同一元路径下节点的重要性 $h_i’ &#x3D; \sum_{j\in N_i} \alpha_{ij}h_j$</li>
+<li><strong>语义级注意力</strong>：学习不同元路径的重要性 $Z &#x3D; \sum_{m&#x3D;1}^M \beta_m \cdot Z_m$</li>
+</ul>
+<h5 id="多粒度层次注意力"><a href="#多粒度层次注意力" class="headerlink" title="多粒度层次注意力"></a>多粒度层次注意力</h5><p>GraphHAM(Lin et al. 2022)设计：</p>
+<ul>
+<li>局部粒度注意力：捕捉节点邻域特征</li>
+<li>全局粒度注意力：捕捉图结构特征</li>
+<li>跨粒度注意力：协调不同粒度信息</li>
+</ul>
+<h5 id="动态层次注意力"><a href="#动态层次注意力" class="headerlink" title="动态层次注意力"></a>动态层次注意力</h5><p>RGHAT(Zhang et al. 2020c)实现：</p>
+<ul>
+<li><strong>底层实体注意力</strong>：处理节点特征 $e_{ij} &#x3D; a(h_i,h_j)$</li>
+<li><strong>高层关系注意力</strong>：处理边类型特征 $r_k &#x3D; \sum_{i,j} \beta_{ij}^k e_{ij}$</li>
+</ul>
+<h2 id="层间注意力-Inter-Layer-GAT"><a href="#层间注意力-Inter-Layer-GAT" class="headerlink" title="层间注意力 (Inter-Layer GAT)"></a>层间注意力 (Inter-Layer GAT)</h2><p>在神经网络层之间，跨层GAT通过特征融合方法将不同特征空间的表示结合起来。根据不同的融合方法，我们将这些基于注意力的GNN分为五个子类别，包括多级注意力、多通道注意力、多视图注意力和时空注意力。</p>
+<h3 id="多级注意力-Multi-Level-Attention"><a href="#多级注意力-Multi-Level-Attention" class="headerlink" title="多级注意力 (Multi-Level Attention)"></a>多级注意力 (Multi-Level Attention)</h3><p>多级注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
+<ol>
+<li><strong>层次化信息处理</strong>：将图数据分解为不同层次的抽象表示</li>
+<li><strong>跨层次信息交互</strong>：在不同层次间建立注意力连接</li>
+<li><strong>自适应权重分配</strong>：自动学习各层次对最终任务的重要性</li>
+</ol>
+<h4 id="关键技术方法-2"><a href="#关键技术方法-2" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-路径双层次注意力"><a href="#节点-路径双层次注意力" class="headerlink" title="节点-路径双层次注意力"></a>节点-路径双层次注意力</h5><p>DAGNN(Liu et al. 2020)提出：</p>
+<ul>
+<li><strong>节点级注意力</strong>：学习局部邻域内节点的重要性 $h_i^{(l)} &#x3D; \sum_{j\in N_i} \alpha_{ij}^{(l)} h_j^{(l-1)}$</li>
+<li><strong>路径级注意力</strong>：学习不同传播深度的重要性 $z_i &#x3D; \sum_{l&#x3D;0}^L \beta_l h_i^{(l)}$</li>
+</ul>
+<h5 id="自适应深度注意力"><a href="#自适应深度注意力" class="headerlink" title="自适应深度注意力"></a>自适应深度注意力</h5><p>TDGNN(Wang and Derr 2021)设计：</p>
+<ul>
+<li>动态调整各层的注意力范围</li>
+<li>基于树分解的层次化注意力</li>
+<li>跨层信息融合机制</li>
+</ul>
+<h5 id="跳跃知识架构"><a href="#跳跃知识架构" class="headerlink" title="跳跃知识架构"></a>跳跃知识架构</h5><p>GAMLP(Zhang et al. 2022c)实现：</p>
+<ul>
+<li>底层局部注意力</li>
+<li>中层区域注意力</li>
+<li>高层全局注意力</li>
+<li>跳跃连接整合各层特征</li>
+</ul>
+<h3 id="多通道注意力-Multi-Channel-Attention"><a href="#多通道注意力-Multi-Channel-Attention" class="headerlink" title="多通道注意力 (Multi-Channel Attention)"></a>多通道注意力 (Multi-Channel Attention)</h3><p>多通道注意力机制通过构建并行注意力通道来处理图数据中的多样化特征，其核心思想包括：</p>
+<ol>
+<li><strong>通道多样化</strong>：将输入特征分解为多个特征通道</li>
+<li><strong>通道特异性</strong>：为每个通道设计独立的注意力机制</li>
+<li><strong>通道融合</strong>：自适应地整合不同通道的信息</li>
+</ol>
+<h4 id="关键技术方法-3"><a href="#关键技术方法-3" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="频率自适应注意力"><a href="#频率自适应注意力" class="headerlink" title="频率自适应注意力"></a>频率自适应注意力</h5><p>FAGCN(Bo et al. 2021)提出：</p>
+<ul>
+<li>低频通道：捕捉节点相似性 $h_{low} &#x3D; \sum_{j\in N_i} \frac{1}{\sqrt{d_i d_j}} h_j$</li>
+<li>高频通道：捕捉节点差异性 $h_{high} &#x3D; \sum_{j\in N_i} -\frac{1}{\sqrt{d_i d_j}} h_j$</li>
+<li>自适应融合： $h_i &#x3D; \alpha_{low} h_{low} + \alpha_{high} h_{high}$</li>
+</ul>
+<h5 id="自适应通道混合"><a href="#自适应通道混合" class="headerlink" title="自适应通道混合"></a>自适应通道混合</h5><p>ACM(Luan et al. 2021)设计：</p>
+<ul>
+<li>多通道特征提取</li>
+<li>通道间注意力交互</li>
+<li>动态通道权重分配</li>
+</ul>
+<h5 id="不确定性感知通道"><a href="#不确定性感知通道" class="headerlink" title="不确定性感知通道"></a>不确定性感知通道</h5><p>UAG(Feng et al. 2021)实现：</p>
+<ul>
+<li>通道不确定性估计</li>
+<li>基于不确定性的通道注意力</li>
+<li>鲁棒性通道融合</li>
+</ul>
+<h3 id="多视角注意力-Multi-View-Attention"><a href="#多视角注意力-Multi-View-Attention" class="headerlink" title="多视角注意力 (Multi-View Attention)"></a>多视角注意力 (Multi-View Attention)</h3><p>多视角注意力机制通过构建并行注意力视角来处理图数据中的多样化信息，其核心思想包括：</p>
+<ol>
+<li><strong>视角多样化</strong>：从不同角度（如拓扑结构、节点特征、时间序列等）构建多个视角</li>
+<li><strong>视角特异性</strong>：为每个视角设计独立的注意力机制</li>
+<li><strong>视角融合</strong>：自适应地整合不同视角的信息</li>
+</ol>
+<h4 id="关键技术方法-4"><a href="#关键技术方法-4" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="结构-特征双视角注意力"><a href="#结构-特征双视角注意力" class="headerlink" title="结构-特征双视角注意力"></a>结构-特征双视角注意力</h5><p>AM-GCN(Wang et al. 2020b)提出：</p>
+<ul>
+<li>拓扑视角：基于图结构的邻接矩阵 $A_{topo} &#x3D; A$</li>
+<li>特征视角：基于节点特征的相似度矩阵 $A_{feat} &#x3D; \text{sim}(X,X^T)$</li>
+<li>注意力融合： $A_{final} &#x3D; \sum_{v\in{topo,feat}} w_v A_v$</li>
+</ul>
+<h3 id="时空注意力-Spatio-Temporal-Attention"><a href="#时空注意力-Spatio-Temporal-Attention" class="headerlink" title="时空注意力 (Spatio-Temporal Attention)"></a>时空注意力 (Spatio-Temporal Attention)</h3><p>时空注意力机制通过构建并行注意力模块来处理图数据中的空间和时间依赖性，其核心思想包括：</p>
+<ol>
+<li>空间依赖性：捕捉节点间的拓扑关系</li>
+<li>时间依赖性：建模动态图中的时序演化模式</li>
+<li>时空交互：联合建模时空维度的相互影响</li>
+</ol>
+<h4 id="关键技术方法-5"><a href="#关键技术方法-5" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="空间-时间双注意力"><a href="#空间-时间双注意力" class="headerlink" title="空间-时间双注意力"></a>空间-时间双注意力</h5><p>DySAT(Sankar et al. 2018)提出：</p>
+<ul>
+<li>空间注意力：基于当前快照的图结构 $A_{spatial} &#x3D; \text{softmax}(Q_s K_s^T&#x2F;\sqrt{d})$</li>
+<li>时间注意力：基于节点的时间序列 $A_{temporal} &#x3D; \text{softmax}(Q_t K_t^T&#x2F;\sqrt{d})$</li>
+<li>联合建模： $Z &#x3D; (A_{spatial} \oplus A_{temporal})V$</li>
+</ul>
+<h3 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h3><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
+<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  External-Attention-pytorch
+</a>
+
+<p><a href="/paper/Sun 等 - 2023 - Attention-based graph neural networks a survey.pdf" target="_blank">📄 Sun 等 - 2023 - Attention-based graph neural networks a survey</a></p>
+<a href="https://disassemble-channel.com/graph-attention-network-gat/" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/google.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  【深層学習】Graph Attention Networks(GAT)を理解する
+</a> 
+]]></content>
+      <categories>
+        <category>model</category>
+        <category>attention</category>
+        <category>graph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
       </tags>
   </entry>
   <entry>
@@ -974,240 +1125,324 @@
       </tags>
   </entry>
   <entry>
-    <title>Woc?! GAT? We&#39;re Saved!</title>
-    <url>/2025/07/18/GAT/</url>
-    <content><![CDATA[<h1 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h1><p>图神经网络（GNNs）旨在为下游任务学习在低维空间中训练良好的表示，同时保留拓扑结构。近年来，注意力机制在自然语言处理和计算机视觉领域表现出色，被引入到GNNs中，以自适应地选择判别特征并自动过滤噪声信息。本博客将重点介绍GAT </p>
+    <title>CDR models From 2020 To 2022</title>
+    <url>/2025/07/20/CDR-model-part1/</url>
+    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
+<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
+<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
 <span id="more"></span>
 
-<h2 id="层内-GAT-Intra-Layer-GAT"><a href="#层内-GAT-Intra-Layer-GAT" class="headerlink" title="层内 GAT (Intra-Layer GAT)"></a>层内 GAT (Intra-Layer GAT)</h2><p>层内GATs是指在单个神经网络层内应用注意力机制的图神经网络，主要特点是：</p>
-<ul>
-<li>注意力机制作用于局部邻居节点</li>
-<li>在特征聚合步骤中为不同节点分配不同权重</li>
-<li>能够自适应地关注图中最相关的部分</li>
-</ul>
-<p>考虑到不同的局部邻域和不同的功能，层内GATs可以进一步分为六个子类，包括邻居注意力、高阶注意力、关系感知注意力、层次注意力、注意力采样&#x2F;池化和超注意力。</p>
-<h3 id="邻居注意力-Neighbor-Attention"><a href="#邻居注意力-Neighbor-Attention" class="headerlink" title="邻居注意力 (Neighbor Attention)"></a>邻居注意力 (Neighbor Attention)</h3><h4 id="邻居注意力核心思想"><a href="#邻居注意力核心思想" class="headerlink" title="邻居注意力核心思想"></a>邻居注意力核心思想</h4><p>邻居注意力机制的核心是通过学习的方式动态确定图中每个节点对其邻居的重要性权重，而非传统GNN中采用的固定权重策略。其关键创新点包括：</p>
-<ol>
-<li><strong>动态权重分配</strong>：根据节点特征相似性动态计算注意力权重</li>
-<li><strong>局部聚焦</strong>：仅考虑一阶邻居节点的注意力计算</li>
-<li><strong>端到端训练</strong>：注意力权重与网络参数共同优化</li>
-</ol>
-<h4 id="基础GAT模型"><a href="#基础GAT模型" class="headerlink" title="基础GAT模型"></a>基础GAT模型</h4><p>GAT 可以简单概括为一种将 Attention 机制引入 GCN（图卷积网络）的方法，而 GCN 是一种能够在深度学习中进行图结构分类等任务的方法。Attention 机制是指一种根据输入数据动态决定关注焦点的机制，通过将这种 Attention 机制引入 GCN（图卷积网络），可以提高分类、识别和预测的精度。因此，如果对 GCN 的理解不够深入，可能会难以完全理解 GAT。</p>
-<p>GCN 与 GAT 的主要区别在于节点卷积时的系数（这就是所谓的 Attention 系数）存在显著差异。</p>
-<p>在常规 GCN 中，当计算某节点的下一层特征（潜在变量）时，会通过将相邻节点的特征与线性权重相乘后的和，再通过激活函数（如 ReLU 等）传递至下一层。在计算相邻节点的特征量的线性组合时，传统方法将所有相邻节点平等对待，而 GAT 则引入了重要性（Attention 系数）的概念，不再将相邻节点视为同等。</p>
-<p>其概念可以形象地理解为如下：</p>
-<img src="/img/GAT/AttentionInGraphVisualize.png" alt="AttentionInGraphVisualize" width="60%" height="auto">
+<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
+<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
 
+<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
+<ol>
+<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
+<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
+</ol>
+<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
+
+<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
+<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
+<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
+
+<p>还是分为两条线来看：</p>
+<ol>
+<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
+<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
+<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
+<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
+<li><img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
+</ul>
+</li>
+</ol>
+<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
+<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
+
+<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
+<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
+<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
+<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
+<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
+
+<p>单组学，回归模型（虽然叫Classiffier）</p>
+<p>然后就是当时读到的时候有一些小问题：</p>
+<ol>
+<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
+<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
+</ol>
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
+<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
+<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
+<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
+
+<p>先说明架构图中可能引起误解的地方：</p>
+<ol>
+<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
+<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
+</ol>
+<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
+<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
+<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
+
+<h3 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h3><p><del>这位更是如此捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
+
+<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
+<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
+
+<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
 <blockquote>
-<p>上图展示了节点 1 与其相邻的节点 2、3、4 之间，通过粗线表示的边，节点 3 最为重要，其次为节点 4，然后是节点 2，按重要性顺序排列的示意图。</p>
+<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
+<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
+<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
+<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
+<ol>
+<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
+<ul>
+<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
+<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
+<li>确保马尔可夫链的遍历性和平稳分布存在</li>
+</ul>
+</li>
+<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
+<ul>
+<li>游走者只能移动到拓扑邻居节点</li>
+<li>模拟生物系统中局部相互作用占主导的特性</li>
+<li>避免远距离间接关联引入的虚假信号</li>
+</ul>
+</li>
+</ol>
+<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
+<blockquote>
+<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
+<ul>
+<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
+</li>
+<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
+</li>
+<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
+<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
+</li>
+</ul>
 </blockquote>
-<p>GAT 正是通过这种方式，将这种概念应用于相邻节点。</p>
-<p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
-<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
-<p>其中注意力系数$\alpha_{ij}$的计算：</p>
-<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
-<h5 id="注意力计算过程"><a href="#注意力计算过程" class="headerlink" title="注意力计算过程"></a>注意力计算过程</h5><p>基础GAT模型(Velickovic et al. 2018)的注意力计算包含三个关键步骤：</p>
+<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
 <ol>
-<li><strong>线性变换</strong>：对节点特征进行共享线性变换 $h_i’ &#x3D; W h_i$</li>
-<li><strong>注意力分数计算</strong>：使用单层前馈网络计算注意力分数 $e_{ij} &#x3D; a^T[Wh_i||Wh_j]$</li>
-<li><strong>归一化处理</strong>：通过softmax进行归一化 $\alpha_{ij} &#x3D; \text{softmax}(e_{ij})$</li>
+<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
+<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
+</li>
+<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
+<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
+</li>
+<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
+<p>这种设计保证了：</p>
+<ul>
+<li>行标准化(每行和&#x3D;1)</li>
+<li>对角线强化(自环保留)</li>
+<li>全局信息平滑</li>
+</ul>
+</li>
 </ol>
-<h5 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h5><p>GAT引入多头注意力以稳定学习过程：</p>
-<ul>
-<li><strong>连接式多头</strong>：各头输出直接拼接 $h_i’ &#x3D; |_{k&#x3D;1}^K \sigma(\sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
-<li><strong>平均式多头</strong>：各头输出取平均 $h_i’ &#x3D; \sigma(\frac{1}{K}\sum_{k&#x3D;1}^K \sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
-</ul>
-<h4 id="关键改进模型"><a href="#关键改进模型" class="headerlink" title="关键改进模型"></a>关键改进模型</h4><h5 id="GATv2"><a href="#GATv2" class="headerlink" title="GATv2"></a>GATv2</h5><p>GATv2(Brody et al. 2021)解决了原始GAT的静态注意力问题：</p>
-<ul>
-<li>调整计算顺序：先非线性变换再线性投影<br>$e_{ij} &#x3D; a^T \text{LeakyReLU}(W[h_i||h_j])$</li>
-<li>证明原始GAT的注意力排名与查询无关</li>
-<li>在多个基准数据集上表现优于GAT</li>
-</ul>
-<h5 id="PPRGAT"><a href="#PPRGAT" class="headerlink" title="PPRGAT"></a>PPRGAT</h5><p>PPRGAT(Choi 2022)整合个性化PageRank信息：</p>
-<ul>
-<li>在注意力计算中加入PPR分数<br>$e_{ij} &#x3D; \text{LeakyReLU}(a^T[Wh_i||Wh_j||\pi_{ij}])$</li>
-<li>保留原始GAT结构的同时利用全局图信息</li>
-<li>在节点分类任务中表现优异</li>
-</ul>
-<h5 id="SuperGAT"><a href="#SuperGAT" class="headerlink" title="SuperGAT"></a>SuperGAT</h5><p>SuperGAT(Kim and Oh 2021)提出两种自监督变体：</p>
+<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
 <ol>
-<li>边预测任务：利用注意力分数预测边存在性</li>
-<li>标签一致性任务：利用注意力分数预测节点标签一致性</li>
-<li>在噪声图上表现更鲁棒</li>
+<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
+<p>其中$N_i$是节点$i$的邻居集合</p>
+</li>
+<li><p><strong>频域特性</strong>：</p>
+<ul>
+<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
+</li>
+<li><p>特征值分布更集中，突出局部模式</p>
+</li>
+<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
+</li>
+</ul>
+</li>
 </ol>
-<h4 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h4><h5 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, <span class="keyword">in</span>\_features, out\_features, dropout, alpha, concat=<span class="literal">True</span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.<span class="keyword">in</span>\_features = <span class="keyword">in</span>\_features</span><br><span class="line">        <span class="variable language_">self</span>.out\_features = out\_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(<span class="keyword">in</span>\_features, out\_features)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out\_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment">### x: 节点特征矩阵 [N, in\_features]</span></span><br><span class="line">        <span class="comment">### adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment">### [N, out\_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 计算注意力分数</span></span><br><span class="line">        a\_<span class="built_in">input</span> = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a\_<span class="built_in">input</span> = a\_<span class="built_in">input</span>.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out\_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a\_<span class="built_in">input</span>, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 掩码机制</span></span><br><span class="line">        zero\_vec = -<span class="number">9e15</span> * torch.ones\_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero\_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 聚合特征</span></span><br><span class="line">        h\_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h\_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h\_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, nfeat, nhid, nclass, dropout, alpha, nheads):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> \_ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out\_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment">### 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out\_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log\_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><del>这里顺便说明一下融合过程捏</del></p>
+<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
+<p>混合滤波器设计</p>
+<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
+<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
+<p>这种组合能够：</p>
+<ul>
+<li>低频：由F主导，捕获全局趋势</li>
+<li>中高频：由S主导，提取局部特征</li>
+</ul>
+<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
+<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
+<ol>
+<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
+<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
+<li>平均操作(1&#x2F;2)防止频谱畸变</li>
+</ol>
+<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
+<p>关于实验，他一共做了4个：</p>
+<ul>
+<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+</ul>
+<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
 
-<h5 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">### 模型初始化</span></span><br><span class="line">model = GAT(nfeat=<span class="built_in">input</span>\_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num\_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight\_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero\_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll\_loss(output[idx\_train], labels[idx\_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
+<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
 
-<h3 id="高阶注意力-High-Order-Attention"><a href="#高阶注意力-High-Order-Attention" class="headerlink" title="高阶注意力 (High-Order Attention)"></a>高阶注意力 (High-Order Attention)</h3><h4 id="高阶注意力核心思想"><a href="#高阶注意力核心思想" class="headerlink" title="高阶注意力核心思想"></a>高阶注意力核心思想</h4><p>高阶注意力机制突破了传统GAT仅关注直接邻居的限制，通过以下方式扩展了注意力范围：</p>
-<ol>
-<li>多跳邻居聚合：考虑k-hop范围内的节点（k&gt;1）</li>
-<li>路径感知：关注节点间的路径信息而不仅是直接连接</li>
-<li>全局感受野：部分模型实现近似全局注意力</li>
-</ol>
-<img src="\img\GAT\HighOrderAttention.png" alt="HighOrderAttention" width="60%" height="auto">
+<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
+<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
+<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
+<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
+<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>models</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>graph theory</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>multi-view</tag>
+        <tag>graph signal processing</tag>
+        <tag>random walk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gugugu Neralashun</title>
+    <url>/2025/07/16/General-Attention/</url>
+    <content><![CDATA[<h1 id="具有一般性的-Attention"><a href="#具有一般性的-Attention" class="headerlink" title="具有一般性的 Attention"></a>具有一般性的 Attention</h1><div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
+  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
+</div>
 
-<h4 id="关键技术路线"><a href="#关键技术路线" class="headerlink" title="关键技术路线"></a>关键技术路线</h4><h5 id="基于路径的注意力"><a href="#基于路径的注意力" class="headerlink" title="基于路径的注意力"></a>基于路径的注意力</h5><p>SPAGAN(Yang et al. 2019)开创性地提出路径注意力机制：</p>
-<ul>
-<li>计算节点间最短路径作为注意力传播路径</li>
-<li>路径特征通过LSTM编码 $p_{ij} &#x3D; \text{LSTM}([h_i, h_{i1}, …, h_{j}])$</li>
-<li>注意力分数计算 $\alpha_{ij} &#x3D; \text{softmax}(W_p p_{ij})$</li>
-</ul>
-<h5 id="基于随机游走的注意力"><a href="#基于随机游走的注意力" class="headerlink" title="基于随机游走的注意力"></a>基于随机游走的注意力</h5><p>PaGNN(Yang et al. 2021d)采用个性化PageRank：</p>
-<ul>
-<li>定义转移矩阵P&#x3D;AD⁻¹</li>
-<li>计算PPR分数矩阵 $\Pi &#x3D; \alpha(I - (1-\alpha)P)^{-1}$</li>
-<li>将PPR分数融入注意力计算</li>
-</ul>
-<h5 id="谱域注意力"><a href="#谱域注意力" class="headerlink" title="谱域注意力"></a>谱域注意力</h5><p>MAGNA(Wang et al. 2021)结合谱理论：</p>
-<ul>
-<li>使用低通滤波器平滑高频噪声</li>
-<li>注意力传播公式 $H^{(l+1)} &#x3D; \sigma(\sum_{k&#x3D;0}^K \beta_k T_k(\tilde{L})H^{(l)}W_k)$ ，其中$T_k$为切比雪夫多项式</li>
-</ul>
-<h3 id="关系感知注意力-Relation-Aware-Attention"><a href="#关系感知注意力-Relation-Aware-Attention" class="headerlink" title="关系感知注意力 (Relation-Aware Attention)"></a>关系感知注意力 (Relation-Aware Attention)</h3><p>关系感知注意力机制主要解决图中不同类型关系的差异化处理问题，其核心思想包括：</p>
-<ol>
-<li><strong>关系类型区分</strong>：识别并利用图中不同类型的关系（边）</li>
-<li><strong>关系特定参数</strong>：为每种关系类型学习独立的注意力参数</li>
-<li><strong>关系特征融合</strong>：结合关系特征与节点特征进行注意力计算</li>
-</ol>
-<img src="\img\GAT\RelationAwareAttention.png" alt="RelationAwareAttention" width="60%" height="auto">
 
-<h4 id="关键技术方法"><a href="#关键技术方法" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="带符号图注意力"><a href="#带符号图注意力" class="headerlink" title="带符号图注意力"></a>带符号图注意力</h5><p>SiGAT(Huang et al. 2019b)针对带符号图提出：</p>
-<ul>
-<li>平衡理论建模：朋友的朋友是朋友</li>
-<li>状态理论建模：敌人的朋友是敌人</li>
-<li>注意力分数计算 $α_{ij} &#x3D; \text{softmax}(\text{MLP}([h_i‖h_j‖r_{ij}]))$, 其中$r_{ij}$表示边类型（正&#x2F;负）</li>
-</ul>
-<h5 id="异构图注意力"><a href="#异构图注意力" class="headerlink" title="异构图注意力"></a>异构图注意力</h5><p>RGAT(Busbridge et al. 2019)处理异构图：</p>
-<ul>
-<li>关系特定变换矩阵 $h_i^r &#x3D; W_r h_i$</li>
-<li>关系感知注意力 $e_{ij}^r &#x3D; a_r^T[h_i^r‖h_j^r]$</li>
-</ul>
-<h3 id="层次注意力-Hierarchical-Attention"><a href="#层次注意力-Hierarchical-Attention" class="headerlink" title="层次注意力 (Hierarchical Attention)"></a>层次注意力 (Hierarchical Attention)</h3><p>层次注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
-<ol>
-<li><strong>多层次信息整合</strong>：同时考虑节点级、路径级和图级信息</li>
-<li><strong>分层注意力计算</strong>：在不同层次应用不同的注意力机制</li>
-<li><strong>信息流动控制</strong>：设计信息从低层向高层的传递方式</li>
-</ol>
-<img src="\img\GAT\HierachicalAttention.png" alt="HierachicalAttention" width="60%" height="auto">
 
-<h4 id="关键技术方法-1"><a href="#关键技术方法-1" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-语义双层次注意力"><a href="#节点-语义双层次注意力" class="headerlink" title="节点-语义双层次注意力"></a>节点-语义双层次注意力</h5><p>HAN(Wang et al. 2019d)提出：</p>
-<ul>
-<li><strong>节点级注意力</strong>：学习同一元路径下节点的重要性 $h_i’ &#x3D; \sum_{j\in N_i} \alpha_{ij}h_j$</li>
-<li><strong>语义级注意力</strong>：学习不同元路径的重要性 $Z &#x3D; \sum_{m&#x3D;1}^M \beta_m \cdot Z_m$</li>
-</ul>
-<h5 id="多粒度层次注意力"><a href="#多粒度层次注意力" class="headerlink" title="多粒度层次注意力"></a>多粒度层次注意力</h5><p>GraphHAM(Lin et al. 2022)设计：</p>
-<ul>
-<li>局部粒度注意力：捕捉节点邻域特征</li>
-<li>全局粒度注意力：捕捉图结构特征</li>
-<li>跨粒度注意力：协调不同粒度信息</li>
-</ul>
-<h5 id="动态层次注意力"><a href="#动态层次注意力" class="headerlink" title="动态层次注意力"></a>动态层次注意力</h5><p>RGHAT(Zhang et al. 2020c)实现：</p>
-<ul>
-<li><strong>底层实体注意力</strong>：处理节点特征 $e_{ij} &#x3D; a(h_i,h_j)$</li>
-<li><strong>高层关系注意力</strong>：处理边类型特征 $r_k &#x3D; \sum_{i,j} \beta_{ij}^k e_{ij}$</li>
-</ul>
-<h2 id="层间注意力-Inter-Layer-GAT"><a href="#层间注意力-Inter-Layer-GAT" class="headerlink" title="层间注意力 (Inter-Layer GAT)"></a>层间注意力 (Inter-Layer GAT)</h2><p>在神经网络层之间，跨层GAT通过特征融合方法将不同特征空间的表示结合起来。根据不同的融合方法，我们将这些基于注意力的GNN分为五个子类别，包括多级注意力、多通道注意力、多视图注意力和时空注意力。</p>
-<h3 id="多级注意力-Multi-Level-Attention"><a href="#多级注意力-Multi-Level-Attention" class="headerlink" title="多级注意力 (Multi-Level Attention)"></a>多级注意力 (Multi-Level Attention)</h3><p>多级注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
-<ol>
-<li><strong>层次化信息处理</strong>：将图数据分解为不同层次的抽象表示</li>
-<li><strong>跨层次信息交互</strong>：在不同层次间建立注意力连接</li>
-<li><strong>自适应权重分配</strong>：自动学习各层次对最终任务的重要性</li>
-</ol>
-<h4 id="关键技术方法-2"><a href="#关键技术方法-2" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-路径双层次注意力"><a href="#节点-路径双层次注意力" class="headerlink" title="节点-路径双层次注意力"></a>节点-路径双层次注意力</h5><p>DAGNN(Liu et al. 2020)提出：</p>
-<ul>
-<li><strong>节点级注意力</strong>：学习局部邻域内节点的重要性 $h_i^{(l)} &#x3D; \sum_{j\in N_i} \alpha_{ij}^{(l)} h_j^{(l-1)}$</li>
-<li><strong>路径级注意力</strong>：学习不同传播深度的重要性 $z_i &#x3D; \sum_{l&#x3D;0}^L \beta_l h_i^{(l)}$</li>
-</ul>
-<h5 id="自适应深度注意力"><a href="#自适应深度注意力" class="headerlink" title="自适应深度注意力"></a>自适应深度注意力</h5><p>TDGNN(Wang and Derr 2021)设计：</p>
-<ul>
-<li>动态调整各层的注意力范围</li>
-<li>基于树分解的层次化注意力</li>
-<li>跨层信息融合机制</li>
-</ul>
-<h5 id="跳跃知识架构"><a href="#跳跃知识架构" class="headerlink" title="跳跃知识架构"></a>跳跃知识架构</h5><p>GAMLP(Zhang et al. 2022c)实现：</p>
-<ul>
-<li>底层局部注意力</li>
-<li>中层区域注意力</li>
-<li>高层全局注意力</li>
-<li>跳跃连接整合各层特征</li>
-</ul>
-<h3 id="多通道注意力-Multi-Channel-Attention"><a href="#多通道注意力-Multi-Channel-Attention" class="headerlink" title="多通道注意力 (Multi-Channel Attention)"></a>多通道注意力 (Multi-Channel Attention)</h3><p>多通道注意力机制通过构建并行注意力通道来处理图数据中的多样化特征，其核心思想包括：</p>
-<ol>
-<li><strong>通道多样化</strong>：将输入特征分解为多个特征通道</li>
-<li><strong>通道特异性</strong>：为每个通道设计独立的注意力机制</li>
-<li><strong>通道融合</strong>：自适应地整合不同通道的信息</li>
-</ol>
-<h4 id="关键技术方法-3"><a href="#关键技术方法-3" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="频率自适应注意力"><a href="#频率自适应注意力" class="headerlink" title="频率自适应注意力"></a>频率自适应注意力</h5><p>FAGCN(Bo et al. 2021)提出：</p>
-<ul>
-<li>低频通道：捕捉节点相似性 $h_{low} &#x3D; \sum_{j\in N_i} \frac{1}{\sqrt{d_i d_j}} h_j$</li>
-<li>高频通道：捕捉节点差异性 $h_{high} &#x3D; \sum_{j\in N_i} -\frac{1}{\sqrt{d_i d_j}} h_j$</li>
-<li>自适应融合： $h_i &#x3D; \alpha_{low} h_{low} + \alpha_{high} h_{high}$</li>
-</ul>
-<h5 id="自适应通道混合"><a href="#自适应通道混合" class="headerlink" title="自适应通道混合"></a>自适应通道混合</h5><p>ACM(Luan et al. 2021)设计：</p>
-<ul>
-<li>多通道特征提取</li>
-<li>通道间注意力交互</li>
-<li>动态通道权重分配</li>
-</ul>
-<h5 id="不确定性感知通道"><a href="#不确定性感知通道" class="headerlink" title="不确定性感知通道"></a>不确定性感知通道</h5><p>UAG(Feng et al. 2021)实现：</p>
-<ul>
-<li>通道不确定性估计</li>
-<li>基于不确定性的通道注意力</li>
-<li>鲁棒性通道融合</li>
-</ul>
-<h3 id="多视角注意力-Multi-View-Attention"><a href="#多视角注意力-Multi-View-Attention" class="headerlink" title="多视角注意力 (Multi-View Attention)"></a>多视角注意力 (Multi-View Attention)</h3><p>多视角注意力机制通过构建并行注意力视角来处理图数据中的多样化信息，其核心思想包括：</p>
-<ol>
-<li><strong>视角多样化</strong>：从不同角度（如拓扑结构、节点特征、时间序列等）构建多个视角</li>
-<li><strong>视角特异性</strong>：为每个视角设计独立的注意力机制</li>
-<li><strong>视角融合</strong>：自适应地整合不同视角的信息</li>
-</ol>
-<h4 id="关键技术方法-4"><a href="#关键技术方法-4" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="结构-特征双视角注意力"><a href="#结构-特征双视角注意力" class="headerlink" title="结构-特征双视角注意力"></a>结构-特征双视角注意力</h5><p>AM-GCN(Wang et al. 2020b)提出：</p>
-<ul>
-<li>拓扑视角：基于图结构的邻接矩阵 $A_{topo} &#x3D; A$</li>
-<li>特征视角：基于节点特征的相似度矩阵 $A_{feat} &#x3D; \text{sim}(X,X^T)$</li>
-<li>注意力融合： $A_{final} &#x3D; \sum_{v\in{topo,feat}} w_v A_v$</li>
-</ul>
-<h3 id="时空注意力-Spatio-Temporal-Attention"><a href="#时空注意力-Spatio-Temporal-Attention" class="headerlink" title="时空注意力 (Spatio-Temporal Attention)"></a>时空注意力 (Spatio-Temporal Attention)</h3><p>时空注意力机制通过构建并行注意力模块来处理图数据中的空间和时间依赖性，其核心思想包括：</p>
-<ol>
-<li>空间依赖性：捕捉节点间的拓扑关系</li>
-<li>时间依赖性：建模动态图中的时序演化模式</li>
-<li>时空交互：联合建模时空维度的相互影响</li>
-</ol>
-<h4 id="关键技术方法-5"><a href="#关键技术方法-5" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="空间-时间双注意力"><a href="#空间-时间双注意力" class="headerlink" title="空间-时间双注意力"></a>空间-时间双注意力</h5><p>DySAT(Sankar et al. 2018)提出：</p>
-<ul>
-<li>空间注意力：基于当前快照的图结构 $A_{spatial} &#x3D; \text{softmax}(Q_s K_s^T&#x2F;\sqrt{d})$</li>
-<li>时间注意力：基于节点的时间序列 $A_{temporal} &#x3D; \text{softmax}(Q_t K_t^T&#x2F;\sqrt{d})$</li>
-<li>联合建模： $Z &#x3D; (A_{spatial} \oplus A_{temporal})V$</li>
-</ul>
-<h3 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h3><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
-<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
-  </span>
-  External-Attention-pytorch
-</a>
+<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+<span id="more"></span>
 
-<p><a href="/paper/Sun 等 - 2023 - Attention-based graph neural networks a survey.pdf" target="_blank">📄 Sun 等 - 2023 - Attention-based graph neural networks a survey</a></p>
-<a href="https://disassemble-channel.com/graph-attention-network-gat/" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/google.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
-  </span>
-  【深層学習】Graph Attention Networks(GAT)を理解する
-</a> 
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
+
+<p>如果还记得这张图的话，那便是极好的捏 <del>不记得了就回去看捏</del> 本文主要就是在说明每一个模块常见的具体实现有什么</p>
+<h2 id="注意力评分函数-Attention-Scoring"><a href="#注意力评分函数-Attention-Scoring" class="headerlink" title="注意力评分函数(Attention Scoring)"></a>注意力评分函数(Attention Scoring)</h2><p>注意力评分函数是计算查询向量$\mathbf{q}$与键向量$\mathbf{k}_l$之间相关性得分的核心组件：</p>
+<ol>
+<li><p><strong>加性评分(Additive&#x2F;Concatenate)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{w}^\top \text{act}(\mathbf{W}_1\mathbf{q} + \mathbf{W}_2\mathbf{k}_l + \mathbf{b})<br>$$</p>
+<p>其中$\mathbf{w} \in \mathbb{R}^{d_w}$, $\mathbf{W}_1 \in \mathbb{R}^{d_w \times d_q}$, $\mathbf{W}_2 \in \mathbb{R}^{d_w \times d_k}$和$\mathbf{b} \in \mathbb{R}^{d_w}$是可训练参数。</p>
+</li>
+<li><p><strong>乘性评分(Multiplicative&#x2F;Dot-Product)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{q}^\top \mathbf{k}_l<br>$$</p>
+</li>
+<li><p><strong>缩放乘性评分(Scaled Multiplicative)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \frac{\mathbf{q}^\top \mathbf{k}_l}{\sqrt{d_k}}<br>$$</p>
+</li>
+<li><p><strong>通用评分(General)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top \mathbf{W} \mathbf{q}<br>$$</p>
+<p>其中$\mathbf{W} \in \mathbb{R}^{d_k \times d_q}$是权重矩阵。</p>
+</li>
+<li><p><strong>带偏置的通用评分(Biased General)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top (\mathbf{W}\mathbf{q} + \mathbf{b})<br>$$</p>
+</li>
+<li><p><strong>激活通用评分(Activated General)</strong>：<br>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \text{act}(\mathbf{k}_l^\top \mathbf{W} \mathbf{q} + b)<br>$$</p>
+</li>
+</ol>
+<h2 id="注意力对齐-Attention-Alignment"><a href="#注意力对齐-Attention-Alignment" class="headerlink" title="注意力对齐(Attention Alignment)"></a>注意力对齐(Attention Alignment)</h2><p>对齐函数将原始注意力分数$\mathbf{e} &#x3D; [e_1, \ldots, e_{n_f}]$转换为标准化权重：</p>
+<ol>
+<li><p><strong>软对齐&#x2F;全局对齐(Soft&#x2F;Global Alignment)</strong>：</p>
+<p>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;1}^{n_f} \exp(e_j)}<br>$$</p>
+</li>
+<li><p><strong>硬对齐(Hard Alignment)</strong>：<br>从多项式分布采样：</p>
+<p>$$<br>m \sim \text{Multinomial}(a_1, \ldots, a_{n_f})<br>$$</p>
+<p>然后：</p>
+<p>$$<br>\mathbf{c} &#x3D; \mathbf{v}_m<br>$$</p>
+</li>
+<li><p><strong>局部对齐(Local Alignment)</strong>：<br>窗口位置$p$的确定：<br>$$<br>p &#x3D; S \times \text{sigmoid}(\mathbf{w}_p^\top \tanh(\mathbf{W}_p \mathbf{q}))<br>$$<br>然后计算：<br>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;p-D}^{p+D} \exp(e_j)} \exp\left(-\frac{(l-p)^2}{2\sigma^2}\right)<br>$$</p>
+</li>
+</ol>
+<h2 id="注意力维度-Attention-Dimensionality"><a href="#注意力维度-Attention-Dimensionality" class="headerlink" title="注意力维度(Attention Dimensionality)"></a>注意力维度(Attention Dimensionality)</h2><ol>
+<li><p><strong>单维注意力(Single-Dimensional Attention)</strong>：</p>
+<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} a_l \mathbf{v}_l<br>$$</p>
+</li>
+<li><p><strong>多维注意力(Multi-Dimensional Attention)</strong>：<br>调整评分函数产生向量分数：</p>
+<p>$$<br>\mathbf{e}_l &#x3D; \mathbf{W}_d^\top \text{act}(\mathbf{W}_1 \mathbf{q} + \mathbf{W}_2 \mathbf{k}_l + \mathbf{b})<br>$$</p>
+<p>然后计算：</p>
+<p>$$<br>a_{l,i} &#x3D; \frac{\exp(e_{l,i})}{\sum_{j&#x3D;1}^{n_f} \exp(e_{j,i})}<br>$$</p>
+<p>最终上下文向量：</p>
+<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} \mathbf{a}_l \circ \mathbf{v}_l<br>$$</p>
+<p>其中$\circ$表示逐元素乘法。</p>
+</li>
+</ol>
+<h2 id="4-实际应用与选择建议"><a href="#4-实际应用与选择建议" class="headerlink" title="4. 实际应用与选择建议"></a>4. 实际应用与选择建议</h2><p>论文提供了关于不同机制选择的实用建议：</p>
+<ol>
+<li><p><strong>评分函数选择</strong>：</p>
+<ul>
+<li>计算效率优先：乘性或缩放乘性评分</li>
+<li>性能优先：加性评分或通用评分</li>
+<li>大维度键向量：必须使用缩放乘性评分防止梯度问题</li>
+</ul>
+</li>
+<li><p><strong>对齐方式选择</strong>：</p>
+<ul>
+<li>标准情况：软对齐</li>
+<li>需要严格稀疏性：硬对齐（但要注意训练难度）</li>
+<li>序列数据：考虑局部对齐</li>
+<li>需要动态选择关注区域：强化对齐</li>
+</ul>
+</li>
+<li><p><strong>维度选择</strong>：</p>
+<ul>
+<li>大多数情况：单维注意力足够</li>
+<li>需要细粒度控制：考虑多维注意力</li>
+</ul>
+</li>
+</ol>
+<p>这些通用机制可以自由组合，例如可以设计一个使用加性评分、软对齐和多维注意力的模型。论文特别指出，Transformer 模型成功的关键在于巧妙地组合了缩放乘性评分、软对齐和单维注意力（通过多头机制实现类似多维注意力的效果）。</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
 ]]></content>
       <categories>
         <category>model</category>
         <category>attention</category>
-        <category>graph</category>
+        <category>category</category>
       </categories>
       <tags>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>deep learning</tag>
-        <tag>PyTorch</tag>
         <tag>attention</tag>
-        <tag>graph theory</tag>
       </tags>
   </entry>
   <entry>
@@ -1412,110 +1647,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Gugugu Neralashun</title>
-    <url>/2025/07/16/General-Attention/</url>
-    <content><![CDATA[<h1 id="具有一般性的-Attention"><a href="#具有一般性的-Attention" class="headerlink" title="具有一般性的 Attention"></a>具有一般性的 Attention</h1><div style="display: flex; align-items: center;">
-  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
-  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
-</div>
-
-
-
-<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
-<span id="more"></span>
-
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
-
-<p>如果还记得这张图的话，那便是极好的捏 <del>不记得了就回去看捏</del> 本文主要就是在说明每一个模块常见的具体实现有什么</p>
-<h2 id="注意力评分函数-Attention-Scoring"><a href="#注意力评分函数-Attention-Scoring" class="headerlink" title="注意力评分函数(Attention Scoring)"></a>注意力评分函数(Attention Scoring)</h2><p>注意力评分函数是计算查询向量$\mathbf{q}$与键向量$\mathbf{k}_l$之间相关性得分的核心组件：</p>
-<ol>
-<li><p><strong>加性评分(Additive&#x2F;Concatenate)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{w}^\top \text{act}(\mathbf{W}_1\mathbf{q} + \mathbf{W}_2\mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>其中$\mathbf{w} \in \mathbb{R}^{d_w}$, $\mathbf{W}_1 \in \mathbb{R}^{d_w \times d_q}$, $\mathbf{W}_2 \in \mathbb{R}^{d_w \times d_k}$和$\mathbf{b} \in \mathbb{R}^{d_w}$是可训练参数。</p>
-</li>
-<li><p><strong>乘性评分(Multiplicative&#x2F;Dot-Product)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{q}^\top \mathbf{k}_l<br>$$</p>
-</li>
-<li><p><strong>缩放乘性评分(Scaled Multiplicative)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \frac{\mathbf{q}^\top \mathbf{k}_l}{\sqrt{d_k}}<br>$$</p>
-</li>
-<li><p><strong>通用评分(General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top \mathbf{W} \mathbf{q}<br>$$</p>
-<p>其中$\mathbf{W} \in \mathbb{R}^{d_k \times d_q}$是权重矩阵。</p>
-</li>
-<li><p><strong>带偏置的通用评分(Biased General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top (\mathbf{W}\mathbf{q} + \mathbf{b})<br>$$</p>
-</li>
-<li><p><strong>激活通用评分(Activated General)</strong>：<br>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \text{act}(\mathbf{k}_l^\top \mathbf{W} \mathbf{q} + b)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力对齐-Attention-Alignment"><a href="#注意力对齐-Attention-Alignment" class="headerlink" title="注意力对齐(Attention Alignment)"></a>注意力对齐(Attention Alignment)</h2><p>对齐函数将原始注意力分数$\mathbf{e} &#x3D; [e_1, \ldots, e_{n_f}]$转换为标准化权重：</p>
-<ol>
-<li><p><strong>软对齐&#x2F;全局对齐(Soft&#x2F;Global Alignment)</strong>：</p>
-<p>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;1}^{n_f} \exp(e_j)}<br>$$</p>
-</li>
-<li><p><strong>硬对齐(Hard Alignment)</strong>：<br>从多项式分布采样：</p>
-<p>$$<br>m \sim \text{Multinomial}(a_1, \ldots, a_{n_f})<br>$$</p>
-<p>然后：</p>
-<p>$$<br>\mathbf{c} &#x3D; \mathbf{v}_m<br>$$</p>
-</li>
-<li><p><strong>局部对齐(Local Alignment)</strong>：<br>窗口位置$p$的确定：<br>$$<br>p &#x3D; S \times \text{sigmoid}(\mathbf{w}_p^\top \tanh(\mathbf{W}_p \mathbf{q}))<br>$$<br>然后计算：<br>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;p-D}^{p+D} \exp(e_j)} \exp\left(-\frac{(l-p)^2}{2\sigma^2}\right)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力维度-Attention-Dimensionality"><a href="#注意力维度-Attention-Dimensionality" class="headerlink" title="注意力维度(Attention Dimensionality)"></a>注意力维度(Attention Dimensionality)</h2><ol>
-<li><p><strong>单维注意力(Single-Dimensional Attention)</strong>：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} a_l \mathbf{v}_l<br>$$</p>
-</li>
-<li><p><strong>多维注意力(Multi-Dimensional Attention)</strong>：<br>调整评分函数产生向量分数：</p>
-<p>$$<br>\mathbf{e}_l &#x3D; \mathbf{W}_d^\top \text{act}(\mathbf{W}_1 \mathbf{q} + \mathbf{W}_2 \mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>然后计算：</p>
-<p>$$<br>a_{l,i} &#x3D; \frac{\exp(e_{l,i})}{\sum_{j&#x3D;1}^{n_f} \exp(e_{j,i})}<br>$$</p>
-<p>最终上下文向量：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} \mathbf{a}_l \circ \mathbf{v}_l<br>$$</p>
-<p>其中$\circ$表示逐元素乘法。</p>
-</li>
-</ol>
-<h2 id="4-实际应用与选择建议"><a href="#4-实际应用与选择建议" class="headerlink" title="4. 实际应用与选择建议"></a>4. 实际应用与选择建议</h2><p>论文提供了关于不同机制选择的实用建议：</p>
-<ol>
-<li><p><strong>评分函数选择</strong>：</p>
-<ul>
-<li>计算效率优先：乘性或缩放乘性评分</li>
-<li>性能优先：加性评分或通用评分</li>
-<li>大维度键向量：必须使用缩放乘性评分防止梯度问题</li>
-</ul>
-</li>
-<li><p><strong>对齐方式选择</strong>：</p>
-<ul>
-<li>标准情况：软对齐</li>
-<li>需要严格稀疏性：硬对齐（但要注意训练难度）</li>
-<li>序列数据：考虑局部对齐</li>
-<li>需要动态选择关注区域：强化对齐</li>
-</ul>
-</li>
-<li><p><strong>维度选择</strong>：</p>
-<ul>
-<li>大多数情况：单维注意力足够</li>
-<li>需要细粒度控制：考虑多维注意力</li>
-</ul>
-</li>
-</ol>
-<p>这些通用机制可以自由组合，例如可以设计一个使用加性评分、软对齐和多维注意力的模型。论文特别指出，Transformer 模型成功的关键在于巧妙地组合了缩放乘性评分、软对齐和单维注意力（通过多头机制实现类似多维注意力的效果）。</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
-]]></content>
-      <categories>
-        <category>model</category>
-        <category>attention</category>
-        <category>category</category>
-      </categories>
-      <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>deep learning</tag>
-        <tag>attention</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Trans?!and Former?!</title>
     <url>/2025/07/19/Graph-Transformer/</url>
     <content><![CDATA[<h1 id="Graph-Transformer"><a href="#Graph-Transformer" class="headerlink" title="Graph Transformer"></a>Graph Transformer</h1><p>Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处理任意结构的图数据（如社交网络、分子结构等）。其既保留了Transformer的强表示能力，又继承了GNN对图结构的归纳偏置，成为图表示学习领域的重要基线模型。</p>
@@ -1545,7 +1676,7 @@
 <p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
 <p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
 <p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
-<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="边特征的前馈网络"></a>边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
+<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
 <p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
 <p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
@@ -1570,52 +1701,6 @@
         <tag>attention</tag>
         <tag>deeplearning</tag>
         <tag>graphtheory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HGCN and HGAT</title>
-    <url>/2025/07/20/HGCN-and-HGAT/</url>
-    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
-<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
-<span id="more"></span>
-
-<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
-<blockquote>
-<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
-<ol>
-<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
-<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
-<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
-</ul>
-</li>
-<li>特征变换：$H^{(l)}W^{(l)}$</li>
-<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
-<li>非线性变换：$\sigma(\cdot)$</li>
-</ol>
-</blockquote>
-<p>而超图也有对应的拉普拉斯矩阵</p>
-<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
-<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
-<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
-<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
-<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
-<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
-<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
-]]></content>
-      <categories>
-        <category>model</category>
-        <category>hypergraph</category>
-      </categories>
-      <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>PyTorch</tag>
-        <tag>attention</tag>
-        <tag>graph theory</tag>
-        <tag>GNN</tag>
-        <tag>embedding</tag>
-        <tag>hypergraph</tag>
       </tags>
   </entry>
   <entry>
@@ -1789,6 +1874,52 @@
       </tags>
   </entry>
   <entry>
+    <title>HGCN and HGAT</title>
+    <url>/2025/07/20/HGCN-and-HGAT/</url>
+    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
+<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+<span id="more"></span>
+
+<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
+<blockquote>
+<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
+<ol>
+<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
+<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
+<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+</ul>
+</li>
+<li>特征变换：$H^{(l)}W^{(l)}$</li>
+<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
+<li>非线性变换：$\sigma(\cdot)$</li>
+</ol>
+</blockquote>
+<p>而超图也有对应的拉普拉斯矩阵</p>
+<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
+<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
+<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
+<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
+<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
+<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
+<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+]]></content>
+      <categories>
+        <category>model</category>
+        <category>hypergraph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
+        <tag>GNN</tag>
+        <tag>embedding</tag>
+        <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PEP 8</title>
     <url>/2025/07/08/PEP-8/</url>
     <content><![CDATA[<h1 id="Style-Guide-for-Python-Code"><a href="#Style-Guide-for-Python-Code" class="headerlink" title="Style Guide for Python Code"></a>Style Guide for Python Code</h1><blockquote>
@@ -1866,58 +1997,6 @@
         <tag>PEP</tag>
         <tag>闲🉐无聊</tag>
         <tag>大概率没用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hwadee</title>
-    <url>/2025/07/13/hwadee/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
-<span id="more"></span>
-
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
-<ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
-</li>
-</ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
-</ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>sb</category>
-      </categories>
-      <tags>
-        <tag>sb</tag>
-        <tag>UESTC</tag>
       </tags>
   </entry>
   <entry>
@@ -2256,6 +2335,58 @@
         <tag>Basic</tag>
         <tag>deep learning</tag>
         <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hwadee</title>
+    <url>/2025/07/13/hwadee/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+<span id="more"></span>
+
+<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<ul>
+<li>引用 7 篇资料作为参考<ol>
+<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
+<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
+<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
+<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
+<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
+<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
+<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+</ul>
+<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
+<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
+<li>类似燃烧塑料或化学药品的味道；</li>
+<li>锯木屑混合酸味（家具中甲醛）；</li>
+<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
+<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
+<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
+</ul>
+<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
+<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
+<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
+</ul>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
+<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
+<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>sb</category>
+      </categories>
+      <tags>
+        <tag>sb</tag>
+        <tag>UESTC</tag>
       </tags>
   </entry>
 </search>

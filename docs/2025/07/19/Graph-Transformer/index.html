@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/GraphTransformer.png">
 <meta property="article:published_time" content="2025-07-18T16:26:57.000Z">
-<meta property="article:modified_time" content="2025-07-23T15:22:06.311Z">
+<meta property="article:modified_time" content="2025-07-26T15:52:39.087Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="model">
 <meta property="article:tag" content="Basic">
@@ -178,7 +178,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Graph-Transformer"><span class="nav-number">1.</span> <span class="nav-text">Graph Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81%E7%BA%BF%E6%80%A7%E6%8A%95%E5%BD%B1%E5%85%AC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入特征线性投影公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E8%9E%8D%E5%90%88%E5%85%AC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">位置编码融合公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%9B%BETransformer%E5%B1%82%E5%85%AC%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">基础图Transformer层公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">前馈网络与归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E8%BE%B9%E7%89%B9%E5%BE%81%E7%9A%84%E5%9B%BETransformer%E5%B1%82"><span class="nav-number">1.5.</span> <span class="nav-text">带边特征的图Transformer层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%89%B9%E5%BE%81%E7%9A%84%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C"><span class="nav-number">1.6.</span> <span class="nav-text">边特征的前馈网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Graph-Transformer"><span class="nav-number">1.</span> <span class="nav-text">Graph Transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E7%89%B9%E5%BE%81%E7%BA%BF%E6%80%A7%E6%8A%95%E5%BD%B1%E5%85%AC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">输入特征线性投影公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E8%9E%8D%E5%90%88%E5%85%AC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">位置编码融合公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%9B%BETransformer%E5%B1%82%E5%85%AC%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">基础图Transformer层公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.4.</span> <span class="nav-text">前馈网络与归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E8%BE%B9%E7%89%B9%E5%BE%81%E7%9A%84%E5%9B%BETransformer%E5%B1%82"><span class="nav-number">1.5.</span> <span class="nav-text">带边特征的图Transformer层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%89%B9%E5%BE%81%E7%9A%84%E5%89%8D%E9%A6%88%E7%BD%91%E7%BB%9C"><span class="nav-number">1.6.</span> <span class="nav-text">$$边特征的前馈网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -193,7 +193,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -204,7 +204,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -223,6 +223,8 @@
     </div>
 
     
+        <div class="pjax">
+        </div>
   </aside>
 
 
@@ -257,7 +259,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Trans?!and Former?!
+          Trans?!and Former?!<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/docs/_posts/Graph-Transformer.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -275,7 +277,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-23 23:22:06" itemprop="dateModified" datetime="2025-07-23T23:22:06+08:00">2025-07-23</time>
+      <time title="Modified: 2025-07-26 23:52:39" itemprop="dateModified" datetime="2025-07-26T23:52:39+08:00">2025-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -346,7 +348,7 @@
 <p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
 <p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
 <p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
-<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="边特征的前馈网络"></a>边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
+<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
 <p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
 <p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
@@ -417,17 +419,15 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">31k</span>
+    <span title="Word count total">33k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:52</span>
+    <span title="Reading time total">1:59</span>
   </span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a>
-  </div>
 
     </div>
   </footer>

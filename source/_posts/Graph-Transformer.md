@@ -76,7 +76,7 @@ Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处
 
 其中，$E^{k，\ell} \in \mathbb{R}^{d\_{k} \times d}$ 是边特征投影矩阵，$O\_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵
 
-## 边特征的前馈网络
+## $$边特征的前馈网络
 
 **边特征归一化**$\hat{\hat{e}}\_{ij}^{\ell+1} = \text{Norm}(e\_{ij}^{\ell} + \hat{e}\_{ij}^{\ell+1})\qquad\qquad\qquad$ **边特征变换**$\hat{\hat{\hat{e}}}\_{ij}^{\ell+1} = W\_{e，2}^{\ell} \text{ReLU}(W\_{e，1}^{\ell} \hat{\hat{e}}\_{ij}^{\ell+1})$ 
 

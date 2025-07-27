@@ -176,7 +176,7 @@ links_settings:
   layout: block
 
 links:
-  #Title: https://example.com
+  #Title: https://blog.sonic-aged.site
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
@@ -217,7 +217,7 @@ footer:
   copyright:
 
   # Powered by Hexo & NexT
-  powered: true
+  powered: false
 
   # Beian ICP and gongan information for Chinese users. See: https://beian.miit.gov.cn, https://beian.mps.gov.cn
   beian:
@@ -284,15 +284,15 @@ follow_me:
 # Related popular posts
 # Dependencies: https://github.com/sergeyzwezdin/hexo-related-posts
 related_posts:
-  enable: false
+  enable: true
   icon: fa fa-signs-post
 
 # Post edit
 # Easily browse and edit blog source code online.
 post_edit:
-  enable: false
-  url: https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/ # Link for view source
-  #url: https://github.com/user-name/repo-name/edit/branch-name/subdirectory-name/ # Link for fork & edit
+  enable: true
+  url: https://github.com/SonicAged/sonicaged.github.io/tree/main/docs/ # Link for view source
+  #url: https://github.com/SonicAged/sonicaged.github.io/edit/main/docs/  # Link for fork & edit
 
 # Show previous post and next post in post footer if exists
 # Available values: left | right | false
