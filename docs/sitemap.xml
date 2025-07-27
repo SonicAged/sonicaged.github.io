@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/</loc>
+    
+    <lastmod>2025-07-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/2025/07/14/Feature-Related-Attention/</loc>
     
     <lastmod>2025-07-27</lastmod>
@@ -83,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/20/HGCN-and-HGAT/</loc>
     
     <lastmod>2025-07-22</lastmod>
     
@@ -92,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/20/HGCN-and-HGAT/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
     
     <lastmod>2025-07-22</lastmod>
     
@@ -273,13 +282,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/multi-view/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/tags/graph-signal-processing/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -288,6 +290,34 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/random-walk/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/multi-view/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/GAN/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/Dynamic-graph/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/hypergraph/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -309,13 +339,6 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/graphtheory/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/hypergraph/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -429,20 +452,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/model/attention/category/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/categories/model/attention/graph/</loc>
-    <lastmod>2025-07-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/categories/Python/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -450,7 +459,21 @@
   </url>
   
   <url>
+    <loc>https://blog.sonic-aged.site/categories/model/attention/category/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/categories/sb/</loc>
+    <lastmod>2025-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/model/attention/graph/</loc>
     <lastmod>2025-07-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

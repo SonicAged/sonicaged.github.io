@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="2024年的CDR模型想看2020到2022的可以前往CDR models From 2020 To 2022 想看2023的可以前往CDR models In 2023 本文将介绍的是2024年的CDR模型 事情本来是这样的，结果写了一半发现24年的东西都好大坨，于是决定拆成两部分，这是前半部分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CDR model In 2024">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="2024年的CDR模型想看2020到2022的可以前往CDR models From 2020 To 2022 想看2023的可以前往CDR models In 2023 本文将介绍的是2024年的CDR模型 事情本来是这样的，结果写了一半发现24年的东西都好大坨，于是决定拆成两部分，这是前半部分。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/PANCDR.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/PANCDR-result.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/DeepAEG.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/MTIGCN.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/HRLCDR.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/DGCL.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/HLMG.png">
+<meta property="article:published_time" content="2025-07-27T12:11:14.000Z">
+<meta property="article:modified_time" content="2025-07-27T14:14:56.622Z">
+<meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="CDR">
+<meta property="article:tag" content="model framework">
+<meta property="article:tag" content="practice">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="contrast learning">
+<meta property="article:tag" content="GAN">
+<meta property="article:tag" content="Dynamic graph">
+<meta property="article:tag" content="hypergraph">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.sonic-aged.site/img/CDR/Framework/CDR-model-part2/PANCDR.png">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/","path":"2025/07/27/CDR-model-part3/","title":"CDR model In 2024"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CDR model In 2024 | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2024%E5%B9%B4%E7%9A%84CDR%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">2024年的CDR模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2024"><span class="nav-number">1.1.</span> <span class="nav-text">2024</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PANCDR"><span class="nav-number">1.1.1.</span> <span class="nav-text">PANCDR</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Framework"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Framework</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepAEG"><span class="nav-number">1.1.2.</span> <span class="nav-text">DeepAEG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Framework-1"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E5%AD%90%E5%9B%BE%E8%A1%A8%E7%A4%BA%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.1.2.1.1.</span> <span class="nav-text">分子图表示形式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CGCN-%E7%9A%84%E5%B1%82%E5%BC%8F%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6"><span class="nav-number">1.1.2.1.2.</span> <span class="nav-text">CGCN 的层式更新机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CGCN-%E6%9E%B6%E6%9E%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.2.1.3.</span> <span class="nav-text">CGCN 架构特点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86-1"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">数据集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MTIGCN"><span class="nav-number">1.1.3.</span> <span class="nav-text">MTIGCN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HRLCDR"><span class="nav-number">1.1.4.</span> <span class="nav-text">HRLCDR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DGCL"><span class="nav-number">1.1.5.</span> <span class="nav-text">DGCL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Framework-2"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.5.1.1.</span> <span class="nav-text">模型整体框架</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E5%B1%80%E9%83%A8%E5%85%B3%E7%B3%BB%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.1.5.1.2.</span> <span class="nav-text">显式局部关系建模</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B6%85%E5%9B%BE%E7%BB%93%E6%9E%84%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.5.1.3.</span> <span class="nav-text">动态超图结构学习</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E5%85%A8%E5%B1%80%E5%85%B3%E7%B3%BB%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.1.5.1.4.</span> <span class="nav-text">隐式全局关系建模</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B1%80%E9%83%A8-%E5%85%A8%E5%B1%80%E8%87%AA%E5%A2%9E%E5%BC%BA%E5%AF%B9%E6%AF%94%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.1.5.1.5.</span> <span class="nav-text">局部-全局自增强对比学习</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0%EF%BC%88%E5%9F%BA%E4%BA%8E-InfoNCE%EF%BC%89"><span class="nav-number">1.1.5.1.5.1.</span> <span class="nav-text">对比损失函数（基于 InfoNCE）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E9%9B%86%E6%88%90"><span class="nav-number">1.1.5.1.6.</span> <span class="nav-text">特征集成</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A2%84%E6%B5%8B%E5%B1%82"><span class="nav-number">1.1.5.1.7.</span> <span class="nav-text">预测层</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E4%BC%98%E5%8C%96"><span class="nav-number">1.1.5.1.8.</span> <span class="nav-text">多任务优化</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C-1"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HLMG"><span class="nav-number">1.1.6.</span> <span class="nav-text">HLMG</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Framework-3"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">Framework</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6"><span class="nav-number">1.1.6.1.1.</span> <span class="nav-text">整体框架</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E7%B2%92%E5%BA%A6%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96"><span class="nav-number">1.1.6.1.2.</span> <span class="nav-text">多粒度特征提取</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7%E5%A4%96%E9%83%A8%E7%89%B9%E5%BE%81%E8%81%9A%E5%90%88"><span class="nav-number">1.1.6.1.3.</span> <span class="nav-text">多级外部特征聚合</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8D%AF%E7%89%A9%E5%93%8D%E5%BA%94%E9%A2%84%E6%B5%8B"><span class="nav-number">1.1.6.1.4.</span> <span class="nav-text">药物响应预测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%88%9B%E6%96%B0%E7%82%B9"><span class="nav-number">1.1.6.1.5.</span> <span class="nav-text">模型创新点</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CDR model In 2024 | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CDR model In 2024<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/CDR-model-part3.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-27 20:11:14 / Modified: 22:14:56" itemprop="dateCreated datePublished" datetime="2025-07-27T20:11:14+08:00">2025-07-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/" itemprop="url" rel="index"><span itemprop="name">CDR</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CDR/models/" itemprop="url" rel="index"><span itemprop="name">models</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>3.8k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>14 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="2024年的CDR模型"><a href="#2024年的CDR模型" class="headerlink" title="2024年的CDR模型"></a>2024年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p><del>本文将介绍的是2024年的CDR模型</del></p>
+<p>事情本来是这样的，结果写了一半发现24年的东西都好大坨，于是决定拆成两部分，这是前半部分。</p>
+<span id="more"></span>
+
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="PANCDR"><a href="#PANCDR" class="headerlink" title="PANCDR"></a><a href="/paper/CDR/2024/Kim 等 - PANCDR precise medicine prediction using an adversarial network for cancer drug response.pdf" target="_blank">PANCDR</a></h3><p>将GAN引入到了CDR，目的是缩小TCGA和GDSC之间的数据差异，这也应该是鼠鼠读到的第一篇着眼于临床和临床前数据差异的论文</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/DMCB-GIST/PANCDR">Source Code</a></p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part2/PANCDR.png" alt="PANCDR" style="zoom:50%;" />
+
+<p>（感觉这个可以用于重构代码时的练手）</p>
+<p>但多的不说少的不唠，TCGA的数据集是不是不太能用捏</p>
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>TCGA和GDSC</p>
+<h4 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h4><img src="/img/CDR/Framework/CDR-model-part2/PANCDR-result.png" alt="PANCDR-result" style="zoom:80%;" />
+
+<p>不得不承认这个实验很有想法捏</p>
+<blockquote>
+<p>CV结果见补充Table 1。除GDSC的召回率外，DeepCDR在AUC、ACC、精确率和F1值方面均优于PANCDR，其值分别为0.8361、0.7761、0.3095和0.4328。然而，在TCGA数据集中，PANCDR取得了最高的AUC、ACC、精确率和F1值，分别为0.7106、0.6686、0.6491和0.6704。结果表明，PANCDR并未过度拟合GDSC的临床前数据，可以推广到TCGA的临床数据中。</p>
+</blockquote>
+<p>同时，还有改变TCGA比例的鲁棒性实验</p>
+<h3 id="DeepAEG"><a href="#DeepAEG" class="headerlink" title="DeepAEG"></a><a href="/paper/CDR/2024/Lao - 2024 - DeepAEG a model for predicting cancer drug response based on data enhancement and edge-collaborativ.pdf" target="_blank">DeepAEG</a></h3><p>第一次在图中引入边的特征的CDR，这里也开始提到了之后超图中反复提到的潜在高维信息，如原子特征和化学键信息等</p>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part2/DeepAEG.png" alt="DeepAEG" style="zoom: 33%;" />
+
+<p>下面来说明一下CGCN的具体原理</p>
+<p>CGCN 的设计背景</p>
+<p>传统图卷积网络（GCN）在处理分子图时主要关注<strong>节点（原子）特征更新</strong>，而忽视了<strong>边（化学键）特征</strong>的重要性。在药物分子中，化学键的类型（单键、双键、三键等）、键长和键能等边特征直接影响分子的化学性质和生物活性。DeepAEG 提出的 CGCN 通过<strong>同步更新节点和边特征</strong>，克服了这一局限。</p>
+<h5 id="分子图表示形式"><a href="#分子图表示形式" class="headerlink" title="分子图表示形式"></a>分子图表示形式</h5><p>在 CGCN 中，药物分子被表示为图 $D_n &#x3D; (V_n, A_n)$：</p>
+<ul>
+<li>$V_n \in \mathbb{R}^{N_n \times C_{\text{node}}}$：节点特征矩阵<ul>
+<li>$N_n$ &#x3D; 分子中原子数量</li>
+<li>$C_{\text{node}}$ &#x3D; 原子特征通道数（如原子类型、电荷等）</li>
+</ul>
+</li>
+<li>$A_n \in \mathbb{R}^{N_n \times N_n \times C_{\text{edge}}}$：边特征张量<ul>
+<li>$C_{\text{edge}}$ &#x3D; 化学键特征通道数（如键类型、键级等）</li>
+</ul>
+</li>
+</ul>
+<p>邻接张量 $A_n$ 可分解为 $C_{\text{edge}}$ 个子矩阵：<br>$$<br>A_n &#x3D; {E_{n,k}}_{k&#x3D;1}^{C_{\text{edge}}}, \quad E_{n,k} \in \mathbb{R}^{N_n \times N_n}<br>$$</p>
+<h5 id="CGCN-的层式更新机制"><a href="#CGCN-的层式更新机制" class="headerlink" title="CGCN 的层式更新机制"></a>CGCN 的层式更新机制</h5><p>CGCN 采用分层特征更新策略，每层包含两个核心操作：</p>
+<ol>
+<li><p>节点特征更新</p>
+<p> $$<br> V^{(l+1)} &#x3D; \text{Update}\left(V^{(l)}, \sigma\left( \sum_{k&#x3D;1}^{C_{\text{edge}}} E_k^{(l)} V^{(l)} W_k^{(l+1)} + b_k^{(l+1)} \right)\right)<br> $$</p>
+<ul>
+<li>$\sigma(\cdot)$：非线性激活函数（如 ReLU）</li>
+<li>$W_k^{(l+1)}, b_k^{(l+1)}$：可学习参数</li>
+<li><strong>物理意义</strong>：聚合通过不同类型化学边（$E_k$）传递的邻居信息，更新原子状态</li>
+</ul>
+</li>
+<li><p>边特征更新（核心创新）</p>
+<ol>
+<li>节点关系向量计算</li>
+</ol>
+<p>$$<br> e_{ij}^{(l+1)} &#x3D; \sigma\left( \left( V_i^{(l+1)} \parallel V_j^{(l+1)} \right) W_{ij}^{(l+1)} + b_{ij}^{(l+1)} \right)<br>$$</p>
+<ul>
+<li>$\parallel$：向量拼接操作</li>
+<li>$V_i^{(l+1)}, V_j^{(l+1)}$：更新后的节点 $i,j$ 的特征向量</li>
+<li><strong>物理意义</strong>：基于更新后的原子状态，计算原子间的新关系</li>
+</ul>
+<ol start="2">
+<li>边特征融合更新</li>
+</ol>
+<p>$$<br> E_{ij}^{(l+1)} &#x3D; \operatorname{Update}\left( E_{ij}^{(l)}, e_{ij}^{(l+1)} \right)<br>$$</p>
+<ul>
+<li><strong>物理意义</strong>：将原子间关系向量 $e_{ij}$ 与原始边特征 $E_{ij}$ 融合，更新化学键表示</li>
+</ul>
+</li>
+</ol>
+<h5 id="CGCN-架构特点"><a href="#CGCN-架构特点" class="headerlink" title="CGCN 架构特点"></a>CGCN 架构特点</h5><ol>
+<li><p><strong>分层设计</strong>：</p>
+<ul>
+<li>默认采用2层CGCN</li>
+<li>第1层：执行节点和边同步更新</li>
+<li>第2层：仅更新节点特征（减少计算开销）</li>
+</ul>
+</li>
+<li><p><strong>参数共享机制</strong>：</p>
+<ul>
+<li>同一层的 $W_k$ 在不同边类型间共享</li>
+<li>不同层有独立的参数集</li>
+</ul>
+</li>
+</ol>
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="MTIGCN"><a href="#MTIGCN" class="headerlink" title="MTIGCN"></a><a href="/paper/CDR/2024/Liu - 2024 - Improving anti-cancer drug response prediction using multi-task learning on graph convolutional netw.pdf" target="_blank">MTIGCN</a></h3><p>又一个拼好模捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MTIGCN.png" alt="MTIGCN" style="zoom: 50%;" />
+
+<h3 id="HRLCDR"><a href="#HRLCDR" class="headerlink" title="HRLCDR"></a><a href="/paper/CDR/2024/Peng - Hypergraph Representation Learning for Cancer Drug Response Prediction.pdf" target="_blank">HRLCDR</a></h3><p>一个严格意义上来讲不算超图学习的超图学习捏，但他确实通过信息整合的方式构造了很多个长得不一样的图，也算是提取了高维信息吧</p>
+<img src="/img/CDR/Framework/CDR-model-part2/HRLCDR.png" alt="HRLCDR" style="zoom: 50%;" />
+
+<p>还有就是这一篇投了两个刊物捏</p>
+<h3 id="DGCL"><a href="#DGCL" class="headerlink" title="DGCL"></a><a href="/paper/CDR/2023/Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning.pdf" target="_blank">DGCL</a></h3><p>来看一个真の超图捏，同时他说由于超图中的嵌入和超边都是由局部图的嵌入得到的，这么高高维信息很有可能会直接<strong>过平滑</strong>，所以在嵌入空间引入<strong>对比学习</strong>以<strong>增大局部和全局信息的差异</strong>。</p>
+<p>这里就引入了另一个问题了，能否用上一篇中的GAN来增大局部和全局信息的差异捏</p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part2/DGCL.png" alt="DGCL" style="zoom:50%;" />
+
+<p>接下来会给出详细的模型构造过程</p>
+<h5 id="模型整体框架"><a href="#模型整体框架" class="headerlink" title="模型整体框架"></a>模型整体框架</h5><p>DGCL 是一个<strong>动态超图对比学习框架</strong>，用于多关系药物-基因相互作用预测。其核心创新在于同时建模<strong>局部拓扑关系</strong>（通过二分图卷积）和<strong>全局语义关系</strong>（通过动态超图学习），并引入<strong>自增强对比学习</strong>约束超图结构学习。整体架构如图1所示：</p>
+<h5 id="显式局部关系建模"><a href="#显式局部关系建模" class="headerlink" title="显式局部关系建模"></a>显式局部关系建模</h5><ol>
+<li><p>输入表示</p>
+<ul>
+<li><p>药物集合：$M$ 个药物，嵌入矩阵 $E^{(d)} \in \mathbb{R}^{M \times d}$</p>
+</li>
+<li><p>基因集合：$N$ 个基因，嵌入矩阵 $E^{(g)} \in \mathbb{R}^{N \times d}$</p>
+</li>
+<li><p>相互作用矩阵：$R \in {0,1}^{M \times N}$</p>
+</li>
+</ul>
+</li>
+<li><p>二分图构建</p>
+<p> 构建增广邻接矩阵：$A &#x3D; \begin{bmatrix}<br> 0 &amp; R \\<br> R^\top &amp; 0<br> \end{bmatrix} \in \mathbb{R}^{(M+N)\times(M+N)}$</p>
+<p> 归一化处理：$\overline{A} &#x3D; \overline{D}^{-\frac{1}{2}}(A + I_{M+N})\overline{D}^{-\frac{1}{2}}$</p>
+<p> 其中 $\overline{D}_{ii} &#x3D; \sum_j (A + I_{M+N})_{ij}$ 是度矩阵。</p>
+</li>
+<li><p>图卷积操作</p>
+<p> 采用简化的 GCN 层（无激活函数和线性变换）：</p>
+<p> $$<br> E_{l-1} &#x3D; [E_{l-1}^{(d)}, E_{l-1}^{(g)}]\\<br> \tilde{E}_l &#x3D; p(\overline{A}) E_{l-1}<br> $$</p>
+<p> $p(\cdot)$ 表示边丢弃操作（防止过拟合），丢弃率 $\in {0.25, 0.5, 0.75}$</p>
+</li>
+</ol>
+<h5 id="动态超图结构学习"><a href="#动态超图结构学习" class="headerlink" title="动态超图结构学习"></a>动态超图结构学习</h5><ol>
+<li><p>超图表示</p>
+<ul>
+<li>超边集合：$K$ 个超边</li>
+<li>药物-超边矩阵：$H^{(d)} \in \mathbb{R}^{M \times K}$</li>
+<li>基因-超边矩阵：$H^{(g)} \in \mathbb{R}^{N \times K}$</li>
+</ul>
+</li>
+<li><p>低秩分解（降低计算复杂度）<br>$$<br>H^{(d)} &#x3D; E^{(d)} W^{(d)}, \quad H^{(g)} &#x3D; E^{(g)} W^{(g)}<br>$$</p>
+</li>
+</ol>
+<p>其中 $W^{(d)}, W^{(g)} \in \mathbb{R}^{d \times K}$ 是可训练参数矩阵。</p>
+<h5 id="隐式全局关系建模"><a href="#隐式全局关系建模" class="headerlink" title="隐式全局关系建模"></a>隐式全局关系建模</h5><ol>
+<li><p>超图消息传递</p>
+<ol>
+<li><p><strong>超边嵌入生成</strong>：$Z^{(d)} &#x3D; H^{(d)\top} E_{l-1}^{(d)} \in \mathbb{R}^{K \times d}$</p>
+</li>
+<li><p><strong>药物节点更新</strong>：$\tilde{E}_l^{(d)} &#x3D; H^{(d)} Z^{(d)} &#x3D; H^{(d)} H^{(d)\top} E_{l-1}^{(d)}$</p>
+</li>
+<li><p><strong>基因节点更新</strong>（类似）：$\tilde{E}_l^{(g)} &#x3D; H^{(g)} H^{(g)\top} E_{l-1}^{(g)}$</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>关键优势</strong>：超边连接多个节点，实现跨图消息传递，突破传统 GNN 的距离限制</p>
+</blockquote>
+</li>
+</ol>
+<h5 id="局部-全局自增强对比学习"><a href="#局部-全局自增强对比学习" class="headerlink" title="局部-全局自增强对比学习"></a>局部-全局自增强对比学习</h5><ol>
+<li><p>对比机制设计</p>
+<ul>
+<li><strong>正样本对</strong>：同一节点的局部嵌入 $\tilde{e}_{i,l}^{(d)}$ 和全局嵌入 $\tilde{e}_{i,l}^{(d)}$</li>
+<li><strong>负样本对</strong>：不同节点的局部和全局嵌入组合</li>
+</ul>
+</li>
+</ol>
+<h6 id="对比损失函数（基于-InfoNCE）"><a href="#对比损失函数（基于-InfoNCE）" class="headerlink" title="对比损失函数（基于 InfoNCE）"></a>对比损失函数（基于 InfoNCE）</h6><p>药物节点对比损失：<br>$$<br>\mathcal{L}_s^{(d)} &#x3D; \sum_{i&#x3D;1}^M \sum_{l&#x3D;1}^L -\log \frac{<br>  \exp(\text{sim}(\tilde{e}_{i,l}^{(d)}, \tilde{e}_{i,l}^{(d)}) &#x2F; \tau)<br>}{<br>  \sum_{i’&#x3D;1}^M \exp(\text{sim}(\tilde{e}_{i,l}^{(d)}, \tilde{e}_{i’,l}^{(d)}) &#x2F; \tau)<br>}<br>$$</p>
+<p>基因节点对比损失 $\mathcal{L}_s^{(g)}$ 形式类似。其中：</p>
+<ul>
+<li>$\text{sim}(u,v) &#x3D; u^\top v &#x2F; |u||v|$（余弦相似度）</li>
+<li>$\tau$：温度超参数 $\in {0.1,0.3,1,3,10}$</li>
+</ul>
+<blockquote>
+<p><strong>创新点</strong>：避免随机扰动导致的信息损失，直接用局部&#x2F;全局视图作为对比对</p>
+</blockquote>
+<h5 id="特征集成"><a href="#特征集成" class="headerlink" title="特征集成"></a>特征集成</h5><ol>
+<li><p>层内特征融合<br>$$\begin{align*}<br>e_{i,l}^{(d)} &amp;&#x3D; \tilde{e}_{i,l}^{(d)} + \tilde{e}_{i,l}^{(d)} \\<br>e_{j,l}^{(g)} &amp;&#x3D; \tilde{e}_{j,l}^{(g)} + \tilde{e}_{j,l}^{(g)}<br>\end{align*}$$<br>其中 $\tilde{e}$ 来自局部GCN，$\tilde{e}$ 来自全局超图</p>
+</li>
+<li><p>跨层残差连接<br>$$<br>\hat{e}_i^{(d)} &#x3D; \sum_{l&#x3D;0}^L e_{i,l}^{(d)}\\<br>\hat{e}_j^{(g)} &#x3D; \sum_{l&#x3D;0}^L e_{j,l}^{(g)}$$<br>缓解过平滑问题，保留各层语义信息</p>
+</li>
+</ol>
+<h5 id="预测层"><a href="#预测层" class="headerlink" title="预测层"></a>预测层</h5><ol>
+<li><p>相互作用类型预测<br> $$<br> \hat{y} &#x3D; \text{softmax}\left(<br> W_2 \cdot \text{ReLU}\left(<br> W_1 [\hat{e}_i^{(d)} | \hat{e}_j^{(g)}] + b_1<br> \right) + b_2<br> \right)<br> $$</p>
+<p> 其中：</p>
+<ul>
+<li>$[\cdot | \cdot]$ 表示向量拼接</li>
+<li>$W_1 \in \mathbb{R}^{2d \times h}$, $W_2 \in \mathbb{R}^{h \times C}$ 为可训练参数</li>
+<li>$C$ 是相互作用类型数</li>
+</ul>
+</li>
+<li><p>预测损失函数<br> $$\mathcal{L}_p &#x3D; -\sum_{c&#x3D;1}^C y_c \log \hat{y}_c$$</p>
+<p> $y_c \in {0,1}$ 表示真实标签</p>
+</li>
+</ol>
+<h5 id="多任务优化"><a href="#多任务优化" class="headerlink" title="多任务优化"></a>多任务优化</h5><ol>
+<li><p>联合损失函数<br> $$<br> \mathcal{L} &#x3D; \mathcal{L}_p + \lambda_1 (\mathcal{L}_s^{(d)} + \mathcal{L}_s^{(g)}) + \lambda_2 |\Theta|_2^2<br> $$</p>
+<p> 其中：</p>
+<ul>
+<li>$\lambda_1 \in {10^{-4},10^{-3},10^{-2},10^{-1}}$ 控制对比学习权重</li>
+<li>$\lambda_2 \in {10^{-8},10^{-7},10^{-6},10^{-5}}$ 控制 L2 正则化强度</li>
+</ul>
+</li>
+</ol>
+<h4 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h4><p>去看原文捏，这篇论文的实验还是很精炼的捏</p>
+<h3 id="HLMG"><a href="#HLMG" class="headerlink" title="HLMG"></a><a href="/paper/CDR/2024/Peng 等 - Hierarchical graph representation learning with multi-granularity features for anti-cancer drug resp.pdf" target="_blank">HLMG</a></h3><p>这里用到的Hierarchical graph和之前 .<a href="/2025/07/14/Feature-Related-Attention/" title="Fufufu Relashinala">Fufufu Relashinala</a>#Hierarchical Attention 类似捏，也会详细说明一下这一个模型的架构捏</p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part2/HLMG.png" alt="HLMG" style="zoom:50%;" />
+
+<h5 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h5><p>HLMG 是一个<strong>分层图表示学习模型</strong>，用于预测抗癌药物响应（IC50值）。其核心创新在于整合<strong>多粒度特征</strong>（细胞系&#x2F;药物的全局+子结构特征）和<strong>多级外部关联</strong>（直接响应+相似性关联），通过异构图卷积实现信息融合。整体框架如图1所示：</p>
+<h5 id="多粒度特征提取"><a href="#多粒度特征提取" class="headerlink" title="多粒度特征提取"></a>多粒度特征提取</h5><ol>
+<li><p>细胞系特征提取</p>
+<ol>
+<li><p>全局基因表达特征</p>
+<ul>
+<li><strong>输入</strong>：基因表达矩阵 $C_g \in \mathbb{R}^{m \times d_{cg}}$ ($m$&#x3D;细胞系数, $d_{cg}$&#x3D;基因数)</li>
+<li><strong>标准化</strong>：$C_{g(i)} &#x3D; \frac{(c_i - \mu_i)}{\sigma_i}$</li>
+<li><strong>线性变换</strong>：$H_g &#x3D; C_g \cdot W_g \quad (W_g \in \mathbb{R}^{d_{cg} \times d_g})$</li>
+</ul>
+</li>
+<li><p>通路子结构特征</p>
+<ul>
+<li><strong>输入</strong>：34个癌症相关通路（KEGG数据库）</li>
+<li><strong>通路图卷积</strong>：<br>$$<br>\begin{aligned}<br>c_p^i &amp;&#x3D; GCN^i(P_i, p_{gene}^i) W^i \\<br>&amp;&#x3D; \left( (L_{P_i} \cdot p_{gene}^i)^T \cdot W_1^i \right) W_2^i \\<br>L_{P_i} &amp;&#x3D; D_{pi}^{-\frac{1}{2}} P_i D_{pi}^{-\frac{1}{2}}<br>\end{aligned}<br>$$</li>
+<li><strong>通路注意力机制</strong>：<br>$$<br>V_{ap} &#x3D; \delta(\sigma(C_p \cdot W_{ap1}) W_{ap2})<br>$$</li>
+<li><strong>特征融合</strong>：$H_p &#x3D; [V_{ap}^1 \odot c_p^1 \parallel \cdots \parallel V_{ap}^i \odot c_p^i]$</li>
+</ul>
+</li>
+<li><p>细胞系多粒度融合<br> $$X_{cell} &#x3D; [H_g \parallel H_p]$$</p>
+</li>
+</ol>
+</li>
+<li><p>药物特征提取</p>
+<ol>
+<li><p>全局分子指纹特征<br> $$H_f &#x3D; D_f \cdot W_f \quad (D_f \in \mathbb{R}^{n \times d_d}, W_f \in \mathbb{R}^{d_d \times d_f})$$</p>
+</li>
+<li><p>分子子结构特征</p>
+<ul>
+<li><strong>子结构分解</strong>：BRICS算法分割SMILES序列</li>
+<li><strong>子结构注意力</strong>：<br>$$<br>V_{ad} &#x3D; \delta(\sigma(D_s \cdot W_{ad1}) W_{ad2})<br>$$</li>
+<li><strong>特征聚合</strong>：$H_s &#x3D; sum(V_{ad} \odot D_s)$</li>
+</ul>
+</li>
+<li><p>药物多粒度融合<br> $$X_{drug} &#x3D; [H_f \parallel H_s]$$</p>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="多级外部特征聚合"><a href="#多级外部特征聚合" class="headerlink" title="多级外部特征聚合"></a>多级外部特征聚合</h5><ol>
+<li><p>异构图构建</p>
+<ul>
+<li><strong>节点</strong>：细胞系 + 药物</li>
+<li><strong>边类型</strong>：<ul>
+<li>直接响应边：$A \in {0,1}^{m \times n}$ (IC50二值化)</li>
+<li>细胞系相似边：$C_{ij} &#x3D; S_c(i,j)$ (基因表达+响应相似性)</li>
+<li>药物相似边：$B_{ij} &#x3D; S_d(i,j)$ (分子指纹+响应相似性)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>细胞系特征聚合</p>
+<ol>
+<li><p>自身特征更新<br> $$<br> \begin{aligned}<br> Cell_s^{(k)} &amp;&#x3D; Cell_s w_{cs}^{(k-1)} + Cell_s \odot Cell_s^0 w_{cs}^{(k-1)} \\<br> Cell_s &amp;&#x3D; (D_c^{-1} + I_c) Cell_s^{(k-1)}<br> \end{aligned}<br> $$</p>
+</li>
+<li><p>一级关联聚合（直接响应药物）<br> $$<br> \begin{aligned}<br> Cell_1^{(k)} &amp;&#x3D; Cell_1 W_{c1}^{(k-1)} + Cell_1 \odot Cell_s^0 W_{c1}^{(k-1)} \\<br> Cell_1 &amp;&#x3D; (D_c^{\frac{1}{2}} A D_d^{\frac{1}{2}}) Drug_s^{(k-1)}<br> \end{aligned}<br> $$</p>
+</li>
+<li><p>二级关联聚合（相似药物）<br> $$<br> \begin{aligned}<br> Cell_2^{(k)} &amp;&#x3D; (D_c^{\frac{1}{2}} A D_d^{\frac{1}{2}}) Drug_{sim}^{(k-1)} W_{c2}^{(k-1)} +<br> \\<br> &amp;(D_c^{\frac{1}{2}} A D_d^{\frac{1}{2}}) Drug_{sim}^{(k-1)} W_{c2}^{(k-1)}\odot Cell_s^0W_{c2}^{k-1} \\<br> Drug_{sim}^{(k-1)} &amp;&#x3D; \sigma((D_B^{\frac{1}{2}} B D_B^{\frac{1}{2}}) Drug_s^{(k-1)} W_{ds}^{(k)})<br> \end{aligned}<br> $$</p>
+</li>
+<li><p>最终融合<br> $$Cell_{agg}^{(k)} &#x3D; \sigma(Cell_s^{(k)} + Cell_1^{(k)} + Cell_2^{(k)})$$</p>
+</li>
+</ol>
+</li>
+<li><p>药物特征聚合（对称操作）</p>
+</li>
+</ol>
+<ul>
+<li>自身更新：类似公式(18)</li>
+<li>一级关联：$Drug_1^{(k)} &#x3D; f(D_d^{\frac{1}{2}} A^T D_c^{\frac{1}{2}} Cell_s^{(k-1)})$</li>
+<li>二级关联：$Drug_2^{(k)} &#x3D; f(D_d^{\frac{1}{2}} A^T D_c^{\frac{1}{2}} Cell_{sim}^{(k-1)})$</li>
+<li>最终融合：$Drug_{agg}^{(k)} &#x3D; \sigma(Drug_s^{(k)} + Drug_1^{(k)} + Drug_2^{(k)})$</li>
+</ul>
+<h5 id="药物响应预测"><a href="#药物响应预测" class="headerlink" title="药物响应预测"></a>药物响应预测</h5><ol>
+<li><p>线性相关系数计算<br>$$<br>\operatorname{Corr}(h_i, h_j) &#x3D; \frac{(h_i - \mu_i)(h_j - \mu_j)^T}{\sqrt{(h_i - \mu_i)(h_i - \mu_i)^T} \sqrt{(h_j - \mu_j)(h_j - \mu_j)^T}}<br>$$</p>
+</li>
+<li><p>响应矩阵重构<br>$$\hat{A} &#x3D; \varphi(\operatorname{Corr}(Cell_{agg}^{(k)}, Drug_{agg}^{(k)}))$$<br>其中 $\varphi(h) &#x3D; \frac{1}{1+e^{-\gamma h}}$ 为Sigmoid函数</p>
+</li>
+<li><p>损失函数<br>$$<br>\begin{aligned}<br>L(A,\hat{A}) &#x3D; -\frac{1}{m \times n} \sum_{i,j} &amp; M_{ij} [A_{ij} \ln(\hat{A}_{ij}) \\<br>&amp; + (1-A_{ij}) \ln(1-\hat{A}_{ij})]<br>\end{aligned}<br>$$<br>$M_{ij}$ 表示训练掩码矩阵</p>
+</li>
+</ol>
+<h5 id="模型创新点"><a href="#模型创新点" class="headerlink" title="模型创新点"></a>模型创新点</h5><ol>
+<li><p><strong>多粒度特征融合</strong>：</p>
+<ul>
+<li>细胞系：基因表达（全局）+ 通路子结构</li>
+<li>药物：分子指纹（全局）+ BRICS子结构</li>
+<li>注意力机制加权关键组分</li>
+</ul>
+</li>
+<li><p><strong>三级特征聚合</strong>：</p>
+</li>
+<li><p><strong>相似性增强传播</strong>：</p>
+<ul>
+<li>细胞系相似度：$S_c(i,j)&#x3D; \frac{1}{2}(e^{-\frac{|x_i-x_j|_2}{2\epsilon^2}} + e^{-\frac{|A_i-A_j|^2}{2\epsilon^2}})$</li>
+<li>药物相似度：$S_d(i,j)&#x3D; \frac{1}{2}(\frac{|d_i \cap d_j|}{|d_i \cup d_j|} + e^{-\frac{|A_i^T-A_j^T|^2}{2\epsilon^2}})$</li>
+</ul>
+</li>
+</ol>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Cui 等 - 2024 - Heterogeneous graph contrastive learning with gradient balance for drug repositioning.pdf" target="_blank">📄 Cui 等 - 2024 - Heterogeneous graph contrastive learning with gradient balance for drug repositioning</a></p>
+<p><a href="/paper/CDR/2024/Kim 等 - PANCDR precise medicine prediction using an adversarial network for cancer drug response.pdf" target="_blank">📄 Kim 等 - PANCDR precise medicine prediction using an adversarial network for cancer drug response</a></p>
+<p><a href="/paper/CDR/2024/Lao - 2024 - DeepAEG a model for predicting cancer drug response based on data enhancement and edge-collaborativ.pdf" target="_blank">📄 Lao - 2024 - DeepAEG a model for predicting cancer drug response based on data enhancement and edge-collaborativ</a></p>
+<p><a href="/paper/CDR/2024/Liu - 2024 - Improving anti-cancer drug response prediction using multi-task learning on graph convolutional netw.pdf" target="_blank">📄 Liu - 2024 - Improving anti-cancer drug response prediction using multi-task learning on graph convolutional netw</a></p>
+<p><a href="/paper/CDR/2024/Peng - Hypergraph Representation Learning for Cancer Drug Response Prediction.pdf" target="_blank">📄 Peng - Hypergraph Representation Learning for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Peng 等 - Hierarchical graph representation learning with multi-granularity features for anti-cancer drug resp.pdf" target="_blank">📄 Peng 等 - Hierarchical graph representation learning with multi-granularity features for anti-cancer drug resp</a></p>
+<p><a href="/paper/CDR/2023/Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning.pdf" target="_blank">📄 Tao 等 - Prediction of multi-relational drug–gene interaction via Dynamic hyperGraph Contrastive Learning</a></p>
+<p><a href="/paper/CDR/2024/Peng 等 - Predicting Anti-Cancer Drug Response Based on Hypergraph Representation Learning.pdf" target="_blank">📄 Peng 等 - Predicting Anti-Cancer Drug Response Based on Hypergraph Representation Learning</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/CDR/" rel="tag"># CDR</a>
+              <a href="/tags/model-framework/" rel="tag"># model framework</a>
+              <a href="/tags/practice/" rel="tag"># practice</a>
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/contrast-learning/" rel="tag"># contrast learning</a>
+              <a href="/tags/GAN/" rel="tag"># GAN</a>
+              <a href="/tags/Dynamic-graph/" rel="tag"># Dynamic graph</a>
+              <a href="/tags/hypergraph/" rel="tag"># hypergraph</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/26/CDR-model-part2/" rel="prev" title="CDR models In 2023">
+                  <i class="fa fa-angle-left"></i> CDR models In 2023
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">36k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">2:12</span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
