@@ -1,8 +1,9 @@
 ---
 title: What Is GNN and GCN ?
-date: 2025-07-10 15:36:46
 categories:
-  - model
+  - Learning
+  - Deep Learning
+  - Model
   - GNN
 tags:
   - CDR
@@ -12,6 +13,7 @@ tags:
   - graph theory
   - Basic
   - GNN
+date: 2025-07-10 15:36:46
 ---
 
 # GNN 与 GCN

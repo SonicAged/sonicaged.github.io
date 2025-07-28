@@ -1,15 +1,17 @@
 ---
 title: Attention Overview
-date: 2025-07-10 19:56:23
 categories:
-  - model
-  - attention
+  - Learning
+  - Deep Learning
+  - Model
+  - Attention
 tags:
   - model
   - Basic
   - deep learning
   - PyTorch
   - attention
+date: 2025-07-10 19:56:23
 ---
 
 # Is Attention All My Need ?

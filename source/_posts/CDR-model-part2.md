@@ -2,7 +2,7 @@
 title: CDR models In 2023
 categories:
   - CDR
-  - models
+  - Model
 tags:
   - CDR
   - model framework

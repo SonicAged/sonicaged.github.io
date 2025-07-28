@@ -1,15 +1,17 @@
 ---
 title: Fufufu Relashinala
-date: 2025-07-14 22:30:57
 categories:
-  - model
-  - attention
-  - category
+  - Learning
+  - Deep Learning
+  - Model
+  - Attention
+  - Category
 tags:
   - model
   - Basic
   - deep learning
   - attention
+date: 2025-07-14 22:30:57
 ---
 
 # 在输入特征上做文章的 Attention

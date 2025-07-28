@@ -1,9 +1,9 @@
 ---
 title: HGCN and HGAT
-date: 2025-07-20 17:33:51
 categories:
-  - model
-  - hypergraph
+  - Learning
+  - Deep Learning
+  - Hypergraph
 tags:
   - model
   - embedding
@@ -14,6 +14,7 @@ tags:
   - PyTorch
   - attention
   - GNN
+date: 2025-07-20 17:33:51
 ---
 
 # 超图的卷积和注意力机制

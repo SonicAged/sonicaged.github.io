@@ -19,7 +19,7 @@ tags:
 
 想看2023的可以前往{% post_link CDR-model-part2 %}
 
-想看2024的可以前往{% post_link CDR-model-part3 %}
+想看2024的可以前往{% post_link CDR-model-part3 %}和{% post_link CDR-model-part4 %}
 
 本文将介绍的是2025年的CDR模型
 

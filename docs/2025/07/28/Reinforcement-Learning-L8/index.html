@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reinforcement-Learning-L8">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L8/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-28T03:55:07.000Z">
+<meta property="article:modified_time" content="2025-07-28T07:55:33.871Z">
+<meta property="article:author" content="Sonic Aged">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L8/","path":"2025/07/28/Reinforcement-Learning-L8/","title":"Reinforcement-Learning-L8"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Reinforcement-Learning-L8 | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">强化学习的数学基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%BC%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91%E6%96%B9%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">值函数逼近方法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8A%A8%E6%9C%BA%EF%BC%9A%E4%BB%8E%E8%A1%A8%E6%A0%BC%E8%A1%A8%E7%A4%BA%E5%88%B0%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91"><span class="nav-number">2.1.</span> <span class="nav-text">一、动机：从表格表示到函数逼近</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E8%A1%A8%E6%A0%BC%E8%A1%A8%E7%A4%BA%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">2.1.1.</span> <span class="nav-text">传统表格表示的局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.2.</span> <span class="nav-text">函数逼近的核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.1.3.</span> <span class="nav-text">线性函数逼近示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%8A%B6%E6%80%81%E5%80%BC%E5%87%BD%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="nav-number">2.2.</span> <span class="nav-text">二、状态值函数估计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 目标函数设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95%EF%BC%9A%E9%9A%8F%E6%9C%BA%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%EF%BC%88SGD%EF%BC%89"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 优化算法：随机梯度下降（SGD）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">梯度计算</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SGD%E6%9B%B4%E6%96%B0%E8%A7%84%E5%88%99"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">SGD更新规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 实现方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%EF%BC%88MC%EF%BC%89%E9%80%BC%E8%BF%91"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">(1) 蒙特卡洛（MC）逼近</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%EF%BC%88TD%EF%BC%89%E9%80%BC%E8%BF%91"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">(2) 时序差分（TD）逼近</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91%E7%89%B9%E4%BE%8B"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">线性函数逼近特例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.4.</span> <span class="nav-text">4. 算法流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81Sarsa%E7%AE%97%E6%B3%95%E4%B8%8E%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91"><span class="nav-number">2.3.</span> <span class="nav-text">三、Sarsa算法与函数逼近</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8A%A8%E4%BD%9C%E5%80%BC%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 动作值函数逼近</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 策略搜索算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81Q-learning%E4%B8%8E%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91"><span class="nav-number">2.4.</span> <span class="nav-text">四、Q-learning与函数逼近</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9C%80%E4%BC%98%E5%8A%A8%E4%BD%9C%E5%80%BC%E9%80%BC%E8%BF%91"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 最优动作值逼近</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%B7%B1%E5%BA%A6Q%E5%AD%A6%E4%B9%A0%EF%BC%88DQN%EF%BC%89"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 深度Q学习（DQN）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">2.5.</span> <span class="nav-text">五、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 关键公式对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%BD%E6%95%B0%E9%80%BC%E8%BF%91%E5%99%A8%E9%80%89%E6%8B%A9"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 函数逼近器选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8A%BF%E4%B8%8E%E6%8C%91%E6%88%98"><span class="nav-number">2.5.3.</span> <span class="nav-text">3. 核心优势与挑战</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">3.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:18011185053@163.com" title="163 → mailto:18011185053@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope-circle-user fa-fw"></i>163</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/382388784" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;382388784" rel="noopener me" target="_blank"><i class="fab fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://whaleblog.github.io/" title="https:&#x2F;&#x2F;whaleblog.github.io" rel="noopener" target="_blank">WhaleFall's Blog</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Reinforcement-Learning-L8 | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Reinforcement-Learning-L8<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L8.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-28 11:55:07 / Modified: 15:55:33" itemprop="dateCreated datePublished" datetime="2025-07-28T11:55:07+08:00">2025-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/" itemprop="url" rel="index"><span itemprop="name">ReinForcement Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/Mathmatical-Foundation/" itemprop="url" rel="index"><span itemprop="name">Mathmatical Foundation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>5 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+<span id="more"></span>
+
+<h1 id="值函数逼近方法读书笔记"><a href="#值函数逼近方法读书笔记" class="headerlink" title="值函数逼近方法读书笔记"></a>值函数逼近方法读书笔记</h1><h2 id="一、动机：从表格表示到函数逼近"><a href="#一、动机：从表格表示到函数逼近" class="headerlink" title="一、动机：从表格表示到函数逼近"></a>一、动机：从表格表示到函数逼近</h2><h3 id="传统表格表示的局限性"><a href="#传统表格表示的局限性" class="headerlink" title="传统表格表示的局限性"></a>传统表格表示的局限性</h3><ol>
+<li><strong>存储问题</strong>：  <ul>
+<li>状态值表：需存储 $|\mathcal{S}|$ 个值<br>$$<br>\begin{array}{c|c|c|c}<br>\text{State} &amp; s_1 &amp; \cdots &amp; s_n \\ \hline<br>\text{Value} &amp; v_\pi(s_1) &amp; \cdots &amp; v_\pi(s_n)<br>\end{array}<br>$$  </li>
+<li>动作值表：需存储 $|\mathcal{S}| \times |\mathcal{A}|$ 个值<br>$$<br>\begin{array}{c|c|c|c}<br>s \backslash a &amp; a_1 &amp; \cdots &amp; a_m \\ \hline<br>s_1 &amp; q_\pi(s_1,a_1) &amp; \cdots &amp; q_\pi(s_1,a_m) \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br>s_n &amp; q_\pi(s_n,a_1) &amp; \cdots &amp; q_\pi(s_n,a_m)<br>\end{array}<br>$$</li>
+</ul>
+</li>
+<li><strong>泛化能力缺失</strong>：  <ul>
+<li>无法处理未见过状态  </li>
+<li>相邻状态的值更新相互独立</li>
+</ul>
+</li>
+</ol>
+<h3 id="函数逼近的核心思想"><a href="#函数逼近的核心思想" class="headerlink" title="函数逼近的核心思想"></a>函数逼近的核心思想</h3><ul>
+<li><strong>参数化函数</strong>：$\hat{v}(s, w) \approx v_\pi(s)$ 或 $\hat{q}(s,a,w) \approx q_\pi(s,a)$  </li>
+<li><strong>参数向量</strong>：$w \in \mathbb{R}^m$（$m \ll |\mathcal{S}|$)  </li>
+<li><strong>核心优势</strong>：  <ol>
+<li><strong>存储高效</strong>：只需存储 $m$ 维参数  </li>
+<li><strong>泛化能力</strong>：更新 $w$ 影响所有相关状态</li>
+</ol>
+</li>
+</ul>
+<h3 id="线性函数逼近示例"><a href="#线性函数逼近示例" class="headerlink" title="线性函数逼近示例"></a>线性函数逼近示例</h3><ul>
+<li><strong>特征向量</strong>：$\phi(s) &#x3D; [\phi_1(s), \dots, \phi_k(s)]^T$  </li>
+<li><strong>线性逼近</strong>：<br>$$<br>\hat{v}(s,w) &#x3D; \phi^T(s)w &#x3D; \sum_{i&#x3D;1}^k \phi_i(s) w_i<br>$$  </li>
+<li><strong>非线性扩展</strong>：神经网络（如 Deep Q-Networks）</li>
+</ul>
+<hr>
+<h2 id="二、状态值函数估计"><a href="#二、状态值函数估计" class="headerlink" title="二、状态值函数估计"></a>二、状态值函数估计</h2><h3 id="1-目标函数设计"><a href="#1-目标函数设计" class="headerlink" title="1. 目标函数设计"></a>1. 目标函数设计</h3><p>基于<strong>平稳分布</strong> $d_\pi(s)$ 的加权平方误差：<br>$$<br>J(w) &#x3D; \mathbb{E}_{S \sim d_\pi} \left[ (v_\pi(S) - \hat{v}(S,w))^2 \right] &#x3D; \sum_{s \in \mathcal{S}} d_\pi(s) \left( v_\pi(s) - \hat{v}(s,w) \right)^2<br>$$  </p>
+<blockquote>
+<p><strong>平稳分布 $d_\pi(s)$</strong>：策略 $\pi$ 下状态的长期访问概率  </p>
+<ul>
+<li>满足 $d_\pi^T &#x3D; d_\pi^T P_\pi$  </li>
+<li>高频访问状态具有更高权重</li>
+</ul>
+</blockquote>
+<h3 id="2-优化算法：随机梯度下降（SGD）"><a href="#2-优化算法：随机梯度下降（SGD）" class="headerlink" title="2. 优化算法：随机梯度下降（SGD）"></a>2. 优化算法：随机梯度下降（SGD）</h3><h4 id="梯度计算"><a href="#梯度计算" class="headerlink" title="梯度计算"></a>梯度计算</h4><p>$$<br>\nabla_w J(w) &#x3D; -2 \mathbb{E}_{S \sim d_\pi} \left[ (v_\pi(S) - \hat{v}(S,w)) \nabla_w \hat{v}(S,w) \right]<br>$$  </p>
+<h4 id="SGD更新规则"><a href="#SGD更新规则" class="headerlink" title="SGD更新规则"></a>SGD更新规则</h4><p>$$<br>w_{t+1} &#x3D; w_t + \alpha_t (v_\pi(s_t) - \hat{v}(s_t,w_t)) \nabla_w \hat{v}(s_t,w_t)<br>$$  </p>
+<h3 id="3-实现方法"><a href="#3-实现方法" class="headerlink" title="3. 实现方法"></a>3. 实现方法</h3><h4 id="1-蒙特卡洛（MC）逼近"><a href="#1-蒙特卡洛（MC）逼近" class="headerlink" title="(1) 蒙特卡洛（MC）逼近"></a>(1) 蒙特卡洛（MC）逼近</h4><p>用经验回报 $g_t$ 估计 $v_\pi(s_t)$：<br>$$<br>w_{t+1} &#x3D; w_t + \alpha_t (g_t - \hat{v}(s_t,w_t)) \nabla_w \hat{v}(s_t,w_t)<br>$$  </p>
+<h4 id="2-时序差分（TD）逼近"><a href="#2-时序差分（TD）逼近" class="headerlink" title="(2) 时序差分（TD）逼近"></a>(2) 时序差分（TD）逼近</h4><p>用引导目标 $r_{t+1} + \gamma \hat{v}(s_{t+1},w_t)$ 估计 $v_\pi(s_t)$：<br>$$<br>w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \hat{v}(s_{t+1},w_t) - \hat{v}(s_t,w_t) \right] \nabla_w \hat{v}(s_t,w_t)<br>$$  </p>
+<h4 id="线性函数逼近特例"><a href="#线性函数逼近特例" class="headerlink" title="线性函数逼近特例"></a>线性函数逼近特例</h4><p>若 $\hat{v}(s,w) &#x3D; \phi^T(s)w$，则 $\nabla_w \hat{v} &#x3D; \phi(s)$，更新简化为：<br>$$<br>w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \phi^T(s_{t+1})w_t - \phi^T(s_t)w_t \right] \phi(s_t)<br>$$  </p>
+<h3 id="4-算法流程"><a href="#4-算法流程" class="headerlink" title="4. 算法流程"></a>4. 算法流程</h3><pre><code>初始化：可微函数 $\hat&#123;v&#125;(s,w)$，参数 $w_0$  
+for 每个由 $\pi$ 生成的轨迹 $(s_t, r_&#123;t+1&#125;, s_&#123;t+1&#125;)$:  
+    TD目标：$\bar&#123;v&#125;_t = r_&#123;t+1&#125; + \gamma \hat&#123;v&#125;(s_&#123;t+1&#125;, w_t)$  
+    计算梯度：$\nabla_w \hat&#123;v&#125;(s_t, w_t)$  
+    更新参数：$w_&#123;t+1&#125; = w_t + \alpha_t (\bar&#123;v&#125;_t - \hat&#123;v&#125;(s_t, w_t)) \nabla_w \hat&#123;v&#125;(s_t, w_t)$  
+</code></pre>
+<hr>
+<h2 id="三、Sarsa算法与函数逼近"><a href="#三、Sarsa算法与函数逼近" class="headerlink" title="三、Sarsa算法与函数逼近"></a>三、Sarsa算法与函数逼近</h2><h3 id="1-动作值函数逼近"><a href="#1-动作值函数逼近" class="headerlink" title="1. 动作值函数逼近"></a>1. 动作值函数逼近</h3><ul>
+<li><strong>逼近函数</strong>：$\hat{q}(s,a,w) \approx q_\pi(s,a)$  </li>
+<li><strong>TD目标</strong>：$r_{t+1} + \gamma \hat{q}(s_{t+1}, a_{t+1}, w_t)$  </li>
+<li><strong>SGD更新</strong>：<br>$$<br>w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \hat{q}(s_{t+1}, a_{t+1}, w_t) - \hat{q}(s_t, a_t, w_t) \right] \nabla_w \hat{q}(s_t, a_t, w_t)<br>$$</li>
+</ul>
+<h3 id="2-策略搜索算法"><a href="#2-策略搜索算法" class="headerlink" title="2. 策略搜索算法"></a>2. 策略搜索算法</h3><pre><code>初始化：$\hat&#123;q&#125;(s,a,w)$, $w$, $\epsilon$, $\alpha$  
+for 每幕：  
+    初始化状态 $s_0$，选择动作 $a_0 \sim \pi(\cdot|s_0)$  
+    for 每步 $t = 0,1,\dots$:  
+        执行 $a_t$，观测 $(r_&#123;t+1&#125;, s_&#123;t+1&#125;)$  
+        选择 $a_&#123;t+1&#125; \sim \pi(\cdot|s_&#123;t+1&#125;)$  
+        更新参数：  
+            $w \leftarrow w + \alpha \left[ r_&#123;t+1&#125; + \gamma \hat&#123;q&#125;(s_&#123;t+1&#125;, a_&#123;t+1&#125;, w) - \hat&#123;q&#125;(s_t, a_t, w) \right] \nabla_w \hat&#123;q&#125;(s_t, a_t, w)$  
+        $\varepsilon$-贪心策略改进：  
+            $\pi(a|s_t) = \begin&#123;cases&#125; 
+            1-\varepsilon + \frac&#123;\varepsilon&#125;&#123;|\mathcal&#123;A&#125;(s_t)|&#125; &amp; a = \arg\max_a \hat&#123;q&#125;(s_t,a,w) \\\\
+            \frac&#123;\varepsilon&#125;&#123;|\mathcal&#123;A&#125;(s_t)|&#125; &amp; \text&#123;否则&#125;
+            \end&#123;cases&#125;$  
+</code></pre>
+<hr>
+<h2 id="四、Q-learning与函数逼近"><a href="#四、Q-learning与函数逼近" class="headerlink" title="四、Q-learning与函数逼近"></a>四、Q-learning与函数逼近</h2><h3 id="1-最优动作值逼近"><a href="#1-最优动作值逼近" class="headerlink" title="1. 最优动作值逼近"></a>1. 最优动作值逼近</h3><ul>
+<li><strong>TD目标</strong>：$r_{t+1} + \gamma \max_{a’} \hat{q}(s_{t+1}, a’, w_t)$  </li>
+<li><strong>SGD更新</strong>：<br>$$<br>w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \max_{a’} \hat{q}(s_{t+1}, a’, w_t) - \hat{q}(s_t, a_t, w_t) \right] \nabla_w \hat{q}(s_t, a_t, w_t)<br>$$</li>
+</ul>
+<h3 id="2-深度Q学习（DQN）"><a href="#2-深度Q学习（DQN）" class="headerlink" title="2. 深度Q学习（DQN）"></a>2. 深度Q学习（DQN）</h3><ul>
+<li><strong>关键技术</strong>：  <ul>
+<li><strong>目标网络</strong>：使用独立参数 $w^-$ 计算目标值<br>$$<br>\text{目标} &#x3D; r_{t+1} + \gamma \max_{a’} \hat{q}(s_{t+1}, a’, w^-)<br>$$  </li>
+<li><strong>经验回放</strong>：存储转移 $(s_t, a_t, r_{t+1}, s_{t+1})$ 到缓冲池，随机采样更新</li>
+</ul>
+</li>
+<li><strong>更新规则</strong>：<br>$$<br>w \leftarrow w + \alpha \left[ r_{t+1} + \gamma \max_{a’} \hat{q}(s_{t+1}, a’, w^-) - \hat{q}(s_t, a_t, w) \right] \nabla_w \hat{q}(s_t, a_t, w)<br>$$</li>
+</ul>
+<hr>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="1-关键公式对比"><a href="#1-关键公式对比" class="headerlink" title="1. 关键公式对比"></a>1. 关键公式对比</h3><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>更新规则</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TD-Linear</strong></td>
+<td>$ w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \phi^T(s_{t+1})w_t - \phi^T(s_t)w_t \right] \phi(s_t) $</td>
+</tr>
+<tr>
+<td><strong>Sarsa 逼近</strong></td>
+<td>$ w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \hat{q}(s_{t+1}, a_{t+1}, w_t) - \hat{q}(s_t, a_t, w_t) \right] \nabla_w \hat{q}(s_t, a_t, w_t) $</td>
+</tr>
+<tr>
+<td><strong>Q-learning 逼近</strong></td>
+<td>$ w_{t+1} &#x3D; w_t + \alpha_t \left[ r_{t+1} + \gamma \max_a \hat{q}(s_{t+1}, a, w_t) - \hat{q}(s_t, a_t, w_t) \right] \nabla_w \hat{q}(s_t, a_t, w_t) $</td>
+</tr>
+</tbody></table>
+<h3 id="2-函数逼近器选择"><a href="#2-函数逼近器选择" class="headerlink" title="2. 函数逼近器选择"></a>2. 函数逼近器选择</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>形式</strong></th>
+<th><strong>特点</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>线性逼近</strong></td>
+<td>$\hat{v}(s,w) &#x3D; \phi^T(s)w$</td>
+<td>理论收敛性好，特征工程关键</td>
+</tr>
+<tr>
+<td><strong>神经网络</strong></td>
+<td>$\hat{q}(s,a,w) &#x3D; \text{DNN}(s,a;w)$</td>
+<td>表征能力强，需结合目标网络&#x2F;经验回放</td>
+</tr>
+</tbody></table>
+<h3 id="3-核心优势与挑战"><a href="#3-核心优势与挑战" class="headerlink" title="3. 核心优势与挑战"></a>3. 核心优势与挑战</h3><ul>
+<li><strong>优势</strong>：  <ul>
+<li>处理连续&#x2F;大规模状态空间  </li>
+<li>相似状态自动泛化</li>
+</ul>
+</li>
+<li><strong>挑战</strong>：  <ul>
+<li>收敛性理论保证减弱（尤其离策略和非线性逼近）  </li>
+<li>逼近误差可能导致策略退化</li>
+</ul>
+</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L7/" rel="prev" title="Reinforcement-Learning-L7">
+                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L7
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L9/" rel="next" title="Reinforcement-Learning-L9">
+                  Reinforcement-Learning-L9 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">52k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">3:09</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

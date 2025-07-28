@@ -1,9 +1,8 @@
 ---
 title: CDR-model In 2024 | Part 2
-date: 2025-07-27 23:12:02
 categories:
   - CDR
-  - models
+  - Model
 tags:
   - CDR
   - model framework
@@ -14,6 +13,7 @@ tags:
   - GAN
   - dynamic graph
   - hypergraph
+date: 2025-07-27 23:12:02
 ---
 
 # 2024年的CDR模型~easy go~

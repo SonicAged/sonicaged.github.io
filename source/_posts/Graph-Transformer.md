@@ -1,10 +1,11 @@
 ---
 title: Trans?!and Former?!
-date: 2025-07-19 00:26:57
 categories:
-  - model
-  - attention
-  - graph
+  - Learning
+  - Deep Learning
+  - Model
+  - Attention
+  - Graph
 tags:
   - model
   - Basic
@@ -12,6 +13,7 @@ tags:
   - PyTorch
   - graphtheory
   - attention
+date: 2025-07-19 00:26:57
 ---
 
 # Graph Transformer

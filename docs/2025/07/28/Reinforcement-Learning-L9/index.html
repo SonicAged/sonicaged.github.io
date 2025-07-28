@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reinforcement-Learning-L9">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L9/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-28T03:55:11.000Z">
+<meta property="article:modified_time" content="2025-07-28T07:55:37.979Z">
+<meta property="article:author" content="Sonic Aged">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L9/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L9/","path":"2025/07/28/Reinforcement-Learning-L9/","title":"Reinforcement-Learning-L9"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Reinforcement-Learning-L9 | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">强化学习的数学基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%96%B9%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">策略梯度方法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">一、策略梯度基本思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AD%96%E7%95%A5%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95%E6%BC%94%E8%BF%9B"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 策略表示方法演进</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%BC%A0%E7%BB%9F%E8%A1%A8%E6%A0%BC%E8%A1%A8%E7%A4%BA"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">(1) 传统表格表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%82%E6%95%B0%E5%8C%96%E5%87%BD%E6%95%B0%E8%A1%A8%E7%A4%BA"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">(2) 参数化函数表示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E4%BC%98%E5%8C%96%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 策略优化的核心思想</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87"><span class="nav-number">2.2.</span> <span class="nav-text">二、最优策略的度量指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BA%A6%E9%87%8F1%EF%BC%9A%E5%B9%B3%E5%9D%87%E7%8A%B6%E6%80%81%E5%80%BC%EF%BC%88Average-Value%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 度量1：平均状态值（Average Value）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BA%A6%E9%87%8F2%EF%BC%9A%E5%B9%B3%E5%9D%87%E5%A5%96%E5%8A%B1%EF%BC%88Average-Reward%EF%BC%89"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 度量2：平均奖励（Average Reward）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BA%A6%E9%87%8F%E7%AD%89%E4%BB%B7%E6%80%A7%E4%B8%8E%E5%85%B3%E7%B3%BB"><span class="nav-number">2.2.3.</span> <span class="nav-text">3. 度量等价性与关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%BA%A6%E9%87%8F%E6%A2%AF%E5%BA%A6%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">2.3.</span> <span class="nav-text">三、度量梯度的计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BB%9F%E4%B8%80%E6%A2%AF%E5%BA%A6%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 统一梯度表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A2%AF%E5%BA%A6%E4%BC%B0%E8%AE%A1%E7%9A%84%E5%AE%9E%E8%B7%B5%E6%84%8F%E4%B9%89"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 梯度估计的实践意义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A2%AF%E5%BA%A6%E4%B8%8A%E5%8D%87%E7%AE%97%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">四、梯度上升算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%E6%A1%86%E6%9E%B6"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 基础算法框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E7%89%B9%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 算法特性分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%87%87%E6%A0%B7%E6%9C%BA%E5%88%B6"><span class="nav-number">2.4.2.1.</span> <span class="nav-text">(1) 采样机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E6%9B%B4%E6%96%B0%E9%87%8F%E5%88%86%E8%A7%A3"><span class="nav-number">2.4.2.2.</span> <span class="nav-text">(2) 更新量分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E6%8E%A2%E7%B4%A2-%E5%88%A9%E7%94%A8%E5%B9%B3%E8%A1%A1"><span class="nav-number">2.4.2.3.</span> <span class="nav-text">(3) 探索-利用平衡</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93%E4%B8%8E%E7%90%86%E8%AE%BA%E6%84%8F%E4%B9%89"><span class="nav-number">2.5.</span> <span class="nav-text">五、总结与理论意义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 策略梯度核心公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E7%89%B9%E6%80%A7%E5%AF%B9%E6%AF%94"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 算法特性对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%90%86%E8%AE%BA%E6%89%A9%E5%B1%95%E6%96%B9%E5%90%91"><span class="nav-number">2.5.3.</span> <span class="nav-text">3. 理论扩展方向</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">3.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:18011185053@163.com" title="163 → mailto:18011185053@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope-circle-user fa-fw"></i>163</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/382388784" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;382388784" rel="noopener me" target="_blank"><i class="fab fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://whaleblog.github.io/" title="https:&#x2F;&#x2F;whaleblog.github.io" rel="noopener" target="_blank">WhaleFall's Blog</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Reinforcement-Learning-L9 | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Reinforcement-Learning-L9<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L9.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-28 11:55:11 / Modified: 15:55:37" itemprop="dateCreated datePublished" datetime="2025-07-28T11:55:11+08:00">2025-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/" itemprop="url" rel="index"><span itemprop="name">ReinForcement Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/Mathmatical-Foundation/" itemprop="url" rel="index"><span itemprop="name">Mathmatical Foundation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+<span id="more"></span>
+
+<h1 id="策略梯度方法读书笔记"><a href="#策略梯度方法读书笔记" class="headerlink" title="策略梯度方法读书笔记"></a>策略梯度方法读书笔记</h1><h2 id="一、策略梯度基本思想"><a href="#一、策略梯度基本思想" class="headerlink" title="一、策略梯度基本思想"></a>一、策略梯度基本思想</h2><h3 id="1-策略表示方法演进"><a href="#1-策略表示方法演进" class="headerlink" title="1. 策略表示方法演进"></a>1. 策略表示方法演进</h3><h4 id="1-传统表格表示"><a href="#1-传统表格表示" class="headerlink" title="(1) 传统表格表示"></a>(1) 传统表格表示</h4><ul>
+<li><strong>存储方式</strong>：二维表格存储每个状态-动作对的概率<br>$$<br>\begin{array}{c|ccccc}<br>s \backslash a &amp; a_1 &amp; a_2 &amp; \cdots &amp; a_m \\ \hline<br>s_1 &amp; \pi(a_1|s_1) &amp; \pi(a_2|s_1) &amp; \cdots &amp; \pi(a_m|s_1) \\<br>\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br>s_n &amp; \pi(a_1|s_n) &amp; \pi(a_2|s_n) &amp; \cdots &amp; \pi(a_m|s_n)<br>\end{array}<br>$$  </li>
+<li><strong>局限性</strong>：  <ul>
+<li>存储开销大（需存储 $|\mathcal{S}| \times |\mathcal{A}|$ 个条目）  </li>
+<li>缺乏泛化能力（状态间无信息共享）</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-参数化函数表示"><a href="#2-参数化函数表示" class="headerlink" title="(2) 参数化函数表示"></a>(2) 参数化函数表示</h4><ul>
+<li><strong>数学形式</strong>：$\pi(a|s,\theta)$，其中 $\theta \in \mathbb{R}^m$ 为参数向量  </li>
+<li><strong>实现方式</strong>：  <ul>
+<li>神经网络（输入状态s，输出动作概率分布）  </li>
+<li>Softmax输出层确保 $\pi(a|s,\theta) &gt; 0$：<br>$$<br>\pi(a|s,\theta) &#x3D; \frac{e^{h(s,a,\theta)}}{\sum_{a’ \in \mathcal{A}} e^{h(s,a’,\theta)}}<br>$$</li>
+</ul>
+</li>
+<li><strong>优势</strong>：  <ul>
+<li>存储高效（仅需保存参数 $\theta$)  </li>
+<li>自动泛化（相似状态共享参数）</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-策略优化的核心思想"><a href="#2-策略优化的核心思想" class="headerlink" title="2. 策略优化的核心思想"></a>2. 策略优化的核心思想</h3><ul>
+<li><strong>目标函数</strong>：定义标量度量 $J(\theta)$ 评估策略质量  </li>
+<li><strong>优化方法</strong>：梯度上升算法<br>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \nabla_\theta J(\theta_t)<br>$$  </li>
+<li><strong>关键问题</strong>：  <ol>
+<li>如何设计合适的度量 $J(\theta)$？  </li>
+<li>如何高效计算梯度 $\nabla_\theta J(\theta)$？</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="二、最优策略的度量指标"><a href="#二、最优策略的度量指标" class="headerlink" title="二、最优策略的度量指标"></a>二、最优策略的度量指标</h2><h3 id="1-度量1：平均状态值（Average-Value）"><a href="#1-度量1：平均状态值（Average-Value）" class="headerlink" title="1. 度量1：平均状态值（Average Value）"></a>1. 度量1：平均状态值（Average Value）</h3><p>$$<br>\bar{v}_\pi &#x3D; \sum_{s \in \mathcal{S}} d(s) v_\pi(s) &#x3D; \mathbb{E}_{S \sim d} [v_\pi(S)]<br>$$  </p>
+<ul>
+<li><strong>权重分布 $d(s)$ 的选择</strong>：  <ul>
+<li><strong>独立于策略</strong>（如 $d_0$）：  <ul>
+<li>均匀分布：$d_0(s) &#x3D; 1&#x2F;|\mathcal{S}|$  </li>
+<li>初始状态集中：$d_0(s_0)&#x3D;1, d_0(s \neq s_0)&#x3D;0$</li>
+</ul>
+</li>
+<li><strong>依赖策略</strong>（平稳分布 $d_\pi$）：  <ul>
+<li>反映长期访问频率：高频状态权重更高</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-度量2：平均奖励（Average-Reward）"><a href="#2-度量2：平均奖励（Average-Reward）" class="headerlink" title="2. 度量2：平均奖励（Average Reward）"></a>2. 度量2：平均奖励（Average Reward）</h3><p>$$<br>\bar{r}_\pi &#x3D; \sum_{s \in \mathcal{S}} d_\pi(s) r_\pi(s) &#x3D; \mathbb{E}_{S \sim d_\pi} [r_\pi(S)]<br>$$<br>其中：  </p>
+<ul>
+<li>$r_\pi(s) &#x3D; \sum_a \pi(a|s) r(s,a)$ 为状态s的期望即时奖励  </li>
+<li>$r(s,a) &#x3D; \mathbb{E}[R|s,a]$ 为状态-动作对的期望奖励</li>
+</ul>
+<h3 id="3-度量等价性与关系"><a href="#3-度量等价性与关系" class="headerlink" title="3. 度量等价性与关系"></a>3. 度量等价性与关系</h3><table>
+<thead>
+<tr>
+<th><strong>度量</strong></th>
+<th><strong>等价形式</strong></th>
+<th><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>平均状态值</strong></td>
+<td>$\lim_{n\to\infty} \mathbb{E}[\sum_{t&#x3D;0}^n \gamma^t R_{t+1}]$</td>
+<td>折扣场景（$\gamma &lt; 1$)</td>
+</tr>
+<tr>
+<td><strong>平均奖励</strong></td>
+<td>$\lim_{n\to\infty} \frac{1}{n} \mathbb{E}[\sum_{t&#x3D;0}^{n-1} R_{t+1}]$</td>
+<td>无折扣场景</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>重要关系</strong>（折扣场景下）：<br>$$<br>\bar{r}_\pi &#x3D; (1-\gamma) \bar{v}_\pi<br>$$<br>表明二者可同时最大化</li>
+</ul>
+<hr>
+<h2 id="三、度量梯度的计算"><a href="#三、度量梯度的计算" class="headerlink" title="三、度量梯度的计算"></a>三、度量梯度的计算</h2><h3 id="1-统一梯度表达式"><a href="#1-统一梯度表达式" class="headerlink" title="1. 统一梯度表达式"></a>1. 统一梯度表达式</h3><p>$$<br>\nabla_\theta J(\theta) &#x3D; \sum_{s \in \mathcal{S}} \eta(s) \sum_{a \in \mathcal{A}} \nabla_\theta \pi(a|s,\theta) q_\pi(s,a)<br>$$  </p>
+<ul>
+<li><strong>关键变换</strong>（对数导数技巧）：<br>$$<br>\nabla_\theta \pi(a|s,\theta) &#x3D; \pi(a|s,\theta) \nabla_\theta \ln \pi(a|s,\theta)<br>$$  </li>
+<li><strong>期望形式</strong>：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S \sim \eta, A \sim \pi} \left[ \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]<br>$$</li>
+</ul>
+<h3 id="2-梯度估计的实践意义"><a href="#2-梯度估计的实践意义" class="headerlink" title="2. 梯度估计的实践意义"></a>2. 梯度估计的实践意义</h3><ul>
+<li><strong>随机梯度近似</strong>：<br>$$<br>\nabla_\theta J(\theta) \approx \nabla_\theta \ln \pi(a|s,\theta) q_\pi(s,a)<br>$$<br>其中 $(s,a)$ 为采样状态-动作对  </li>
+<li><strong>策略探索保证</strong>：  <ul>
+<li>Softmax输出确保 $\pi(a|s,\theta) &gt; 0$（避免动作概率归零）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="四、梯度上升算法"><a href="#四、梯度上升算法" class="headerlink" title="四、梯度上升算法"></a>四、梯度上升算法</h2><h3 id="1-基础算法框架"><a href="#1-基础算法框架" class="headerlink" title="1. 基础算法框架"></a>1. 基础算法框架</h3><p>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta_t) q_\pi(S,A) \right]<br>$$  </p>
+<ul>
+<li><strong>随机梯度版本</strong>：<br>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \nabla_\theta \ln \pi(a_t|s_t,\theta_t) q_t(s_t,a_t)<br>$$  </li>
+<li><strong>REINFORCE算法</strong>：当 $q_\pi$ 用蒙特卡洛估计时</li>
+</ul>
+<h3 id="2-算法特性分析"><a href="#2-算法特性分析" class="headerlink" title="2. 算法特性分析"></a>2. 算法特性分析</h3><h4 id="1-采样机制"><a href="#1-采样机制" class="headerlink" title="(1) 采样机制"></a>(1) 采样机制</h4><ul>
+<li><strong>状态分布</strong>：$S \sim \eta$（通常为平稳分布 $d_\pi$)  </li>
+<li><strong>动作选择</strong>：$A \sim \pi(\cdot|S,\theta)$（<strong>同策略</strong>要求）</li>
+</ul>
+<h4 id="2-更新量分解"><a href="#2-更新量分解" class="headerlink" title="(2) 更新量分解"></a>(2) 更新量分解</h4><p>令 $\beta_t &#x3D; \frac{q_t(s_t,a_t)}{\pi(a_t|s_t,\theta_t)}$，则更新规则为：<br>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \beta_t \nabla_\theta \pi(a_t|s_t,\theta_t)<br>$$  </p>
+<ul>
+<li><strong>行为解释</strong>：  <ul>
+<li>$\beta_t &gt; 0$：增加动作 $a_t$ 的选择概率  </li>
+<li>$\beta_t &lt; 0$：减少动作 $a_t$ 的选择概率</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-探索-利用平衡"><a href="#3-探索-利用平衡" class="headerlink" title="(3) 探索-利用平衡"></a>(3) 探索-利用平衡</h4><ul>
+<li><strong>利用机制</strong>：$\beta_t \propto q_t(s_t,a_t)$ → 偏向高值动作  </li>
+<li><strong>探索机制</strong>：$\beta_t \propto 1&#x2F;\pi(a_t|s_t,\theta_t)$ → 提升低频动作概率</li>
+</ul>
+<hr>
+<h2 id="五、总结与理论意义"><a href="#五、总结与理论意义" class="headerlink" title="五、总结与理论意义"></a>五、总结与理论意义</h2><h3 id="1-策略梯度核心公式"><a href="#1-策略梯度核心公式" class="headerlink" title="1. 策略梯度核心公式"></a>1. 策略梯度核心公式</h3><p>$$<br>\boxed{\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]}<br>$$  </p>
+<h3 id="2-算法特性对比"><a href="#2-算法特性对比" class="headerlink" title="2. 算法特性对比"></a>2. 算法特性对比</h3><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>表格方法</strong></th>
+<th><strong>策略梯度方法</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>策略表示</strong></td>
+<td>查表</td>
+<td>参数化函数 $\pi(a</td>
+</tr>
+<tr>
+<td><strong>更新对象</strong></td>
+<td>动作概率直接修改</td>
+<td>参数 $\theta$ 迭代更新</td>
+</tr>
+<tr>
+<td><strong>探索能力</strong></td>
+<td>依赖 $\epsilon$-greedy</td>
+<td>内置随机策略</td>
+</tr>
+<tr>
+<td><strong>收敛保证</strong></td>
+<td>有限状态有理论保证</td>
+<td>局部最优解</td>
+</tr>
+</tbody></table>
+<h3 id="3-理论扩展方向"><a href="#3-理论扩展方向" class="headerlink" title="3. 理论扩展方向"></a>3. 理论扩展方向</h3><ul>
+<li><strong>Actor-Critic架构</strong>：用价值函数近似 $q_\pi$  </li>
+<li><strong>确定性策略梯度</strong>（DPG）：处理连续动作空间  </li>
+<li><strong>自然策略梯度</strong>：改进优化轨迹的收敛性</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L8/" rel="prev" title="Reinforcement-Learning-L8">
+                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L8
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L10/" rel="next" title="Reinforcement-Learning-L10">
+                  Reinforcement-Learning-L10 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">52k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">3:09</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

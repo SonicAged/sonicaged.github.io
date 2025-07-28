@@ -1,9 +1,9 @@
 ---
 title: Hypergraph Introduction
-date: 2025-07-19 13:38:32
 categories:
-  - model
-  - hypergraph
+  - Learning
+  - Deep Learning
+  - Hypergraph
 tags:
   - model
   - embedding
@@ -11,6 +11,7 @@ tags:
   - Basic
   - hypergraph
   - GNN
+date: 2025-07-19 13:38:32
 ---
 
 # 超图的定义以及构造方式

@@ -156,6 +156,8 @@ site_state: true
 social:
   GitHub: https://github.com/SonicAged || fab fa-github
   E-Mail: mailto:sonicaged404@gmail.com || fa fa-envelope
+  Bilibili: https://space.bilibili.com/382388784 || fab fa-bilibili
+  163: mailto:18011185053@163.com || fa fa-envelope-circle-user
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Twitter: https://twitter.com/yourname || fab fa-twitter
   #FB Page: https://www.facebook.com/yourname || fab fa-facebook
@@ -176,7 +178,7 @@ links_settings:
   layout: block
 
 links:
-  WhaleFall: https://whaleblog.github.io
+  WhaleFall's Blog: https://whaleblog.github.io
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
@@ -525,7 +527,7 @@ pdf:
 
 # Mermaid tag
 mermaid:
-  enable: false
+  enable: true
   # Available themes: default | dark | forest | neutral
   theme:
     light: default
@@ -826,7 +828,7 @@ firestore:
 # Show Views / Visitors of the website / page with busuanzi.
 # For more information: http://ibruce.info/2015/04/04/busuanzi/
 busuanzi_count:
-  enable: false
+  enable: true
   total_visitors: true
   total_visitors_icon: fa fa-user
   total_views: true

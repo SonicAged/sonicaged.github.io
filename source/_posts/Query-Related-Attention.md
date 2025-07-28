@@ -1,15 +1,17 @@
 ---
 title: Quaqua Rishinala
-date: 2025-07-17 00:25:30
 categories:
-  - model
-  - attention
-  - category
+  - Learning
+  - Deep Learning
+  - Model
+  - Attention
+  - Category
 tags:
   - model
   - Basic
   - deep learning
   - attention
+date: 2025-07-17 00:25:30
 ---
 
 # 在查询上做文章的 Attention

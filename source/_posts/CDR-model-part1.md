@@ -1,9 +1,8 @@
 ---
 title: CDR models From 2020 To 2022
-date: 2025-07-20 23:52:07
 categories:
   - CDR
-  - models
+  - Model
 tags:
   - CDR
   - model framework
@@ -15,6 +14,7 @@ tags:
   - graph theory
   - random walk
   - multi-view
+date: 2025-07-20 23:52:07
 ---
 
 # 2020到2022年的CDR模型

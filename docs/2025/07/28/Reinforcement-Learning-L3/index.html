@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reinforcement-Learning-L3">
+<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-07-28T03:54:49.000Z">
+<meta property="article:modified_time" content="2025-07-28T07:55:21.921Z">
+<meta property="article:author" content="Sonic Aged">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/","path":"2025/07/28/Reinforcement-Learning-L3/","title":"Reinforcement-Learning-L3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Reinforcement-Learning-L3 | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">强化学习的数学基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E4%B8%8E%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">最优策略与贝尔曼最优方程读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8A%A8%E6%9C%BA%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%8A%A8%E4%BD%9C%E5%80%BC%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B"><span class="nav-number">2.1.</span> <span class="nav-text">一、动机示例：动作值驱动的策略改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.1.1.</span> <span class="nav-text">场景描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.2.</span> <span class="nav-text">策略改进原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E6%95%B0%E5%AD%A6%E5%AE%9A%E4%B9%89"><span class="nav-number">2.2.</span> <span class="nav-text">二、最优策略的数学定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.2.</span> <span class="nav-text">理论问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%EF%BC%88BOE%EF%BC%89%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">三、贝尔曼最优方程（BOE）的形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%83%E7%B4%A0%E5%BD%A2%E5%BC%8F%EF%BC%88Elementwise-Form%EF%BC%89"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 元素形式（Elementwise Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%EF%BC%88Matrix-Form%EF%BC%89"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 矩阵形式（Matrix Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%80%E5%A4%A7%E5%8C%96%E7%AE%80%E5%8C%96%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 最大化简化形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81BOE%E7%9A%84%E6%B1%82%E8%A7%A3%EF%BC%9A%E5%8E%8B%E7%BC%A9%E6%98%A0%E5%B0%84%E7%90%86%E8%AE%BA"><span class="nav-number">2.4.</span> <span class="nav-text">四、BOE的求解：压缩映射理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.4.1.</span> <span class="nav-text">关键步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7%E4%B8%8E%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">2.4.2.</span> <span class="nav-text">解的存在性与唯一性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81BOE%E4%B8%8E%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">2.5.</span> <span class="nav-text">五、BOE与最优策略的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E6%80%A7%E5%AE%9A%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">最优性定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E5%85%85%E5%88%86%E6%80%A7"><span class="nav-number">2.5.2.</span> <span class="nav-text">确定性策略充分性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0%E5%88%86%E6%9E%90"><span class="nav-number">2.6.</span> <span class="nav-text">六、最优策略的影响因素分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A5%96%E5%8A%B1%E8%AE%BE%E8%AE%A1%EF%BC%88Reward-Design%EF%BC%89"><span class="nav-number">2.6.1.</span> <span class="nav-text">1. 奖励设计（Reward Design）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%98%E6%89%A3%E7%8E%87-gamma"><span class="nav-number">2.6.2.</span> <span class="nav-text">2. 折扣率 $\gamma$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BB%95%E8%B7%AF%E6%83%A9%E7%BD%9A%E6%9C%BA%E5%88%B6"><span class="nav-number">2.6.3.</span> <span class="nav-text">3. 绕路惩罚机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%9A%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">2.7.</span> <span class="nav-text">七、总结：贝尔曼最优方程的意义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-number">2.7.1.</span> <span class="nav-text">关键公式回顾</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">3.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:18011185053@163.com" title="163 → mailto:18011185053@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope-circle-user fa-fw"></i>163</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/382388784" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;382388784" rel="noopener me" target="_blank"><i class="fab fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://whaleblog.github.io/" title="https:&#x2F;&#x2F;whaleblog.github.io" rel="noopener" target="_blank">WhaleFall's Blog</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Reinforcement-Learning-L3 | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Reinforcement-Learning-L3<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L3.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2025-07-28 11:54:49 / Modified: 15:55:21" itemprop="dateCreated datePublished" datetime="2025-07-28T11:54:49+08:00">2025-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/" itemprop="url" rel="index"><span itemprop="name">ReinForcement Learning</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Learning/ReinForcement-Learning/Mathmatical-Foundation/" itemprop="url" rel="index"><span itemprop="name">Mathmatical Foundation</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+<span id="more"></span>
+
+<h1 id="最优策略与贝尔曼最优方程读书笔记"><a href="#最优策略与贝尔曼最优方程读书笔记" class="headerlink" title="最优策略与贝尔曼最优方程读书笔记"></a>最优策略与贝尔曼最优方程读书笔记</h1><h2 id="一、动机示例：动作值驱动的策略改进"><a href="#一、动机示例：动作值驱动的策略改进" class="headerlink" title="一、动机示例：动作值驱动的策略改进"></a>一、动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
+<ul>
+<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$  </li>
+<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 7.2<br>\end{align*}<br>$$</li>
+</ul>
+<h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
+<li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
+<li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
+<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$  <blockquote>
+<p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="二、最优策略的数学定义"><a href="#二、最优策略的数学定义" class="headerlink" title="二、最优策略的数学定义"></a>二、最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
+</li>
+<li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
+<p>$$<br>v_{\pi^*}(s) \geq v_{\pi}(s)<br>$$</p>
+</li>
+</ul>
+<h3 id="理论问题"><a href="#理论问题" class="headerlink" title="理论问题"></a>理论问题</h3><ol>
+<li><strong>存在性</strong>：最优策略是否存在？  </li>
+<li><strong>唯一性</strong>：最优策略是否唯一？  </li>
+<li><strong>确定性</strong>：最优策略是确定性还是随机性？  </li>
+<li><strong>求解方法</strong>：如何计算最优策略？</li>
+</ol>
+<blockquote>
+<p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
+</blockquote>
+<hr>
+<h2 id="三、贝尔曼最优方程（BOE）的形式"><a href="#三、贝尔曼最优方程（BOE）的形式" class="headerlink" title="三、贝尔曼最优方程（BOE）的形式"></a>三、贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; \max_{\pi} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
+<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$  </p>
+<ul>
+<li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
+<li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
+<li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
+</ul>
+<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$  </p>
+<ul>
+<li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
+</ul>
+<hr>
+<h2 id="四、BOE的求解：压缩映射理论"><a href="#四、BOE的求解：压缩映射理论" class="headerlink" title="四、BOE的求解：压缩映射理论"></a>四、BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
+<li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
+</li>
+<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$  </p>
+<blockquote>
+<p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="解的存在性与唯一性"><a href="#解的存在性与唯一性" class="headerlink" title="解的存在性与唯一性"></a>解的存在性与唯一性</h3><p><strong>压缩映射定理</strong>：  </p>
+<ol>
+<li><strong>存在性</strong>：BOE 存在解 $v^*$  </li>
+<li><strong>唯一性</strong>：解 $v^*$ 唯一  </li>
+<li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
+</ol>
+<hr>
+<h2 id="五、BOE与最优策略的关系"><a href="#五、BOE与最优策略的关系" class="headerlink" title="五、BOE与最优策略的关系"></a>五、BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
+<ol>
+<li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
+<li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
+</ol>
+<h3 id="确定性策略充分性"><a href="#确定性策略充分性" class="headerlink" title="确定性策略充分性"></a>确定性策略充分性</h3><p><strong>定理</strong>：确定性策略足以达到最优性能  </p>
+<ul>
+<li>随机策略不会产生比最优确定性策略更高的状态值</li>
+</ul>
+<hr>
+<h2 id="六、最优策略的影响因素分析"><a href="#六、最优策略的影响因素分析" class="headerlink" title="六、最优策略的影响因素分析"></a>六、最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
+<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$  </li>
+<li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
+<li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-折扣率-gamma"><a href="#2-折扣率-gamma" class="headerlink" title="2. 折扣率 $\gamma$"></a>2. 折扣率 $\gamma$</h3><ul>
+<li>$\gamma \approx 1$：<strong>长远规划</strong>，愿承担风险穿越禁区  </li>
+<li>$\gamma \approx 0$：<strong>短视行为</strong>，回避所有风险（可能无法到达目标）</li>
+</ul>
+<h3 id="3-绕路惩罚机制"><a href="#3-绕路惩罚机制" class="headerlink" title="3. 绕路惩罚机制"></a>3. 绕路惩罚机制</h3><ul>
+<li><strong>隐含惩罚</strong>：折扣率 $\gamma$ 天然惩罚长路径  <ul>
+<li>最优路径回报：$\frac{1}{1-\gamma}$  </li>
+<li>绕路路径回报：$\frac{\gamma^k}{1-\gamma} &lt; \frac{1}{1-\gamma}$（$k \geq 2$)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="七、总结：贝尔曼最优方程的意义"><a href="#七、总结：贝尔曼最优方程的意义" class="headerlink" title="七、总结：贝尔曼最优方程的意义"></a>七、总结：贝尔曼最优方程的意义</h2><table>
+<thead>
+<tr>
+<th><strong>问题</strong></th>
+<th><strong>BOE的解答</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>最优策略存在性</strong></td>
+<td>BOE解存在 → 最优策略 $\pi^*$ 存在</td>
+</tr>
+<tr>
+<td><strong>策略形式</strong></td>
+<td>确定性策略足够最优：$\pi^* &#x3D; \arg\max_a q(s,a)$</td>
+</tr>
+<tr>
+<td><strong>求解算法</strong></td>
+<td>值迭代：$v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)$</td>
+</tr>
+<tr>
+<td><strong>解的唯一性</strong></td>
+<td>压缩映射保证唯一解 $v^*$</td>
+</tr>
+<tr>
+<td><strong>最优性验证</strong></td>
+<td>$v^* \geq v_{\pi}$ 对所有策略 $\pi$ 成立</td>
+</tr>
+</tbody></table>
+<h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
+<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$  </li>
+<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$  </li>
+<li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
+</ol>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L2/" rel="prev" title="Reinforcement-Learning-L2">
+                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L4/" rel="next" title="Reinforcement-Learning-L4">
+                  Reinforcement-Learning-L4 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">52k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">3:09</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

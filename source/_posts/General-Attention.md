@@ -1,15 +1,17 @@
 ---
 title: Gugugu Neralashun
-date: 2025-07-16 22:16:14
 categories:
-  - model
-  - attention
-  - category
+  - Learning
+  - Deep Learning
+  - Model
+  - Attention
+  - Category
 tags:
   - model
   - Basic
   - deep learning
   - attention
+date: 2025-07-16 22:16:14
 ---
 
 # 具有一般性的 Attention
