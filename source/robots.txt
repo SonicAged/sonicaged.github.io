@@ -13,4 +13,4 @@ Disallow: /js/
 Disallow: /paper/
 Disallow: /nodeppt/
 
-Sitemap: https://blog.soni-caged.site/sitemap.xml
+Sitemap: https://blog.sonic-aged.site/sitemap.xml
