@@ -175,6 +175,223 @@
       </tags>
   </entry>
   <entry>
+    <title>CDR models From 2020 To 2022</title>
+    <url>/2025/07/20/CDR-model-part1/</url>
+    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
+<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
+<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
+<span id="more"></span>
+
+<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
+<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
+
+<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
+<ol>
+<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
+<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
+</ol>
+<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
+
+<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
+<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
+<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
+
+<p>还是分为两条线来看：</p>
+<ol>
+<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
+<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
+<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
+<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
+<li><img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
+</ul>
+</li>
+</ol>
+<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
+<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
+
+<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
+<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
+<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
+<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
+<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
+
+<p>单组学，回归模型（虽然叫Classiffier）</p>
+<p>然后就是当时读到的时候有一些小问题：</p>
+<ol>
+<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
+<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
+</ol>
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
+<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
+<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
+<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
+
+<p>先说明架构图中可能引起误解的地方：</p>
+<ol>
+<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
+<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
+</ol>
+<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
+<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
+<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
+<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
+
+<h3 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h3><p><del>这位更是如此捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
+<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
+
+<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
+<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
+
+<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
+<blockquote>
+<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
+<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
+<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
+<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
+<ol>
+<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
+<ul>
+<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
+<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
+<li>确保马尔可夫链的遍历性和平稳分布存在</li>
+</ul>
+</li>
+<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
+<ul>
+<li>游走者只能移动到拓扑邻居节点</li>
+<li>模拟生物系统中局部相互作用占主导的特性</li>
+<li>避免远距离间接关联引入的虚假信号</li>
+</ul>
+</li>
+</ol>
+<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
+<blockquote>
+<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
+<ul>
+<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
+</li>
+<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
+</li>
+<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
+<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
+</li>
+</ul>
+</blockquote>
+<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
+<ol>
+<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
+<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
+</li>
+<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
+<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
+</li>
+<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
+<p>这种设计保证了：</p>
+<ul>
+<li>行标准化(每行和&#x3D;1)</li>
+<li>对角线强化(自环保留)</li>
+<li>全局信息平滑</li>
+</ul>
+</li>
+</ol>
+<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
+<ol>
+<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
+<p>其中$N_i$是节点$i$的邻居集合</p>
+</li>
+<li><p><strong>频域特性</strong>：</p>
+<ul>
+<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
+</li>
+<li><p>特征值分布更集中，突出局部模式</p>
+</li>
+<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
+</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<p><del>这里顺便说明一下融合过程捏</del></p>
+<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
+<p>混合滤波器设计</p>
+<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
+<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
+<p>这种组合能够：</p>
+<ul>
+<li>低频：由F主导，捕获全局趋势</li>
+<li>中高频：由S主导，提取局部特征</li>
+</ul>
+<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
+<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
+<ol>
+<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
+<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
+<li>平均操作(1&#x2F;2)防止频谱畸变</li>
+</ol>
+<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
+<p>关于实验，他一共做了4个：</p>
+<ul>
+<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
+<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
+</ul>
+<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
+
+<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
+<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
+
+<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
+<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
+<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
+<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
+<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
+<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
+<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
+<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>Model</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>graph signal processing</tag>
+        <tag>graph theory</tag>
+        <tag>random walk</tag>
+        <tag>multi-view</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CDR Input Data Analysis</title>
     <url>/2025/07/09/CDR-data-analysis/</url>
     <content><![CDATA[<h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
@@ -513,355 +730,9 @@
       </categories>
       <tags>
         <tag>CDR</tag>
+        <tag>graph theory</tag>
         <tag>Data Analysis</tag>
         <tag>可能有点用</tag>
-        <tag>graph theory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CDR models From 2020 To 2022</title>
-    <url>/2025/07/20/CDR-model-part1/</url>
-    <content><![CDATA[<h1 id="2020到2022年的CDR模型"><a href="#2020到2022年的CDR模型" class="headerlink" title="2020到2022年的CDR模型"></a>2020到2022年的CDR模型</h1><p>本博客将简单分析从2020年到2022年的CDR论文中所有的图神经相关的模型架构，使用数据，模型和实验亮点。由于篇幅有限<del>（主要是鼠鼠懒捏）</del>，所有的模型都不会有详细的说明。但鼠鼠都将原文贴在了最后，想下细了解的可以去看原文捏。</p>
-<p>另外，鼠鼠已经在之前大致地看过一遍截止目前的相关文章，奈何因为一些SB事情，再加上没有留下任何的笔记<del>（主要原因）</del>，所有已经忘得差不多了。这也是决定写一篇博客的原因</p>
-<p>还有就是，这里的<em>大致</em>指的是：2023之后的全部和2022之前的顺眼的捏，所以这篇中的大多数模型是没看过的捏</p>
-<span id="more"></span>
-
-<h2 id="2020"><a href="#2020" class="headerlink" title="2020"></a>2020</h2><h3 id="DeepCDR"><a href="#DeepCDR" class="headerlink" title="DeepCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">DeepCDR</a></h3><p>这是鼠鼠初入CDR时看的第一篇论文，这篇论文现在看来虽然有些过时<del>（过时到源代码都是用tensorflow1.x写的，现在跑起来用鼠鼠的蒟蒻4060还会爆显存）</del>。但不可否认的是它给之后的模型给出了方向，也成为了几乎所有的之后的模型的基线模型。</p>
-<p><a href="https://github.com/kimmo1019/DeepCDR">Source Code</a></p>
-<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepCDR.png" alt="DeepCDR" width="80%" height="auto">
-
-<p>这个架构现在看来是十分朴素的，他大致就分为了两条线：</p>
-<ol>
-<li><strong>药物</strong>：将其转换为<strong>图结构</strong>处理，这一整条线成为了后来大多数药物的GCN Encoder</li>
-<li><strong>组学</strong>：没有组学融合，没有防止过平滑，就是纯粹的FCN，淳朴得像刚走出大山的理塘王子</li>
-</ol>
-<img src="/img/难绷/丁真.jpg" alt="理塘王子" width="20%" height="auto">
-
-<p>另外，值得一提的是，DeepCDR是一个回归模型，因此之后选用的指标是Pearson’s correlation，Spearman’s correlation以及RMSE</p>
-<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC，CCLE和TCGA</p>
-<h2 id="2021"><a href="#2021" class="headerlink" title="2021"></a>2021</h2><h3 id="AGMI"><a href="#AGMI" class="headerlink" title="AGMI"></a><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">AGMI</a></h3><p>鼠鼠看过之后的模型之后回头看到的模型捏，现在看来，应该是第一个在组学那边构造图模型的捏。但是在简图的过程中，引入了一些大多数模型没有用到的先验知识，也许这不是一些希望看到的事情捏</p>
-<p><a href="https://github.com/yivan-WYYGDSG/AGMI">Source Code</a></p>
-<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/AGMI.png" alt="AGMI" width="80%" height="auto">
-
-<p>还是分为两条线来看：</p>
-<ol>
-<li><strong>药物</strong>：将DeepCDR的UGCN换成了GIN</li>
-<li><strong>组学</strong>：主要有两个新颖的地方：<ul>
-<li>开始的时候，将组学信息利用先验知识将其连成一张图</li>
-<li>处理这张图的是一个叫做MPNN（消息传递神经网络）的带有注意力引导的NN，这里就只贴一张图捏<del>（鼠鼠对RNN和门控单元不感兴趣捏）</del></li>
-<li><img src="/img/CDR/Framework/CDR-model-part1/AGMI-MPNN.png" alt="AGMI-MPNN" width="80%" height="auto"></li>
-</ul>
-</li>
-</ol>
-<p>仍然是一个回归模型，没有什么新颖的实验捏</p>
-<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h2 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h2><h3 id="BiG-DRP"><a href="#BiG-DRP" class="headerlink" title="BiG-DRP"></a><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">BiG-DRP</a></h3><p>首次引入异构二分图将IC50值作为一种输入，而不只是label看待，这也就意味着，各式各样的针对处理异构图的图神经网络将会开始大规模的出现了捏</p>
-<p><a href="https://github.com/ddhostallero/BiG-DRP">Source Code</a></p>
-<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/BiG-DRP.png" alt="BiG-DRP" width="80%" height="auto">
-
-<p>可以看到，只有药物那条线没了，取而代之的是一个与细胞系结合的异构网络。但实际上，可以看出来，这里的H-GCN本质上于GCN没有什么区别，大致理由是对于一个二部图而言的邻居不可能是同类的节点，换句话说，即使是正常的GCN，一层中药物聚合的也只有细胞系的信息，细胞系聚合也只有药物的信息，但是由于药物和细胞系特征的维数是不一样的，所以原本的权重矩阵不能再是方阵了</p>
-<p>仍然是一个回归模型。值得一提的是，其在BiG-DRP+中引入了早停机制，应该是第一次捏</p>
-<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和TCGA</p>
-<h3 id="DeepTTA"><a href="#DeepTTA" class="headerlink" title="DeepTTA"></a><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">DeepTTA</a></h3><p>甚至单组学模型。逆天的是直接往药物线里硬套了一个Transformer，真是一种战斗爽的感觉捏</p>
-<p><a href="https://github.com/jianglikun/DeepTTC">Source Code</a></p>
-<p><del>为什么一个叫DeepTTA的模型的仓库名叫DeepTTC捏</del></p>
-<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/DeepTTA.png" alt="DeepTTA" width="80%" height="auto">
-
-<p>单组学，回归模型（虽然叫Classiffier）</p>
-<p>然后就是当时读到的时候有一些小问题：</p>
-<ol>
-<li>同一药物的子结构序列理论上来讲是有多个，但他们的上下文差距理论上来讲是很大的，只学习其中一个是否会有些不妥呢</li>
-<li>分子式非常接近的不同药物理论上是可能产生相同子结构序列的，这样是否会有些奇怪捏</li>
-</ol>
-<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
-<h3 id="GraphCDR"><a href="#GraphCDR" class="headerlink" title="GraphCDR"></a><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">GraphCDR</a></h3><p>鼠鼠读到的第一篇对比学习的文章，虽然一些<del>很多</del>模型是为了加入某个模块而讲故事，起初鼠鼠也认为这是没有硬整的东西，但是现在看来对比学习实际上对于CDR是十分有用的捏。</p>
-<p>其中一部分原因便是在<a href="/2025/07/09/CDR-data-analysis/" title="CDR Input Data Analysis">CDR Input Data Analysis</a>中提到的，如果用分类的方式构造异构体，那么这张图将会是一张非常稀疏的图，也就会有过平滑的风险，而对比学习恰好可以缓解这一点捏。</p>
-<p>关于对比学习，鼠鼠一直都想写一篇博客，奈何能力太捞，还是感觉对这个很不熟悉捏</p>
-<p><a href="https://github.com/BioMedicalBigDataMiningLab/GraphCDR">Source Code</a></p>
-<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/GraphCDR.png" alt="GraphCDR" width="80%" height="auto">
-
-<p>先说明架构图中可能引起误解的地方：</p>
-<ol>
-<li>Corrupt的箭头没有什么意义，这里的腐化图使之通过IC50值得出的耐药性关系，并不是在原图的基础上生成的</li>
-<li>两张图实际上是被两个不同的GNN处理的，只不过这两个GNN的配置一样而已捏</li>
-</ol>
-<p>值得说明的是，模型中Readout那一坨其实就是一个self-attention捏</p>
-<p>另外，这是一个分类模型<del>（好像一句废话捏）</del></p>
-<h4 id="数据集-4"><a href="#数据集-4" class="headerlink" title="数据集"></a>数据集</h4><p>CCLE和GDSC</p>
-<h3 id="DualGCN"><a href="#DualGCN" class="headerlink" title="DualGCN"></a><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">DualGCN</a></h3><p><del>疑似是有点太捞了捏</del>所以就放一个架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/DualCDR.png" alt="DualCDR" width="80%" height="auto">
-
-<h3 id="GraOmicDRP"><a href="#GraOmicDRP" class="headerlink" title="GraOmicDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">GraOmicDRP</a></h3><p><del>这位更是如此捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
-
-<h3 id="GraphDRP"><a href="#GraphDRP" class="headerlink" title="GraphDRP"></a><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">GraphDRP</a></h3><p><del>又来一个捏</del></p>
-<img src="/img/CDR/Framework/CDR-model-part1/GraphDRP.png" alt="GraphDRP" width="80%" height="auto">
-
-<h3 id="MOFGCN"><a href="#MOFGCN" class="headerlink" title="MOFGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">MOFGCN</a></h3><p>这是鼠鼠第一篇完整读过源代码的模型，现在还是觉得这个模型的代码写的很好看捏。同时这个模型的论文写得也非常清楚，没有那些谜语人似的弯弯绕绕，就是模块、作用、公式。同时，本论文中做的实验也很多很全面（常规的实验都做了一遍捏）。总之，如果想入门图神经的CDR，先看着一篇会让你取得很大的提升。</p>
-<p><a href="https://github.com/weiba/MOFGCN">Source Code</a></p>
-<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="/img/CDR/Framework/CDR-model-part1/MOFGCN.png" alt="MOFGCN" width="80%" height="auto">
-
-<p>关于细胞系相似度矩阵，可以去看一下引用的原文捏<a href="https://www.nature.com/articles/nmeth.2810">Similarity network fusion for aggregating data types on a genomic scale | Nature Methods</a>，<del>由于学校爆的💰好像不太够，鼠鼠好像看不了捏</del>，看看原文有没有对全核矩阵和稀疏核矩阵数学背景的说明捏，在这里简单谈一下鼠鼠的理解捏。</p>
-<blockquote>
-<p>在这里先把全核矩阵和稀疏核矩阵的定义式写在这里捏<br>$$<br>F_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{2\sum_j E_{ij}}  &amp;\text{if}\quad i \neq j \\ \frac{1}{2} &amp;\text{if}\quad i &#x3D; j \end{cases}<br>$$</p>
-<p>$$<br>S_{ij}&#x3D;\begin{cases} \frac{E_{ij}}{\sum_j E_{ij}}  &amp;\text{if}\quad j \in N_i \\ \frac{1}{2} &amp;\text{if}\quad j \notin N_i \end{cases}<br>$$</p>
-<p>我们从概率的角度出发（为什么是概率，你会发现全核矩阵和稀疏核矩阵一定保证了一样的和一定是1！），那么这是否可以被视作两种不同的状态转移的规则呢？</p>
-<p>然后就查到了一个叫做<strong>随机游走</strong>的东西捏，大概就有以下的解释：</p>
-<ol>
-<li><p>全核矩阵可以理解为<strong>连续时间随机游走</strong>的转移概率矩阵：</p>
-<ul>
-<li>每个状态(细胞系)以相同概率1&#x2F;2保持当前状态</li>
-<li>以概率1&#x2F;2转移到其他状态，转移概率与相似度成正比</li>
-<li>确保马尔可夫链的遍历性和平稳分布存在</li>
-</ul>
-</li>
-<li><p>稀疏核矩阵则对应<strong>受限随机游走</strong>：</p>
-<ul>
-<li>游走者只能移动到拓扑邻居节点</li>
-<li>模拟生物系统中局部相互作用占主导的特性</li>
-<li>避免远距离间接关联引入的虚假信号</li>
-</ul>
-</li>
-</ol>
-<p>顺手的<del>实际上并不顺手</del>，我查到了这玩意儿在<strong>图信号处理</strong>中也有涉及：</p>
-<blockquote>
-<p>之前在<a href="/2025/07/10/GNN-and-GCN/" title="What Is GNN and GCN ?">What Is GNN and GCN ?</a>中提到过拉普拉斯矩阵$L&#x3D;D-A$，下面简单的说明一些图信号相关的知识：</p>
-<ul>
-<li><p><strong>图结构</strong>：定义为$G &#x3D; (V, E)$，$V$是节点集合($∣V∣ &#x3D; N$)，E是边集合</p>
-</li>
-<li><p><strong>图信号</strong>：定义为映射$f : V → ℝ$，可以表示为向量$f ∈ ℝᴺ$，其中fᵢ表示节点$vᵢ$上的信号值</p>
-</li>
-<li><p><strong>图滤波器与矩阵表示</strong>：在图信号处理中，<strong>图滤波器</strong>是对图信号进行变换操作的核心工具，可以表示为矩阵H ∈ ℝᴺˣᴺ。滤波操作可表示为$\hat{f} &#x3D; Hf$</p>
-<p> 其中H可以表示为拉普拉斯矩阵的函数$H &#x3D; h(\mathcal{L}) &#x3D; \sum_{k&#x3D;0}^K h_k \mathcal{L}^k$</p>
-</li>
-</ul>
-</blockquote>
-<h5 id="全核矩阵的频域解释"><a href="#全核矩阵的频域解释" class="headerlink" title="全核矩阵的频域解释"></a>全核矩阵的频域解释</h5><p>全核矩阵$F$在图信号处理视角下是一个<strong>低通滤波器</strong>，其作用机理可以从图傅里叶变换理解：</p>
-<ol>
-<li><p><strong>图傅里叶变换</strong>：将图信号投影到拉普拉斯矩阵的特征基<br>$$<br>\hat{f} &#x3D; U^T f<br>$$</p>
-<p>其中$U$是$\mathcal L$的特征向量矩阵</p>
-</li>
-<li><p><strong>全核矩阵的滤波作用</strong>：<br>$$<br>F &#x3D; g(\mathcal{L}) &#x3D; U \cdot diag(g(λ₁),…,g(λₙ)) \cdot U^T<br>$$</p>
-<p>其中$g(λ)$是单调递减函数，保留低频成分</p>
-</li>
-<li><p><strong>具体实现</strong>：<br>$$<br>F_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{2\sum_j W_{ij}} &amp; i \neq j \<br>\frac{1}{2} &amp; i &#x3D; j<br>\end{cases}<br>$$</p>
-<p>这种设计保证了：</p>
-<ul>
-<li>行标准化(每行和&#x3D;1)</li>
-<li>对角线强化(自环保留)</li>
-<li>全局信息平滑</li>
-</ul>
-</li>
-</ol>
-<h5 id="稀疏核矩阵的频域解释"><a href="#稀疏核矩阵的频域解释" class="headerlink" title="稀疏核矩阵的频域解释"></a>稀疏核矩阵的频域解释</h5><p>稀疏核矩阵$S$是一个<strong>带通滤波器</strong>，其数学表示为：</p>
-<ol>
-<li><p><strong>拓扑约束</strong>：<br>$$<br>S_{ij} &#x3D; \begin{cases}<br>\frac{W_{ij}}{\sum_{j \in N_i} W_{ij}} &amp; j \in N_i \<br>0 &amp; j \notin N_i<br>\end{cases}<br>$$</p>
-<p>其中$N_i$是节点$i$的邻居集合</p>
-</li>
-<li><p><strong>频域特性</strong>：</p>
-<ul>
-<li><p>通过限制局部连接($N_i$)产生频带选择效应</p>
-</li>
-<li><p>特征值分布更集中，突出局部模式</p>
-</li>
-<li><p>相当于频域中的窗函数：<br>  $$<br>  S &#x3D; U \cdot diag(s(λ₁),…,s(λₙ)) \cdot U^T<br>  $$<br>  其中$s(λ)$是峰值在中间频段的函数</p>
-</li>
-</ul>
-</li>
-</ol>
-</blockquote>
-<p><del>这里顺便说明一下融合过程捏</del></p>
-<h5 id="多尺度分析与矩阵组合"><a href="#多尺度分析与矩阵组合" class="headerlink" title="多尺度分析与矩阵组合"></a>多尺度分析与矩阵组合</h5><p>全核矩阵$F$和稀疏核矩阵$S$的组合实现了<strong>多尺度分析</strong>：</p>
-<p>混合滤波器设计</p>
-<p>组合滤波器可表示为：<br>$$<br>H &#x3D; αF + (1-α)S \quad α ∈ [0,1]<br>$$</p>
-<p>对应的频域响应：<br>$$<br>h(λ) &#x3D; αg(λ) + (1-α)s(λ)<br>$$</p>
-<p>这种组合能够：</p>
-<ul>
-<li>低频：由F主导，捕获全局趋势</li>
-<li>中高频：由S主导，提取局部特征</li>
-</ul>
-<h5 id="矩阵迭代的谱分析"><a href="#矩阵迭代的谱分析" class="headerlink" title="矩阵迭代的谱分析"></a>矩阵迭代的谱分析</h5><p>MOFGCN中的矩阵迭代：<br>$$<br>\begin{aligned}<br>GF_t &amp;&#x3D; GS \cdot \frac{(CF_{t-1} + MF_{t-1})}{2} \cdot GS^T \\<br>CF_t &amp;&#x3D; CS \cdot \frac{(GF_{t-1} + MF_{t-1})}{2} \cdot CS^T \\<br>MF_t &amp;&#x3D; MS \cdot \frac{(CF_{t-1} + GF_{t-1})}{2} \cdot MS^T<br>\end{aligned}<br>$$</p>
-<p>从图信号处理看，这是<strong>谱调制过程</strong>：</p>
-<ol>
-<li>每次迭代相当于在频域进行$\hat{f}^{(t)} &#x3D; h(λ) \cdot \hat{f}^{(t-1)}$</li>
-<li>不同组学源的矩阵($GS,CS,MS$)提供互补频带</li>
-<li>平均操作(1&#x2F;2)防止频谱畸变</li>
-</ol>
-<p>对于后面的异构图，论文中详细的说明了异构图的GCN构造方式，这里就不在赘述了捏</p>
-<p>关于实验，他一共做了4个：</p>
-<ul>
-<li><strong>测试1</strong>：在随机将矩阵中的值置零时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试2</strong>：在随机屏蔽一行或一列时，将我们的模型与HNMDRP和SRMF进行比较，以重建细胞系-药物关联矩阵。</li>
-<li><strong>测试3</strong>：在预测单一药物的反应时，将我们的方法与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-<li><strong>测试4</strong>：在预测一些靶向药物的反应时，将我们的模型与HNMDRP、SRMF、MOLI、DeepForest和DeepCDR进行比较。</li>
-</ul>
-<h3 id="NIHGCN"><a href="#NIHGCN" class="headerlink" title="NIHGCN"></a><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">NIHGCN</a></h3><p>又是一个力大砖飞的典型代表捏，看看架构图就行了捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/NIHGCN.png" alt="NIHGCN" width="80%" height="auto">
-
-<h3 id="MvMo"><a href="#MvMo" class="headerlink" title="MvMo"></a><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">MvMo</a></h3><p>首次引入了Multi-view attention，可以去看一下<a href="/2025/07/18/GAT/" title="Woc?! GAT? We&#39;re Saved!">Woc?! GAT? We&#39;re Saved!</a>，其他的没什好说的，还是直接一个架构图捏</p>
-<img src="/img/CDR/Framework/CDR-model-part1/MvMo.png" alt="MvMo" width="80%" height="auto">
-
-<h4 id="📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection"><a href="#📄-Xie-2022-Drug-response-prediction-using-graph-representation-learning-and-Laplacian-feature-selection" class="headerlink" title="📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection"></a><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></h4><p>这篇看着有点奇怪捏，不想看了捏<del>（虽然有很大一部分原因是看到现在有点无聊了捏）</del></p>
-<h3 id="TGSA"><a href="#TGSA" class="headerlink" title="TGSA"></a><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">TGSA</a></h3><p>又是先验知识捏，不想看了捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2020-2022/Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ.pdf" target="_blank">📄 Feng 等 - AGMI Attention-Guided Multi-omics Integration for Drug Response Prediction with Graph Neural Networ</a></p>
-<p><a href="/paper/CDR/2020-2022/Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction.pdf" target="_blank">📄 Hostallero 等 - Looking at the BiG picture incorporating bipartite graphs in drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response.pdf" target="_blank">📄 Jiang 等 - DeepTTA a transformer-based model for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response.pdf" target="_blank">📄 Liu 等 - DeepCDR a hybrid graph convolutional network for predicting cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio.pdf" target="_blank">📄 Liu 等 - GraphCDR a graph neural network method with contrastive learning for cancer drug response predictio</a></p>
-<p><a href="/paper/CDR/2020-2022/Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response.pdf" target="_blank">📄 Ma - 2022 - DualGCN a dual graph convolutional network model to predict cancer drug response</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf" target="_blank">📄 Nguyen 等 - Graph Convolutional Networks for Drug Response Prediction.pdf</a></p>
-<p><a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">📄 Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh.pdf" target="_blank">📄 Peng 等 - Predicting cancer drug response using parallel heterogeneous graph convolutional networks with neigh</a></p>
-<p><a href="/paper/CDR/2020-2022/Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution.pdf" target="_blank">📄 Peng 等 - Predicting Drug Response Based on Multi-Omics Fusion and Graph Convolution</a></p>
-<p><a href="/paper/CDR/2020-2022/Wang - A multi-view multi-omics model for cancer drug response prediction.pdf" target="_blank">📄 Wang - A multi-view multi-omics model for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2020-2022/Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection.pdf" target="_blank">📄 Xie - 2022 - Drug response prediction using graph representation learning and Laplacian feature selection</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding.pdf" target="_blank">📄 Zhang 等 - Multi-Scale Dynamic Convolutional Network for Knowledge Graph Embedding</a></p>
-<p><a href="/paper/CDR/2020-2022/Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with.pdf" target="_blank">📄 Zhu 等 - TGSA protein–protein association-based twin graph neural networks for drug response prediction with</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>graph theory</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>graph signal processing</tag>
-        <tag>random walk</tag>
-        <tag>multi-view</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CDR models In 2023</title>
-    <url>/2025/07/26/CDR-model-part2/</url>
-    <content><![CDATA[<h1 id="2023年的CDR模型"><a href="#2023年的CDR模型" class="headerlink" title="2023年的CDR模型"></a>2023年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>本文将介绍的是2023年的CDR模型，总的来说23年的模型在之前的基础上变得更复杂了，但感觉和鼠鼠想要的创新还有一些小距离捏<del>（主要是一连看到好多篇拼好模捏）</del></p>
-<span id="more"></span>
-
-<h2 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h2><h3 id="GraTransDRP"><a href="#GraTransDRP" class="headerlink" title="GraTransDRP"></a><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">GraTransDRP</a></h3><p>这应该是第一次将Graph Transformer引入CDR中吧<del>应该吧</del>。</p>
-<p>关于Graph Transformer，鼠鼠专门写过一篇博客<a href="/2025/07/19/Graph-Transformer/" title="Trans?!and Former?!">Trans?!and Former?!</a>。像了解的可以去看一下捏</p>
-<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><p><del>这个架构图让鼠鼠想到一位故人<a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">(GraOmicDRP)</a>捏，一看果然是一个团队做的捏，该说不说，这里就直接把两个架构图放在一起捏dddd</del></p>
-<img src="/img/CDR/Framework/CDR-model-part2/GraTransDRP.png" alt="GraTransDRP"  width="80%" height="auto">
-
-<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
-
-<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>经典出装（CCLE和GDSC）</p>
-<h3 id="MMCL-CDR"><a href="#MMCL-CDR" class="headerlink" title="MMCL CDR"></a><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">MMCL CDR</a></h3><p>这玩意儿引入了<strong>形态学图像</strong>并将其用于与之前的组学数据进行对比学习，鼠鼠并不喜欢先验知识，但鼠鼠现在想知道另一件事（过两天会进行实验，到时候补充）：是否可以直接在组学内部经行对比学习以提高一些东西呢？</p>
-<p>鼠鼠现在设想的改造如下：</p>
-<ol>
-<li>将形态学图像改成另一组组学信息</li>
-<li>改造对比学习公式使其可以对三个组学进行对比学习，所作的修改类似于从二元交叉熵到多元交叉熵</li>
-</ol>
-<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\MMCL-CDR.png" alt="MMCL CDR" style="zoom:50%;" />
-
-<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC、PubChem、DMSZ</p>
-<h3 id="SubCDR"><a href="#SubCDR" class="headerlink" title="SubCDR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">SubCDR</a></h3><p>这里主要是将药物做成官能团序列一样的东西用于训练</p>
-<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\SubCDR.png" alt="SubCDR" style="zoom:33%;" />
-
-<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
-<h3 id="HMM-GDAN"><a href="#HMM-GDAN" class="headerlink" title="HMM GDAN"></a><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">HMM GDAN</a></h3><p>多的不说少的不唠，这其实是鼠鼠看的第一篇Multi-view Attention的论文，之前有过一篇<del>（但感觉只是形式上的）</del></p>
-<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\HMM-GDAN.png" alt="HMM-GDAN" style="zoom: 33%;" />
-
-<p>这里给出其multi-view的具体构造过程：</p>
-<h5 id="1-多视图图构建"><a href="#1-多视图图构建" class="headerlink" title="1. 多视图图构建"></a>1. 多视图图构建</h5><h6 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h6><img src="\img\CDR\Framework\CDR-model-part2\multi-view.png" alt="image-20250727105814311" style="zoom: 80%;" />
-
-<ul>
-<li><strong>多组学数据</strong>：构成三维张量<br>$$<br>C \in \mathbb{R}^{N_{cl} \times N_g \times (K-1)}<br>$$<ul>
-<li>$N_{cl}$: 细胞系数量</li>
-<li>$N_g$: 癌症相关基因数量  </li>
-<li>$K-1$: 组学类型数</li>
-</ul>
-</li>
-</ul>
-<h6 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h6><ol>
-<li><p><strong>节点特征生成</strong><br>细胞系$i$的基因特征矩阵：<br>$$<br>X_c^i &#x3D; C(i, :, :) \in \mathbb{R}^{N_g \times (K-1)}<br>$$</p>
-</li>
-<li><p><strong>邻接矩阵生成</strong></p>
-<ul>
-<li><p><strong>组学视图</strong>（$v&#x3D;1,…,K-1$）:<br>$$<br>\rho_{ij}^{(v)} &#x3D; \frac{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})(Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})}{\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})^2}\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})^2}}<br>$$</p>
-<p>阈值化：</p>
-<p>$$<br>E_{ij}^{(v)} &#x3D; \begin{cases}<br>1 &amp; \text{if } |\rho_{ij}^{(v)}| &gt; \tau^{(v)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
-</li>
-<li><p><strong>STRING视图</strong>（$v&#x3D;K$）:<br>$$<br>E_{ij}^{(K)} &#x3D; \begin{cases}<br>1 &amp; \text{if } s_{ij}^{(K)} &gt; \tau^{(K)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
-</li>
-</ul>
-</li>
-<li><p><strong>最终图结构</strong><br>$$<br>\mathcal{G}_c &#x3D; \langle V, { E^{(v)} }_{v&#x3D;1}^K \rangle<br>$$</p>
-</li>
-</ol>
-<h5 id="2-双注意力机制"><a href="#2-双注意力机制" class="headerlink" title="2. 双注意力机制"></a>2. 双注意力机制</h5><img src="\img\CDR\Framework\CDR-model-part2\Duplex-attention.png" alt="image-20250727105814311" style="zoom: 25%;" />
-
-<h6 id="多视图自注意力"><a href="#多视图自注意力" class="headerlink" title="多视图自注意力"></a>多视图自注意力</h6><ol>
-<li><p>共享参数投影：<br>$$<br>\Theta &#x3D; [H^{(1)}\theta, …, H^{(K)}\theta] \in \mathbb{R}^{N_g \times K}<br>$$</p>
-</li>
-<li><p>相似度计算：<br>$$<br>\bar{\alpha}_{ij} &#x3D; \text{LeakyReLU}\left( \frac{\langle \Theta_i, \Theta_j \rangle}{|\Theta_i|_2 |\Theta_j|_2}, \beta \right)<br>$$</p>
-</li>
-<li><p>注意力系数：<br>$$<br>\alpha_{ij} &#x3D; \frac{\exp(\bar{\alpha}_{ij})}{\sum_{j&#x3D;1}^K \exp(\bar{\alpha}_{ij})}<br>$$</p>
-</li>
-<li><p>视图表示更新：<br>$$<br>H_s^{(v)} &#x3D; \sum_{j&#x3D;1}^K \alpha_{vj} H^{(j)}<br>$$</p>
-</li>
-</ol>
-<h6 id="视图级注意力"><a href="#视图级注意力" class="headerlink" title="视图级注意力"></a>视图级注意力</h6><ol>
-<li><p>表示拼接：<br>$$<br>H_s &#x3D; [H_s^{(1)}, …, H_s^{(K)}] \in \mathbb{R}^{N_g \times K d_c}<br>$$</p>
-</li>
-<li><p>视图权重计算：<br>$$<br>\bar{w}^{(v)} &#x3D; \text{Avg}(H_s z^{(v)} + b)<br>$$</p>
-</li>
-<li><p>归一化权重：<br>$$<br>w^{(v)} &#x3D; \frac{\exp(\bar{w}^{(v)})}{\sum_{v&#x3D;1}^K \exp(\bar{w}^{(v)})}<br>$$</p>
-</li>
-<li><p>最终融合：<br>$$<br>H &#x3D; \sum_{v&#x3D;1}^K w^{(v)} H_s^{(v)}<br>$$</p>
-</li>
-</ol>
-<p>此外，其还引入了multi-scale学习<del>（比较简单，可以直接去看原文捏）</del></p>
-<h3 id="Emden"><a href="#Emden" class="headerlink" title="Emden"></a><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">Emden</a></h3><p>这感觉没什么有用的信息捏</p>
-<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\Emden.png" alt="Emden" style="zoom:50%;" />
-
-<h3 id="AutoCDPR"><a href="#AutoCDPR" class="headerlink" title="AutoCDPR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">AutoCDPR</a></h3><p>采用了类似于AutoML的方式，但对鼠鼠而言，这东西就像将之前应该是超参数的东西也加入了训练，但实际用到CDR的部分只占很小一点<del>（是不是有点舍本逐末了捏）</del></p>
-<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\AutoCDPR.png" alt="AutoCDPR" style="zoom: 33%;" />
-
-
-
-<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE外加PubChem</p>
-<h3 id="TSGCNN"><a href="#TSGCNN" class="headerlink" title="TSGCNN"></a><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">TSGCNN</a></h3><p>由于之后有比这个玩意儿更加激进的RedCDR，所以这里只放一个架构图捏</p>
-<img src="\img\CDR\Framework\CDR-model-part2\TSGCNN.png" alt="image-20250727111745618" style="zoom:50%;" />
-
-<h3 id="📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton"><a href="#📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton" class="headerlink" title="📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton"></a><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></h3><p>从各个方面来讲都过于《淳朴》了捏，略过</p>
-<h3 id="HQNN"><a href="#HQNN" class="headerlink" title="HQNN"></a><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">HQNN</a></h3><p>将其他模型最后的FCN换成了一个QNN</p>
-<img src="\img\CDR\Framework\CDR-model-part2\HQNN.png" alt="image-20250727112841044" style="zoom: 50%;" />
-
-<h3 id="GADRP"><a href="#GADRP" class="headerlink" title="GADRP"></a><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">GADRP</a></h3><p>没什么特别的捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/GADPR.png" alt="GADPR" style="zoom:50%;" />
-
-<h3 id="GPDRP"><a href="#GPDRP" class="headerlink" title="GPDRP"></a><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">GPDRP</a></h3><p>这位更是如此捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/GPDRP.png" alt="image-20250727113526356" style="zoom:50%;" />
-
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a></p>
-<p><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a></p>
-<p><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a></p>
-<p><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a></p>
-<p><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a></p>
-<p><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></p>
-<p><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>multi-view</tag>
       </tags>
   </entry>
   <entry>
@@ -1185,6 +1056,100 @@
       </tags>
   </entry>
   <entry>
+    <title>CDR-model In 2024 | Part 2</title>
+    <url>/2025/07/27/CDR-model-part4/</url>
+    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
+<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
+<span id="more"></span>
+
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
+<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
+
+<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
+<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
+<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
+<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
+<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
+<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
+<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
+</ul>
+<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
+<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
+<ul>
+<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
+</li>
+<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
+<ul>
+<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
+<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
+<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
+</ul>
+</li>
+<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
+</li>
+</ul>
+<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
+<ul>
+<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
+<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
+</ul>
+<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
+<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
+<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
+<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
+<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
+<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
+<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
+<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
+</ul>
+<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
+<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
+<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
+<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
+<ul>
+<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
+<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
+</ul>
+<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
+<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
+<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
+<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>Model</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>GAN</tag>
+        <tag>dynamic graph</tag>
+        <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Fufufu Relashinala</title>
     <url>/2025/07/14/Feature-Related-Attention/</url>
     <content><![CDATA[<h1 id="在输入特征上做文章的-Attention"><a href="#在输入特征上做文章的-Attention" class="headerlink" title="在输入特征上做文章的 Attention"></a>在输入特征上做文章的 Attention</h1><p>本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。</p>
@@ -1418,100 +1383,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CDR-model In 2024 | Part 2</title>
-    <url>/2025/07/27/CDR-model-part4/</url>
-    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
-<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
-<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
-<span id="more"></span>
-
-<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
-<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
-
-<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
-<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
-<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
-<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
-<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
-<ul>
-<li><strong>输入</strong>：<ul>
-<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
-<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
-<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
-</ul>
-</li>
-<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
-</ul>
-<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
-<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
-<ul>
-<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
-</li>
-<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
-<ul>
-<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
-<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
-<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
-</ul>
-</li>
-<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
-</li>
-</ul>
-<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
-<ul>
-<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
-<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
-</ul>
-<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
-<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
-<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
-<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
-<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
-</ul>
-</li>
-</ul>
-<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
-<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
-<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
-<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
-</ul>
-<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
-<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
-<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
-<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
-<ul>
-<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
-<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
-</ul>
-<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
-<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
-<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
-<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>GAN</tag>
-        <tag>dynamic graph</tag>
-        <tag>hypergraph</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>What Is GNN and GCN ?</title>
     <url>/2025/07/10/GNN-and-GCN/</url>
     <content><![CDATA[<h1 id="GNN-与-GCN"><a href="#GNN-与-GCN" class="headerlink" title="GNN 与 GCN"></a>GNN 与 GCN</h1><blockquote>
@@ -1709,115 +1580,9 @@
         <tag>Basic</tag>
         <tag>PyTorch</tag>
         <tag>CDR</tag>
-        <tag>graph theory</tag>
         <tag>GNN</tag>
+        <tag>graph theory</tag>
         <tag>embedding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Gugugu Neralashun</title>
-    <url>/2025/07/16/General-Attention/</url>
-    <content><![CDATA[<h1 id="具有一般性的-Attention"><a href="#具有一般性的-Attention" class="headerlink" title="具有一般性的 Attention"></a>具有一般性的 Attention</h1><div style="display: flex; align-items: center;">
-  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
-  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
-</div>
-
-
-
-<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
-<span id="more"></span>
-
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
-
-<p>如果还记得这张图的话，那便是极好的捏 <del>不记得了就回去看捏</del> 本文主要就是在说明每一个模块常见的具体实现有什么</p>
-<h2 id="注意力评分函数-Attention-Scoring"><a href="#注意力评分函数-Attention-Scoring" class="headerlink" title="注意力评分函数(Attention Scoring)"></a>注意力评分函数(Attention Scoring)</h2><p>注意力评分函数是计算查询向量$\mathbf{q}$与键向量$\mathbf{k}_l$之间相关性得分的核心组件：</p>
-<ol>
-<li><p><strong>加性评分(Additive&#x2F;Concatenate)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{w}^\top \text{act}(\mathbf{W}_1\mathbf{q} + \mathbf{W}_2\mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>其中$\mathbf{w} \in \mathbb{R}^{d_w}$, $\mathbf{W}_1 \in \mathbb{R}^{d_w \times d_q}$, $\mathbf{W}_2 \in \mathbb{R}^{d_w \times d_k}$和$\mathbf{b} \in \mathbb{R}^{d_w}$是可训练参数。</p>
-</li>
-<li><p><strong>乘性评分(Multiplicative&#x2F;Dot-Product)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{q}^\top \mathbf{k}_l<br>$$</p>
-</li>
-<li><p><strong>缩放乘性评分(Scaled Multiplicative)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \frac{\mathbf{q}^\top \mathbf{k}_l}{\sqrt{d_k}}<br>$$</p>
-</li>
-<li><p><strong>通用评分(General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top \mathbf{W} \mathbf{q}<br>$$</p>
-<p>其中$\mathbf{W} \in \mathbb{R}^{d_k \times d_q}$是权重矩阵。</p>
-</li>
-<li><p><strong>带偏置的通用评分(Biased General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top (\mathbf{W}\mathbf{q} + \mathbf{b})<br>$$</p>
-</li>
-<li><p><strong>激活通用评分(Activated General)</strong>：<br>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \text{act}(\mathbf{k}_l^\top \mathbf{W} \mathbf{q} + b)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力对齐-Attention-Alignment"><a href="#注意力对齐-Attention-Alignment" class="headerlink" title="注意力对齐(Attention Alignment)"></a>注意力对齐(Attention Alignment)</h2><p>对齐函数将原始注意力分数$\mathbf{e} &#x3D; [e_1, \ldots, e_{n_f}]$转换为标准化权重：</p>
-<ol>
-<li><p><strong>软对齐&#x2F;全局对齐(Soft&#x2F;Global Alignment)</strong>：</p>
-<p>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;1}^{n_f} \exp(e_j)}<br>$$</p>
-</li>
-<li><p><strong>硬对齐(Hard Alignment)</strong>：<br>从多项式分布采样：</p>
-<p>$$<br>m \sim \text{Multinomial}(a_1, \ldots, a_{n_f})<br>$$</p>
-<p>然后：</p>
-<p>$$<br>\mathbf{c} &#x3D; \mathbf{v}_m<br>$$</p>
-</li>
-<li><p><strong>局部对齐(Local Alignment)</strong>：<br>窗口位置$p$的确定：<br>$$<br>p &#x3D; S \times \text{sigmoid}(\mathbf{w}_p^\top \tanh(\mathbf{W}_p \mathbf{q}))<br>$$<br>然后计算：<br>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;p-D}^{p+D} \exp(e_j)} \exp\left(-\frac{(l-p)^2}{2\sigma^2}\right)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力维度-Attention-Dimensionality"><a href="#注意力维度-Attention-Dimensionality" class="headerlink" title="注意力维度(Attention Dimensionality)"></a>注意力维度(Attention Dimensionality)</h2><ol>
-<li><p><strong>单维注意力(Single-Dimensional Attention)</strong>：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} a_l \mathbf{v}_l<br>$$</p>
-</li>
-<li><p><strong>多维注意力(Multi-Dimensional Attention)</strong>：<br>调整评分函数产生向量分数：</p>
-<p>$$<br>\mathbf{e}_l &#x3D; \mathbf{W}_d^\top \text{act}(\mathbf{W}_1 \mathbf{q} + \mathbf{W}_2 \mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>然后计算：</p>
-<p>$$<br>a_{l,i} &#x3D; \frac{\exp(e_{l,i})}{\sum_{j&#x3D;1}^{n_f} \exp(e_{j,i})}<br>$$</p>
-<p>最终上下文向量：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} \mathbf{a}_l \circ \mathbf{v}_l<br>$$</p>
-<p>其中$\circ$表示逐元素乘法。</p>
-</li>
-</ol>
-<h2 id="4-实际应用与选择建议"><a href="#4-实际应用与选择建议" class="headerlink" title="4. 实际应用与选择建议"></a>4. 实际应用与选择建议</h2><p>论文提供了关于不同机制选择的实用建议：</p>
-<ol>
-<li><p><strong>评分函数选择</strong>：</p>
-<ul>
-<li>计算效率优先：乘性或缩放乘性评分</li>
-<li>性能优先：加性评分或通用评分</li>
-<li>大维度键向量：必须使用缩放乘性评分防止梯度问题</li>
-</ul>
-</li>
-<li><p><strong>对齐方式选择</strong>：</p>
-<ul>
-<li>标准情况：软对齐</li>
-<li>需要严格稀疏性：硬对齐（但要注意训练难度）</li>
-<li>序列数据：考虑局部对齐</li>
-<li>需要动态选择关注区域：强化对齐</li>
-</ul>
-</li>
-<li><p><strong>维度选择</strong>：</p>
-<ul>
-<li>大多数情况：单维注意力足够</li>
-<li>需要细粒度控制：考虑多维注意力</li>
-</ul>
-</li>
-</ol>
-<p>这些通用机制可以自由组合，例如可以设计一个使用加性评分、软对齐和多维注意力的模型。论文特别指出，Transformer 模型成功的关键在于巧妙地组合了缩放乘性评分、软对齐和单维注意力（通过多头机制实现类似多维注意力的效果）。</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
-]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>Deep Learning</category>
-        <category>Model</category>
-        <category>Attention</category>
-        <category>Category</category>
-      </categories>
-      <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>deep learning</tag>
-        <tag>attention</tag>
       </tags>
   </entry>
   <entry>
@@ -2119,50 +1884,132 @@
       </tags>
   </entry>
   <entry>
-    <title>HGCN and HGAT</title>
-    <url>/2025/07/20/HGCN-and-HGAT/</url>
-    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
-<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+    <title>CDR models In 2023</title>
+    <url>/2025/07/26/CDR-model-part2/</url>
+    <content><![CDATA[<h1 id="2023年的CDR模型"><a href="#2023年的CDR模型" class="headerlink" title="2023年的CDR模型"></a>2023年的CDR模型</h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>本文将介绍的是2023年的CDR模型，总的来说23年的模型在之前的基础上变得更复杂了，但感觉和鼠鼠想要的创新还有一些小距离捏<del>（主要是一连看到好多篇拼好模捏）</del></p>
 <span id="more"></span>
 
-<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
-<blockquote>
-<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
+<h2 id="2023"><a href="#2023" class="headerlink" title="2023"></a>2023</h2><h3 id="GraTransDRP"><a href="#GraTransDRP" class="headerlink" title="GraTransDRP"></a><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">GraTransDRP</a></h3><p>这应该是第一次将Graph Transformer引入CDR中吧<del>应该吧</del>。</p>
+<p>关于Graph Transformer，鼠鼠专门写过一篇博客<a href="/2025/07/19/Graph-Transformer/" title="Trans?!and Former?!">Trans?!and Former?!</a>。像了解的可以去看一下捏</p>
+<h4 id="Framework"><a href="#Framework" class="headerlink" title="Framework"></a>Framework</h4><p><del>这个架构图让鼠鼠想到一位故人<a href="/paper/CDR/2020-2022/Nguyen 等 - Integrating Molecular Graph Data of Drugs and Multiple -Omic Data of Cell Lines for Drug Response Pr.pdf" target="_blank">(GraOmicDRP)</a>捏，一看果然是一个团队做的捏，该说不说，这里就直接把两个架构图放在一起捏dddd</del></p>
+<img src="/img/CDR/Framework/CDR-model-part2/GraTransDRP.png" alt="GraTransDRP"  width="80%" height="auto">
+
+<img src="/img/CDR/Framework/CDR-model-part1/GraOmicDRP.png" alt="GraOmicDRP" width="80%" height="auto">
+
+<h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><p>经典出装（CCLE和GDSC）</p>
+<h3 id="MMCL-CDR"><a href="#MMCL-CDR" class="headerlink" title="MMCL CDR"></a><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">MMCL CDR</a></h3><p>这玩意儿引入了<strong>形态学图像</strong>并将其用于与之前的组学数据进行对比学习，鼠鼠并不喜欢先验知识，但鼠鼠现在想知道另一件事（过两天会进行实验，到时候补充）：是否可以直接在组学内部经行对比学习以提高一些东西呢？</p>
+<p>鼠鼠现在设想的改造如下：</p>
 <ol>
-<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
-<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
-<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+<li>将形态学图像改成另一组组学信息</li>
+<li>改造对比学习公式使其可以对三个组学进行对比学习，所作的修改类似于从二元交叉熵到多元交叉熵</li>
+</ol>
+<h4 id="Framework-1"><a href="#Framework-1" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\MMCL-CDR.png" alt="MMCL CDR" style="zoom:50%;" />
+
+<h4 id="数据集-1"><a href="#数据集-1" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC、PubChem、DMSZ</p>
+<h3 id="SubCDR"><a href="#SubCDR" class="headerlink" title="SubCDR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">SubCDR</a></h3><p>这里主要是将药物做成官能团序列一样的东西用于训练</p>
+<h4 id="Framework-2"><a href="#Framework-2" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\SubCDR.png" alt="SubCDR" style="zoom:33%;" />
+
+<h4 id="数据集-2"><a href="#数据集-2" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE</p>
+<h3 id="HMM-GDAN"><a href="#HMM-GDAN" class="headerlink" title="HMM GDAN"></a><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">HMM GDAN</a></h3><p>多的不说少的不唠，这其实是鼠鼠看的第一篇Multi-view Attention的论文，之前有过一篇<del>（但感觉只是形式上的）</del></p>
+<h4 id="Framework-3"><a href="#Framework-3" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\HMM-GDAN.png" alt="HMM-GDAN" style="zoom: 33%;" />
+
+<p>这里给出其multi-view的具体构造过程：</p>
+<h5 id="1-多视图图构建"><a href="#1-多视图图构建" class="headerlink" title="1. 多视图图构建"></a>1. 多视图图构建</h5><h6 id="输入数据"><a href="#输入数据" class="headerlink" title="输入数据"></a>输入数据</h6><img src="\img\CDR\Framework\CDR-model-part2\multi-view.png" alt="image-20250727105814311" style="zoom: 80%;" />
+
+<ul>
+<li><strong>多组学数据</strong>：构成三维张量<br>$$<br>C \in \mathbb{R}^{N_{cl} \times N_g \times (K-1)}<br>$$<ul>
+<li>$N_{cl}$: 细胞系数量</li>
+<li>$N_g$: 癌症相关基因数量  </li>
+<li>$K-1$: 组学类型数</li>
 </ul>
 </li>
-<li>特征变换：$H^{(l)}W^{(l)}$</li>
-<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
-<li>非线性变换：$\sigma(\cdot)$</li>
+</ul>
+<h6 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h6><ol>
+<li><p><strong>节点特征生成</strong><br>细胞系$i$的基因特征矩阵：<br>$$<br>X_c^i &#x3D; C(i, :, :) \in \mathbb{R}^{N_g \times (K-1)}<br>$$</p>
+</li>
+<li><p><strong>邻接矩阵生成</strong></p>
+<ul>
+<li><p><strong>组学视图</strong>（$v&#x3D;1,…,K-1$）:<br>$$<br>\rho_{ij}^{(v)} &#x3D; \frac{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})(Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})}{\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{i,q}^{(v)} - \bar{Y}_i^{(v)})^2}\sqrt{\sum_{q&#x3D;1}^{N_g} (Y_{j,q}^{(v)} - \bar{Y}_j^{(v)})^2}}<br>$$</p>
+<p>阈值化：</p>
+<p>$$<br>E_{ij}^{(v)} &#x3D; \begin{cases}<br>1 &amp; \text{if } |\rho_{ij}^{(v)}| &gt; \tau^{(v)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+<li><p><strong>STRING视图</strong>（$v&#x3D;K$）:<br>$$<br>E_{ij}^{(K)} &#x3D; \begin{cases}<br>1 &amp; \text{if } s_{ij}^{(K)} &gt; \tau^{(K)} \<br>0 &amp; \text{otherwise}<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+</li>
+<li><p><strong>最终图结构</strong><br>$$<br>\mathcal{G}_c &#x3D; \langle V, { E^{(v)} }_{v&#x3D;1}^K \rangle<br>$$</p>
+</li>
 </ol>
-</blockquote>
-<p>而超图也有对应的拉普拉斯矩阵</p>
-<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
-<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
-<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
-<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
-<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
-<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
-<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+<h5 id="2-双注意力机制"><a href="#2-双注意力机制" class="headerlink" title="2. 双注意力机制"></a>2. 双注意力机制</h5><img src="\img\CDR\Framework\CDR-model-part2\Duplex-attention.png" alt="image-20250727105814311" style="zoom: 25%;" />
+
+<h6 id="多视图自注意力"><a href="#多视图自注意力" class="headerlink" title="多视图自注意力"></a>多视图自注意力</h6><ol>
+<li><p>共享参数投影：<br>$$<br>\Theta &#x3D; [H^{(1)}\theta, …, H^{(K)}\theta] \in \mathbb{R}^{N_g \times K}<br>$$</p>
+</li>
+<li><p>相似度计算：<br>$$<br>\bar{\alpha}_{ij} &#x3D; \text{LeakyReLU}\left( \frac{\langle \Theta_i, \Theta_j \rangle}{|\Theta_i|_2 |\Theta_j|_2}, \beta \right)<br>$$</p>
+</li>
+<li><p>注意力系数：<br>$$<br>\alpha_{ij} &#x3D; \frac{\exp(\bar{\alpha}_{ij})}{\sum_{j&#x3D;1}^K \exp(\bar{\alpha}_{ij})}<br>$$</p>
+</li>
+<li><p>视图表示更新：<br>$$<br>H_s^{(v)} &#x3D; \sum_{j&#x3D;1}^K \alpha_{vj} H^{(j)}<br>$$</p>
+</li>
+</ol>
+<h6 id="视图级注意力"><a href="#视图级注意力" class="headerlink" title="视图级注意力"></a>视图级注意力</h6><ol>
+<li><p>表示拼接：<br>$$<br>H_s &#x3D; [H_s^{(1)}, …, H_s^{(K)}] \in \mathbb{R}^{N_g \times K d_c}<br>$$</p>
+</li>
+<li><p>视图权重计算：<br>$$<br>\bar{w}^{(v)} &#x3D; \text{Avg}(H_s z^{(v)} + b)<br>$$</p>
+</li>
+<li><p>归一化权重：<br>$$<br>w^{(v)} &#x3D; \frac{\exp(\bar{w}^{(v)})}{\sum_{v&#x3D;1}^K \exp(\bar{w}^{(v)})}<br>$$</p>
+</li>
+<li><p>最终融合：<br>$$<br>H &#x3D; \sum_{v&#x3D;1}^K w^{(v)} H_s^{(v)}<br>$$</p>
+</li>
+</ol>
+<p>此外，其还引入了multi-scale学习<del>（比较简单，可以直接去看原文捏）</del></p>
+<h3 id="Emden"><a href="#Emden" class="headerlink" title="Emden"></a><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">Emden</a></h3><p>这感觉没什么有用的信息捏</p>
+<h4 id="Framework-4"><a href="#Framework-4" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\Emden.png" alt="Emden" style="zoom:50%;" />
+
+<h3 id="AutoCDPR"><a href="#AutoCDPR" class="headerlink" title="AutoCDPR"></a><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">AutoCDPR</a></h3><p>采用了类似于AutoML的方式，但对鼠鼠而言，这东西就像将之前应该是超参数的东西也加入了训练，但实际用到CDR的部分只占很小一点<del>（是不是有点舍本逐末了捏）</del></p>
+<h4 id="Framework-5"><a href="#Framework-5" class="headerlink" title="Framework"></a>Framework</h4><img src="\img\CDR\Framework\CDR-model-part2\AutoCDPR.png" alt="AutoCDPR" style="zoom: 33%;" />
+
+
+
+<h4 id="数据集-3"><a href="#数据集-3" class="headerlink" title="数据集"></a>数据集</h4><p>GDSC和CCLE外加PubChem</p>
+<h3 id="TSGCNN"><a href="#TSGCNN" class="headerlink" title="TSGCNN"></a><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">TSGCNN</a></h3><p>由于之后有比这个玩意儿更加激进的RedCDR，所以这里只放一个架构图捏</p>
+<img src="\img\CDR\Framework\CDR-model-part2\TSGCNN.png" alt="image-20250727111745618" style="zoom:50%;" />
+
+<h3 id="📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton"><a href="#📄-Rajendran和Sivannarayna-Multi-Head-Graph-Attention-for-Drug-Response-Predicton" class="headerlink" title="📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton"></a><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></h3><p>从各个方面来讲都过于《淳朴》了捏，略过</p>
+<h3 id="HQNN"><a href="#HQNN" class="headerlink" title="HQNN"></a><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">HQNN</a></h3><p>将其他模型最后的FCN换成了一个QNN</p>
+<img src="\img\CDR\Framework\CDR-model-part2\HQNN.png" alt="image-20250727112841044" style="zoom: 50%;" />
+
+<h3 id="GADRP"><a href="#GADRP" class="headerlink" title="GADRP"></a><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">GADRP</a></h3><p>没什么特别的捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GADPR.png" alt="GADPR" style="zoom:50%;" />
+
+<h3 id="GPDRP"><a href="#GPDRP" class="headerlink" title="GPDRP"></a><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">GPDRP</a></h3><p>这位更是如此捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/GPDRP.png" alt="image-20250727113526356" style="zoom:50%;" />
+
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2023/Chu 等 - Graph Transformer for Drug Response Prediction.pdf" target="_blank">📄 Chu 等 - Graph Transformer for Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti.pdf" target="_blank">📄 Li 等 - MMCL-CDR enhancing cancer drug response prediction with multi-omics and morphology images contrasti</a></p>
+<p><a href="/paper/CDR/2023/Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of.pdf" target="_blank">📄 Liu - 2023 - Emden A novel method integrating graph and transformer representations for predicting the effect of</a></p>
+<p><a href="/paper/CDR/2023/Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic.pdf" target="_blank">📄 Liu 等 - 2023 - HMM-GDAN Hybrid multi-view and multi-scale graph duplex-attention networks for drug response predic</a></p>
+<p><a href="/paper/CDR/2023/Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction.pdf" target="_blank">📄 Liu和Zhang - A subcomponent-guided deep learning method for interpretable cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search.pdf" target="_blank">📄 Oloulade 等 - Cancer drug response prediction with surrogate modeling-based graph neural architecture search</a></p>
+<p><a href="/paper/CDR/2023/Peng - 2023 - Improving drug response prediction based on two-space graph convolution.pdf" target="_blank">📄 Peng - 2023 - Improving drug response prediction based on two-space graph convolution</a></p>
+<p><a href="/paper/CDR/2023/Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton.pdf" target="_blank">📄 Rajendran和Sivannarayna - Multi Head Graph Attention for Drug Response Predicton</a></p>
+<p><a href="/paper/CDR/2023/Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction.pdf" target="_blank">📄 Sagingalieva 等 - Hybrid Quantum Neural Network For Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2023/Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction.pdf" target="_blank">📄 Wang 等 - GADRP graph convolutional networks and autoencoders for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2023/Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer.pdf" target="_blank">📄 Yang - 2023 - GPDRP a multimodal framework for drug response prediction with graph transformer</a></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>Deep Learning</category>
-        <category>Hypergraph</category>
+        <category>CDR</category>
+        <category>Model</category>
       </categories>
       <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>PyTorch</tag>
         <tag>attention</tag>
-        <tag>graph theory</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>hypergraph</tag>
-        <tag>embedding</tag>
+        <tag>contrast learning</tag>
+        <tag>multi-view</tag>
       </tags>
   </entry>
   <entry>
@@ -2308,8 +2155,55 @@
       <tags>
         <tag>model</tag>
         <tag>Basic</tag>
-        <tag>graph theory</tag>
         <tag>GNN</tag>
+        <tag>graph theory</tag>
+        <tag>hypergraph</tag>
+        <tag>embedding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HGCN and HGAT</title>
+    <url>/2025/07/20/HGCN-and-HGAT/</url>
+    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
+<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+<span id="more"></span>
+
+<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
+<blockquote>
+<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
+<ol>
+<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
+<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
+<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+</ul>
+</li>
+<li>特征变换：$H^{(l)}W^{(l)}$</li>
+<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
+<li>非线性变换：$\sigma(\cdot)$</li>
+</ol>
+</blockquote>
+<p>而超图也有对应的拉普拉斯矩阵</p>
+<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
+<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
+<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
+<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
+<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
+<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
+<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>Deep Learning</category>
+        <category>Hypergraph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>GNN</tag>
+        <tag>graph theory</tag>
         <tag>hypergraph</tag>
         <tag>embedding</tag>
       </tags>
@@ -2414,275 +2308,6 @@
         <tag>PEP</tag>
         <tag>闲🉐无聊</tag>
         <tag>大概率没用</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Basic Concepts</title>
-    <url>/2025/07/28/Reinforcement-Learning-L1/</url>
-    <content><![CDATA[<h1 id="强化学习基础概念读书笔记"><a href="#强化学习基础概念读书笔记" class="headerlink" title="强化学习基础概念读书笔记"></a>强化学习基础概念读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/01.png" style="width: 175px; margin-right: 20px;">
-  <p>本文定义状态、动作、奖励、策略等核心概念，形式化MDP五元组框架。通过网格世界示例说明状态转移、回报计算和任务分类（分幕vs连续），为后续算法提供统一的数学建模基础。</p>
-</div>
-
-
-
-
-<span id="more"></span>
-
-
-
-<h2 id="网格世界示例-Grid-World-Example"><a href="#网格世界示例-Grid-World-Example" class="headerlink" title="网格世界示例 (Grid-World Example)"></a>网格世界示例 (Grid-World Example)</h2><ul>
-<li><strong>环境结构</strong>：  <ul>
-<li>网格由9个单元格组成（编号 $s_1$ 到 $s_9$）  </li>
-<li>单元格类型：可通行区域（如 $s_1, s_2$）、禁区（如 $s_6$）、目标区（如 $s_9$）、边界</li>
-</ul>
-</li>
-<li><strong>智能体任务</strong>：<br>从任意起点找到通往目标区域 $s_9$ 的“优质”路径。  <ul>
-<li>“优质”定义：避免进入禁区、减少绕路、不触碰边界。</li>
-</ul>
-</li>
-</ul>
-<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/grid%20world.png" alt="grid world" style="zoom: 30%;" />
-
-<hr>
-<h2 id="核心概念与数学形式化"><a href="#核心概念与数学形式化" class="headerlink" title="核心概念与数学形式化"></a>核心概念与数学形式化</h2><h3 id="状态-State"><a href="#状态-State" class="headerlink" title="状态 (State)"></a>状态 (State)</h3><ul>
-<li><strong>定义</strong>：智能体在环境中的<strong>当前状态标识</strong>（网格世界中为位置）  </li>
-<li><strong>状态空间 (State Space)</strong>：<br>$$\mathcal{S} &#x3D; {s_i}_{i&#x3D;1}^{9} &#x3D; {s_1, s_2, \dots, s_9}$$</li>
-</ul>
-<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/state.png" alt="state" style="zoom:23%;" />
-
-<h3 id="动作-Action"><a href="#动作-Action" class="headerlink" title="动作 (Action)"></a>动作 (Action)</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L1/action.png" alt="image-20250729124818727" style="zoom:33%;" />
-
-<ul>
-<li><strong>定义</strong>：智能体在状态 $s_i$ 下可执行的操作  </li>
-<li><strong>动作空间 (Action Space)</strong>：<br>$$\mathcal{A}(s_i) &#x3D; {a_k}_{k&#x3D;1}^{5} &#x3D; {a_1: \text{向上}, a_2: \text{向右}, a_3: \text{向下}, a_4: \text{向左}, a_5: \text{静止}}$$  <blockquote>
-<p><strong>注意</strong>：不同状态可能有不同的合法动作集（如边界处无法向外移动）</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="状态转移-State-Transition"><a href="#状态转移-State-Transition" class="headerlink" title="状态转移 (State Transition)"></a>状态转移 (State Transition)</h3><ul>
-<li><strong>定义</strong>：执行动作 $a$ 后，状态从 $s_i$ 迁移到 $s_j$ 的过程  </li>
-<li><strong>数学表示</strong>：  <ul>
-<li><strong>确定性转移</strong>（无随机因素）：<br>$$s_i \xrightarrow{a} s_j \quad \Rightarrow \quad p(s_j | s_i, a) &#x3D; 1$$  </li>
-<li><strong>随机性转移</strong>（如受风力影响）：<br>$$p(s_j | s_i, a) \in [0, 1], \quad \sum_{s_j \in \mathcal{S}} p(s_j | s_i, a) &#x3D; 1$$</li>
-</ul>
-</li>
-<li><strong>特殊规则</strong>：  <ul>
-<li><strong>触碰边界</strong>：$s_i \xrightarrow{a} s_i$（保持原位，奖励 $r_{\text{bound}}&#x3D;-1$）  </li>
-<li><strong>进入禁区</strong>：  <ul>
-<li>方案1（默认）：$s_i \xrightarrow{a} s_{\text{forbid}}$（允许进入但惩罚 $r_{\text{forbid}}&#x3D;-1$)  </li>
-<li>方案2：$s_i \xrightarrow{a} s_i$（物理阻挡无法进入）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="状态转移表示法"><a href="#状态转移表示法" class="headerlink" title="状态转移表示法"></a>状态转移表示法</h4><table>
-<thead>
-<tr>
-<th><strong>状态\动作</strong></th>
-<th>$a_1$ (上)</th>
-<th>$a_2$ (右)</th>
-<th>$a_3$ (下)</th>
-<th>$a_4$ (左)</th>
-<th>$a_5$ (静)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$s_1$</td>
-<td>$s_1$</td>
-<td>$s_2$</td>
-<td>$s_4$</td>
-<td>$s_1$</td>
-<td>$s_1$</td>
-</tr>
-<tr>
-<td>$s_2$</td>
-<td>$s_2$</td>
-<td>$s_3$</td>
-<td>$s_5$</td>
-<td>$s_1$</td>
-<td>$s_2$</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>局限</strong>：表格仅能表示确定性转移，随机转移需用概率分布 $p(s’|s,a)$。  </p>
-</blockquote>
-<h3 id="策略-Policy"><a href="#策略-Policy" class="headerlink" title="策略 (Policy)"></a>策略 (Policy)</h3><ul>
-<li><strong>定义</strong>：在状态 $s$ 下选择动作 $a$ 的规则  </li>
-<li><strong>数学表示</strong>：<br>$$\pi(a|s) &#x3D; \mathbb{P}(\text{选择动作 } a \mid \text{状态 } s), \quad \sum_{a \in \mathcal{A}(s)} \pi(a|s) &#x3D; 1$$  </li>
-<li><strong>类型</strong>：  <ul>
-<li><strong>确定性策略</strong>：$\exists a’ \text{ s.t. } \pi(a’|s)&#x3D;1, \pi(a|s)&#x3D;0 (\forall a \neq a’)$  </li>
-<li><strong>随机性策略</strong>：$\exists a \text{ s.t. } \pi(a|s) \in (0,1)$（如探索需求）</li>
-</ul>
-</li>
-</ul>
-<h4 id="策略表示法"><a href="#策略表示法" class="headerlink" title="策略表示法"></a>策略表示法</h4><table>
-<thead>
-<tr>
-<th><strong>状态\动作</strong></th>
-<th>$a_1$</th>
-<th>$a_2$</th>
-<th>$a_3$</th>
-<th>$a_4$</th>
-<th>$a_5$</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$s_1$</td>
-<td>0</td>
-<td>0.5</td>
-<td>0.5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>$s_2$</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<h3 id="奖励-Reward"><a href="#奖励-Reward" class="headerlink" title="奖励 (Reward)"></a>奖励 (Reward)</h3><ul>
-<li><strong>定义</strong>：执行动作后环境反馈的标量值（鼓励&#x2F;惩罚信号）  </li>
-<li><strong>设计原则</strong>：  <ul>
-<li>$r_{\text{bound}} &#x3D; -1$（触碰边界）  </li>
-<li>$r_{\text{forbid}} &#x3D; -1$（进入禁区）  </li>
-<li>$r_{\text{target}} &#x3D; +1$（到达目标）  </li>
-<li>其他情况 $r &#x3D; 0$</li>
-</ul>
-</li>
-<li><strong>关键性质</strong>：  <ul>
-<li><strong>相对性</strong>：奖励的绝对数值不重要，相对大小决定策略优劣（例如 ${+1,-1}$ 等价于 ${+2,0}$）  </li>
-<li><strong>随机性</strong>：$p(r|s,a)$ 可建模不确定性（如学习效果波动）</li>
-</ul>
-</li>
-</ul>
-<h3 id="轨迹与回报-Trajectory-Return"><a href="#轨迹与回报-Trajectory-Return" class="headerlink" title="轨迹与回报 (Trajectory &amp; Return)"></a>轨迹与回报 (Trajectory &amp; Return)</h3><ul>
-<li><strong>轨迹</strong>：状态-动作-奖励序列<br>$$s_1 \xrightarrow[r&#x3D;0]{a_2} s_2 \xrightarrow[r&#x3D;0]{a_3} s_5 \xrightarrow[r&#x3D;0]{a_3} s_8 \xrightarrow[r&#x3D;1]{a_2} s_9$$  </li>
-<li><strong>回报 (Return)</strong>：累积奖励之和  <ul>
-<li><strong>有限轨迹</strong>：$\text{return} &#x3D; \sum_{t&#x3D;1}^{T} r_t &#x3D; 0+0+0+1&#x3D;1$  </li>
-<li><strong>无限轨迹问题</strong>：若在 $s_9$ 持续停留，回报 $\sum_{t&#x3D;4}^{\infty} 1 \to \infty$（发散）</li>
-</ul>
-</li>
-</ul>
-<h4 id="折扣回报-Discounted-Return"><a href="#折扣回报-Discounted-Return" class="headerlink" title="折扣回报 (Discounted Return)"></a>折扣回报 (Discounted Return)</h4><p>引入折扣因子 $\gamma \in (0,1)$ 保证收敛：<br>$$G_t &#x3D; \sum_{k&#x3D;0}^{\infty} \gamma^k r_{t+k+1} &#x3D; r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \cdots$$  </p>
-<ul>
-<li><strong>性质</strong>：  <ul>
-<li>$\gamma \approx 0$：侧重近期奖励  </li>
-<li>$\gamma \approx 1$：侧重远期奖励</li>
-</ul>
-</li>
-<li><strong>计算示例</strong>（$s_1$ 到 $s_9$ 后停留）：<br>$$G &#x3D; \gamma^3(1 + \gamma + \gamma^2 + \cdots) &#x3D; \gamma^3 \frac{1}{1-\gamma}$$</li>
-</ul>
-<h3 id="7-任务分类"><a href="#7-任务分类" class="headerlink" title="7. 任务分类"></a>7. 任务分类</h3><table>
-<thead>
-<tr>
-<th><strong>类型</strong></th>
-<th><strong>特点</strong></th>
-<th><strong>回报计算</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>分幕任务</strong> (Episodic)</td>
-<td>存在终止状态（如到达 $s_9$）</td>
-<td>有限步累积奖励</td>
-</tr>
-<tr>
-<td><strong>连续任务</strong> (Continuing)</td>
-<td>无终止状态</td>
-<td>折扣回报 $G_t$</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="马尔可夫决策过程-Markov-Decision-Process-MDP"><a href="#马尔可夫决策过程-Markov-Decision-Process-MDP" class="headerlink" title="马尔可夫决策过程 (Markov Decision Process, MDP)"></a>马尔可夫决策过程 (Markov Decision Process, MDP)</h2><h3 id="关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle"><a href="#关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle" class="headerlink" title="关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$"></a>关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</h3><ol>
-<li><strong>状态集</strong> $\mathcal{S}$  </li>
-<li><strong>动作集</strong> $\mathcal{A}(s)$（状态相关）  </li>
-<li><strong>状态转移概率</strong>：<br>$$P(s’|s,a) &#x3D; \mathbb{P}(s_{t+1}&#x3D;s’ \mid s_t&#x3D;s, a_t&#x3D;a)$$  </li>
-<li><strong>奖励函数</strong>：<br>$$R(s,a) &#x3D; \mathbb{E}[r_{t+1} \mid s_t&#x3D;s, a_t&#x3D;a] \quad \text{或} \quad p(r|s,a)$$  </li>
-<li><strong>折扣因子</strong> $\gamma \in (0,1)$</li>
-</ol>
-<h3 id="马尔可夫性质-Markov-Property"><a href="#马尔可夫性质-Markov-Property" class="headerlink" title="马尔可夫性质 (Markov Property)"></a>马尔可夫性质 (Markov Property)</h3><p>未来状态&#x2F;奖励仅依赖当前状态和动作：<br>$$\begin{align*}<br>p(s_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(s_{t+1}|s_t,a_t) \\<br>p(r_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(r_{t+1}|s_t,a_t)<br>\end{align*}$$  </p>
-<h3 id="抽象表示"><a href="#抽象表示" class="headerlink" title="抽象表示"></a>抽象表示</h3><pre>
-<code class="mermaid">
-graph LR
- 
-s1((s1)) --&gt;|a1, r| s2((s2))  
-s2 --&gt;|a3, r| s5((s5))  
-s5 --&gt;|a3, r| s8((s8))  
-s8 --&gt;|a2, r&#x3D;1| s9((s9))  
-</code>
-</pre>
-
-<blockquote>
-<p>注：网格世界是MDP的具体实例，MDP是强化学习的通用数学模型。  </p>
-</blockquote>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
-<thead>
-<tr>
-<th><strong>概念</strong></th>
-<th><strong>关键描述</strong></th>
-<th><strong>数学工具</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>状态与动作</td>
-<td>环境描述与决策基础</td>
-<td>集合 $\mathcal{S}, \mathcal{A}$</td>
-</tr>
-<tr>
-<td>策略</td>
-<td>状态到动作的映射规则</td>
-<td>$\pi(a|s)$</td>
-</tr>
-<tr>
-<td>状态转移与奖励</td>
-<td>环境动态特性与反馈机制</td>
-<td>$p(s’|s,a), p(r|s,a)$</td>
-</tr>
-<tr>
-<td>轨迹与回报</td>
-<td>策略执行的序列与长期收益</td>
-<td>$G_t&#x3D;\sum \gamma^k r_{t+k+1}$</td>
-</tr>
-<tr>
-<td>MDP框架</td>
-<td>统一建模强化学习问题</td>
-<td>$\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</td>
-</tr>
-</tbody></table>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
-  </span>
-  Book-Mathematical-Foundation-of-Reinforcement-Learning
-</a>]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-      <tags>
-        <tag>ReinForcement Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -3026,6 +2651,275 @@ s8 --&gt;|a2, r&#x3D;1| s9((s9))
       </tags>
   </entry>
   <entry>
+    <title>Basic Concepts</title>
+    <url>/2025/07/28/Reinforcement-Learning-L1/</url>
+    <content><![CDATA[<h1 id="强化学习基础概念读书笔记"><a href="#强化学习基础概念读书笔记" class="headerlink" title="强化学习基础概念读书笔记"></a>强化学习基础概念读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/01.png" style="width: 175px; margin-right: 20px;">
+  <p>本文定义状态、动作、奖励、策略等核心概念，形式化MDP五元组框架。通过网格世界示例说明状态转移、回报计算和任务分类（分幕vs连续），为后续算法提供统一的数学建模基础。</p>
+</div>
+
+
+
+
+<span id="more"></span>
+
+
+
+<h2 id="网格世界示例-Grid-World-Example"><a href="#网格世界示例-Grid-World-Example" class="headerlink" title="网格世界示例 (Grid-World Example)"></a>网格世界示例 (Grid-World Example)</h2><ul>
+<li><strong>环境结构</strong>：  <ul>
+<li>网格由9个单元格组成（编号 $s_1$ 到 $s_9$）  </li>
+<li>单元格类型：可通行区域（如 $s_1, s_2$）、禁区（如 $s_6$）、目标区（如 $s_9$）、边界</li>
+</ul>
+</li>
+<li><strong>智能体任务</strong>：<br>从任意起点找到通往目标区域 $s_9$ 的“优质”路径。  <ul>
+<li>“优质”定义：避免进入禁区、减少绕路、不触碰边界。</li>
+</ul>
+</li>
+</ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/grid%20world.png" alt="grid world" style="zoom: 30%;" />
+
+<hr>
+<h2 id="核心概念与数学形式化"><a href="#核心概念与数学形式化" class="headerlink" title="核心概念与数学形式化"></a>核心概念与数学形式化</h2><h3 id="状态-State"><a href="#状态-State" class="headerlink" title="状态 (State)"></a>状态 (State)</h3><ul>
+<li><strong>定义</strong>：智能体在环境中的<strong>当前状态标识</strong>（网格世界中为位置）  </li>
+<li><strong>状态空间 (State Space)</strong>：<br>$$\mathcal{S} &#x3D; {s_i}_{i&#x3D;1}^{9} &#x3D; {s_1, s_2, \dots, s_9}$$</li>
+</ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/state.png" alt="state" style="zoom:23%;" />
+
+<h3 id="动作-Action"><a href="#动作-Action" class="headerlink" title="动作 (Action)"></a>动作 (Action)</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L1/action.png" alt="image-20250729124818727" style="zoom:33%;" />
+
+<ul>
+<li><strong>定义</strong>：智能体在状态 $s_i$ 下可执行的操作  </li>
+<li><strong>动作空间 (Action Space)</strong>：<br>$$\mathcal{A}(s_i) &#x3D; {a_k}_{k&#x3D;1}^{5} &#x3D; {a_1: \text{向上}, a_2: \text{向右}, a_3: \text{向下}, a_4: \text{向左}, a_5: \text{静止}}$$  <blockquote>
+<p><strong>注意</strong>：不同状态可能有不同的合法动作集（如边界处无法向外移动）</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="状态转移-State-Transition"><a href="#状态转移-State-Transition" class="headerlink" title="状态转移 (State Transition)"></a>状态转移 (State Transition)</h3><ul>
+<li><strong>定义</strong>：执行动作 $a$ 后，状态从 $s_i$ 迁移到 $s_j$ 的过程  </li>
+<li><strong>数学表示</strong>：  <ul>
+<li><strong>确定性转移</strong>（无随机因素）：<br>$$s_i \xrightarrow{a} s_j \quad \Rightarrow \quad p(s_j | s_i, a) &#x3D; 1$$  </li>
+<li><strong>随机性转移</strong>（如受风力影响）：<br>$$p(s_j | s_i, a) \in [0, 1], \quad \sum_{s_j \in \mathcal{S}} p(s_j | s_i, a) &#x3D; 1$$</li>
+</ul>
+</li>
+<li><strong>特殊规则</strong>：  <ul>
+<li><strong>触碰边界</strong>：$s_i \xrightarrow{a} s_i$（保持原位，奖励 $r_{\text{bound}}&#x3D;-1$）  </li>
+<li><strong>进入禁区</strong>：  <ul>
+<li>方案1（默认）：$s_i \xrightarrow{a} s_{\text{forbid}}$（允许进入但惩罚 $r_{\text{forbid}}&#x3D;-1$)  </li>
+<li>方案2：$s_i \xrightarrow{a} s_i$（物理阻挡无法进入）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="状态转移表示法"><a href="#状态转移表示法" class="headerlink" title="状态转移表示法"></a>状态转移表示法</h4><table>
+<thead>
+<tr>
+<th><strong>状态\动作</strong></th>
+<th>$a_1$ (上)</th>
+<th>$a_2$ (右)</th>
+<th>$a_3$ (下)</th>
+<th>$a_4$ (左)</th>
+<th>$a_5$ (静)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$s_1$</td>
+<td>$s_1$</td>
+<td>$s_2$</td>
+<td>$s_4$</td>
+<td>$s_1$</td>
+<td>$s_1$</td>
+</tr>
+<tr>
+<td>$s_2$</td>
+<td>$s_2$</td>
+<td>$s_3$</td>
+<td>$s_5$</td>
+<td>$s_1$</td>
+<td>$s_2$</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>局限</strong>：表格仅能表示确定性转移，随机转移需用概率分布 $p(s’|s,a)$。  </p>
+</blockquote>
+<h3 id="策略-Policy"><a href="#策略-Policy" class="headerlink" title="策略 (Policy)"></a>策略 (Policy)</h3><ul>
+<li><strong>定义</strong>：在状态 $s$ 下选择动作 $a$ 的规则  </li>
+<li><strong>数学表示</strong>：<br>$$\pi(a|s) &#x3D; \mathbb{P}(\text{选择动作 } a \mid \text{状态 } s), \quad \sum_{a \in \mathcal{A}(s)} \pi(a|s) &#x3D; 1$$  </li>
+<li><strong>类型</strong>：  <ul>
+<li><strong>确定性策略</strong>：$\exists a’ \text{ s.t. } \pi(a’|s)&#x3D;1, \pi(a|s)&#x3D;0 (\forall a \neq a’)$  </li>
+<li><strong>随机性策略</strong>：$\exists a \text{ s.t. } \pi(a|s) \in (0,1)$（如探索需求）</li>
+</ul>
+</li>
+</ul>
+<h4 id="策略表示法"><a href="#策略表示法" class="headerlink" title="策略表示法"></a>策略表示法</h4><table>
+<thead>
+<tr>
+<th><strong>状态\动作</strong></th>
+<th>$a_1$</th>
+<th>$a_2$</th>
+<th>$a_3$</th>
+<th>$a_4$</th>
+<th>$a_5$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$s_1$</td>
+<td>0</td>
+<td>0.5</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>$s_2$</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<h3 id="奖励-Reward"><a href="#奖励-Reward" class="headerlink" title="奖励 (Reward)"></a>奖励 (Reward)</h3><ul>
+<li><strong>定义</strong>：执行动作后环境反馈的标量值（鼓励&#x2F;惩罚信号）  </li>
+<li><strong>设计原则</strong>：  <ul>
+<li>$r_{\text{bound}} &#x3D; -1$（触碰边界）  </li>
+<li>$r_{\text{forbid}} &#x3D; -1$（进入禁区）  </li>
+<li>$r_{\text{target}} &#x3D; +1$（到达目标）  </li>
+<li>其他情况 $r &#x3D; 0$</li>
+</ul>
+</li>
+<li><strong>关键性质</strong>：  <ul>
+<li><strong>相对性</strong>：奖励的绝对数值不重要，相对大小决定策略优劣（例如 ${+1,-1}$ 等价于 ${+2,0}$）  </li>
+<li><strong>随机性</strong>：$p(r|s,a)$ 可建模不确定性（如学习效果波动）</li>
+</ul>
+</li>
+</ul>
+<h3 id="轨迹与回报-Trajectory-Return"><a href="#轨迹与回报-Trajectory-Return" class="headerlink" title="轨迹与回报 (Trajectory &amp; Return)"></a>轨迹与回报 (Trajectory &amp; Return)</h3><ul>
+<li><strong>轨迹</strong>：状态-动作-奖励序列<br>$$s_1 \xrightarrow[r&#x3D;0]{a_2} s_2 \xrightarrow[r&#x3D;0]{a_3} s_5 \xrightarrow[r&#x3D;0]{a_3} s_8 \xrightarrow[r&#x3D;1]{a_2} s_9$$  </li>
+<li><strong>回报 (Return)</strong>：累积奖励之和  <ul>
+<li><strong>有限轨迹</strong>：$\text{return} &#x3D; \sum_{t&#x3D;1}^{T} r_t &#x3D; 0+0+0+1&#x3D;1$  </li>
+<li><strong>无限轨迹问题</strong>：若在 $s_9$ 持续停留，回报 $\sum_{t&#x3D;4}^{\infty} 1 \to \infty$（发散）</li>
+</ul>
+</li>
+</ul>
+<h4 id="折扣回报-Discounted-Return"><a href="#折扣回报-Discounted-Return" class="headerlink" title="折扣回报 (Discounted Return)"></a>折扣回报 (Discounted Return)</h4><p>引入折扣因子 $\gamma \in (0,1)$ 保证收敛：<br>$$G_t &#x3D; \sum_{k&#x3D;0}^{\infty} \gamma^k r_{t+k+1} &#x3D; r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \cdots$$  </p>
+<ul>
+<li><strong>性质</strong>：  <ul>
+<li>$\gamma \approx 0$：侧重近期奖励  </li>
+<li>$\gamma \approx 1$：侧重远期奖励</li>
+</ul>
+</li>
+<li><strong>计算示例</strong>（$s_1$ 到 $s_9$ 后停留）：<br>$$G &#x3D; \gamma^3(1 + \gamma + \gamma^2 + \cdots) &#x3D; \gamma^3 \frac{1}{1-\gamma}$$</li>
+</ul>
+<h3 id="7-任务分类"><a href="#7-任务分类" class="headerlink" title="7. 任务分类"></a>7. 任务分类</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>特点</strong></th>
+<th><strong>回报计算</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分幕任务</strong> (Episodic)</td>
+<td>存在终止状态（如到达 $s_9$）</td>
+<td>有限步累积奖励</td>
+</tr>
+<tr>
+<td><strong>连续任务</strong> (Continuing)</td>
+<td>无终止状态</td>
+<td>折扣回报 $G_t$</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="马尔可夫决策过程-Markov-Decision-Process-MDP"><a href="#马尔可夫决策过程-Markov-Decision-Process-MDP" class="headerlink" title="马尔可夫决策过程 (Markov Decision Process, MDP)"></a>马尔可夫决策过程 (Markov Decision Process, MDP)</h2><h3 id="关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle"><a href="#关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle" class="headerlink" title="关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$"></a>关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</h3><ol>
+<li><strong>状态集</strong> $\mathcal{S}$  </li>
+<li><strong>动作集</strong> $\mathcal{A}(s)$（状态相关）  </li>
+<li><strong>状态转移概率</strong>：<br>$$P(s’|s,a) &#x3D; \mathbb{P}(s_{t+1}&#x3D;s’ \mid s_t&#x3D;s, a_t&#x3D;a)$$  </li>
+<li><strong>奖励函数</strong>：<br>$$R(s,a) &#x3D; \mathbb{E}[r_{t+1} \mid s_t&#x3D;s, a_t&#x3D;a] \quad \text{或} \quad p(r|s,a)$$  </li>
+<li><strong>折扣因子</strong> $\gamma \in (0,1)$</li>
+</ol>
+<h3 id="马尔可夫性质-Markov-Property"><a href="#马尔可夫性质-Markov-Property" class="headerlink" title="马尔可夫性质 (Markov Property)"></a>马尔可夫性质 (Markov Property)</h3><p>未来状态&#x2F;奖励仅依赖当前状态和动作：<br>$$\begin{align*}<br>p(s_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(s_{t+1}|s_t,a_t) \\<br>p(r_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(r_{t+1}|s_t,a_t)<br>\end{align*}$$  </p>
+<h3 id="抽象表示"><a href="#抽象表示" class="headerlink" title="抽象表示"></a>抽象表示</h3><pre>
+<code class="mermaid">
+graph LR
+ 
+s1((s1)) --&gt;|a1, r| s2((s2))  
+s2 --&gt;|a3, r| s5((s5))  
+s5 --&gt;|a3, r| s8((s8))  
+s8 --&gt;|a2, r&#x3D;1| s9((s9))  
+</code>
+</pre>
+
+<blockquote>
+<p>注：网格世界是MDP的具体实例，MDP是强化学习的通用数学模型。  </p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th><strong>概念</strong></th>
+<th><strong>关键描述</strong></th>
+<th><strong>数学工具</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态与动作</td>
+<td>环境描述与决策基础</td>
+<td>集合 $\mathcal{S}, \mathcal{A}$</td>
+</tr>
+<tr>
+<td>策略</td>
+<td>状态到动作的映射规则</td>
+<td>$\pi(a|s)$</td>
+</tr>
+<tr>
+<td>状态转移与奖励</td>
+<td>环境动态特性与反馈机制</td>
+<td>$p(s’|s,a), p(r|s,a)$</td>
+</tr>
+<tr>
+<td>轨迹与回报</td>
+<td>策略执行的序列与长期收益</td>
+<td>$G_t&#x3D;\sum \gamma^k r_{t+k+1}$</td>
+</tr>
+<tr>
+<td>MDP框架</td>
+<td>统一建模强化学习问题</td>
+<td>$\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</td>
+</tr>
+</tbody></table>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+      <tags>
+        <tag>ReinForcement Learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Reinforcement-Learning-L10</title>
     <url>/2025/07/28/Reinforcement-Learning-L10/</url>
     <content><![CDATA[<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
@@ -3188,175 +3082,6 @@ for 每步 $t$：
 </ul>
 </blockquote>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Reinforcement-Learning-L2</title>
-    <url>/2025/07/28/Reinforcement-Learning-L2/</url>
-    <content><![CDATA[<h1 id="强化学习基础：状态值与贝尔曼方程读书笔记"><a href="#强化学习基础：状态值与贝尔曼方程读书笔记" class="headerlink" title="强化学习基础：状态值与贝尔曼方程读书笔记"></a>强化学习基础：状态值与贝尔曼方程读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/02.png" style="width: 175px; margin-right: 20px;">
-  <p>状态值函数量化策略的长期收益，贝尔曼方程揭示其递归结构。本文通过网格世界示例展示状态值计算，推导贝尔曼方程的矩阵形式与求解方法，并分析状态值与动作值的关系，为策略评估奠定数学基础。</p>
-</div>
-
-<span id="more"></span>
-
-
-
-<h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><ul>
-<li><strong>核心概念</strong>：状态值（State Value）  </li>
-<li><strong>基本工具</strong>：贝尔曼方程（Bellman Equation）  </li>
-<li><strong>学习内容</strong>：  <ol>
-<li>状态值的定义与重要性  </li>
-<li>贝尔曼方程的推导与求解  </li>
-<li>状态值与动作值的关系</li>
-</ol>
-</li>
-</ul>
-<hr>
-<h2 id="二、动机示例：为什么回报（Return）重要？"><a href="#二、动机示例：为什么回报（Return）重要？" class="headerlink" title="二、动机示例：为什么回报（Return）重要？"></a>二、动机示例：为什么回报（Return）重要？</h2><h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><p>在网格世界中，从起点 $s_1$ 出发，评估三个策略的优劣：  </p>
-<ul>
-<li><strong>策略1</strong>（左）：避开禁区直接走向目标  </li>
-<li><strong>策略2</strong>（中）：经过禁区走向目标  </li>
-<li><strong>策略3</strong>（右）：随机选择动作（50%概率进入禁区）</li>
-</ul>
-<h3 id="回报计算（-gamma-0-9-）"><a href="#回报计算（-gamma-0-9-）" class="headerlink" title="回报计算（$\gamma &#x3D; 0.9$）"></a>回报计算（$\gamma &#x3D; 0.9$）</h3><ol>
-<li><strong>策略1</strong>（确定性）：<br>$$<br>G_1 &#x3D; 0 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots &#x3D; \frac{\gamma}{1-\gamma} &#x3D; 9<br>$$</li>
-<li><strong>策略2</strong>（确定性）：<br>$$<br>G_2 &#x3D; -1 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots &#x3D; -1 + \frac{\gamma}{1-\gamma} &#x3D; 8<br>$$</li>
-<li><strong>策略3</strong>（随机性）：<br>$$<br>G_3 &#x3D; 0.5 \times (-1 + 9) + 0.5 \times 9 &#x3D; -0.5 + 9 &#x3D; 8.5<br>$$</li>
-</ol>
-<h3 id="关键结论"><a href="#关键结论" class="headerlink" title="关键结论"></a>关键结论</h3><ul>
-<li><strong>策略优劣</strong>：$G_1 &gt; G_3 &gt; G_2$（策略1最优，策略2最差）  </li>
-<li><strong>回报的作用</strong>：  <ul>
-<li>量化策略性能  </li>
-<li>反映长期收益（避免禁区惩罚）  </li>
-<li>验证直观决策的数学合理性</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="三、状态值（State-Value）的定义"><a href="#三、状态值（State-Value）的定义" class="headerlink" title="三、状态值（State Value）的定义"></a>三、状态值（State Value）的定义</h2><h3 id="数学形式"><a href="#数学形式" class="headerlink" title="数学形式"></a>数学形式</h3><ul>
-<li><strong>符号定义</strong>：  <ul>
-<li>$S_t$：时刻 $t$ 的状态  </li>
-<li>$A_t$：时刻 $t$ 的动作  </li>
-<li>$R_{t+1}$：动作 $A_t$ 的即时奖励  </li>
-<li>$G_t$：折扣回报 $G_t &#x3D; R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots$</li>
-</ul>
-</li>
-<li><strong>状态值函数</strong>：<br>$$<br>v_\pi(s) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s]<br>$$  <blockquote>
-<p>表示从状态 $s$ 出发，遵循策略 $\pi$ 的期望累积回报</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="核心性质"><a href="#核心性质" class="headerlink" title="核心性质"></a>核心性质</h3><ol>
-<li><strong>条件期望</strong>：依赖初始状态 $s$ 和策略 $\pi$  </li>
-<li><strong>模型依赖性</strong>：由动态模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$ 决定  </li>
-<li><strong>与回报的关系</strong>：  <ul>
-<li>若策略、状态转移、奖励均为确定性 → $v_\pi(s) &#x3D; G_t$  </li>
-<li>若存在随机性 → $v_\pi(s)$ 是所有可能轨迹回报的均值</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="四、贝尔曼方程（Bellman-Equation）的推导"><a href="#四、贝尔曼方程（Bellman-Equation）的推导" class="headerlink" title="四、贝尔曼方程（Bellman Equation）的推导"></a>四、贝尔曼方程（Bellman Equation）的推导</h2><h3 id="回报分解"><a href="#回报分解" class="headerlink" title="回报分解"></a>回报分解</h3><p>将 $G_t$ 拆分为即时奖励和未来折扣回报：<br>$$<br>G_t &#x3D; R_{t+1} + \gamma G_{t+1}<br>$$  </p>
-<h3 id="状态值分解"><a href="#状态值分解" class="headerlink" title="状态值分解"></a>状态值分解</h3><p>代入状态值定义：<br>$$<br>v_\pi(s) &#x3D; \mathbb{E}[R_{t+1} \mid S_t &#x3D; s] + \gamma \mathbb{E}[G_{t+1} \mid S_t &#x3D; s]<br>$$  </p>
-<h4 id="1-即时奖励项（Immediate-Reward）"><a href="#1-即时奖励项（Immediate-Reward）" class="headerlink" title="1. 即时奖励项（Immediate Reward）"></a>1. 即时奖励项（Immediate Reward）</h4><p>$$<br>\mathbb{E}[R_{t+1} \mid S_t &#x3D; s] &#x3D; \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r<br>$$  </p>
-<blockquote>
-<p>策略 $\pi$ 下所有可能动作的奖励期望  </p>
-</blockquote>
-<h4 id="2-未来奖励项（Future-Reward）"><a href="#2-未来奖励项（Future-Reward）" class="headerlink" title="2. 未来奖励项（Future Reward）"></a>2. 未来奖励项（Future Reward）</h4><p>$$<br>\mathbb{E}[G_{t+1} \mid S_t &#x3D; s] &#x3D; \sum_a \pi(a \mid s) \sum_{s’} p(s’ \mid s,a) v_\pi(s’)<br>$$  </p>
-<blockquote>
-<p>马尔可夫性质保证：未来奖励仅依赖下一状态 $s’$  </p>
-</blockquote>
-<h4 id="3-最终形式"><a href="#3-最终形式" class="headerlink" title="3. 最终形式"></a>3. 最终形式</h4><p>$$<br>v_\pi(s) &#x3D; \sum_a \pi(a \mid s) \left[ \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’) \right]<br>$$  </p>
-<h3 id="关键特性"><a href="#关键特性" class="headerlink" title="关键特性"></a>关键特性</h3><ul>
-<li><strong>自举（Bootstrapping）</strong>：状态值 $v_\pi(s)$ 依赖其他状态值 $v_\pi(s’)$  </li>
-<li><strong>方程组结构</strong>：每个状态对应一个方程（共 $|\mathcal{S}|$ 个方程）  </li>
-<li><strong>模型要求</strong>：需已知动态模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$</li>
-</ul>
-<hr>
-<h2 id="五、贝尔曼方程的矩阵形式"><a href="#五、贝尔曼方程的矩阵形式" class="headerlink" title="五、贝尔曼方程的矩阵形式"></a>五、贝尔曼方程的矩阵形式</h2><h3 id="符号定义"><a href="#符号定义" class="headerlink" title="符号定义"></a>符号定义</h3><ul>
-<li><p><strong>策略相关奖励</strong>：<br>$$<br>r_\pi(s) &#x3D; \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r<br>$$  </p>
-</li>
-<li><p><strong>策略相关状态转移矩阵</strong>：<br>$$<br>p_\pi(s’ \mid s) &#x3D; \sum_a \pi(a \mid s) p(s’ \mid s,a)<br>$$</p>
-<p>$$<br>P_\pi \in \mathbb{R}^{n \times n}, \quad [P_\pi]_{ij} &#x3D; p_\pi(s_j \mid s_i)<br>$$</p>
-</li>
-</ul>
-<h3 id="矩阵方程"><a href="#矩阵方程" class="headerlink" title="矩阵方程"></a>矩阵方程</h3><p>$$<br>v_\pi &#x3D; r_\pi + \gamma P_\pi v_\pi<br>$$<br>其中：  </p>
-<ul>
-<li>$v_\pi &#x3D; [v_\pi(s_1), \dots, v_\pi(s_n)]^T$  </li>
-<li>$r_\pi &#x3D; [r_\pi(s_1), \dots, r_\pi(s_n)]^T$</li>
-</ul>
-<h4 id="示例（四状态循环图）"><a href="#示例（四状态循环图）" class="headerlink" title="示例（四状态循环图）"></a>示例（四状态循环图）</h4><p>$$<br>\begin{bmatrix}<br>v_\pi(s_1) \\<br>v_\pi(s_2) \\<br>v_\pi(s_3) \\<br>v_\pi(s_4)<br>\end{bmatrix}&#x3D;<br>\begin{bmatrix}<br>0 \\<br>1 \\<br>1 \\<br>1<br>\end{bmatrix}+<br>\gamma<br>\begin{bmatrix}<br>0 &amp; 0 &amp; 1 &amp; 0 \\<br>0 &amp; 0 &amp; 0 &amp; 1 \\<br>0 &amp; 0 &amp; 0 &amp; 1 \\<br>0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>\begin{bmatrix}<br>v_\pi(s_1) \\<br>v_\pi(s_2) \\<br>v_\pi(s_3) \\<br>v_\pi(s_4)<br>\end{bmatrix}<br>$$  </p>
-<hr>
-<h2 id="六、贝尔曼方程的求解方法"><a href="#六、贝尔曼方程的求解方法" class="headerlink" title="六、贝尔曼方程的求解方法"></a>六、贝尔曼方程的求解方法</h2><h3 id="1-闭式解（Closed-Form-Solution）"><a href="#1-闭式解（Closed-Form-Solution）" class="headerlink" title="1. 闭式解（Closed-Form Solution）"></a>1. 闭式解（Closed-Form Solution）</h3><p>$$<br>v_\pi &#x3D; (I - \gamma P_\pi)^{-1} r_\pi<br>$$  </p>
-<blockquote>
-<p>要求矩阵 $I - \gamma P_\pi$ 可逆（当 $\gamma &lt; 1$ 时成立）  </p>
-</blockquote>
-<h3 id="2-迭代解（Iterative-Solution）"><a href="#2-迭代解（Iterative-Solution）" class="headerlink" title="2. 迭代解（Iterative Solution）"></a>2. 迭代解（Iterative Solution）</h3><p>迭代更新直至收敛：<br>$$<br>v_{k+1} &#x3D; r_\pi + \gamma P_\pi v_k<br>$$  </p>
-<blockquote>
-<p><strong>收敛性证明</strong>：定义误差 $\delta_k &#x3D; v_k - v_\pi$，则<br>  $$<br>  \delta_{k+1} &#x3D; \gamma P_\pi \delta_k \to 0 \quad (k \to \infty)<br>  $$<br>  因 $\gamma &lt; 1$ 且 $P_\pi$ 为概率矩阵（谱半径 $\leq 1$)  </p>
-</blockquote>
-<h4 id="网格世界求解示例"><a href="#网格世界求解示例" class="headerlink" title="网格世界求解示例"></a>网格世界求解示例</h4><ul>
-<li><strong>奖励设置</strong>：禁区&#x2F;边界 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
-<li><strong>策略评估</strong>：计算各状态值（如 $s_1$ 在最优策略下 $v_{\pi}(s_1)&#x3D;9$)</li>
-</ul>
-<hr>
-<h2 id="七、动作值（Action-Value）"><a href="#七、动作值（Action-Value）" class="headerlink" title="七、动作值（Action Value）"></a>七、动作值（Action Value）</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>$$<br>q_\pi(s,a) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s, A_t &#x3D; a]<br>$$  </p>
-<blockquote>
-<p>表示在状态 $s$ 执行动作 $a$ 后，遵循策略 $\pi$ 的期望回报  </p>
-</blockquote>
-<h3 id="与状态值的关系"><a href="#与状态值的关系" class="headerlink" title="与状态值的关系"></a>与状态值的关系</h3><ol>
-<li><strong>状态值分解为动作值</strong>：<br>$$<br>v_\pi(s) &#x3D; \sum_a \pi(a \mid s) q_\pi(s,a)<br>$$  </li>
-<li><strong>动作值的贝尔曼方程</strong>：<br>$$<br>q_\pi(s,a) &#x3D; \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’)<br>$$</li>
-</ol>
-<h3 id="重要性"><a href="#重要性" class="headerlink" title="重要性"></a>重要性</h3><ul>
-<li><strong>动作评估</strong>：直接量化动作的长期收益（如 $q_\pi(s_1, a_3) &#x3D; \gamma v_\pi(s_3)$）  </li>
-<li><strong>策略优化基础</strong>：通过比较 $q_\pi(s,a)$ 改进策略（后续课程）</li>
-</ul>
-<hr>
-<h2 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><table>
-<thead>
-<tr>
-<th><strong>概念</strong></th>
-<th><strong>定义</strong></th>
-<th><strong>数学表示</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>状态值</strong></td>
-<td>从状态 $s$ 出发的期望累积回报</td>
-<td>$v_\pi(s) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s]$</td>
-</tr>
-<tr>
-<td><strong>动作值</strong></td>
-<td>执行动作 $a$ 后的期望累积回报</td>
-<td>$q_\pi(s,a) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s, A_t &#x3D; a]$</td>
-</tr>
-<tr>
-<td><strong>贝尔曼方程</strong></td>
-<td>描述状态值递归关系的方程组</td>
-<td>$v_\pi(s) &#x3D; \sum_a \pi(a \mid s) \left[ \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’) \right]$</td>
-</tr>
-</tbody></table>
-<h3 id="关键结论-1"><a href="#关键结论-1" class="headerlink" title="关键结论"></a>关键结论</h3><ol>
-<li><strong>回报驱动策略评估</strong>：回报 $G_t$ 是量化策略优劣的核心指标  </li>
-<li><strong>状态值求解</strong>：通过贝尔曼方程（闭式或迭代法）计算 $v_\pi$  </li>
-<li><strong>动作值桥梁作用</strong>：连接即时奖励与长期状态值（$q_\pi \leftrightarrow v_\pi$）</li>
-</ol>
-<h3 id="学习意义"><a href="#学习意义" class="headerlink" title="学习意义"></a>学习意义</h3><ul>
-<li><strong>策略评估（Policy Evaluation）</strong>：计算给定策略 $\pi$ 的状态值 $v_\pi$  </li>
-<li><strong>后续基础</strong>：为策略改进（Policy Improvement）和值迭代（Value Iteration）奠定基础</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
-  </span>
-  Book-Mathematical-Foundation-of-Reinforcement-Learning
-</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -3676,6 +3401,112 @@ for k=0,1,2,... until convergence:
         <category>ReinForcement Learning</category>
         <category>Mathmatical Foundation</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Gugugu Neralashun</title>
+    <url>/2025/07/16/General-Attention/</url>
+    <content><![CDATA[<h1 id="具有一般性的-Attention"><a href="#具有一般性的-Attention" class="headerlink" title="具有一般性的 Attention"></a>具有一般性的 Attention</h1><div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
+  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
+</div>
+
+
+
+<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+<span id="more"></span>
+
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
+
+<p>如果还记得这张图的话，那便是极好的捏 <del>不记得了就回去看捏</del> 本文主要就是在说明每一个模块常见的具体实现有什么</p>
+<h2 id="注意力评分函数-Attention-Scoring"><a href="#注意力评分函数-Attention-Scoring" class="headerlink" title="注意力评分函数(Attention Scoring)"></a>注意力评分函数(Attention Scoring)</h2><p>注意力评分函数是计算查询向量$\mathbf{q}$与键向量$\mathbf{k}_l$之间相关性得分的核心组件：</p>
+<ol>
+<li><p><strong>加性评分(Additive&#x2F;Concatenate)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{w}^\top \text{act}(\mathbf{W}_1\mathbf{q} + \mathbf{W}_2\mathbf{k}_l + \mathbf{b})<br>$$</p>
+<p>其中$\mathbf{w} \in \mathbb{R}^{d_w}$, $\mathbf{W}_1 \in \mathbb{R}^{d_w \times d_q}$, $\mathbf{W}_2 \in \mathbb{R}^{d_w \times d_k}$和$\mathbf{b} \in \mathbb{R}^{d_w}$是可训练参数。</p>
+</li>
+<li><p><strong>乘性评分(Multiplicative&#x2F;Dot-Product)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{q}^\top \mathbf{k}_l<br>$$</p>
+</li>
+<li><p><strong>缩放乘性评分(Scaled Multiplicative)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \frac{\mathbf{q}^\top \mathbf{k}_l}{\sqrt{d_k}}<br>$$</p>
+</li>
+<li><p><strong>通用评分(General)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top \mathbf{W} \mathbf{q}<br>$$</p>
+<p>其中$\mathbf{W} \in \mathbb{R}^{d_k \times d_q}$是权重矩阵。</p>
+</li>
+<li><p><strong>带偏置的通用评分(Biased General)</strong>：</p>
+<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top (\mathbf{W}\mathbf{q} + \mathbf{b})<br>$$</p>
+</li>
+<li><p><strong>激活通用评分(Activated General)</strong>：<br>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \text{act}(\mathbf{k}_l^\top \mathbf{W} \mathbf{q} + b)<br>$$</p>
+</li>
+</ol>
+<h2 id="注意力对齐-Attention-Alignment"><a href="#注意力对齐-Attention-Alignment" class="headerlink" title="注意力对齐(Attention Alignment)"></a>注意力对齐(Attention Alignment)</h2><p>对齐函数将原始注意力分数$\mathbf{e} &#x3D; [e_1, \ldots, e_{n_f}]$转换为标准化权重：</p>
+<ol>
+<li><p><strong>软对齐&#x2F;全局对齐(Soft&#x2F;Global Alignment)</strong>：</p>
+<p>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;1}^{n_f} \exp(e_j)}<br>$$</p>
+</li>
+<li><p><strong>硬对齐(Hard Alignment)</strong>：<br>从多项式分布采样：</p>
+<p>$$<br>m \sim \text{Multinomial}(a_1, \ldots, a_{n_f})<br>$$</p>
+<p>然后：</p>
+<p>$$<br>\mathbf{c} &#x3D; \mathbf{v}_m<br>$$</p>
+</li>
+<li><p><strong>局部对齐(Local Alignment)</strong>：<br>窗口位置$p$的确定：<br>$$<br>p &#x3D; S \times \text{sigmoid}(\mathbf{w}_p^\top \tanh(\mathbf{W}_p \mathbf{q}))<br>$$<br>然后计算：<br>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;p-D}^{p+D} \exp(e_j)} \exp\left(-\frac{(l-p)^2}{2\sigma^2}\right)<br>$$</p>
+</li>
+</ol>
+<h2 id="注意力维度-Attention-Dimensionality"><a href="#注意力维度-Attention-Dimensionality" class="headerlink" title="注意力维度(Attention Dimensionality)"></a>注意力维度(Attention Dimensionality)</h2><ol>
+<li><p><strong>单维注意力(Single-Dimensional Attention)</strong>：</p>
+<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} a_l \mathbf{v}_l<br>$$</p>
+</li>
+<li><p><strong>多维注意力(Multi-Dimensional Attention)</strong>：<br>调整评分函数产生向量分数：</p>
+<p>$$<br>\mathbf{e}_l &#x3D; \mathbf{W}_d^\top \text{act}(\mathbf{W}_1 \mathbf{q} + \mathbf{W}_2 \mathbf{k}_l + \mathbf{b})<br>$$</p>
+<p>然后计算：</p>
+<p>$$<br>a_{l,i} &#x3D; \frac{\exp(e_{l,i})}{\sum_{j&#x3D;1}^{n_f} \exp(e_{j,i})}<br>$$</p>
+<p>最终上下文向量：</p>
+<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} \mathbf{a}_l \circ \mathbf{v}_l<br>$$</p>
+<p>其中$\circ$表示逐元素乘法。</p>
+</li>
+</ol>
+<h2 id="4-实际应用与选择建议"><a href="#4-实际应用与选择建议" class="headerlink" title="4. 实际应用与选择建议"></a>4. 实际应用与选择建议</h2><p>论文提供了关于不同机制选择的实用建议：</p>
+<ol>
+<li><p><strong>评分函数选择</strong>：</p>
+<ul>
+<li>计算效率优先：乘性或缩放乘性评分</li>
+<li>性能优先：加性评分或通用评分</li>
+<li>大维度键向量：必须使用缩放乘性评分防止梯度问题</li>
+</ul>
+</li>
+<li><p><strong>对齐方式选择</strong>：</p>
+<ul>
+<li>标准情况：软对齐</li>
+<li>需要严格稀疏性：硬对齐（但要注意训练难度）</li>
+<li>序列数据：考虑局部对齐</li>
+<li>需要动态选择关注区域：强化对齐</li>
+</ul>
+</li>
+<li><p><strong>维度选择</strong>：</p>
+<ul>
+<li>大多数情况：单维注意力足够</li>
+<li>需要细粒度控制：考虑多维注意力</li>
+</ul>
+</li>
+</ol>
+<p>这些通用机制可以自由组合，例如可以设计一个使用加性评分、软对齐和多维注意力的模型。论文特别指出，Transformer 模型成功的关键在于巧妙地组合了缩放乘性评分、软对齐和单维注意力（通过多头机制实现类似多维注意力的效果）。</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>Deep Learning</category>
+        <category>Model</category>
+        <category>Attention</category>
+        <category>Category</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>attention</tag>
+      </tags>
   </entry>
   <entry>
     <title>Reinforcement-Learning-L5</title>
@@ -4352,6 +4183,175 @@ for 每个幕:
       </categories>
   </entry>
   <entry>
+    <title>Reinforcement-Learning-L2</title>
+    <url>/2025/07/28/Reinforcement-Learning-L2/</url>
+    <content><![CDATA[<h1 id="强化学习基础：状态值与贝尔曼方程读书笔记"><a href="#强化学习基础：状态值与贝尔曼方程读书笔记" class="headerlink" title="强化学习基础：状态值与贝尔曼方程读书笔记"></a>强化学习基础：状态值与贝尔曼方程读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/02.png" style="width: 175px; margin-right: 20px;">
+  <p>状态值函数量化策略的长期收益，贝尔曼方程揭示其递归结构。本文通过网格世界示例展示状态值计算，推导贝尔曼方程的矩阵形式与求解方法，并分析状态值与动作值的关系，为策略评估奠定数学基础。</p>
+</div>
+
+<span id="more"></span>
+
+
+
+<h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><ul>
+<li><strong>核心概念</strong>：状态值（State Value）  </li>
+<li><strong>基本工具</strong>：贝尔曼方程（Bellman Equation）  </li>
+<li><strong>学习内容</strong>：  <ol>
+<li>状态值的定义与重要性  </li>
+<li>贝尔曼方程的推导与求解  </li>
+<li>状态值与动作值的关系</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2 id="二、动机示例：为什么回报（Return）重要？"><a href="#二、动机示例：为什么回报（Return）重要？" class="headerlink" title="二、动机示例：为什么回报（Return）重要？"></a>二、动机示例：为什么回报（Return）重要？</h2><h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><p>在网格世界中，从起点 $s_1$ 出发，评估三个策略的优劣：  </p>
+<ul>
+<li><strong>策略1</strong>（左）：避开禁区直接走向目标  </li>
+<li><strong>策略2</strong>（中）：经过禁区走向目标  </li>
+<li><strong>策略3</strong>（右）：随机选择动作（50%概率进入禁区）</li>
+</ul>
+<h3 id="回报计算（-gamma-0-9-）"><a href="#回报计算（-gamma-0-9-）" class="headerlink" title="回报计算（$\gamma &#x3D; 0.9$）"></a>回报计算（$\gamma &#x3D; 0.9$）</h3><ol>
+<li><strong>策略1</strong>（确定性）：<br>$$<br>G_1 &#x3D; 0 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots &#x3D; \frac{\gamma}{1-\gamma} &#x3D; 9<br>$$</li>
+<li><strong>策略2</strong>（确定性）：<br>$$<br>G_2 &#x3D; -1 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots &#x3D; -1 + \frac{\gamma}{1-\gamma} &#x3D; 8<br>$$</li>
+<li><strong>策略3</strong>（随机性）：<br>$$<br>G_3 &#x3D; 0.5 \times (-1 + 9) + 0.5 \times 9 &#x3D; -0.5 + 9 &#x3D; 8.5<br>$$</li>
+</ol>
+<h3 id="关键结论"><a href="#关键结论" class="headerlink" title="关键结论"></a>关键结论</h3><ul>
+<li><strong>策略优劣</strong>：$G_1 &gt; G_3 &gt; G_2$（策略1最优，策略2最差）  </li>
+<li><strong>回报的作用</strong>：  <ul>
+<li>量化策略性能  </li>
+<li>反映长期收益（避免禁区惩罚）  </li>
+<li>验证直观决策的数学合理性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、状态值（State-Value）的定义"><a href="#三、状态值（State-Value）的定义" class="headerlink" title="三、状态值（State Value）的定义"></a>三、状态值（State Value）的定义</h2><h3 id="数学形式"><a href="#数学形式" class="headerlink" title="数学形式"></a>数学形式</h3><ul>
+<li><strong>符号定义</strong>：  <ul>
+<li>$S_t$：时刻 $t$ 的状态  </li>
+<li>$A_t$：时刻 $t$ 的动作  </li>
+<li>$R_{t+1}$：动作 $A_t$ 的即时奖励  </li>
+<li>$G_t$：折扣回报 $G_t &#x3D; R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots$</li>
+</ul>
+</li>
+<li><strong>状态值函数</strong>：<br>$$<br>v_\pi(s) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s]<br>$$  <blockquote>
+<p>表示从状态 $s$ 出发，遵循策略 $\pi$ 的期望累积回报</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="核心性质"><a href="#核心性质" class="headerlink" title="核心性质"></a>核心性质</h3><ol>
+<li><strong>条件期望</strong>：依赖初始状态 $s$ 和策略 $\pi$  </li>
+<li><strong>模型依赖性</strong>：由动态模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$ 决定  </li>
+<li><strong>与回报的关系</strong>：  <ul>
+<li>若策略、状态转移、奖励均为确定性 → $v_\pi(s) &#x3D; G_t$  </li>
+<li>若存在随机性 → $v_\pi(s)$ 是所有可能轨迹回报的均值</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="四、贝尔曼方程（Bellman-Equation）的推导"><a href="#四、贝尔曼方程（Bellman-Equation）的推导" class="headerlink" title="四、贝尔曼方程（Bellman Equation）的推导"></a>四、贝尔曼方程（Bellman Equation）的推导</h2><h3 id="回报分解"><a href="#回报分解" class="headerlink" title="回报分解"></a>回报分解</h3><p>将 $G_t$ 拆分为即时奖励和未来折扣回报：<br>$$<br>G_t &#x3D; R_{t+1} + \gamma G_{t+1}<br>$$  </p>
+<h3 id="状态值分解"><a href="#状态值分解" class="headerlink" title="状态值分解"></a>状态值分解</h3><p>代入状态值定义：<br>$$<br>v_\pi(s) &#x3D; \mathbb{E}[R_{t+1} \mid S_t &#x3D; s] + \gamma \mathbb{E}[G_{t+1} \mid S_t &#x3D; s]<br>$$  </p>
+<h4 id="1-即时奖励项（Immediate-Reward）"><a href="#1-即时奖励项（Immediate-Reward）" class="headerlink" title="1. 即时奖励项（Immediate Reward）"></a>1. 即时奖励项（Immediate Reward）</h4><p>$$<br>\mathbb{E}[R_{t+1} \mid S_t &#x3D; s] &#x3D; \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r<br>$$  </p>
+<blockquote>
+<p>策略 $\pi$ 下所有可能动作的奖励期望  </p>
+</blockquote>
+<h4 id="2-未来奖励项（Future-Reward）"><a href="#2-未来奖励项（Future-Reward）" class="headerlink" title="2. 未来奖励项（Future Reward）"></a>2. 未来奖励项（Future Reward）</h4><p>$$<br>\mathbb{E}[G_{t+1} \mid S_t &#x3D; s] &#x3D; \sum_a \pi(a \mid s) \sum_{s’} p(s’ \mid s,a) v_\pi(s’)<br>$$  </p>
+<blockquote>
+<p>马尔可夫性质保证：未来奖励仅依赖下一状态 $s’$  </p>
+</blockquote>
+<h4 id="3-最终形式"><a href="#3-最终形式" class="headerlink" title="3. 最终形式"></a>3. 最终形式</h4><p>$$<br>v_\pi(s) &#x3D; \sum_a \pi(a \mid s) \left[ \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’) \right]<br>$$  </p>
+<h3 id="关键特性"><a href="#关键特性" class="headerlink" title="关键特性"></a>关键特性</h3><ul>
+<li><strong>自举（Bootstrapping）</strong>：状态值 $v_\pi(s)$ 依赖其他状态值 $v_\pi(s’)$  </li>
+<li><strong>方程组结构</strong>：每个状态对应一个方程（共 $|\mathcal{S}|$ 个方程）  </li>
+<li><strong>模型要求</strong>：需已知动态模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$</li>
+</ul>
+<hr>
+<h2 id="五、贝尔曼方程的矩阵形式"><a href="#五、贝尔曼方程的矩阵形式" class="headerlink" title="五、贝尔曼方程的矩阵形式"></a>五、贝尔曼方程的矩阵形式</h2><h3 id="符号定义"><a href="#符号定义" class="headerlink" title="符号定义"></a>符号定义</h3><ul>
+<li><p><strong>策略相关奖励</strong>：<br>$$<br>r_\pi(s) &#x3D; \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r<br>$$  </p>
+</li>
+<li><p><strong>策略相关状态转移矩阵</strong>：<br>$$<br>p_\pi(s’ \mid s) &#x3D; \sum_a \pi(a \mid s) p(s’ \mid s,a)<br>$$</p>
+<p>$$<br>P_\pi \in \mathbb{R}^{n \times n}, \quad [P_\pi]_{ij} &#x3D; p_\pi(s_j \mid s_i)<br>$$</p>
+</li>
+</ul>
+<h3 id="矩阵方程"><a href="#矩阵方程" class="headerlink" title="矩阵方程"></a>矩阵方程</h3><p>$$<br>v_\pi &#x3D; r_\pi + \gamma P_\pi v_\pi<br>$$<br>其中：  </p>
+<ul>
+<li>$v_\pi &#x3D; [v_\pi(s_1), \dots, v_\pi(s_n)]^T$  </li>
+<li>$r_\pi &#x3D; [r_\pi(s_1), \dots, r_\pi(s_n)]^T$</li>
+</ul>
+<h4 id="示例（四状态循环图）"><a href="#示例（四状态循环图）" class="headerlink" title="示例（四状态循环图）"></a>示例（四状态循环图）</h4><p>$$<br>\begin{bmatrix}<br>v_\pi(s_1) \\<br>v_\pi(s_2) \\<br>v_\pi(s_3) \\<br>v_\pi(s_4)<br>\end{bmatrix}&#x3D;<br>\begin{bmatrix}<br>0 \\<br>1 \\<br>1 \\<br>1<br>\end{bmatrix}+<br>\gamma<br>\begin{bmatrix}<br>0 &amp; 0 &amp; 1 &amp; 0 \\<br>0 &amp; 0 &amp; 0 &amp; 1 \\<br>0 &amp; 0 &amp; 0 &amp; 1 \\<br>0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>\begin{bmatrix}<br>v_\pi(s_1) \\<br>v_\pi(s_2) \\<br>v_\pi(s_3) \\<br>v_\pi(s_4)<br>\end{bmatrix}<br>$$  </p>
+<hr>
+<h2 id="六、贝尔曼方程的求解方法"><a href="#六、贝尔曼方程的求解方法" class="headerlink" title="六、贝尔曼方程的求解方法"></a>六、贝尔曼方程的求解方法</h2><h3 id="1-闭式解（Closed-Form-Solution）"><a href="#1-闭式解（Closed-Form-Solution）" class="headerlink" title="1. 闭式解（Closed-Form Solution）"></a>1. 闭式解（Closed-Form Solution）</h3><p>$$<br>v_\pi &#x3D; (I - \gamma P_\pi)^{-1} r_\pi<br>$$  </p>
+<blockquote>
+<p>要求矩阵 $I - \gamma P_\pi$ 可逆（当 $\gamma &lt; 1$ 时成立）  </p>
+</blockquote>
+<h3 id="2-迭代解（Iterative-Solution）"><a href="#2-迭代解（Iterative-Solution）" class="headerlink" title="2. 迭代解（Iterative Solution）"></a>2. 迭代解（Iterative Solution）</h3><p>迭代更新直至收敛：<br>$$<br>v_{k+1} &#x3D; r_\pi + \gamma P_\pi v_k<br>$$  </p>
+<blockquote>
+<p><strong>收敛性证明</strong>：定义误差 $\delta_k &#x3D; v_k - v_\pi$，则<br>  $$<br>  \delta_{k+1} &#x3D; \gamma P_\pi \delta_k \to 0 \quad (k \to \infty)<br>  $$<br>  因 $\gamma &lt; 1$ 且 $P_\pi$ 为概率矩阵（谱半径 $\leq 1$)  </p>
+</blockquote>
+<h4 id="网格世界求解示例"><a href="#网格世界求解示例" class="headerlink" title="网格世界求解示例"></a>网格世界求解示例</h4><ul>
+<li><strong>奖励设置</strong>：禁区&#x2F;边界 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
+<li><strong>策略评估</strong>：计算各状态值（如 $s_1$ 在最优策略下 $v_{\pi}(s_1)&#x3D;9$)</li>
+</ul>
+<hr>
+<h2 id="七、动作值（Action-Value）"><a href="#七、动作值（Action-Value）" class="headerlink" title="七、动作值（Action Value）"></a>七、动作值（Action Value）</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>$$<br>q_\pi(s,a) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s, A_t &#x3D; a]<br>$$  </p>
+<blockquote>
+<p>表示在状态 $s$ 执行动作 $a$ 后，遵循策略 $\pi$ 的期望回报  </p>
+</blockquote>
+<h3 id="与状态值的关系"><a href="#与状态值的关系" class="headerlink" title="与状态值的关系"></a>与状态值的关系</h3><ol>
+<li><strong>状态值分解为动作值</strong>：<br>$$<br>v_\pi(s) &#x3D; \sum_a \pi(a \mid s) q_\pi(s,a)<br>$$  </li>
+<li><strong>动作值的贝尔曼方程</strong>：<br>$$<br>q_\pi(s,a) &#x3D; \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’)<br>$$</li>
+</ol>
+<h3 id="重要性"><a href="#重要性" class="headerlink" title="重要性"></a>重要性</h3><ul>
+<li><strong>动作评估</strong>：直接量化动作的长期收益（如 $q_\pi(s_1, a_3) &#x3D; \gamma v_\pi(s_3)$）  </li>
+<li><strong>策略优化基础</strong>：通过比较 $q_\pi(s,a)$ 改进策略（后续课程）</li>
+</ul>
+<hr>
+<h2 id="八、总结"><a href="#八、总结" class="headerlink" title="八、总结"></a>八、总结</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><table>
+<thead>
+<tr>
+<th><strong>概念</strong></th>
+<th><strong>定义</strong></th>
+<th><strong>数学表示</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>状态值</strong></td>
+<td>从状态 $s$ 出发的期望累积回报</td>
+<td>$v_\pi(s) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s]$</td>
+</tr>
+<tr>
+<td><strong>动作值</strong></td>
+<td>执行动作 $a$ 后的期望累积回报</td>
+<td>$q_\pi(s,a) &#x3D; \mathbb{E}[G_t \mid S_t &#x3D; s, A_t &#x3D; a]$</td>
+</tr>
+<tr>
+<td><strong>贝尔曼方程</strong></td>
+<td>描述状态值递归关系的方程组</td>
+<td>$v_\pi(s) &#x3D; \sum_a \pi(a \mid s) \left[ \sum_r p(r \mid s,a) r + \gamma \sum_{s’} p(s’ \mid s,a) v_\pi(s’) \right]$</td>
+</tr>
+</tbody></table>
+<h3 id="关键结论-1"><a href="#关键结论-1" class="headerlink" title="关键结论"></a>关键结论</h3><ol>
+<li><strong>回报驱动策略评估</strong>：回报 $G_t$ 是量化策略优劣的核心指标  </li>
+<li><strong>状态值求解</strong>：通过贝尔曼方程（闭式或迭代法）计算 $v_\pi$  </li>
+<li><strong>动作值桥梁作用</strong>：连接即时奖励与长期状态值（$q_\pi \leftrightarrow v_\pi$）</li>
+</ol>
+<h3 id="学习意义"><a href="#学习意义" class="headerlink" title="学习意义"></a>学习意义</h3><ul>
+<li><strong>策略评估（Policy Evaluation）</strong>：计算给定策略 $\pi$ 的状态值 $v_\pi$  </li>
+<li><strong>后续基础</strong>：为策略改进（Policy Improvement）和值迭代（Value Iteration）奠定基础</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Reinforcement-Learning-L8</title>
     <url>/2025/07/28/Reinforcement-Learning-L8/</url>
     <content><![CDATA[<h1 id="值函数逼近方法读书笔记"><a href="#值函数逼近方法读书笔记" class="headerlink" title="值函数逼近方法读书笔记"></a>值函数逼近方法读书笔记</h1><div style="display: flex; align-items: center;">
@@ -4510,7 +4510,7 @@ for 每幕：
     <title>Reinforcement-Learning-L9</title>
     <url>/2025/07/28/Reinforcement-Learning-L9/</url>
     <content><![CDATA[<h1 id="策略梯度方法读书笔记"><a href="#策略梯度方法读书笔记" class="headerlink" title="策略梯度方法读书笔记"></a>策略梯度方法读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/09.png" style="width: 200px; margin-right: 20px;">
+  <img src="/img/reinforcement-learning/09.png" style="width: 175px; margin-right: 20px;">
   <p>策略梯度直接优化参数化策略。本文对比表格与函数表示，推导策略梯度定理，分析平均状态值和平均奖励两种度量，给出REINFORCE算法的实现框架，讨论探索-利用平衡机制。</p>
 </div>
 

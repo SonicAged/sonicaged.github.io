@@ -11,7 +11,7 @@ tags:
 # 策略梯度方法读书笔记  
 
 <div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/09.png" style="width: 200px; margin-right: 20px;">
+  <img src="/img/reinforcement-learning/09.png" style="width: 175px; margin-right: 20px;">
   <p>策略梯度直接优化参数化策略。本文对比表格与函数表示，推导策略梯度定理，分析平均状态值和平均奖励两种度量，给出REINFORCE算法的实现框架，讨论探索-利用平衡机制。</p>
 </div>
 
