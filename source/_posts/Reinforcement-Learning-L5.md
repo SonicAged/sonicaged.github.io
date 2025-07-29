@@ -8,13 +8,16 @@ date: 2025-07-28 11:54:56
 tags:
 ---
 
-# 强化学习的数学基础
+# 蒙特卡洛强化学习读书笔记   
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/05.png" style="width: 175px; margin-right: 20px;">
+  <p>蒙特卡洛方法通过采样轨迹估计值函数，实现无模型学习。本文介绍MC Basic、MC Exploring Starts和MC ε-Greedy三种算法，分析探索机制设计，对比批量更新与在线更新的优劣，阐述大数定律下的收敛保证。</p>
+</div>
 
 <!-- more -->
 
-# 蒙特卡洛强化学习读书笔记   
+
 
 ## 一、蒙特卡洛估计基础  
 ### 核心思想  
@@ -195,3 +198,10 @@ $$
   - 后期：较小ε（强调用）  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

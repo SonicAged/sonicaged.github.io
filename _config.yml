@@ -130,12 +130,3 @@ symbols_count_time:
   exclude_codeblock: false
   wpm: 275
   suffix: "mins."
-
-# Generate categories from directory-tree
-# Dependencies: https://github.com/xu-song/hexo-auto-category
-# depth: the max_depth of directory-tree you want to generate, should > 0
-# multiple: multiple category hierarchies
-auto_category:
- enable: true
- multiple: false
- depth: 

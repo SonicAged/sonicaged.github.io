@@ -8,13 +8,16 @@ date: 2025-07-28 11:55:04
 tags:
 ---
 
-# 强化学习的数学基础
+# 时序差分学习（TD Learning）读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/07.png" style="width: 175px; margin-right: 20px;">
+  <p>TD学习结合蒙特卡洛和动态规划的优势，实现在线、低方差的值估计。本文解析TD(0)、Sarsa、Q-learning等算法的更新规则与收敛性，讨论n步回报的偏差-方差权衡，并建立与随机逼近的理论联系。</p>
+</div>
 
 <!-- more -->
 
-# 时序差分学习（TD Learning）读书笔记  
+
 
 ## 一、核心概念与学习目标  
 ### 1. TD学习的定位与意义  
@@ -200,3 +203,10 @@ $$
 - **偏差-方差权衡**：n步Sarsa为折中方案  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

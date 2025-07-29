@@ -19,17 +19,19 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+    <meta name="description" content="Actor-Critic方法读书笔记      Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Reinforcement-Learning-L10">
 <meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L10/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="强化学习的数学基础这是之前的遗产捏，还需要整理">
+<meta property="og:description" content="Actor-Critic方法读书笔记      Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/10.png">
 <meta property="article:published_time" content="2025-07-28T03:55:16.000Z">
-<meta property="article:modified_time" content="2025-07-28T07:55:43.427Z">
+<meta property="article:modified_time" content="2025-07-29T16:50:23.532Z">
 <meta property="article:author" content="Sonic Aged">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/10.png">
 
 
 <link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L10/">
@@ -173,7 +175,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">强化学习的数学基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-Critic%E6%96%B9%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">Actor-Critic方法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Actor-Critic%E6%96%B9%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">2.1.</span> <span class="nav-text">一、Actor-Critic方法核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 基本架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 策略梯度基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%EF%BC%9AQAC%EF%BC%88%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84Actor-Critic%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">二、基础算法：QAC（最简单的Actor-Critic）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 算法流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E7%89%B9%E6%80%A7"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 算法特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BC%98%E5%8A%BFActor-Critic%EF%BC%88A2C%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">三、优势Actor-Critic（A2C）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%BA%BF%E4%B8%8D%E5%8F%98%E6%80%A7%E5%8E%9F%E7%90%86"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 基线不变性原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 优势函数设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-A2C%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. A2C算法流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%A6%BB%E7%AD%96%E7%95%A5Actor-Critic"><span class="nav-number">2.4.</span> <span class="nav-text">四、离策略Actor-Critic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7%E5%8E%9F%E7%90%86"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 重要性采样原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%A6%BB%E7%AD%96%E7%95%A5Actor-Critic%E7%AE%97%E6%B3%95"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 离策略Actor-Critic算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%A1%AE%E5%AE%9A%E6%80%A7Actor-Critic%EF%BC%88DPG%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">五、确定性Actor-Critic（DPG）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%AE%9A%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 确定性策略梯度定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DPG%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. DPG算法流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93"><span class="nav-number">2.6.</span> <span class="nav-text">六、算法对比总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">3.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-Critic%E6%96%B9%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">Actor-Critic方法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81Actor-Critic%E6%96%B9%E6%B3%95%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">1.1.</span> <span class="nav-text">一、Actor-Critic方法核心思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 基本架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 策略梯度基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E7%A1%80%E7%AE%97%E6%B3%95%EF%BC%9AQAC%EF%BC%88%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84Actor-Critic%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">二、基础算法：QAC（最简单的Actor-Critic）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">1. 算法流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2. 算法特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BC%98%E5%8A%BFActor-Critic%EF%BC%88A2C%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">三、优势Actor-Critic（A2C）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%9F%BA%E7%BA%BF%E4%B8%8D%E5%8F%98%E6%80%A7%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 基线不变性原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BC%98%E5%8A%BF%E5%87%BD%E6%95%B0%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 优势函数设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-A2C%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. A2C算法流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%A6%BB%E7%AD%96%E7%95%A5Actor-Critic"><span class="nav-number">1.4.</span> <span class="nav-text">四、离策略Actor-Critic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%87%8D%E8%A6%81%E6%80%A7%E9%87%87%E6%A0%B7%E5%8E%9F%E7%90%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">1. 重要性采样原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%A6%BB%E7%AD%96%E7%95%A5Actor-Critic%E7%AE%97%E6%B3%95"><span class="nav-number">1.4.2.</span> <span class="nav-text">2. 离策略Actor-Critic算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%A1%AE%E5%AE%9A%E6%80%A7Actor-Critic%EF%BC%88DPG%EF%BC%89"><span class="nav-number">1.5.</span> <span class="nav-text">五、确定性Actor-Critic（DPG）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E5%AE%9A%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">1. 确定性策略梯度定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-DPG%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">1.5.2.</span> <span class="nav-text">2. DPG算法流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">六、算法对比总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -199,7 +201,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -282,9 +284,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2025-07-28 11:55:16 / Modified: 15:55:43" itemprop="dateCreated datePublished" datetime="2025-07-28T11:55:16+08:00">2025-07-28</time>
+      <time title="Created: 2025-07-28 11:55:16" itemprop="dateCreated datePublished" datetime="2025-07-28T11:55:16+08:00">2025-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-07-30 00:50:23" itemprop="dateModified" datetime="2025-07-30T00:50:23+08:00">2025-07-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -318,7 +326,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.3k</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -335,10 +343,14 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/10.png" style="width: 175px; margin-right: 20px;">
+  <p>Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
+<h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
 <li><strong>Actor（演员）</strong>：  <ul>
 <li>负责策略更新 $\pi(a|s,\theta)$  </li>
 <li>通过参数 $\theta$ 生成动作</li>
@@ -376,7 +388,7 @@ for 每步 $t$：
 <li><strong>Critic本质</strong>：带函数近似的SARSA算法</li>
 </ul>
 <hr>
-<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}<em>A \left[ |\nabla</em>\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}<em>A \left[ |\nabla</em>\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
+<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
 <h3 id="2-优势函数设计"><a href="#2-优势函数设计" class="headerlink" title="2. 优势函数设计"></a>2. 优势函数设计</h3><ul>
 <li><strong>次优基线选择</strong>：$b(s) &#x3D; v_\pi(s)$  </li>
 <li><strong>优势函数定义</strong>：<br>$$<br>\delta_t &#x3D; q_\pi(s_t,a_t) - v_\pi(s_t) \approx r_{t+1} + \gamma v(s_{t+1},w_t) - v(s_t,w_t)<br>$$  </li>
@@ -538,13 +550,13 @@ for 每步 $t$：
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">52k</span>
+    <span title="Word count total">53k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">3:09</span>
+    <span title="Reading time total">3:13</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -8,13 +8,16 @@ date: 2025-07-28 11:54:52
 tags:
 ---
 
-# 强化学习的数学基础
+# 值迭代与策略迭代算法读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/04.png" style="width: 175px; margin-right: 20px;">
+  <p>值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。</p>
+</div>
 
 <!-- more -->
 
-# 值迭代与策略迭代算法读书笔记  
+
 
 ## 一、值迭代算法（Value Iteration）  
 ### 核心思想  
@@ -192,3 +195,10 @@ $$
 三大算法构成了**广义策略迭代（GPI）框架**，统一了动态规划求解MDP的核心思想：**策略评估与改进的交替循环 → 收敛至最优策略**  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

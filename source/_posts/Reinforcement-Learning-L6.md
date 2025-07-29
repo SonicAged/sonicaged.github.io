@@ -8,13 +8,16 @@ date: 2025-07-28 11:55:00
 tags:
 ---
 
-# 强化学习的数学基础
+# 随机逼近与随机梯度下降读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/06.png" style="width: 175px; margin-right: 20px;">
+  <p>随机逼近（RM算法）和随机梯度下降（SGD）是强化学习的优化基础。本文推导RM算法的收敛条件，对比BGD/SGD/MBGD的收敛特性，建立与TD学习的理论桥梁，解释优化中的两阶段行为。</p>
+</div>
 
 <!-- more -->
 
-# 随机逼近与随机梯度下降读书笔记  
+
 
 ## 一、引言：核心概念与学习目标  
 ### 背景与意义  
@@ -208,3 +211,10 @@ $$
 - **统计估计**：大规模数据集的参数估计  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

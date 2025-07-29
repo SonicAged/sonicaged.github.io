@@ -8,13 +8,16 @@ date: 2025-07-28 11:54:49
 tags:
 ---
 
-# 强化学习的数学基础
+# 最优策略与贝尔曼最优方程读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/03.png" style="width: 175px; margin-right: 20px;">
+  <p>贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。</p>
+</div>
 
 <!-- more -->
 
-# 最优策略与贝尔曼最优方程读书笔记  
+
 
 ## 一、动机示例：动作值驱动的策略改进  
 ### 场景描述  
@@ -189,3 +192,10 @@ $$
    $$  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

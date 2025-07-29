@@ -8,13 +8,16 @@ date: 2025-07-28 11:55:11
 tags:
 ---
 
-# 强化学习的数学基础
+# 策略梯度方法读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/09.png" style="width: 200px; margin-right: 20px;">
+  <p>策略梯度直接优化参数化策略。本文对比表格与函数表示，推导策略梯度定理，分析平均状态值和平均奖励两种度量，给出REINFORCE算法的实现框架，讨论探索-利用平衡机制。</p>
+</div>
 
 <!-- more -->
 
-# 策略梯度方法读书笔记  
+
 
 ## 一、策略梯度基本思想  
 ### 1. 策略表示方法演进  
@@ -166,3 +169,10 @@ $$
 - **自然策略梯度**：改进优化轨迹的收敛性  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

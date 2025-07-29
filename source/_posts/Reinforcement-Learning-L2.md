@@ -8,13 +8,16 @@ date: 2025-07-28 11:54:41
 tags:
 ---
 
-# 强化学习的数学基础
+# 强化学习基础：状态值与贝尔曼方程读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/02.png" style="width: 175px; margin-right: 20px;">
+  <p>状态值函数量化策略的长期收益，贝尔曼方程揭示其递归结构。本文通过网格世界示例展示状态值计算，推导贝尔曼方程的矩阵形式与求解方法，并分析状态值与动作值的关系，为策略评估奠定数学基础。</p>
+</div>
 
 <!-- more -->
 
-# 强化学习基础：状态值与贝尔曼方程读书笔记  
+
 
 ## 一、核心概念与学习目标  
 - **核心概念**：状态值（State Value）  
@@ -235,3 +238,10 @@ $$
 - **后续基础**：为策略改进（Policy Improvement）和值迭代（Value Iteration）奠定基础  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

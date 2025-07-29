@@ -8,13 +8,14 @@ date: 2025-07-28 11:55:16
 tags:
 ---
 
-# 强化学习的数学基础
+# Actor-Critic方法读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/10.png" style="width: 175px; margin-right: 20px;">
+  <p>Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。</p>
+</div>
 
 <!-- more -->
-
-# Actor-Critic方法读书笔记  
 
 ## 一、Actor-Critic方法核心思想  
 ### 1. 基本架构  
@@ -72,7 +73,7 @@ $$
 $$  
 **最优基线**（最小化方差）：  
 $$
-b^\*(s) = \frac{\mathbb{E}_A \left[ \|\nabla_\theta \ln \pi(A|s,\theta)\|^2 q_\pi(s,A) \right]}{\mathbb{E}_A \left[ \|\nabla_\theta \ln \pi(A|s,\theta)\|^2 \right]}
+b^\*(s) = \frac{\mathbb{E}\_A \left[ \|\nabla\_\theta \ln \pi(A|s,\theta)\|^2 q\_\pi(s,A) \right]}{\mathbb{E}\_A \left[ \|\nabla\_\theta \ln \pi(A|s,\theta)\|^2 \right]}
 $$  
 
 ### 2. 优势函数设计  

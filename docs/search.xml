@@ -1185,100 +1185,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CDR-model In 2024 | Part 2</title>
-    <url>/2025/07/27/CDR-model-part4/</url>
-    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
-<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
-<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
-<span id="more"></span>
-
-<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
-<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
-
-<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
-<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
-<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
-<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
-<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
-<ul>
-<li><strong>输入</strong>：<ul>
-<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
-<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
-<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
-</ul>
-</li>
-<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
-</ul>
-<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
-<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
-<ul>
-<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
-</li>
-<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
-<ul>
-<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
-<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
-<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
-</ul>
-</li>
-<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
-</li>
-</ul>
-<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
-<ul>
-<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
-<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
-</ul>
-<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
-<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
-<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
-<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
-<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
-</ul>
-</li>
-</ul>
-<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
-<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
-<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
-<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
-</ul>
-<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
-<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
-<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
-<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
-<ul>
-<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
-<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
-</ul>
-<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
-<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
-<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
-<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>GAN</tag>
-        <tag>dynamic graph</tag>
-        <tag>hypergraph</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Fufufu Relashinala</title>
     <url>/2025/07/14/Feature-Related-Attention/</url>
     <content><![CDATA[<h1 id="在输入特征上做文章的-Attention"><a href="#在输入特征上做文章的-Attention" class="headerlink" title="在输入特征上做文章的 Attention"></a>在输入特征上做文章的 Attention</h1><p>本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。</p>
@@ -1512,242 +1418,97 @@
       </tags>
   </entry>
   <entry>
-    <title>Woc?! GAT? We&#39;re Saved!</title>
-    <url>/2025/07/18/GAT/</url>
-    <content><![CDATA[<h1 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h1><p>图神经网络（GNNs）旨在为下游任务学习在低维空间中训练良好的表示，同时保留拓扑结构。近年来，注意力机制在自然语言处理和计算机视觉领域表现出色，被引入到GNNs中，以自适应地选择判别特征并自动过滤噪声信息。本博客将重点介绍GAT </p>
+    <title>CDR-model In 2024 | Part 2</title>
+    <url>/2025/07/27/CDR-model-part4/</url>
+    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
+<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
 <span id="more"></span>
 
-<h2 id="层内-GAT-Intra-Layer-GAT"><a href="#层内-GAT-Intra-Layer-GAT" class="headerlink" title="层内 GAT (Intra-Layer GAT)"></a>层内 GAT (Intra-Layer GAT)</h2><p>层内GATs是指在单个神经网络层内应用注意力机制的图神经网络，主要特点是：</p>
-<ul>
-<li>注意力机制作用于局部邻居节点</li>
-<li>在特征聚合步骤中为不同节点分配不同权重</li>
-<li>能够自适应地关注图中最相关的部分</li>
-</ul>
-<p>考虑到不同的局部邻域和不同的功能，层内GATs可以进一步分为六个子类，包括邻居注意力、高阶注意力、关系感知注意力、层次注意力、注意力采样&#x2F;池化和超注意力。</p>
-<h3 id="邻居注意力-Neighbor-Attention"><a href="#邻居注意力-Neighbor-Attention" class="headerlink" title="邻居注意力 (Neighbor Attention)"></a>邻居注意力 (Neighbor Attention)</h3><h4 id="邻居注意力核心思想"><a href="#邻居注意力核心思想" class="headerlink" title="邻居注意力核心思想"></a>邻居注意力核心思想</h4><p>邻居注意力机制的核心是通过学习的方式动态确定图中每个节点对其邻居的重要性权重，而非传统GNN中采用的固定权重策略。其关键创新点包括：</p>
-<ol>
-<li><strong>动态权重分配</strong>：根据节点特征相似性动态计算注意力权重</li>
-<li><strong>局部聚焦</strong>：仅考虑一阶邻居节点的注意力计算</li>
-<li><strong>端到端训练</strong>：注意力权重与网络参数共同优化</li>
-</ol>
-<h4 id="基础GAT模型"><a href="#基础GAT模型" class="headerlink" title="基础GAT模型"></a>基础GAT模型</h4><p>GAT 可以简单概括为一种将 Attention 机制引入 GCN（图卷积网络）的方法，而 GCN 是一种能够在深度学习中进行图结构分类等任务的方法。Attention 机制是指一种根据输入数据动态决定关注焦点的机制，通过将这种 Attention 机制引入 GCN（图卷积网络），可以提高分类、识别和预测的精度。因此，如果对 GCN 的理解不够深入，可能会难以完全理解 GAT。</p>
-<p>GCN 与 GAT 的主要区别在于节点卷积时的系数（这就是所谓的 Attention 系数）存在显著差异。</p>
-<p>在常规 GCN 中，当计算某节点的下一层特征（潜在变量）时，会通过将相邻节点的特征与线性权重相乘后的和，再通过激活函数（如 ReLU 等）传递至下一层。在计算相邻节点的特征量的线性组合时，传统方法将所有相邻节点平等对待，而 GAT 则引入了重要性（Attention 系数）的概念，不再将相邻节点视为同等。</p>
-<p>其概念可以形象地理解为如下：</p>
-<img src="/img/GAT/AttentionInGraphVisualize.png" alt="AttentionInGraphVisualize" width="60%" height="auto">
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
+<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
 
-<blockquote>
-<p>上图展示了节点 1 与其相邻的节点 2、3、4 之间，通过粗线表示的边，节点 3 最为重要，其次为节点 4，然后是节点 2，按重要性顺序排列的示意图。</p>
-</blockquote>
-<p>GAT 正是通过这种方式，将这种概念应用于相邻节点。</p>
-<p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
-<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
-<p>其中注意力系数$\alpha_{ij}$的计算：</p>
-<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
-<h5 id="注意力计算过程"><a href="#注意力计算过程" class="headerlink" title="注意力计算过程"></a>注意力计算过程</h5><p>基础GAT模型(Velickovic et al. 2018)的注意力计算包含三个关键步骤：</p>
-<ol>
-<li><strong>线性变换</strong>：对节点特征进行共享线性变换 $h_i’ &#x3D; W h_i$</li>
-<li><strong>注意力分数计算</strong>：使用单层前馈网络计算注意力分数 $e_{ij} &#x3D; a^T[Wh_i||Wh_j]$</li>
-<li><strong>归一化处理</strong>：通过softmax进行归一化 $\alpha_{ij} &#x3D; \text{softmax}(e_{ij})$</li>
-</ol>
-<h5 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h5><p>GAT引入多头注意力以稳定学习过程：</p>
+<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
+<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
+<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
+<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
+<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
 <ul>
-<li><strong>连接式多头</strong>：各头输出直接拼接 $h_i’ &#x3D; |_{k&#x3D;1}^K \sigma(\sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
-<li><strong>平均式多头</strong>：各头输出取平均 $h_i’ &#x3D; \sigma(\frac{1}{K}\sum_{k&#x3D;1}^K \sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
+<li><strong>输入</strong>：<ul>
+<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
+<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
+<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
 </ul>
-<h4 id="关键改进模型"><a href="#关键改进模型" class="headerlink" title="关键改进模型"></a>关键改进模型</h4><h5 id="GATv2"><a href="#GATv2" class="headerlink" title="GATv2"></a>GATv2</h5><p>GATv2(Brody et al. 2021)解决了原始GAT的静态注意力问题：</p>
+</li>
+<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
+</ul>
+<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
+<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
 <ul>
-<li>调整计算顺序：先非线性变换再线性投影<br>$e_{ij} &#x3D; a^T \text{LeakyReLU}(W[h_i||h_j])$</li>
-<li>证明原始GAT的注意力排名与查询无关</li>
-<li>在多个基准数据集上表现优于GAT</li>
-</ul>
-<h5 id="PPRGAT"><a href="#PPRGAT" class="headerlink" title="PPRGAT"></a>PPRGAT</h5><p>PPRGAT(Choi 2022)整合个性化PageRank信息：</p>
+<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
+</li>
+<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
 <ul>
-<li>在注意力计算中加入PPR分数<br>$e_{ij} &#x3D; \text{LeakyReLU}(a^T[Wh_i||Wh_j||\pi_{ij}])$</li>
-<li>保留原始GAT结构的同时利用全局图信息</li>
-<li>在节点分类任务中表现优异</li>
+<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
+<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
+<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
 </ul>
-<h5 id="SuperGAT"><a href="#SuperGAT" class="headerlink" title="SuperGAT"></a>SuperGAT</h5><p>SuperGAT(Kim and Oh 2021)提出两种自监督变体：</p>
-<ol>
-<li>边预测任务：利用注意力分数预测边存在性</li>
-<li>标签一致性任务：利用注意力分数预测节点标签一致性</li>
-<li>在噪声图上表现更鲁棒</li>
-</ol>
-<h4 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h4><h5 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, <span class="keyword">in</span>\_features, out\_features, dropout, alpha, concat=<span class="literal">True</span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.<span class="keyword">in</span>\_features = <span class="keyword">in</span>\_features</span><br><span class="line">        <span class="variable language_">self</span>.out\_features = out\_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(<span class="keyword">in</span>\_features, out\_features)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out\_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment">### x: 节点特征矩阵 [N, in\_features]</span></span><br><span class="line">        <span class="comment">### adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment">### [N, out\_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 计算注意力分数</span></span><br><span class="line">        a\_<span class="built_in">input</span> = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a\_<span class="built_in">input</span> = a\_<span class="built_in">input</span>.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out\_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a\_<span class="built_in">input</span>, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 掩码机制</span></span><br><span class="line">        zero\_vec = -<span class="number">9e15</span> * torch.ones\_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero\_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 聚合特征</span></span><br><span class="line">        h\_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h\_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h\_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, nfeat, nhid, nclass, dropout, alpha, nheads):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> \_ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out\_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment">### 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out\_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log\_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<h5 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">### 模型初始化</span></span><br><span class="line">model = GAT(nfeat=<span class="built_in">input</span>\_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num\_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight\_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero\_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll\_loss(output[idx\_train], labels[idx\_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
-
-<h3 id="高阶注意力-High-Order-Attention"><a href="#高阶注意力-High-Order-Attention" class="headerlink" title="高阶注意力 (High-Order Attention)"></a>高阶注意力 (High-Order Attention)</h3><h4 id="高阶注意力核心思想"><a href="#高阶注意力核心思想" class="headerlink" title="高阶注意力核心思想"></a>高阶注意力核心思想</h4><p>高阶注意力机制突破了传统GAT仅关注直接邻居的限制，通过以下方式扩展了注意力范围：</p>
-<ol>
-<li>多跳邻居聚合：考虑k-hop范围内的节点（k&gt;1）</li>
-<li>路径感知：关注节点间的路径信息而不仅是直接连接</li>
-<li>全局感受野：部分模型实现近似全局注意力</li>
-</ol>
-<img src="\img\GAT\HighOrderAttention.png" alt="HighOrderAttention" width="60%" height="auto">
-
-<h4 id="关键技术路线"><a href="#关键技术路线" class="headerlink" title="关键技术路线"></a>关键技术路线</h4><h5 id="基于路径的注意力"><a href="#基于路径的注意力" class="headerlink" title="基于路径的注意力"></a>基于路径的注意力</h5><p>SPAGAN(Yang et al. 2019)开创性地提出路径注意力机制：</p>
+</li>
+<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
+</li>
+</ul>
+<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
 <ul>
-<li>计算节点间最短路径作为注意力传播路径</li>
-<li>路径特征通过LSTM编码 $p_{ij} &#x3D; \text{LSTM}([h_i, h_{i1}, …, h_{j}])$</li>
-<li>注意力分数计算 $\alpha_{ij} &#x3D; \text{softmax}(W_p p_{ij})$</li>
+<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
+<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
 </ul>
-<h5 id="基于随机游走的注意力"><a href="#基于随机游走的注意力" class="headerlink" title="基于随机游走的注意力"></a>基于随机游走的注意力</h5><p>PaGNN(Yang et al. 2021d)采用个性化PageRank：</p>
+<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
+<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
+<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
+<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
+<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
+<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
+<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
+<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
+</ul>
+<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
+<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
+<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
+<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
 <ul>
-<li>定义转移矩阵P&#x3D;AD⁻¹</li>
-<li>计算PPR分数矩阵 $\Pi &#x3D; \alpha(I - (1-\alpha)P)^{-1}$</li>
-<li>将PPR分数融入注意力计算</li>
+<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
+<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
 </ul>
-<h5 id="谱域注意力"><a href="#谱域注意力" class="headerlink" title="谱域注意力"></a>谱域注意力</h5><p>MAGNA(Wang et al. 2021)结合谱理论：</p>
-<ul>
-<li>使用低通滤波器平滑高频噪声</li>
-<li>注意力传播公式 $H^{(l+1)} &#x3D; \sigma(\sum_{k&#x3D;0}^K \beta_k T_k(\tilde{L})H^{(l)}W_k)$ ，其中$T_k$为切比雪夫多项式</li>
-</ul>
-<h3 id="关系感知注意力-Relation-Aware-Attention"><a href="#关系感知注意力-Relation-Aware-Attention" class="headerlink" title="关系感知注意力 (Relation-Aware Attention)"></a>关系感知注意力 (Relation-Aware Attention)</h3><p>关系感知注意力机制主要解决图中不同类型关系的差异化处理问题，其核心思想包括：</p>
-<ol>
-<li><strong>关系类型区分</strong>：识别并利用图中不同类型的关系（边）</li>
-<li><strong>关系特定参数</strong>：为每种关系类型学习独立的注意力参数</li>
-<li><strong>关系特征融合</strong>：结合关系特征与节点特征进行注意力计算</li>
-</ol>
-<img src="\img\GAT\RelationAwareAttention.png" alt="RelationAwareAttention" width="60%" height="auto">
-
-<h4 id="关键技术方法"><a href="#关键技术方法" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="带符号图注意力"><a href="#带符号图注意力" class="headerlink" title="带符号图注意力"></a>带符号图注意力</h5><p>SiGAT(Huang et al. 2019b)针对带符号图提出：</p>
-<ul>
-<li>平衡理论建模：朋友的朋友是朋友</li>
-<li>状态理论建模：敌人的朋友是敌人</li>
-<li>注意力分数计算 $α_{ij} &#x3D; \text{softmax}(\text{MLP}([h_i‖h_j‖r_{ij}]))$, 其中$r_{ij}$表示边类型（正&#x2F;负）</li>
-</ul>
-<h5 id="异构图注意力"><a href="#异构图注意力" class="headerlink" title="异构图注意力"></a>异构图注意力</h5><p>RGAT(Busbridge et al. 2019)处理异构图：</p>
-<ul>
-<li>关系特定变换矩阵 $h_i^r &#x3D; W_r h_i$</li>
-<li>关系感知注意力 $e_{ij}^r &#x3D; a_r^T[h_i^r‖h_j^r]$</li>
-</ul>
-<h3 id="层次注意力-Hierarchical-Attention"><a href="#层次注意力-Hierarchical-Attention" class="headerlink" title="层次注意力 (Hierarchical Attention)"></a>层次注意力 (Hierarchical Attention)</h3><p>层次注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
-<ol>
-<li><strong>多层次信息整合</strong>：同时考虑节点级、路径级和图级信息</li>
-<li><strong>分层注意力计算</strong>：在不同层次应用不同的注意力机制</li>
-<li><strong>信息流动控制</strong>：设计信息从低层向高层的传递方式</li>
-</ol>
-<img src="\img\GAT\HierachicalAttention.png" alt="HierachicalAttention" width="60%" height="auto">
-
-<h4 id="关键技术方法-1"><a href="#关键技术方法-1" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-语义双层次注意力"><a href="#节点-语义双层次注意力" class="headerlink" title="节点-语义双层次注意力"></a>节点-语义双层次注意力</h5><p>HAN(Wang et al. 2019d)提出：</p>
-<ul>
-<li><strong>节点级注意力</strong>：学习同一元路径下节点的重要性 $h_i’ &#x3D; \sum_{j\in N_i} \alpha_{ij}h_j$</li>
-<li><strong>语义级注意力</strong>：学习不同元路径的重要性 $Z &#x3D; \sum_{m&#x3D;1}^M \beta_m \cdot Z_m$</li>
-</ul>
-<h5 id="多粒度层次注意力"><a href="#多粒度层次注意力" class="headerlink" title="多粒度层次注意力"></a>多粒度层次注意力</h5><p>GraphHAM(Lin et al. 2022)设计：</p>
-<ul>
-<li>局部粒度注意力：捕捉节点邻域特征</li>
-<li>全局粒度注意力：捕捉图结构特征</li>
-<li>跨粒度注意力：协调不同粒度信息</li>
-</ul>
-<h5 id="动态层次注意力"><a href="#动态层次注意力" class="headerlink" title="动态层次注意力"></a>动态层次注意力</h5><p>RGHAT(Zhang et al. 2020c)实现：</p>
-<ul>
-<li><strong>底层实体注意力</strong>：处理节点特征 $e_{ij} &#x3D; a(h_i,h_j)$</li>
-<li><strong>高层关系注意力</strong>：处理边类型特征 $r_k &#x3D; \sum_{i,j} \beta_{ij}^k e_{ij}$</li>
-</ul>
-<h2 id="层间注意力-Inter-Layer-GAT"><a href="#层间注意力-Inter-Layer-GAT" class="headerlink" title="层间注意力 (Inter-Layer GAT)"></a>层间注意力 (Inter-Layer GAT)</h2><p>在神经网络层之间，跨层GAT通过特征融合方法将不同特征空间的表示结合起来。根据不同的融合方法，我们将这些基于注意力的GNN分为五个子类别，包括多级注意力、多通道注意力、多视图注意力和时空注意力。</p>
-<h3 id="多级注意力-Multi-Level-Attention"><a href="#多级注意力-Multi-Level-Attention" class="headerlink" title="多级注意力 (Multi-Level Attention)"></a>多级注意力 (Multi-Level Attention)</h3><p>多级注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
-<ol>
-<li><strong>层次化信息处理</strong>：将图数据分解为不同层次的抽象表示</li>
-<li><strong>跨层次信息交互</strong>：在不同层次间建立注意力连接</li>
-<li><strong>自适应权重分配</strong>：自动学习各层次对最终任务的重要性</li>
-</ol>
-<h4 id="关键技术方法-2"><a href="#关键技术方法-2" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-路径双层次注意力"><a href="#节点-路径双层次注意力" class="headerlink" title="节点-路径双层次注意力"></a>节点-路径双层次注意力</h5><p>DAGNN(Liu et al. 2020)提出：</p>
-<ul>
-<li><strong>节点级注意力</strong>：学习局部邻域内节点的重要性 $h_i^{(l)} &#x3D; \sum_{j\in N_i} \alpha_{ij}^{(l)} h_j^{(l-1)}$</li>
-<li><strong>路径级注意力</strong>：学习不同传播深度的重要性 $z_i &#x3D; \sum_{l&#x3D;0}^L \beta_l h_i^{(l)}$</li>
-</ul>
-<h5 id="自适应深度注意力"><a href="#自适应深度注意力" class="headerlink" title="自适应深度注意力"></a>自适应深度注意力</h5><p>TDGNN(Wang and Derr 2021)设计：</p>
-<ul>
-<li>动态调整各层的注意力范围</li>
-<li>基于树分解的层次化注意力</li>
-<li>跨层信息融合机制</li>
-</ul>
-<h5 id="跳跃知识架构"><a href="#跳跃知识架构" class="headerlink" title="跳跃知识架构"></a>跳跃知识架构</h5><p>GAMLP(Zhang et al. 2022c)实现：</p>
-<ul>
-<li>底层局部注意力</li>
-<li>中层区域注意力</li>
-<li>高层全局注意力</li>
-<li>跳跃连接整合各层特征</li>
-</ul>
-<h3 id="多通道注意力-Multi-Channel-Attention"><a href="#多通道注意力-Multi-Channel-Attention" class="headerlink" title="多通道注意力 (Multi-Channel Attention)"></a>多通道注意力 (Multi-Channel Attention)</h3><p>多通道注意力机制通过构建并行注意力通道来处理图数据中的多样化特征，其核心思想包括：</p>
-<ol>
-<li><strong>通道多样化</strong>：将输入特征分解为多个特征通道</li>
-<li><strong>通道特异性</strong>：为每个通道设计独立的注意力机制</li>
-<li><strong>通道融合</strong>：自适应地整合不同通道的信息</li>
-</ol>
-<h4 id="关键技术方法-3"><a href="#关键技术方法-3" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="频率自适应注意力"><a href="#频率自适应注意力" class="headerlink" title="频率自适应注意力"></a>频率自适应注意力</h5><p>FAGCN(Bo et al. 2021)提出：</p>
-<ul>
-<li>低频通道：捕捉节点相似性 $h_{low} &#x3D; \sum_{j\in N_i} \frac{1}{\sqrt{d_i d_j}} h_j$</li>
-<li>高频通道：捕捉节点差异性 $h_{high} &#x3D; \sum_{j\in N_i} -\frac{1}{\sqrt{d_i d_j}} h_j$</li>
-<li>自适应融合： $h_i &#x3D; \alpha_{low} h_{low} + \alpha_{high} h_{high}$</li>
-</ul>
-<h5 id="自适应通道混合"><a href="#自适应通道混合" class="headerlink" title="自适应通道混合"></a>自适应通道混合</h5><p>ACM(Luan et al. 2021)设计：</p>
-<ul>
-<li>多通道特征提取</li>
-<li>通道间注意力交互</li>
-<li>动态通道权重分配</li>
-</ul>
-<h5 id="不确定性感知通道"><a href="#不确定性感知通道" class="headerlink" title="不确定性感知通道"></a>不确定性感知通道</h5><p>UAG(Feng et al. 2021)实现：</p>
-<ul>
-<li>通道不确定性估计</li>
-<li>基于不确定性的通道注意力</li>
-<li>鲁棒性通道融合</li>
-</ul>
-<h3 id="多视角注意力-Multi-View-Attention"><a href="#多视角注意力-Multi-View-Attention" class="headerlink" title="多视角注意力 (Multi-View Attention)"></a>多视角注意力 (Multi-View Attention)</h3><p>多视角注意力机制通过构建并行注意力视角来处理图数据中的多样化信息，其核心思想包括：</p>
-<ol>
-<li><strong>视角多样化</strong>：从不同角度（如拓扑结构、节点特征、时间序列等）构建多个视角</li>
-<li><strong>视角特异性</strong>：为每个视角设计独立的注意力机制</li>
-<li><strong>视角融合</strong>：自适应地整合不同视角的信息</li>
-</ol>
-<h4 id="关键技术方法-4"><a href="#关键技术方法-4" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="结构-特征双视角注意力"><a href="#结构-特征双视角注意力" class="headerlink" title="结构-特征双视角注意力"></a>结构-特征双视角注意力</h5><p>AM-GCN(Wang et al. 2020b)提出：</p>
-<ul>
-<li>拓扑视角：基于图结构的邻接矩阵 $A_{topo} &#x3D; A$</li>
-<li>特征视角：基于节点特征的相似度矩阵 $A_{feat} &#x3D; \text{sim}(X,X^T)$</li>
-<li>注意力融合： $A_{final} &#x3D; \sum_{v\in{topo,feat}} w_v A_v$</li>
-</ul>
-<h3 id="时空注意力-Spatio-Temporal-Attention"><a href="#时空注意力-Spatio-Temporal-Attention" class="headerlink" title="时空注意力 (Spatio-Temporal Attention)"></a>时空注意力 (Spatio-Temporal Attention)</h3><p>时空注意力机制通过构建并行注意力模块来处理图数据中的空间和时间依赖性，其核心思想包括：</p>
-<ol>
-<li>空间依赖性：捕捉节点间的拓扑关系</li>
-<li>时间依赖性：建模动态图中的时序演化模式</li>
-<li>时空交互：联合建模时空维度的相互影响</li>
-</ol>
-<h4 id="关键技术方法-5"><a href="#关键技术方法-5" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="空间-时间双注意力"><a href="#空间-时间双注意力" class="headerlink" title="空间-时间双注意力"></a>空间-时间双注意力</h5><p>DySAT(Sankar et al. 2018)提出：</p>
-<ul>
-<li>空间注意力：基于当前快照的图结构 $A_{spatial} &#x3D; \text{softmax}(Q_s K_s^T&#x2F;\sqrt{d})$</li>
-<li>时间注意力：基于节点的时间序列 $A_{temporal} &#x3D; \text{softmax}(Q_t K_t^T&#x2F;\sqrt{d})$</li>
-<li>联合建模： $Z &#x3D; (A_{spatial} \oplus A_{temporal})V$</li>
-</ul>
-<h3 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h3><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
-<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
-  </span>
-  External-Attention-pytorch
-</a>
-
-<p><a href="/paper/Sun 等 - 2023 - Attention-based graph neural networks a survey.pdf" target="_blank">📄 Sun 等 - 2023 - Attention-based graph neural networks a survey</a></p>
-<a href="https://disassemble-channel.com/graph-attention-network-gat/" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/google.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
-  </span>
-  【深層学習】Graph Attention Networks(GAT)を理解する
-</a> 
+<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
+<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
+<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
+<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
 ]]></content>
       <categories>
-        <category>Learning</category>
-        <category>Deep Learning</category>
+        <category>CDR</category>
         <category>Model</category>
-        <category>Attention</category>
-        <category>Graph</category>
       </categories>
       <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>deep learning</tag>
-        <tag>PyTorch</tag>
         <tag>attention</tag>
-        <tag>graph theory</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>GAN</tag>
+        <tag>dynamic graph</tag>
+        <tag>hypergraph</tag>
       </tags>
   </entry>
   <entry>
@@ -2057,6 +1818,245 @@
         <tag>Basic</tag>
         <tag>deep learning</tag>
         <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Woc?! GAT? We&#39;re Saved!</title>
+    <url>/2025/07/18/GAT/</url>
+    <content><![CDATA[<h1 id="GAT（Graph-Attention-Networks）"><a href="#GAT（Graph-Attention-Networks）" class="headerlink" title="GAT（Graph Attention Networks）"></a>GAT（Graph Attention Networks）</h1><p>图神经网络（GNNs）旨在为下游任务学习在低维空间中训练良好的表示，同时保留拓扑结构。近年来，注意力机制在自然语言处理和计算机视觉领域表现出色，被引入到GNNs中，以自适应地选择判别特征并自动过滤噪声信息。本博客将重点介绍GAT </p>
+<span id="more"></span>
+
+<h2 id="层内-GAT-Intra-Layer-GAT"><a href="#层内-GAT-Intra-Layer-GAT" class="headerlink" title="层内 GAT (Intra-Layer GAT)"></a>层内 GAT (Intra-Layer GAT)</h2><p>层内GATs是指在单个神经网络层内应用注意力机制的图神经网络，主要特点是：</p>
+<ul>
+<li>注意力机制作用于局部邻居节点</li>
+<li>在特征聚合步骤中为不同节点分配不同权重</li>
+<li>能够自适应地关注图中最相关的部分</li>
+</ul>
+<p>考虑到不同的局部邻域和不同的功能，层内GATs可以进一步分为六个子类，包括邻居注意力、高阶注意力、关系感知注意力、层次注意力、注意力采样&#x2F;池化和超注意力。</p>
+<h3 id="邻居注意力-Neighbor-Attention"><a href="#邻居注意力-Neighbor-Attention" class="headerlink" title="邻居注意力 (Neighbor Attention)"></a>邻居注意力 (Neighbor Attention)</h3><h4 id="邻居注意力核心思想"><a href="#邻居注意力核心思想" class="headerlink" title="邻居注意力核心思想"></a>邻居注意力核心思想</h4><p>邻居注意力机制的核心是通过学习的方式动态确定图中每个节点对其邻居的重要性权重，而非传统GNN中采用的固定权重策略。其关键创新点包括：</p>
+<ol>
+<li><strong>动态权重分配</strong>：根据节点特征相似性动态计算注意力权重</li>
+<li><strong>局部聚焦</strong>：仅考虑一阶邻居节点的注意力计算</li>
+<li><strong>端到端训练</strong>：注意力权重与网络参数共同优化</li>
+</ol>
+<h4 id="基础GAT模型"><a href="#基础GAT模型" class="headerlink" title="基础GAT模型"></a>基础GAT模型</h4><p>GAT 可以简单概括为一种将 Attention 机制引入 GCN（图卷积网络）的方法，而 GCN 是一种能够在深度学习中进行图结构分类等任务的方法。Attention 机制是指一种根据输入数据动态决定关注焦点的机制，通过将这种 Attention 机制引入 GCN（图卷积网络），可以提高分类、识别和预测的精度。因此，如果对 GCN 的理解不够深入，可能会难以完全理解 GAT。</p>
+<p>GCN 与 GAT 的主要区别在于节点卷积时的系数（这就是所谓的 Attention 系数）存在显著差异。</p>
+<p>在常规 GCN 中，当计算某节点的下一层特征（潜在变量）时，会通过将相邻节点的特征与线性权重相乘后的和，再通过激活函数（如 ReLU 等）传递至下一层。在计算相邻节点的特征量的线性组合时，传统方法将所有相邻节点平等对待，而 GAT 则引入了重要性（Attention 系数）的概念，不再将相邻节点视为同等。</p>
+<p>其概念可以形象地理解为如下：</p>
+<img src="/img/GAT/AttentionInGraphVisualize.png" alt="AttentionInGraphVisualize" width="60%" height="auto">
+
+<blockquote>
+<p>上图展示了节点 1 与其相邻的节点 2、3、4 之间，通过粗线表示的边，节点 3 最为重要，其次为节点 4，然后是节点 2，按重要性顺序排列的示意图。</p>
+</blockquote>
+<p>GAT 正是通过这种方式，将这种概念应用于相邻节点。</p>
+<p>GAT通过引入注意力机制来加权邻居节点的特征。对于节点i，其更新公式为：</p>
+<p>$$h_i^{(l+1)} &#x3D; \sigma(\sum_{j \in \mathcal{N}_i} \alpha_{ij}W^{(l)}h_j^{(l)})$$</p>
+<p>其中注意力系数$\alpha_{ij}$的计算：</p>
+<p>$$\alpha_{ij} &#x3D; \frac{exp(LeakyReLU(a^T[Wh_i || Wh_j]))}{\sum_{k \in \mathcal{N}_i} exp(LeakyReLU(a^T[Wh_i || Wh_k]))}$$</p>
+<h5 id="注意力计算过程"><a href="#注意力计算过程" class="headerlink" title="注意力计算过程"></a>注意力计算过程</h5><p>基础GAT模型(Velickovic et al. 2018)的注意力计算包含三个关键步骤：</p>
+<ol>
+<li><strong>线性变换</strong>：对节点特征进行共享线性变换 $h_i’ &#x3D; W h_i$</li>
+<li><strong>注意力分数计算</strong>：使用单层前馈网络计算注意力分数 $e_{ij} &#x3D; a^T[Wh_i||Wh_j]$</li>
+<li><strong>归一化处理</strong>：通过softmax进行归一化 $\alpha_{ij} &#x3D; \text{softmax}(e_{ij})$</li>
+</ol>
+<h5 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h5><p>GAT引入多头注意力以稳定学习过程：</p>
+<ul>
+<li><strong>连接式多头</strong>：各头输出直接拼接 $h_i’ &#x3D; |_{k&#x3D;1}^K \sigma(\sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
+<li><strong>平均式多头</strong>：各头输出取平均 $h_i’ &#x3D; \sigma(\frac{1}{K}\sum_{k&#x3D;1}^K \sum_{j\in N_i} \alpha_{ij}^k W^k h_j)$</li>
+</ul>
+<h4 id="关键改进模型"><a href="#关键改进模型" class="headerlink" title="关键改进模型"></a>关键改进模型</h4><h5 id="GATv2"><a href="#GATv2" class="headerlink" title="GATv2"></a>GATv2</h5><p>GATv2(Brody et al. 2021)解决了原始GAT的静态注意力问题：</p>
+<ul>
+<li>调整计算顺序：先非线性变换再线性投影<br>$e_{ij} &#x3D; a^T \text{LeakyReLU}(W[h_i||h_j])$</li>
+<li>证明原始GAT的注意力排名与查询无关</li>
+<li>在多个基准数据集上表现优于GAT</li>
+</ul>
+<h5 id="PPRGAT"><a href="#PPRGAT" class="headerlink" title="PPRGAT"></a>PPRGAT</h5><p>PPRGAT(Choi 2022)整合个性化PageRank信息：</p>
+<ul>
+<li>在注意力计算中加入PPR分数<br>$e_{ij} &#x3D; \text{LeakyReLU}(a^T[Wh_i||Wh_j||\pi_{ij}])$</li>
+<li>保留原始GAT结构的同时利用全局图信息</li>
+<li>在节点分类任务中表现优异</li>
+</ul>
+<h5 id="SuperGAT"><a href="#SuperGAT" class="headerlink" title="SuperGAT"></a>SuperGAT</h5><p>SuperGAT(Kim and Oh 2021)提出两种自监督变体：</p>
+<ol>
+<li>边预测任务：利用注意力分数预测边存在性</li>
+<li>标签一致性任务：利用注意力分数预测节点标签一致性</li>
+<li>在噪声图上表现更鲁棒</li>
+</ol>
+<h4 id="💻-实现细节"><a href="#💻-实现细节" class="headerlink" title="💻 实现细节"></a>💻 实现细节</h4><h5 id="PyTorch实现的GAT层"><a href="#PyTorch实现的GAT层" class="headerlink" title="PyTorch实现的GAT层"></a>PyTorch实现的GAT层</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GATLayer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, <span class="keyword">in</span>\_features, out\_features, dropout, alpha, concat=<span class="literal">True</span>):</span><br><span class="line">        <span class="built_in">super</span>(GATLayer, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.<span class="keyword">in</span>\_features = <span class="keyword">in</span>\_features</span><br><span class="line">        <span class="variable language_">self</span>.out\_features = out\_features</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        <span class="variable language_">self</span>.alpha = alpha</span><br><span class="line">        <span class="variable language_">self</span>.concat = concat</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 变换矩阵</span></span><br><span class="line">        <span class="variable language_">self</span>.W = nn.Parameter(torch.zeros(size=(<span class="keyword">in</span>\_features, out\_features)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.W.data, gain=<span class="number">1.414</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 注意力向量</span></span><br><span class="line">        <span class="variable language_">self</span>.a = nn.Parameter(torch.zeros(size=(<span class="number">2</span>*out\_features, <span class="number">1</span>)))</span><br><span class="line">        nn.init.xavier\_uniform\_(<span class="variable language_">self</span>.a.data, gain=<span class="number">1.414</span>)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.leakyrelu = nn.LeakyReLU(<span class="variable language_">self</span>.alpha)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        <span class="comment">### x: 节点特征矩阵 [N, in\_features]</span></span><br><span class="line">        <span class="comment">### adj: 邻接矩阵 [N, N]</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 线性变换</span></span><br><span class="line">        h = torch.mm(x, <span class="variable language_">self</span>.W)  <span class="comment">### [N, out\_features]</span></span><br><span class="line">        N = h.size()[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 计算注意力分数</span></span><br><span class="line">        a\_<span class="built_in">input</span> = torch.cat([h.repeat(<span class="number">1</span>, N).view(N * N, -<span class="number">1</span>), h.repeat(N, <span class="number">1</span>)], dim=<span class="number">1</span>)</span><br><span class="line">        a\_<span class="built_in">input</span> = a\_<span class="built_in">input</span>.view(N, N, <span class="number">2</span> * <span class="variable language_">self</span>.out\_features)</span><br><span class="line">        e = <span class="variable language_">self</span>.leakyrelu(torch.matmul(a\_<span class="built_in">input</span>, <span class="variable language_">self</span>.a).squeeze(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 掩码机制</span></span><br><span class="line">        zero\_vec = -<span class="number">9e15</span> * torch.ones\_like(e)</span><br><span class="line">        attention = torch.where(adj &gt; <span class="number">0</span>, e, zero\_vec)</span><br><span class="line">        attention = F.softmax(attention, dim=<span class="number">1</span>)</span><br><span class="line">        attention = F.dropout(attention, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line"></span><br><span class="line">        <span class="comment">### 聚合特征</span></span><br><span class="line">        h\_prime = torch.matmul(attention, h)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.concat:</span><br><span class="line">            <span class="keyword">return</span> F.elu(h\_prime)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> h\_prime</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GAT</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> \_\_init\_\_(<span class="variable language_">self</span>, nfeat, nhid, nclass, dropout, alpha, nheads):</span><br><span class="line">        <span class="built_in">super</span>(GAT, <span class="variable language_">self</span>).\_\_init\_\_()</span><br><span class="line">        <span class="variable language_">self</span>.dropout = dropout</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 多头注意力层</span></span><br><span class="line">        <span class="variable language_">self</span>.attentions = nn.ModuleList([</span><br><span class="line">            GATLayer(nfeat, nhid, dropout=dropout, alpha=alpha, concat=<span class="literal">True</span>) </span><br><span class="line">            <span class="keyword">for</span> \_ <span class="keyword">in</span> <span class="built_in">range</span>(nheads)</span><br><span class="line">        ])</span><br><span class="line">        </span><br><span class="line">        <span class="comment">### 输出层</span></span><br><span class="line">        <span class="variable language_">self</span>.out\_att = GATLayer(nhid * nheads, nclass, dropout=dropout, alpha=alpha, concat=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, adj</span>):</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        <span class="comment">### 多头注意力</span></span><br><span class="line">        x = torch.cat([att(x, adj) <span class="keyword">for</span> att <span class="keyword">in</span> <span class="variable language_">self</span>.attentions], dim=<span class="number">1</span>)</span><br><span class="line">        x = F.dropout(x, <span class="variable language_">self</span>.dropout, training=<span class="variable language_">self</span>.training)</span><br><span class="line">        x = <span class="variable language_">self</span>.out\_att(x, adj)</span><br><span class="line">        <span class="keyword">return</span> F.log\_softmax(x, dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">### 模型初始化</span></span><br><span class="line">model = GAT(nfeat=<span class="built_in">input</span>\_dim,</span><br><span class="line">           nhid=<span class="number">8</span>,</span><br><span class="line">           nclass=num\_classes,</span><br><span class="line">           dropout=<span class="number">0.6</span>,</span><br><span class="line">           alpha=<span class="number">0.2</span>,</span><br><span class="line">           nheads=<span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 优化器</span></span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">0.005</span>, weight\_decay=<span class="number">5e-4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">### 训练循环</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>():</span><br><span class="line">    model.train()</span><br><span class="line">    optimizer.zero\_grad()</span><br><span class="line">    output = model(features, adj)</span><br><span class="line">    loss = F.nll\_loss(output[idx\_train], labels[idx\_train])</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    <span class="keyword">return</span> loss.item()</span><br></pre></td></tr></table></figure>
+
+<h3 id="高阶注意力-High-Order-Attention"><a href="#高阶注意力-High-Order-Attention" class="headerlink" title="高阶注意力 (High-Order Attention)"></a>高阶注意力 (High-Order Attention)</h3><h4 id="高阶注意力核心思想"><a href="#高阶注意力核心思想" class="headerlink" title="高阶注意力核心思想"></a>高阶注意力核心思想</h4><p>高阶注意力机制突破了传统GAT仅关注直接邻居的限制，通过以下方式扩展了注意力范围：</p>
+<ol>
+<li>多跳邻居聚合：考虑k-hop范围内的节点（k&gt;1）</li>
+<li>路径感知：关注节点间的路径信息而不仅是直接连接</li>
+<li>全局感受野：部分模型实现近似全局注意力</li>
+</ol>
+<img src="\img\GAT\HighOrderAttention.png" alt="HighOrderAttention" width="60%" height="auto">
+
+<h4 id="关键技术路线"><a href="#关键技术路线" class="headerlink" title="关键技术路线"></a>关键技术路线</h4><h5 id="基于路径的注意力"><a href="#基于路径的注意力" class="headerlink" title="基于路径的注意力"></a>基于路径的注意力</h5><p>SPAGAN(Yang et al. 2019)开创性地提出路径注意力机制：</p>
+<ul>
+<li>计算节点间最短路径作为注意力传播路径</li>
+<li>路径特征通过LSTM编码 $p_{ij} &#x3D; \text{LSTM}([h_i, h_{i1}, …, h_{j}])$</li>
+<li>注意力分数计算 $\alpha_{ij} &#x3D; \text{softmax}(W_p p_{ij})$</li>
+</ul>
+<h5 id="基于随机游走的注意力"><a href="#基于随机游走的注意力" class="headerlink" title="基于随机游走的注意力"></a>基于随机游走的注意力</h5><p>PaGNN(Yang et al. 2021d)采用个性化PageRank：</p>
+<ul>
+<li>定义转移矩阵P&#x3D;AD⁻¹</li>
+<li>计算PPR分数矩阵 $\Pi &#x3D; \alpha(I - (1-\alpha)P)^{-1}$</li>
+<li>将PPR分数融入注意力计算</li>
+</ul>
+<h5 id="谱域注意力"><a href="#谱域注意力" class="headerlink" title="谱域注意力"></a>谱域注意力</h5><p>MAGNA(Wang et al. 2021)结合谱理论：</p>
+<ul>
+<li>使用低通滤波器平滑高频噪声</li>
+<li>注意力传播公式 $H^{(l+1)} &#x3D; \sigma(\sum_{k&#x3D;0}^K \beta_k T_k(\tilde{L})H^{(l)}W_k)$ ，其中$T_k$为切比雪夫多项式</li>
+</ul>
+<h3 id="关系感知注意力-Relation-Aware-Attention"><a href="#关系感知注意力-Relation-Aware-Attention" class="headerlink" title="关系感知注意力 (Relation-Aware Attention)"></a>关系感知注意力 (Relation-Aware Attention)</h3><p>关系感知注意力机制主要解决图中不同类型关系的差异化处理问题，其核心思想包括：</p>
+<ol>
+<li><strong>关系类型区分</strong>：识别并利用图中不同类型的关系（边）</li>
+<li><strong>关系特定参数</strong>：为每种关系类型学习独立的注意力参数</li>
+<li><strong>关系特征融合</strong>：结合关系特征与节点特征进行注意力计算</li>
+</ol>
+<img src="\img\GAT\RelationAwareAttention.png" alt="RelationAwareAttention" width="60%" height="auto">
+
+<h4 id="关键技术方法"><a href="#关键技术方法" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="带符号图注意力"><a href="#带符号图注意力" class="headerlink" title="带符号图注意力"></a>带符号图注意力</h5><p>SiGAT(Huang et al. 2019b)针对带符号图提出：</p>
+<ul>
+<li>平衡理论建模：朋友的朋友是朋友</li>
+<li>状态理论建模：敌人的朋友是敌人</li>
+<li>注意力分数计算 $α_{ij} &#x3D; \text{softmax}(\text{MLP}([h_i‖h_j‖r_{ij}]))$, 其中$r_{ij}$表示边类型（正&#x2F;负）</li>
+</ul>
+<h5 id="异构图注意力"><a href="#异构图注意力" class="headerlink" title="异构图注意力"></a>异构图注意力</h5><p>RGAT(Busbridge et al. 2019)处理异构图：</p>
+<ul>
+<li>关系特定变换矩阵 $h_i^r &#x3D; W_r h_i$</li>
+<li>关系感知注意力 $e_{ij}^r &#x3D; a_r^T[h_i^r‖h_j^r]$</li>
+</ul>
+<h3 id="层次注意力-Hierarchical-Attention"><a href="#层次注意力-Hierarchical-Attention" class="headerlink" title="层次注意力 (Hierarchical Attention)"></a>层次注意力 (Hierarchical Attention)</h3><p>层次注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
+<ol>
+<li><strong>多层次信息整合</strong>：同时考虑节点级、路径级和图级信息</li>
+<li><strong>分层注意力计算</strong>：在不同层次应用不同的注意力机制</li>
+<li><strong>信息流动控制</strong>：设计信息从低层向高层的传递方式</li>
+</ol>
+<img src="\img\GAT\HierachicalAttention.png" alt="HierachicalAttention" width="60%" height="auto">
+
+<h4 id="关键技术方法-1"><a href="#关键技术方法-1" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-语义双层次注意力"><a href="#节点-语义双层次注意力" class="headerlink" title="节点-语义双层次注意力"></a>节点-语义双层次注意力</h5><p>HAN(Wang et al. 2019d)提出：</p>
+<ul>
+<li><strong>节点级注意力</strong>：学习同一元路径下节点的重要性 $h_i’ &#x3D; \sum_{j\in N_i} \alpha_{ij}h_j$</li>
+<li><strong>语义级注意力</strong>：学习不同元路径的重要性 $Z &#x3D; \sum_{m&#x3D;1}^M \beta_m \cdot Z_m$</li>
+</ul>
+<h5 id="多粒度层次注意力"><a href="#多粒度层次注意力" class="headerlink" title="多粒度层次注意力"></a>多粒度层次注意力</h5><p>GraphHAM(Lin et al. 2022)设计：</p>
+<ul>
+<li>局部粒度注意力：捕捉节点邻域特征</li>
+<li>全局粒度注意力：捕捉图结构特征</li>
+<li>跨粒度注意力：协调不同粒度信息</li>
+</ul>
+<h5 id="动态层次注意力"><a href="#动态层次注意力" class="headerlink" title="动态层次注意力"></a>动态层次注意力</h5><p>RGHAT(Zhang et al. 2020c)实现：</p>
+<ul>
+<li><strong>底层实体注意力</strong>：处理节点特征 $e_{ij} &#x3D; a(h_i,h_j)$</li>
+<li><strong>高层关系注意力</strong>：处理边类型特征 $r_k &#x3D; \sum_{i,j} \beta_{ij}^k e_{ij}$</li>
+</ul>
+<h2 id="层间注意力-Inter-Layer-GAT"><a href="#层间注意力-Inter-Layer-GAT" class="headerlink" title="层间注意力 (Inter-Layer GAT)"></a>层间注意力 (Inter-Layer GAT)</h2><p>在神经网络层之间，跨层GAT通过特征融合方法将不同特征空间的表示结合起来。根据不同的融合方法，我们将这些基于注意力的GNN分为五个子类别，包括多级注意力、多通道注意力、多视图注意力和时空注意力。</p>
+<h3 id="多级注意力-Multi-Level-Attention"><a href="#多级注意力-Multi-Level-Attention" class="headerlink" title="多级注意力 (Multi-Level Attention)"></a>多级注意力 (Multi-Level Attention)</h3><p>多级注意力机制通过构建多级注意力结构来处理图数据中的复杂关系，其核心思想包括：</p>
+<ol>
+<li><strong>层次化信息处理</strong>：将图数据分解为不同层次的抽象表示</li>
+<li><strong>跨层次信息交互</strong>：在不同层次间建立注意力连接</li>
+<li><strong>自适应权重分配</strong>：自动学习各层次对最终任务的重要性</li>
+</ol>
+<h4 id="关键技术方法-2"><a href="#关键技术方法-2" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="节点-路径双层次注意力"><a href="#节点-路径双层次注意力" class="headerlink" title="节点-路径双层次注意力"></a>节点-路径双层次注意力</h5><p>DAGNN(Liu et al. 2020)提出：</p>
+<ul>
+<li><strong>节点级注意力</strong>：学习局部邻域内节点的重要性 $h_i^{(l)} &#x3D; \sum_{j\in N_i} \alpha_{ij}^{(l)} h_j^{(l-1)}$</li>
+<li><strong>路径级注意力</strong>：学习不同传播深度的重要性 $z_i &#x3D; \sum_{l&#x3D;0}^L \beta_l h_i^{(l)}$</li>
+</ul>
+<h5 id="自适应深度注意力"><a href="#自适应深度注意力" class="headerlink" title="自适应深度注意力"></a>自适应深度注意力</h5><p>TDGNN(Wang and Derr 2021)设计：</p>
+<ul>
+<li>动态调整各层的注意力范围</li>
+<li>基于树分解的层次化注意力</li>
+<li>跨层信息融合机制</li>
+</ul>
+<h5 id="跳跃知识架构"><a href="#跳跃知识架构" class="headerlink" title="跳跃知识架构"></a>跳跃知识架构</h5><p>GAMLP(Zhang et al. 2022c)实现：</p>
+<ul>
+<li>底层局部注意力</li>
+<li>中层区域注意力</li>
+<li>高层全局注意力</li>
+<li>跳跃连接整合各层特征</li>
+</ul>
+<h3 id="多通道注意力-Multi-Channel-Attention"><a href="#多通道注意力-Multi-Channel-Attention" class="headerlink" title="多通道注意力 (Multi-Channel Attention)"></a>多通道注意力 (Multi-Channel Attention)</h3><p>多通道注意力机制通过构建并行注意力通道来处理图数据中的多样化特征，其核心思想包括：</p>
+<ol>
+<li><strong>通道多样化</strong>：将输入特征分解为多个特征通道</li>
+<li><strong>通道特异性</strong>：为每个通道设计独立的注意力机制</li>
+<li><strong>通道融合</strong>：自适应地整合不同通道的信息</li>
+</ol>
+<h4 id="关键技术方法-3"><a href="#关键技术方法-3" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="频率自适应注意力"><a href="#频率自适应注意力" class="headerlink" title="频率自适应注意力"></a>频率自适应注意力</h5><p>FAGCN(Bo et al. 2021)提出：</p>
+<ul>
+<li>低频通道：捕捉节点相似性 $h_{low} &#x3D; \sum_{j\in N_i} \frac{1}{\sqrt{d_i d_j}} h_j$</li>
+<li>高频通道：捕捉节点差异性 $h_{high} &#x3D; \sum_{j\in N_i} -\frac{1}{\sqrt{d_i d_j}} h_j$</li>
+<li>自适应融合： $h_i &#x3D; \alpha_{low} h_{low} + \alpha_{high} h_{high}$</li>
+</ul>
+<h5 id="自适应通道混合"><a href="#自适应通道混合" class="headerlink" title="自适应通道混合"></a>自适应通道混合</h5><p>ACM(Luan et al. 2021)设计：</p>
+<ul>
+<li>多通道特征提取</li>
+<li>通道间注意力交互</li>
+<li>动态通道权重分配</li>
+</ul>
+<h5 id="不确定性感知通道"><a href="#不确定性感知通道" class="headerlink" title="不确定性感知通道"></a>不确定性感知通道</h5><p>UAG(Feng et al. 2021)实现：</p>
+<ul>
+<li>通道不确定性估计</li>
+<li>基于不确定性的通道注意力</li>
+<li>鲁棒性通道融合</li>
+</ul>
+<h3 id="多视角注意力-Multi-View-Attention"><a href="#多视角注意力-Multi-View-Attention" class="headerlink" title="多视角注意力 (Multi-View Attention)"></a>多视角注意力 (Multi-View Attention)</h3><p>多视角注意力机制通过构建并行注意力视角来处理图数据中的多样化信息，其核心思想包括：</p>
+<ol>
+<li><strong>视角多样化</strong>：从不同角度（如拓扑结构、节点特征、时间序列等）构建多个视角</li>
+<li><strong>视角特异性</strong>：为每个视角设计独立的注意力机制</li>
+<li><strong>视角融合</strong>：自适应地整合不同视角的信息</li>
+</ol>
+<h4 id="关键技术方法-4"><a href="#关键技术方法-4" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="结构-特征双视角注意力"><a href="#结构-特征双视角注意力" class="headerlink" title="结构-特征双视角注意力"></a>结构-特征双视角注意力</h5><p>AM-GCN(Wang et al. 2020b)提出：</p>
+<ul>
+<li>拓扑视角：基于图结构的邻接矩阵 $A_{topo} &#x3D; A$</li>
+<li>特征视角：基于节点特征的相似度矩阵 $A_{feat} &#x3D; \text{sim}(X,X^T)$</li>
+<li>注意力融合： $A_{final} &#x3D; \sum_{v\in{topo,feat}} w_v A_v$</li>
+</ul>
+<h3 id="时空注意力-Spatio-Temporal-Attention"><a href="#时空注意力-Spatio-Temporal-Attention" class="headerlink" title="时空注意力 (Spatio-Temporal Attention)"></a>时空注意力 (Spatio-Temporal Attention)</h3><p>时空注意力机制通过构建并行注意力模块来处理图数据中的空间和时间依赖性，其核心思想包括：</p>
+<ol>
+<li>空间依赖性：捕捉节点间的拓扑关系</li>
+<li>时间依赖性：建模动态图中的时序演化模式</li>
+<li>时空交互：联合建模时空维度的相互影响</li>
+</ol>
+<h4 id="关键技术方法-5"><a href="#关键技术方法-5" class="headerlink" title="关键技术方法"></a>关键技术方法</h4><h5 id="空间-时间双注意力"><a href="#空间-时间双注意力" class="headerlink" title="空间-时间双注意力"></a>空间-时间双注意力</h5><p>DySAT(Sankar et al. 2018)提出：</p>
+<ul>
+<li>空间注意力：基于当前快照的图结构 $A_{spatial} &#x3D; \text{softmax}(Q_s K_s^T&#x2F;\sqrt{d})$</li>
+<li>时间注意力：基于节点的时间序列 $A_{temporal} &#x3D; \text{softmax}(Q_t K_t^T&#x2F;\sqrt{d})$</li>
+<li>联合建模： $Z &#x3D; (A_{spatial} \oplus A_{temporal})V$</li>
+</ul>
+<h3 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h3><p><a href="/paper/Lee 等 - 2018 - Attention Models in Graphs A Survey.pdf" target="_blank">📄 Lee 等 - 2018 - Attention Models in Graphs A Survey</a></p>
+<a href="https://github.com/xmu-xiaoma666/External-Attention-pytorch" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  External-Attention-pytorch
+</a>
+
+<p><a href="/paper/Sun 等 - 2023 - Attention-based graph neural networks a survey.pdf" target="_blank">📄 Sun 等 - 2023 - Attention-based graph neural networks a survey</a></p>
+<a href="https://disassemble-channel.com/graph-attention-network-gat/" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/google.svg" alt="github" style="height: 1.3em; vertical-align: middle; margin-top: 16px;">
+  </span>
+  【深層学習】Graph Attention Networks(GAT)を理解する
+</a> 
+]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>Deep Learning</category>
+        <category>Model</category>
+        <category>Attention</category>
+        <category>Graph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
       </tags>
   </entry>
   <entry>
@@ -2417,6 +2417,275 @@
       </tags>
   </entry>
   <entry>
+    <title>Basic Concepts</title>
+    <url>/2025/07/28/Reinforcement-Learning-L1/</url>
+    <content><![CDATA[<h1 id="强化学习基础概念读书笔记"><a href="#强化学习基础概念读书笔记" class="headerlink" title="强化学习基础概念读书笔记"></a>强化学习基础概念读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/01.png" style="width: 175px; margin-right: 20px;">
+  <p>本文定义状态、动作、奖励、策略等核心概念，形式化MDP五元组框架。通过网格世界示例说明状态转移、回报计算和任务分类（分幕vs连续），为后续算法提供统一的数学建模基础。</p>
+</div>
+
+
+
+
+<span id="more"></span>
+
+
+
+<h2 id="网格世界示例-Grid-World-Example"><a href="#网格世界示例-Grid-World-Example" class="headerlink" title="网格世界示例 (Grid-World Example)"></a>网格世界示例 (Grid-World Example)</h2><ul>
+<li><strong>环境结构</strong>：  <ul>
+<li>网格由9个单元格组成（编号 $s_1$ 到 $s_9$）  </li>
+<li>单元格类型：可通行区域（如 $s_1, s_2$）、禁区（如 $s_6$）、目标区（如 $s_9$）、边界</li>
+</ul>
+</li>
+<li><strong>智能体任务</strong>：<br>从任意起点找到通往目标区域 $s_9$ 的“优质”路径。  <ul>
+<li>“优质”定义：避免进入禁区、减少绕路、不触碰边界。</li>
+</ul>
+</li>
+</ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/grid%20world.png" alt="grid world" style="zoom: 30%;" />
+
+<hr>
+<h2 id="核心概念与数学形式化"><a href="#核心概念与数学形式化" class="headerlink" title="核心概念与数学形式化"></a>核心概念与数学形式化</h2><h3 id="状态-State"><a href="#状态-State" class="headerlink" title="状态 (State)"></a>状态 (State)</h3><ul>
+<li><strong>定义</strong>：智能体在环境中的<strong>当前状态标识</strong>（网格世界中为位置）  </li>
+<li><strong>状态空间 (State Space)</strong>：<br>$$\mathcal{S} &#x3D; {s_i}_{i&#x3D;1}^{9} &#x3D; {s_1, s_2, \dots, s_9}$$</li>
+</ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/state.png" alt="state" style="zoom:23%;" />
+
+<h3 id="动作-Action"><a href="#动作-Action" class="headerlink" title="动作 (Action)"></a>动作 (Action)</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L1/action.png" alt="image-20250729124818727" style="zoom:33%;" />
+
+<ul>
+<li><strong>定义</strong>：智能体在状态 $s_i$ 下可执行的操作  </li>
+<li><strong>动作空间 (Action Space)</strong>：<br>$$\mathcal{A}(s_i) &#x3D; {a_k}_{k&#x3D;1}^{5} &#x3D; {a_1: \text{向上}, a_2: \text{向右}, a_3: \text{向下}, a_4: \text{向左}, a_5: \text{静止}}$$  <blockquote>
+<p><strong>注意</strong>：不同状态可能有不同的合法动作集（如边界处无法向外移动）</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="状态转移-State-Transition"><a href="#状态转移-State-Transition" class="headerlink" title="状态转移 (State Transition)"></a>状态转移 (State Transition)</h3><ul>
+<li><strong>定义</strong>：执行动作 $a$ 后，状态从 $s_i$ 迁移到 $s_j$ 的过程  </li>
+<li><strong>数学表示</strong>：  <ul>
+<li><strong>确定性转移</strong>（无随机因素）：<br>$$s_i \xrightarrow{a} s_j \quad \Rightarrow \quad p(s_j | s_i, a) &#x3D; 1$$  </li>
+<li><strong>随机性转移</strong>（如受风力影响）：<br>$$p(s_j | s_i, a) \in [0, 1], \quad \sum_{s_j \in \mathcal{S}} p(s_j | s_i, a) &#x3D; 1$$</li>
+</ul>
+</li>
+<li><strong>特殊规则</strong>：  <ul>
+<li><strong>触碰边界</strong>：$s_i \xrightarrow{a} s_i$（保持原位，奖励 $r_{\text{bound}}&#x3D;-1$）  </li>
+<li><strong>进入禁区</strong>：  <ul>
+<li>方案1（默认）：$s_i \xrightarrow{a} s_{\text{forbid}}$（允许进入但惩罚 $r_{\text{forbid}}&#x3D;-1$)  </li>
+<li>方案2：$s_i \xrightarrow{a} s_i$（物理阻挡无法进入）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="状态转移表示法"><a href="#状态转移表示法" class="headerlink" title="状态转移表示法"></a>状态转移表示法</h4><table>
+<thead>
+<tr>
+<th><strong>状态\动作</strong></th>
+<th>$a_1$ (上)</th>
+<th>$a_2$ (右)</th>
+<th>$a_3$ (下)</th>
+<th>$a_4$ (左)</th>
+<th>$a_5$ (静)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$s_1$</td>
+<td>$s_1$</td>
+<td>$s_2$</td>
+<td>$s_4$</td>
+<td>$s_1$</td>
+<td>$s_1$</td>
+</tr>
+<tr>
+<td>$s_2$</td>
+<td>$s_2$</td>
+<td>$s_3$</td>
+<td>$s_5$</td>
+<td>$s_1$</td>
+<td>$s_2$</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>局限</strong>：表格仅能表示确定性转移，随机转移需用概率分布 $p(s’|s,a)$。  </p>
+</blockquote>
+<h3 id="策略-Policy"><a href="#策略-Policy" class="headerlink" title="策略 (Policy)"></a>策略 (Policy)</h3><ul>
+<li><strong>定义</strong>：在状态 $s$ 下选择动作 $a$ 的规则  </li>
+<li><strong>数学表示</strong>：<br>$$\pi(a|s) &#x3D; \mathbb{P}(\text{选择动作 } a \mid \text{状态 } s), \quad \sum_{a \in \mathcal{A}(s)} \pi(a|s) &#x3D; 1$$  </li>
+<li><strong>类型</strong>：  <ul>
+<li><strong>确定性策略</strong>：$\exists a’ \text{ s.t. } \pi(a’|s)&#x3D;1, \pi(a|s)&#x3D;0 (\forall a \neq a’)$  </li>
+<li><strong>随机性策略</strong>：$\exists a \text{ s.t. } \pi(a|s) \in (0,1)$（如探索需求）</li>
+</ul>
+</li>
+</ul>
+<h4 id="策略表示法"><a href="#策略表示法" class="headerlink" title="策略表示法"></a>策略表示法</h4><table>
+<thead>
+<tr>
+<th><strong>状态\动作</strong></th>
+<th>$a_1$</th>
+<th>$a_2$</th>
+<th>$a_3$</th>
+<th>$a_4$</th>
+<th>$a_5$</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$s_1$</td>
+<td>0</td>
+<td>0.5</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>$s_2$</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<h3 id="奖励-Reward"><a href="#奖励-Reward" class="headerlink" title="奖励 (Reward)"></a>奖励 (Reward)</h3><ul>
+<li><strong>定义</strong>：执行动作后环境反馈的标量值（鼓励&#x2F;惩罚信号）  </li>
+<li><strong>设计原则</strong>：  <ul>
+<li>$r_{\text{bound}} &#x3D; -1$（触碰边界）  </li>
+<li>$r_{\text{forbid}} &#x3D; -1$（进入禁区）  </li>
+<li>$r_{\text{target}} &#x3D; +1$（到达目标）  </li>
+<li>其他情况 $r &#x3D; 0$</li>
+</ul>
+</li>
+<li><strong>关键性质</strong>：  <ul>
+<li><strong>相对性</strong>：奖励的绝对数值不重要，相对大小决定策略优劣（例如 ${+1,-1}$ 等价于 ${+2,0}$）  </li>
+<li><strong>随机性</strong>：$p(r|s,a)$ 可建模不确定性（如学习效果波动）</li>
+</ul>
+</li>
+</ul>
+<h3 id="轨迹与回报-Trajectory-Return"><a href="#轨迹与回报-Trajectory-Return" class="headerlink" title="轨迹与回报 (Trajectory &amp; Return)"></a>轨迹与回报 (Trajectory &amp; Return)</h3><ul>
+<li><strong>轨迹</strong>：状态-动作-奖励序列<br>$$s_1 \xrightarrow[r&#x3D;0]{a_2} s_2 \xrightarrow[r&#x3D;0]{a_3} s_5 \xrightarrow[r&#x3D;0]{a_3} s_8 \xrightarrow[r&#x3D;1]{a_2} s_9$$  </li>
+<li><strong>回报 (Return)</strong>：累积奖励之和  <ul>
+<li><strong>有限轨迹</strong>：$\text{return} &#x3D; \sum_{t&#x3D;1}^{T} r_t &#x3D; 0+0+0+1&#x3D;1$  </li>
+<li><strong>无限轨迹问题</strong>：若在 $s_9$ 持续停留，回报 $\sum_{t&#x3D;4}^{\infty} 1 \to \infty$（发散）</li>
+</ul>
+</li>
+</ul>
+<h4 id="折扣回报-Discounted-Return"><a href="#折扣回报-Discounted-Return" class="headerlink" title="折扣回报 (Discounted Return)"></a>折扣回报 (Discounted Return)</h4><p>引入折扣因子 $\gamma \in (0,1)$ 保证收敛：<br>$$G_t &#x3D; \sum_{k&#x3D;0}^{\infty} \gamma^k r_{t+k+1} &#x3D; r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \cdots$$  </p>
+<ul>
+<li><strong>性质</strong>：  <ul>
+<li>$\gamma \approx 0$：侧重近期奖励  </li>
+<li>$\gamma \approx 1$：侧重远期奖励</li>
+</ul>
+</li>
+<li><strong>计算示例</strong>（$s_1$ 到 $s_9$ 后停留）：<br>$$G &#x3D; \gamma^3(1 + \gamma + \gamma^2 + \cdots) &#x3D; \gamma^3 \frac{1}{1-\gamma}$$</li>
+</ul>
+<h3 id="7-任务分类"><a href="#7-任务分类" class="headerlink" title="7. 任务分类"></a>7. 任务分类</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>特点</strong></th>
+<th><strong>回报计算</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分幕任务</strong> (Episodic)</td>
+<td>存在终止状态（如到达 $s_9$）</td>
+<td>有限步累积奖励</td>
+</tr>
+<tr>
+<td><strong>连续任务</strong> (Continuing)</td>
+<td>无终止状态</td>
+<td>折扣回报 $G_t$</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="马尔可夫决策过程-Markov-Decision-Process-MDP"><a href="#马尔可夫决策过程-Markov-Decision-Process-MDP" class="headerlink" title="马尔可夫决策过程 (Markov Decision Process, MDP)"></a>马尔可夫决策过程 (Markov Decision Process, MDP)</h2><h3 id="关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle"><a href="#关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle" class="headerlink" title="关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$"></a>关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</h3><ol>
+<li><strong>状态集</strong> $\mathcal{S}$  </li>
+<li><strong>动作集</strong> $\mathcal{A}(s)$（状态相关）  </li>
+<li><strong>状态转移概率</strong>：<br>$$P(s’|s,a) &#x3D; \mathbb{P}(s_{t+1}&#x3D;s’ \mid s_t&#x3D;s, a_t&#x3D;a)$$  </li>
+<li><strong>奖励函数</strong>：<br>$$R(s,a) &#x3D; \mathbb{E}[r_{t+1} \mid s_t&#x3D;s, a_t&#x3D;a] \quad \text{或} \quad p(r|s,a)$$  </li>
+<li><strong>折扣因子</strong> $\gamma \in (0,1)$</li>
+</ol>
+<h3 id="马尔可夫性质-Markov-Property"><a href="#马尔可夫性质-Markov-Property" class="headerlink" title="马尔可夫性质 (Markov Property)"></a>马尔可夫性质 (Markov Property)</h3><p>未来状态&#x2F;奖励仅依赖当前状态和动作：<br>$$\begin{align*}<br>p(s_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(s_{t+1}|s_t,a_t) \\<br>p(r_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(r_{t+1}|s_t,a_t)<br>\end{align*}$$  </p>
+<h3 id="抽象表示"><a href="#抽象表示" class="headerlink" title="抽象表示"></a>抽象表示</h3><pre>
+<code class="mermaid">
+graph LR
+ 
+s1((s1)) --&gt;|a1, r| s2((s2))  
+s2 --&gt;|a3, r| s5((s5))  
+s5 --&gt;|a3, r| s8((s8))  
+s8 --&gt;|a2, r&#x3D;1| s9((s9))  
+</code>
+</pre>
+
+<blockquote>
+<p>注：网格世界是MDP的具体实例，MDP是强化学习的通用数学模型。  </p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
+<thead>
+<tr>
+<th><strong>概念</strong></th>
+<th><strong>关键描述</strong></th>
+<th><strong>数学工具</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态与动作</td>
+<td>环境描述与决策基础</td>
+<td>集合 $\mathcal{S}, \mathcal{A}$</td>
+</tr>
+<tr>
+<td>策略</td>
+<td>状态到动作的映射规则</td>
+<td>$\pi(a|s)$</td>
+</tr>
+<tr>
+<td>状态转移与奖励</td>
+<td>环境动态特性与反馈机制</td>
+<td>$p(s’|s,a), p(r|s,a)$</td>
+</tr>
+<tr>
+<td>轨迹与回报</td>
+<td>策略执行的序列与长期收益</td>
+<td>$G_t&#x3D;\sum \gamma^k r_{t+k+1}$</td>
+</tr>
+<tr>
+<td>MDP框架</td>
+<td>统一建模强化学习问题</td>
+<td>$\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</td>
+</tr>
+</tbody></table>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+      <tags>
+        <tag>ReinForcement Learning</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Quaqua Rishinala</title>
     <url>/2025/07/17/Query-Related-Attention/</url>
     <content><![CDATA[<h1 id="在查询上做文章的-Attention"><a href="#在查询上做文章的-Attention" class="headerlink" title="在查询上做文章的 Attention"></a>在查询上做文章的 Attention</h1><div style="display: flex; align-items: center;">
@@ -2757,258 +3026,16 @@
       </tags>
   </entry>
   <entry>
-    <title>Reinforcement-Learning-L1</title>
-    <url>/2025/07/28/Reinforcement-Learning-L1/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
-<span id="more"></span>
-
-<h1 id="强化学习基础概念读书笔记"><a href="#强化学习基础概念读书笔记" class="headerlink" title="强化学习基础概念读书笔记"></a>强化学习基础概念读书笔记</h1><h2 id="网格世界示例-Grid-World-Example"><a href="#网格世界示例-Grid-World-Example" class="headerlink" title="网格世界示例 (Grid-World Example)"></a>网格世界示例 (Grid-World Example)</h2><ul>
-<li><strong>环境结构</strong>：  <ul>
-<li>网格由9个单元格组成（编号 $s_1$ 到 $s_9$）  </li>
-<li>单元格类型：可通行区域（如 $s_1, s_2$）、禁区（如 $s_6$）、目标区（如 $s_9$）、边界</li>
-</ul>
-</li>
-<li><strong>智能体任务</strong>：<br>从任意起点找到通往目标区域 $s_9$ 的“优质”路径。  <ul>
-<li>“优质”定义：避免进入禁区、减少绕路、不触碰边界。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="核心概念与数学形式化"><a href="#核心概念与数学形式化" class="headerlink" title="核心概念与数学形式化"></a>核心概念与数学形式化</h2><h3 id="状态-State"><a href="#状态-State" class="headerlink" title="状态 (State)"></a>状态 (State)</h3><ul>
-<li><strong>定义</strong>：智能体在环境中的<strong>当前状态标识</strong>（网格世界中为位置）  </li>
-<li><strong>状态空间 (State Space)</strong>：<br>$$\mathcal{S} &#x3D; {s_i}_{i&#x3D;1}^{9} &#x3D; {s_1, s_2, \dots, s_9}$$</li>
-</ul>
-<h3 id="动作-Action"><a href="#动作-Action" class="headerlink" title="动作 (Action)"></a>动作 (Action)</h3><ul>
-<li><strong>定义</strong>：智能体在状态 $s_i$ 下可执行的操作  </li>
-<li><strong>动作空间 (Action Space)</strong>：<br>$$\mathcal{A}(s_i) &#x3D; {a_k}_{k&#x3D;1}^{5} &#x3D; {a_1: \text{向上}, a_2: \text{向右}, a_3: \text{向下}, a_4: \text{向左}, a_5: \text{静止}}$$  <blockquote>
-<p><strong>注意</strong>：不同状态可能有不同的合法动作集（如边界处无法向外移动）</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="状态转移-State-Transition"><a href="#状态转移-State-Transition" class="headerlink" title="状态转移 (State Transition)"></a>状态转移 (State Transition)</h3><ul>
-<li><strong>定义</strong>：执行动作 $a$ 后，状态从 $s_i$ 迁移到 $s_j$ 的过程  </li>
-<li><strong>数学表示</strong>：  <ul>
-<li><strong>确定性转移</strong>（无随机因素）：<br>$$s_i \xrightarrow{a} s_j \quad \Rightarrow \quad p(s_j | s_i, a) &#x3D; 1$$  </li>
-<li><strong>随机性转移</strong>（如受风力影响）：<br>$$p(s_j | s_i, a) \in [0, 1], \quad \sum_{s_j \in \mathcal{S}} p(s_j | s_i, a) &#x3D; 1$$</li>
-</ul>
-</li>
-<li><strong>特殊规则</strong>：  <ul>
-<li><strong>触碰边界</strong>：$s_i \xrightarrow{a} s_i$（保持原位，奖励 $r_{\text{bound}}&#x3D;-1$）  </li>
-<li><strong>进入禁区</strong>：  <ul>
-<li>方案1（默认）：$s_i \xrightarrow{a} s_{\text{forbid}}$（允许进入但惩罚 $r_{\text{forbid}}&#x3D;-1$)  </li>
-<li>方案2：$s_i \xrightarrow{a} s_i$（物理阻挡无法进入）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="状态转移表示法"><a href="#状态转移表示法" class="headerlink" title="状态转移表示法"></a>状态转移表示法</h4><table>
-<thead>
-<tr>
-<th><strong>状态\动作</strong></th>
-<th>$a_1$ (上)</th>
-<th>$a_2$ (右)</th>
-<th>$a_3$ (下)</th>
-<th>$a_4$ (左)</th>
-<th>$a_5$ (静)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$s_1$</td>
-<td>$s_1$</td>
-<td>$s_2$</td>
-<td>$s_4$</td>
-<td>$s_1$</td>
-<td>$s_1$</td>
-</tr>
-<tr>
-<td>$s_2$</td>
-<td>$s_2$</td>
-<td>$s_3$</td>
-<td>$s_5$</td>
-<td>$s_1$</td>
-<td>$s_2$</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>局限</strong>：表格仅能表示确定性转移，随机转移需用概率分布 $p(s’|s,a)$。  </p>
-</blockquote>
-<h3 id="策略-Policy"><a href="#策略-Policy" class="headerlink" title="策略 (Policy)"></a>策略 (Policy)</h3><ul>
-<li><strong>定义</strong>：在状态 $s$ 下选择动作 $a$ 的规则  </li>
-<li><strong>数学表示</strong>：<br>$$\pi(a|s) &#x3D; \mathbb{P}(\text{选择动作 } a \mid \text{状态 } s), \quad \sum_{a \in \mathcal{A}(s)} \pi(a|s) &#x3D; 1$$  </li>
-<li><strong>类型</strong>：  <ul>
-<li><strong>确定性策略</strong>：$\exists a’ \text{ s.t. } \pi(a’|s)&#x3D;1, \pi(a|s)&#x3D;0 (\forall a \neq a’)$  </li>
-<li><strong>随机性策略</strong>：$\exists a \text{ s.t. } \pi(a|s) \in (0,1)$（如探索需求）</li>
-</ul>
-</li>
-</ul>
-<h4 id="策略表示法"><a href="#策略表示法" class="headerlink" title="策略表示法"></a>策略表示法</h4><table>
-<thead>
-<tr>
-<th><strong>状态\动作</strong></th>
-<th>$a_1$</th>
-<th>$a_2$</th>
-<th>$a_3$</th>
-<th>$a_4$</th>
-<th>$a_5$</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$s_1$</td>
-<td>0</td>
-<td>0.5</td>
-<td>0.5</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>$s_2$</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-<td>…</td>
-</tr>
-</tbody></table>
-<h3 id="奖励-Reward"><a href="#奖励-Reward" class="headerlink" title="奖励 (Reward)"></a>奖励 (Reward)</h3><ul>
-<li><strong>定义</strong>：执行动作后环境反馈的标量值（鼓励&#x2F;惩罚信号）  </li>
-<li><strong>设计原则</strong>：  <ul>
-<li>$r_{\text{bound}} &#x3D; -1$（触碰边界）  </li>
-<li>$r_{\text{forbid}} &#x3D; -1$（进入禁区）  </li>
-<li>$r_{\text{target}} &#x3D; +1$（到达目标）  </li>
-<li>其他情况 $r &#x3D; 0$</li>
-</ul>
-</li>
-<li><strong>关键性质</strong>：  <ul>
-<li><strong>相对性</strong>：奖励的绝对数值不重要，相对大小决定策略优劣（例如 ${+1,-1}$ 等价于 ${+2,0}$）  </li>
-<li><strong>随机性</strong>：$p(r|s,a)$ 可建模不确定性（如学习效果波动）</li>
-</ul>
-</li>
-</ul>
-<h3 id="轨迹与回报-Trajectory-Return"><a href="#轨迹与回报-Trajectory-Return" class="headerlink" title="轨迹与回报 (Trajectory &amp; Return)"></a>轨迹与回报 (Trajectory &amp; Return)</h3><ul>
-<li><strong>轨迹</strong>：状态-动作-奖励序列<br>$$s_1 \xrightarrow[r&#x3D;0]{a_2} s_2 \xrightarrow[r&#x3D;0]{a_3} s_5 \xrightarrow[r&#x3D;0]{a_3} s_8 \xrightarrow[r&#x3D;1]{a_2} s_9$$  </li>
-<li><strong>回报 (Return)</strong>：累积奖励之和  <ul>
-<li><strong>有限轨迹</strong>：$\text{return} &#x3D; \sum_{t&#x3D;1}^{T} r_t &#x3D; 0+0+0+1&#x3D;1$  </li>
-<li><strong>无限轨迹问题</strong>：若在 $s_9$ 持续停留，回报 $\sum_{t&#x3D;4}^{\infty} 1 \to \infty$（发散）</li>
-</ul>
-</li>
-</ul>
-<h4 id="折扣回报-Discounted-Return"><a href="#折扣回报-Discounted-Return" class="headerlink" title="折扣回报 (Discounted Return)"></a>折扣回报 (Discounted Return)</h4><p>引入折扣因子 $\gamma \in (0,1)$ 保证收敛：<br>$$G_t &#x3D; \sum_{k&#x3D;0}^{\infty} \gamma^k r_{t+k+1} &#x3D; r_{t+1} + \gamma r_{t+2} + \gamma^2 r_{t+3} + \cdots$$  </p>
-<ul>
-<li><strong>性质</strong>：  <ul>
-<li>$\gamma \approx 0$：侧重近期奖励  </li>
-<li>$\gamma \approx 1$：侧重远期奖励</li>
-</ul>
-</li>
-<li><strong>计算示例</strong>（$s_1$ 到 $s_9$ 后停留）：<br>$$G &#x3D; \gamma^3(1 + \gamma + \gamma^2 + \cdots) &#x3D; \gamma^3 \frac{1}{1-\gamma}$$</li>
-</ul>
-<h3 id="7-任务分类"><a href="#7-任务分类" class="headerlink" title="7. 任务分类"></a>7. 任务分类</h3><table>
-<thead>
-<tr>
-<th><strong>类型</strong></th>
-<th><strong>特点</strong></th>
-<th><strong>回报计算</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>分幕任务</strong> (Episodic)</td>
-<td>存在终止状态（如到达 $s_9$）</td>
-<td>有限步累积奖励</td>
-</tr>
-<tr>
-<td><strong>连续任务</strong> (Continuing)</td>
-<td>无终止状态</td>
-<td>折扣回报 $G_t$</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="马尔可夫决策过程-Markov-Decision-Process-MDP"><a href="#马尔可夫决策过程-Markov-Decision-Process-MDP" class="headerlink" title="马尔可夫决策过程 (Markov Decision Process, MDP)"></a>马尔可夫决策过程 (Markov Decision Process, MDP)</h2><h3 id="关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle"><a href="#关键五元组-langle-mathcal-S-mathcal-A-P-R-gamma-rangle" class="headerlink" title="关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$"></a>关键五元组 $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</h3><ol>
-<li><strong>状态集</strong> $\mathcal{S}$  </li>
-<li><strong>动作集</strong> $\mathcal{A}(s)$（状态相关）  </li>
-<li><strong>状态转移概率</strong>：<br>$$P(s’|s,a) &#x3D; \mathbb{P}(s_{t+1}&#x3D;s’ \mid s_t&#x3D;s, a_t&#x3D;a)$$  </li>
-<li><strong>奖励函数</strong>：<br>$$R(s,a) &#x3D; \mathbb{E}[r_{t+1} \mid s_t&#x3D;s, a_t&#x3D;a] \quad \text{或} \quad p(r|s,a)$$  </li>
-<li><strong>折扣因子</strong> $\gamma \in (0,1)$</li>
-</ol>
-<h3 id="马尔可夫性质-Markov-Property"><a href="#马尔可夫性质-Markov-Property" class="headerlink" title="马尔可夫性质 (Markov Property)"></a>马尔可夫性质 (Markov Property)</h3><p>未来状态&#x2F;奖励仅依赖当前状态和动作：<br>$$\begin{align*}<br>p(s_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(s_{t+1}|s_t,a_t) \\<br>p(r_{t+1}|s_t,a_t,\dots,s_0,a_0) &amp;&#x3D; p(r_{t+1}|s_t,a_t)<br>\end{align*}$$  </p>
-<h3 id="抽象表示"><a href="#抽象表示" class="headerlink" title="抽象表示"></a>抽象表示</h3><pre>
-<code class="mermaid">
-graph LR
- 
-s1((s1)) --&gt;|a1, r| s2((s2))  
-s2 --&gt;|a3, r| s5((s5))  
-s5 --&gt;|a3, r| s8((s8))  
-s8 --&gt;|a2, r&#x3D;1| s9((s9))  
-</code>
-</pre>
-
-<blockquote>
-<p>注：网格世界是MDP的具体实例，MDP是强化学习的通用数学模型。  </p>
-</blockquote>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
-<thead>
-<tr>
-<th><strong>概念</strong></th>
-<th><strong>关键描述</strong></th>
-<th><strong>数学工具</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>状态与动作</td>
-<td>环境描述与决策基础</td>
-<td>集合 $\mathcal{S}, \mathcal{A}$</td>
-</tr>
-<tr>
-<td>策略</td>
-<td>状态到动作的映射规则</td>
-<td>$\pi(a|s)$</td>
-</tr>
-<tr>
-<td>状态转移与奖励</td>
-<td>环境动态特性与反馈机制</td>
-<td>$p(s’|s,a), p(r|s,a)$</td>
-</tr>
-<tr>
-<td>轨迹与回报</td>
-<td>策略执行的序列与长期收益</td>
-<td>$G_t&#x3D;\sum \gamma^k r_{t+k+1}$</td>
-</tr>
-<tr>
-<td>MDP框架</td>
-<td>统一建模强化学习问题</td>
-<td>$\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$</td>
-</tr>
-</tbody></table>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Reinforcement-Learning-L10</title>
     <url>/2025/07/28/Reinforcement-Learning-L10/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/10.png" style="width: 175px; margin-right: 20px;">
+  <p>Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
+<h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
 <li><strong>Actor（演员）</strong>：  <ul>
 <li>负责策略更新 $\pi(a|s,\theta)$  </li>
 <li>通过参数 $\theta$ 生成动作</li>
@@ -3046,7 +3073,7 @@ for 每步 $t$：
 <li><strong>Critic本质</strong>：带函数近似的SARSA算法</li>
 </ul>
 <hr>
-<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}<em>A \left[ |\nabla</em>\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}<em>A \left[ |\nabla</em>\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
+<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
 <h3 id="2-优势函数设计"><a href="#2-优势函数设计" class="headerlink" title="2. 优势函数设计"></a>2. 优势函数设计</h3><ul>
 <li><strong>次优基线选择</strong>：$b(s) &#x3D; v_\pi(s)$  </li>
 <li><strong>优势函数定义</strong>：<br>$$<br>\delta_t &#x3D; q_\pi(s_t,a_t) - v_\pi(s_t) \approx r_{t+1} + \gamma v(s_{t+1},w_t) - v(s_t,w_t)<br>$$  </li>
@@ -3168,146 +3195,18 @@ for 每步 $t$：
       </categories>
   </entry>
   <entry>
-    <title>Reinforcement-Learning-L3</title>
-    <url>/2025/07/28/Reinforcement-Learning-L3/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
-<span id="more"></span>
-
-<h1 id="最优策略与贝尔曼最优方程读书笔记"><a href="#最优策略与贝尔曼最优方程读书笔记" class="headerlink" title="最优策略与贝尔曼最优方程读书笔记"></a>最优策略与贝尔曼最优方程读书笔记</h1><h2 id="一、动机示例：动作值驱动的策略改进"><a href="#一、动机示例：动作值驱动的策略改进" class="headerlink" title="一、动机示例：动作值驱动的策略改进"></a>一、动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
-<ul>
-<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$  </li>
-<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 7.2<br>\end{align*}<br>$$</li>
-</ul>
-<h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
-<li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
-<li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
-<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$  <blockquote>
-<p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h2 id="二、最优策略的数学定义"><a href="#二、最优策略的数学定义" class="headerlink" title="二、最优策略的数学定义"></a>二、最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
-<li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
-</li>
-<li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
-<p>$$<br>v_{\pi^*}(s) \geq v_{\pi}(s)<br>$$</p>
-</li>
-</ul>
-<h3 id="理论问题"><a href="#理论问题" class="headerlink" title="理论问题"></a>理论问题</h3><ol>
-<li><strong>存在性</strong>：最优策略是否存在？  </li>
-<li><strong>唯一性</strong>：最优策略是否唯一？  </li>
-<li><strong>确定性</strong>：最优策略是确定性还是随机性？  </li>
-<li><strong>求解方法</strong>：如何计算最优策略？</li>
-</ol>
-<blockquote>
-<p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
-</blockquote>
-<hr>
-<h2 id="三、贝尔曼最优方程（BOE）的形式"><a href="#三、贝尔曼最优方程（BOE）的形式" class="headerlink" title="三、贝尔曼最优方程（BOE）的形式"></a>三、贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; \max_{\pi} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
-<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$  </p>
-<ul>
-<li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
-<li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
-<li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
-</ul>
-<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$  </p>
-<ul>
-<li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
-</ul>
-<hr>
-<h2 id="四、BOE的求解：压缩映射理论"><a href="#四、BOE的求解：压缩映射理论" class="headerlink" title="四、BOE的求解：压缩映射理论"></a>四、BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
-<li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
-</li>
-<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$  </p>
-<blockquote>
-<p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="解的存在性与唯一性"><a href="#解的存在性与唯一性" class="headerlink" title="解的存在性与唯一性"></a>解的存在性与唯一性</h3><p><strong>压缩映射定理</strong>：  </p>
-<ol>
-<li><strong>存在性</strong>：BOE 存在解 $v^*$  </li>
-<li><strong>唯一性</strong>：解 $v^*$ 唯一  </li>
-<li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
-</ol>
-<hr>
-<h2 id="五、BOE与最优策略的关系"><a href="#五、BOE与最优策略的关系" class="headerlink" title="五、BOE与最优策略的关系"></a>五、BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
-<ol>
-<li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
-<li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
-</ol>
-<h3 id="确定性策略充分性"><a href="#确定性策略充分性" class="headerlink" title="确定性策略充分性"></a>确定性策略充分性</h3><p><strong>定理</strong>：确定性策略足以达到最优性能  </p>
-<ul>
-<li>随机策略不会产生比最优确定性策略更高的状态值</li>
-</ul>
-<hr>
-<h2 id="六、最优策略的影响因素分析"><a href="#六、最优策略的影响因素分析" class="headerlink" title="六、最优策略的影响因素分析"></a>六、最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
-<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$  </li>
-<li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
-<li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-折扣率-gamma"><a href="#2-折扣率-gamma" class="headerlink" title="2. 折扣率 $\gamma$"></a>2. 折扣率 $\gamma$</h3><ul>
-<li>$\gamma \approx 1$：<strong>长远规划</strong>，愿承担风险穿越禁区  </li>
-<li>$\gamma \approx 0$：<strong>短视行为</strong>，回避所有风险（可能无法到达目标）</li>
-</ul>
-<h3 id="3-绕路惩罚机制"><a href="#3-绕路惩罚机制" class="headerlink" title="3. 绕路惩罚机制"></a>3. 绕路惩罚机制</h3><ul>
-<li><strong>隐含惩罚</strong>：折扣率 $\gamma$ 天然惩罚长路径  <ul>
-<li>最优路径回报：$\frac{1}{1-\gamma}$  </li>
-<li>绕路路径回报：$\frac{\gamma^k}{1-\gamma} &lt; \frac{1}{1-\gamma}$（$k \geq 2$)</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="七、总结：贝尔曼最优方程的意义"><a href="#七、总结：贝尔曼最优方程的意义" class="headerlink" title="七、总结：贝尔曼最优方程的意义"></a>七、总结：贝尔曼最优方程的意义</h2><table>
-<thead>
-<tr>
-<th><strong>问题</strong></th>
-<th><strong>BOE的解答</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>最优策略存在性</strong></td>
-<td>BOE解存在 → 最优策略 $\pi^*$ 存在</td>
-</tr>
-<tr>
-<td><strong>策略形式</strong></td>
-<td>确定性策略足够最优：$\pi^* &#x3D; \arg\max_a q(s,a)$</td>
-</tr>
-<tr>
-<td><strong>求解算法</strong></td>
-<td>值迭代：$v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)$</td>
-</tr>
-<tr>
-<td><strong>解的唯一性</strong></td>
-<td>压缩映射保证唯一解 $v^*$</td>
-</tr>
-<tr>
-<td><strong>最优性验证</strong></td>
-<td>$v^* \geq v_{\pi}$ 对所有策略 $\pi$ 成立</td>
-</tr>
-</tbody></table>
-<h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
-<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$  </li>
-<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$  </li>
-<li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
-</ol>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Reinforcement-Learning-L2</title>
     <url>/2025/07/28/Reinforcement-Learning-L2/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="强化学习基础：状态值与贝尔曼方程读书笔记"><a href="#强化学习基础：状态值与贝尔曼方程读书笔记" class="headerlink" title="强化学习基础：状态值与贝尔曼方程读书笔记"></a>强化学习基础：状态值与贝尔曼方程读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/02.png" style="width: 175px; margin-right: 20px;">
+  <p>状态值函数量化策略的长期收益，贝尔曼方程揭示其递归结构。本文通过网格世界示例展示状态值计算，推导贝尔曼方程的矩阵形式与求解方法，并分析状态值与动作值的关系，为策略评估奠定数学基础。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="强化学习基础：状态值与贝尔曼方程读书笔记"><a href="#强化学习基础：状态值与贝尔曼方程读书笔记" class="headerlink" title="强化学习基础：状态值与贝尔曼方程读书笔记"></a>强化学习基础：状态值与贝尔曼方程读书笔记</h1><h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><ul>
+
+
+<h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><ul>
 <li><strong>核心概念</strong>：状态值（State Value）  </li>
 <li><strong>基本工具</strong>：贝尔曼方程（Bellman Equation）  </li>
 <li><strong>学习内容</strong>：  <ol>
@@ -3452,7 +3351,326 @@ for 每步 $t$：
 <li><strong>策略评估（Policy Evaluation）</strong>：计算给定策略 $\pi$ 的状态值 $v_\pi$  </li>
 <li><strong>后续基础</strong>：为策略改进（Policy Improvement）和值迭代（Value Iteration）奠定基础</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Reinforcement-Learning-L3</title>
+    <url>/2025/07/28/Reinforcement-Learning-L3/</url>
+    <content><![CDATA[<h1 id="最优策略与贝尔曼最优方程读书笔记"><a href="#最优策略与贝尔曼最优方程读书笔记" class="headerlink" title="最优策略与贝尔曼最优方程读书笔记"></a>最优策略与贝尔曼最优方程读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/03.png" style="width: 175px; margin-right: 20px;">
+  <p>贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。</p>
+</div>
+
+<span id="more"></span>
+
+
+
+<h2 id="一、动机示例：动作值驱动的策略改进"><a href="#一、动机示例：动作值驱动的策略改进" class="headerlink" title="一、动机示例：动作值驱动的策略改进"></a>一、动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
+<ul>
+<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$  </li>
+<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 7.2<br>\end{align*}<br>$$</li>
+</ul>
+<h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
+<li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
+<li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
+<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$  <blockquote>
+<p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="二、最优策略的数学定义"><a href="#二、最优策略的数学定义" class="headerlink" title="二、最优策略的数学定义"></a>二、最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
+</li>
+<li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
+<p>$$<br>v_{\pi^*}(s) \geq v_{\pi}(s)<br>$$</p>
+</li>
+</ul>
+<h3 id="理论问题"><a href="#理论问题" class="headerlink" title="理论问题"></a>理论问题</h3><ol>
+<li><strong>存在性</strong>：最优策略是否存在？  </li>
+<li><strong>唯一性</strong>：最优策略是否唯一？  </li>
+<li><strong>确定性</strong>：最优策略是确定性还是随机性？  </li>
+<li><strong>求解方法</strong>：如何计算最优策略？</li>
+</ol>
+<blockquote>
+<p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
+</blockquote>
+<hr>
+<h2 id="三、贝尔曼最优方程（BOE）的形式"><a href="#三、贝尔曼最优方程（BOE）的形式" class="headerlink" title="三、贝尔曼最优方程（BOE）的形式"></a>三、贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; \max_{\pi} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
+<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$  </p>
+<ul>
+<li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
+<li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
+<li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
+</ul>
+<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$  </p>
+<ul>
+<li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
+</ul>
+<hr>
+<h2 id="四、BOE的求解：压缩映射理论"><a href="#四、BOE的求解：压缩映射理论" class="headerlink" title="四、BOE的求解：压缩映射理论"></a>四、BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
+<li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
+</li>
+<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$  </p>
+<blockquote>
+<p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="解的存在性与唯一性"><a href="#解的存在性与唯一性" class="headerlink" title="解的存在性与唯一性"></a>解的存在性与唯一性</h3><p><strong>压缩映射定理</strong>：  </p>
+<ol>
+<li><strong>存在性</strong>：BOE 存在解 $v^*$  </li>
+<li><strong>唯一性</strong>：解 $v^*$ 唯一  </li>
+<li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
+</ol>
+<hr>
+<h2 id="五、BOE与最优策略的关系"><a href="#五、BOE与最优策略的关系" class="headerlink" title="五、BOE与最优策略的关系"></a>五、BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
+<ol>
+<li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
+<li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
+</ol>
+<h3 id="确定性策略充分性"><a href="#确定性策略充分性" class="headerlink" title="确定性策略充分性"></a>确定性策略充分性</h3><p><strong>定理</strong>：确定性策略足以达到最优性能  </p>
+<ul>
+<li>随机策略不会产生比最优确定性策略更高的状态值</li>
+</ul>
+<hr>
+<h2 id="六、最优策略的影响因素分析"><a href="#六、最优策略的影响因素分析" class="headerlink" title="六、最优策略的影响因素分析"></a>六、最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
+<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$  </li>
+<li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
+<li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-折扣率-gamma"><a href="#2-折扣率-gamma" class="headerlink" title="2. 折扣率 $\gamma$"></a>2. 折扣率 $\gamma$</h3><ul>
+<li>$\gamma \approx 1$：<strong>长远规划</strong>，愿承担风险穿越禁区  </li>
+<li>$\gamma \approx 0$：<strong>短视行为</strong>，回避所有风险（可能无法到达目标）</li>
+</ul>
+<h3 id="3-绕路惩罚机制"><a href="#3-绕路惩罚机制" class="headerlink" title="3. 绕路惩罚机制"></a>3. 绕路惩罚机制</h3><ul>
+<li><strong>隐含惩罚</strong>：折扣率 $\gamma$ 天然惩罚长路径  <ul>
+<li>最优路径回报：$\frac{1}{1-\gamma}$  </li>
+<li>绕路路径回报：$\frac{\gamma^k}{1-\gamma} &lt; \frac{1}{1-\gamma}$（$k \geq 2$)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="七、总结：贝尔曼最优方程的意义"><a href="#七、总结：贝尔曼最优方程的意义" class="headerlink" title="七、总结：贝尔曼最优方程的意义"></a>七、总结：贝尔曼最优方程的意义</h2><table>
+<thead>
+<tr>
+<th><strong>问题</strong></th>
+<th><strong>BOE的解答</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>最优策略存在性</strong></td>
+<td>BOE解存在 → 最优策略 $\pi^*$ 存在</td>
+</tr>
+<tr>
+<td><strong>策略形式</strong></td>
+<td>确定性策略足够最优：$\pi^* &#x3D; \arg\max_a q(s,a)$</td>
+</tr>
+<tr>
+<td><strong>求解算法</strong></td>
+<td>值迭代：$v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)$</td>
+</tr>
+<tr>
+<td><strong>解的唯一性</strong></td>
+<td>压缩映射保证唯一解 $v^*$</td>
+</tr>
+<tr>
+<td><strong>最优性验证</strong></td>
+<td>$v^* \geq v_{\pi}$ 对所有策略 $\pi$ 成立</td>
+</tr>
+</tbody></table>
+<h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
+<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$  </li>
+<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$  </li>
+<li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
+</ol>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>Learning</category>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Reinforcement-Learning-L4</title>
+    <url>/2025/07/28/Reinforcement-Learning-L4/</url>
+    <content><![CDATA[<h1 id="值迭代与策略迭代算法读书笔记"><a href="#值迭代与策略迭代算法读书笔记" class="headerlink" title="值迭代与策略迭代算法读书笔记"></a>值迭代与策略迭代算法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/04.png" style="width: 175px; margin-right: 20px;">
+  <p>值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。</p>
+</div>
+
+<span id="more"></span>
+
+
+
+<h2 id="一、值迭代算法（Value-Iteration）"><a href="#一、值迭代算法（Value-Iteration）" class="headerlink" title="一、值迭代算法（Value Iteration）"></a>一、值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^<em>$，并提取最优策略 $\pi^</em>$  </p>
+<h3 id="算法步骤（元素形式）"><a href="#算法步骤（元素形式）" class="headerlink" title="算法步骤（元素形式）"></a>算法步骤（元素形式）</h3><ol>
+<li><p><strong>初始化</strong>：  </p>
+<ul>
+<li>已知环境模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$  </li>
+<li>任意初始化状态值函数 $v_0(s)$</li>
+</ul>
+</li>
+<li><p><strong>迭代更新</strong>：<br><strong>重复直到收敛</strong>（$|v_k - v_{k-1}| &lt; \varepsilon$）:  </p>
+<ul>
+<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$  </li>
+<li><strong>值更新</strong>（Value Update）：<br>$$<br>v_{k+1}(s) &#x3D; \max_a q_k(s,a)<br>$$</li>
+</ul>
+</li>
+</ol>
+<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><pre><code>while ||v_k - v_&#123;k-1&#125;|| &gt; threshold:  
+    for each state s:  
+        for each action a:  
+            q(s,a) = Σ [p(r|s,a)*r] + γ * Σ [p(s&#39;|s,a)*v_k(s&#39;)]  
+        a* = argmax_a q(s,a)  
+        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
+        v_&#123;k+1&#125;(s) = max_a q(s,a)  
+</code></pre>
+<h3 id="网格世界示例"><a href="#网格世界示例" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
+<li><strong>奖励设置</strong>：边界&#x2F;禁区 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
+<li><strong>初始值</strong>：$v_0(s_1)&#x3D;v_0(s_2)&#x3D;v_0(s_3)&#x3D;v_0(s_4)&#x3D;0$  </li>
+<li><strong>迭代过程</strong>：  <ul>
+<li><strong>k&#x3D;0</strong>：计算 $q_0$ → 策略 $\pi_1$ 选择 $a_5$（静止）→ $v_1&#x3D;[0,1,1,1]$  </li>
+<li><strong>k&#x3D;1</strong>：计算 $q_1$ → 策略 $\pi_2$ 选择 $a_3$（向下）→ $v_2&#x3D;[\gamma,1+\gamma,1+\gamma,1+\gamma]$  </li>
+<li><strong>收敛</strong>：2次迭代即得最优策略（避开禁区直达目标）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、策略迭代算法（Policy-Iteration）"><a href="#二、策略迭代算法（Policy-Iteration）" class="headerlink" title="二、策略迭代算法（Policy Iteration）"></a>二、策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
+<ol>
+<li><strong>策略评估</strong>（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  </li>
+<li><strong>策略改进</strong>（Policy Improvement）：基于 $v_{\pi_k}$ 生成更优策略 $\pi_{k+1}$</li>
+</ol>
+<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
+<li><strong>初始化</strong>：任意初始策略 $\pi_0$  </li>
+<li><strong>迭代直到收敛</strong>：  <ul>
+<li><strong>策略评估</strong>（求解贝尔曼方程）：<br>$$<br>v_{\pi_k}^{(j+1)} &#x3D; r_{\pi_k} + \gamma P_{\pi_k} v_{\pi_k}^{(j)}<br>$$<br>闭式解：$v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k}$  </li>
+<li><strong>策略改进</strong>（贪心策略）：<br>$$<br>\pi_{k+1} &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v_{\pi_k})<br>$$<br>元素形式：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_{\pi_k}(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
+</ul>
+</li>
+</ol>
+<h3 id="关键性质"><a href="#关键性质" class="headerlink" title="关键性质"></a>关键性质</h3><ul>
+<li><strong>策略改进定理</strong>：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  </li>
+<li><strong>收敛性</strong>：序列 ${v_{\pi_k}}$ 收敛到最优值 $v^*$</li>
+</ul>
+<h3 id="网格世界示例-1"><a href="#网格世界示例-1" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
+<li><strong>初始策略</strong> $\pi_0$：在 $s_1$ 选择向右（$a_2$）  </li>
+<li><strong>策略评估</strong>：<br>$$<br>\begin{cases}<br>v_{\pi_0}(s_1) &#x3D; -1 + \gamma v_{\pi_0}(s_1) \\<br>v_{\pi_0}(s_2) &#x3D; \gamma v_{\pi_0}(s_1)<br>\end{cases}<br>$$<br>解得 $v_{\pi_0}(s_1)&#x3D;-10, v_{\pi_0}(s_2)&#x3D;-9$  </li>
+<li><strong>策略改进</strong>：计算 $q_{\pi_0}$ → 新策略 $\pi_1$ 在 $s_1$ 选择向右（$a_r$)</li>
+</ul>
+<hr>
+<h2 id="三、截断策略迭代（Truncated-Policy-Iteration）"><a href="#三、截断策略迭代（Truncated-Policy-Iteration）" class="headerlink" title="三、截断策略迭代（Truncated Policy Iteration）"></a>三、截断策略迭代（Truncated Policy Iteration）</h2><h3 id="核心思想-2"><a href="#核心思想-2" class="headerlink" title="核心思想"></a>核心思想</h3><p>在策略评估阶段<strong>有限次迭代</strong>（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  </p>
+<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><pre><code>初始化：策略 $\pi_0$，值函数 $v_&#123;-1&#125;$  
+for k=0,1,2,... until convergence:  
+    # 策略评估（截断）  
+    v_k^&#123;(0)&#125; = v_&#123;k-1&#125;   # 继承上轮值  
+    for j=0 to j_truncate-1:  
+        v_k^&#123;(j+1)&#125;(s) = Σ_a π_k(a|s)[ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k^&#123;(j)&#125;(s&#39;) ]  
+    v_k = v_k^&#123;(j_truncate)&#125;  
+      
+    # 策略改进  
+    for each s:  
+        a* = argmax_a [ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k(s&#39;) ]  
+        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
+</code></pre>
+<h3 id="理论保证"><a href="#理论保证" class="headerlink" title="理论保证"></a>理论保证</h3><ul>
+<li><strong>值单调性</strong>：若初始值 $v_k^{(0)} &#x3D; v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  </li>
+<li><strong>收敛性</strong>：仍收敛到最优策略（因策略改进步保证方向正确）</li>
+</ul>
+<hr>
+<h2 id="四、算法对比与关系"><a href="#四、算法对比与关系" class="headerlink" title="四、算法对比与关系"></a>四、算法对比与关系</h2><h3 id="统一框架分析"><a href="#统一框架分析" class="headerlink" title="统一框架分析"></a>统一框架分析</h3><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>策略评估精度</strong></th>
+<th><strong>策略改进方式</strong></th>
+<th><strong>计算效率</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>值迭代</strong></td>
+<td>单次迭代（近似）</td>
+<td>最大化动作值</td>
+<td>⭐⭐高</td>
+</tr>
+<tr>
+<td><strong>策略迭代</strong></td>
+<td>精确求解（无限次迭代）</td>
+<td>贪心策略</td>
+<td>⭐低</td>
+</tr>
+<tr>
+<td><strong>截断策略迭代</strong></td>
+<td>有限次迭代（可调精度）</td>
+<td>贪心策略</td>
+<td>⭐⭐中等</td>
+</tr>
+</tbody></table>
+<h3 id="数学等价性"><a href="#数学等价性" class="headerlink" title="数学等价性"></a>数学等价性</h3><ul>
+<li><strong>值迭代</strong> &#x3D; 策略迭代中策略评估仅进行 <strong>1 次迭代</strong> 的特例  </li>
+<li><strong>策略迭代</strong> &#x3D; 截断策略迭代中 $j_{\text{truncate}} \to \infty$ 的特例</li>
+</ul>
+<h3 id="迭代过程对比"><a href="#迭代过程对比" class="headerlink" title="迭代过程对比"></a>迭代过程对比</h3><ul>
+<li><strong>策略迭代</strong>：$\pi_0 \xrightarrow{\text{PE}} v_{\pi_0} \xrightarrow{\text{PI}} \pi_1 \xrightarrow{\text{PE}} v_{\pi_1} \cdots$  </li>
+<li><strong>值迭代</strong>：$v_0 \xrightarrow{\text{PU}} \pi_1 \xrightarrow{\text{VU}} v_1 \xrightarrow{\text{PU}} \pi_2 \cdots$  </li>
+<li><strong>截断策略迭代</strong>：$\pi_k \xrightarrow{\text{PE (j次)}} \tilde{v}_{\pi_k} \xrightarrow{\text{PI}} \pi_{k+1}$</li>
+</ul>
+<blockquote>
+<p><strong>注</strong>：PE&#x3D;策略评估, PI&#x3D;策略改进, PU&#x3D;策略更新, VU&#x3D;值更新  </p>
+</blockquote>
+<p>具体来说就是：</p>
+<p>$$<br>\begin{aligned}<br>\color{red}{v_{\pi_1}^{(0)}} &amp;\color{red}{&#x3D; v_0  }\\<br>\text{值迭代}\leftarrow \color{red}{v_1\leftarrow} v_{\pi_1}^{(1)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(0)}\\<br>\vdots\\<br>v_{\pi1}^{(2)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(1)}\\<br>\text{截断策略迭代}\leftarrow\color{red}{\tilde{v}_1\leftarrow} v_{\pi_1}^{(j)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(j-1)}\\<br>\vdots\\<br>\text{策略迭代}\leftarrow \color{red}{v_{\pi_1}\leftarrow} v_{\pi_1}^{(\infty)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(\infty)}<br>\end{aligned}<br>$$</p>
+<hr>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="核心公式回顾"><a href="#核心公式回顾" class="headerlink" title="核心公式回顾"></a>核心公式回顾</h3><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>关键更新方程</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>值迭代</td>
+<td>$ v_{k+1}(s) &#x3D; \max_a \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k(s’) \right] $</td>
+</tr>
+<tr>
+<td>策略迭代</td>
+<td>$ v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k} $</td>
+</tr>
+<tr>
+<td>截断策略迭代</td>
+<td>$ v_k^{(j+1)}(s) &#x3D; \sum_a \pi_k(a|s) \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k^{(j)}(s’) \right] $</td>
+</tr>
+</tbody></table>
+<h3 id="应用场景建议"><a href="#应用场景建议" class="headerlink" title="应用场景建议"></a>应用场景建议</h3><ul>
+<li><strong>小规模问题</strong>：策略迭代（精确解）  </li>
+<li><strong>大规模问题</strong>：值迭代或截断策略迭代（计算高效）  </li>
+<li><strong>在线学习</strong>：结合值迭代与实时更新（如Q-learning）</li>
+</ul>
+<h3 id="理论意义"><a href="#理论意义" class="headerlink" title="理论意义"></a>理论意义</h3><p>三大算法构成了<strong>广义策略迭代（GPI）框架</strong>，统一了动态规划求解MDP的核心思想：<strong>策略评估与改进的交替循环 → 收敛至最优策略</strong>  </p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -3462,10 +3680,16 @@ for 每步 $t$：
   <entry>
     <title>Reinforcement-Learning-L5</title>
     <url>/2025/07/28/Reinforcement-Learning-L5/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="蒙特卡洛强化学习读书笔记"><a href="#蒙特卡洛强化学习读书笔记" class="headerlink" title="蒙特卡洛强化学习读书笔记"></a>蒙特卡洛强化学习读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/05.png" style="width: 175px; margin-right: 20px;">
+  <p>蒙特卡洛方法通过采样轨迹估计值函数，实现无模型学习。本文介绍MC Basic、MC Exploring Starts和MC ε-Greedy三种算法，分析探索机制设计，对比批量更新与在线更新的优劣，阐述大数定律下的收敛保证。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="蒙特卡洛强化学习读书笔记"><a href="#蒙特卡洛强化学习读书笔记" class="headerlink" title="蒙特卡洛强化学习读书笔记"></a>蒙特卡洛强化学习读书笔记</h1><h2 id="一、蒙特卡洛估计基础"><a href="#一、蒙特卡洛估计基础" class="headerlink" title="一、蒙特卡洛估计基础"></a>一、蒙特卡洛估计基础</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>蒙特卡洛（MC）方法通过<strong>重复随机采样</strong>估计期望值，无需已知概率模型：  </p>
+
+
+<h2 id="一、蒙特卡洛估计基础"><a href="#一、蒙特卡洛估计基础" class="headerlink" title="一、蒙特卡洛估计基础"></a>一、蒙特卡洛估计基础</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>蒙特卡洛（MC）方法通过<strong>重复随机采样</strong>估计期望值，无需已知概率模型：  </p>
 <ul>
 <li><strong>问题</strong>：估计随机变量 $X$ 的期望 $E[X]$（概率分布 $p(x)$ 未知）  </li>
 <li><strong>解决方案</strong>：<br>$$<br>E[X] \approx \bar{x} &#x3D; \frac{1}{N} \sum_{j&#x3D;1}^{N} x_j<br>$$<br>其中 ${x_j}_{j&#x3D;1}^N$ 是独立同分布（i.i.d.）样本</li>
@@ -3674,165 +3898,12 @@ for 每个幕:
 </ul>
 </li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>Learning</category>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Reinforcement-Learning-L4</title>
-    <url>/2025/07/28/Reinforcement-Learning-L4/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
-<span id="more"></span>
-
-<h1 id="值迭代与策略迭代算法读书笔记"><a href="#值迭代与策略迭代算法读书笔记" class="headerlink" title="值迭代与策略迭代算法读书笔记"></a>值迭代与策略迭代算法读书笔记</h1><h2 id="一、值迭代算法（Value-Iteration）"><a href="#一、值迭代算法（Value-Iteration）" class="headerlink" title="一、值迭代算法（Value Iteration）"></a>一、值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^<em>$，并提取最优策略 $\pi^</em>$  </p>
-<h3 id="算法步骤（元素形式）"><a href="#算法步骤（元素形式）" class="headerlink" title="算法步骤（元素形式）"></a>算法步骤（元素形式）</h3><ol>
-<li><p><strong>初始化</strong>：  </p>
-<ul>
-<li>已知环境模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$  </li>
-<li>任意初始化状态值函数 $v_0(s)$</li>
-</ul>
-</li>
-<li><p><strong>迭代更新</strong>：<br><strong>重复直到收敛</strong>（$|v_k - v_{k-1}| &lt; \varepsilon$）:  </p>
-<ul>
-<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$  </li>
-<li><strong>值更新</strong>（Value Update）：<br>$$<br>v_{k+1}(s) &#x3D; \max_a q_k(s,a)<br>$$</li>
-</ul>
-</li>
-</ol>
-<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><pre><code>while ||v_k - v_&#123;k-1&#125;|| &gt; threshold:  
-    for each state s:  
-        for each action a:  
-            q(s,a) = Σ [p(r|s,a)*r] + γ * Σ [p(s&#39;|s,a)*v_k(s&#39;)]  
-        a* = argmax_a q(s,a)  
-        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
-        v_&#123;k+1&#125;(s) = max_a q(s,a)  
-</code></pre>
-<h3 id="网格世界示例"><a href="#网格世界示例" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
-<li><strong>奖励设置</strong>：边界&#x2F;禁区 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
-<li><strong>初始值</strong>：$v_0(s_1)&#x3D;v_0(s_2)&#x3D;v_0(s_3)&#x3D;v_0(s_4)&#x3D;0$  </li>
-<li><strong>迭代过程</strong>：  <ul>
-<li><strong>k&#x3D;0</strong>：计算 $q_0$ → 策略 $\pi_1$ 选择 $a_5$（静止）→ $v_1&#x3D;[0,1,1,1]$  </li>
-<li><strong>k&#x3D;1</strong>：计算 $q_1$ → 策略 $\pi_2$ 选择 $a_3$（向下）→ $v_2&#x3D;[\gamma,1+\gamma,1+\gamma,1+\gamma]$  </li>
-<li><strong>收敛</strong>：2次迭代即得最优策略（避开禁区直达目标）</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="二、策略迭代算法（Policy-Iteration）"><a href="#二、策略迭代算法（Policy-Iteration）" class="headerlink" title="二、策略迭代算法（Policy Iteration）"></a>二、策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
-<ol>
-<li><strong>策略评估</strong>（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  </li>
-<li><strong>策略改进</strong>（Policy Improvement）：基于 $v_{\pi_k}$ 生成更优策略 $\pi_{k+1}$</li>
-</ol>
-<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
-<li><strong>初始化</strong>：任意初始策略 $\pi_0$  </li>
-<li><strong>迭代直到收敛</strong>：  <ul>
-<li><strong>策略评估</strong>（求解贝尔曼方程）：<br>$$<br>v_{\pi_k}^{(j+1)} &#x3D; r_{\pi_k} + \gamma P_{\pi_k} v_{\pi_k}^{(j)}<br>$$<br>闭式解：$v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k}$  </li>
-<li><strong>策略改进</strong>（贪心策略）：<br>$$<br>\pi_{k+1} &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v_{\pi_k})<br>$$<br>元素形式：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_{\pi_k}(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
-</ul>
-</li>
-</ol>
-<h3 id="关键性质"><a href="#关键性质" class="headerlink" title="关键性质"></a>关键性质</h3><ul>
-<li><strong>策略改进定理</strong>：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  </li>
-<li><strong>收敛性</strong>：序列 ${v_{\pi_k}}$ 收敛到最优值 $v^*$</li>
-</ul>
-<h3 id="网格世界示例-1"><a href="#网格世界示例-1" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
-<li><strong>初始策略</strong> $\pi_0$：在 $s_1$ 选择向右（$a_2$）  </li>
-<li><strong>策略评估</strong>：<br>$$<br>\begin{cases}<br>v_{\pi_0}(s_1) &#x3D; -1 + \gamma v_{\pi_0}(s_1) \\<br>v_{\pi_0}(s_2) &#x3D; \gamma v_{\pi_0}(s_1)<br>\end{cases}<br>$$<br>解得 $v_{\pi_0}(s_1)&#x3D;-10, v_{\pi_0}(s_2)&#x3D;-9$  </li>
-<li><strong>策略改进</strong>：计算 $q_{\pi_0}$ → 新策略 $\pi_1$ 在 $s_1$ 选择向右（$a_r$)</li>
-</ul>
-<hr>
-<h2 id="三、截断策略迭代（Truncated-Policy-Iteration）"><a href="#三、截断策略迭代（Truncated-Policy-Iteration）" class="headerlink" title="三、截断策略迭代（Truncated Policy Iteration）"></a>三、截断策略迭代（Truncated Policy Iteration）</h2><h3 id="核心思想-2"><a href="#核心思想-2" class="headerlink" title="核心思想"></a>核心思想</h3><p>在策略评估阶段<strong>有限次迭代</strong>（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  </p>
-<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><pre><code>初始化：策略 $\pi_0$，值函数 $v_&#123;-1&#125;$  
-for k=0,1,2,... until convergence:  
-    # 策略评估（截断）  
-    v_k^&#123;(0)&#125; = v_&#123;k-1&#125;   # 继承上轮值  
-    for j=0 to j_truncate-1:  
-        v_k^&#123;(j+1)&#125;(s) = Σ_a π_k(a|s)[ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k^&#123;(j)&#125;(s&#39;) ]  
-    v_k = v_k^&#123;(j_truncate)&#125;  
-      
-    # 策略改进  
-    for each s:  
-        a* = argmax_a [ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k(s&#39;) ]  
-        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
-</code></pre>
-<h3 id="理论保证"><a href="#理论保证" class="headerlink" title="理论保证"></a>理论保证</h3><ul>
-<li><strong>值单调性</strong>：若初始值 $v_k^{(0)} &#x3D; v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  </li>
-<li><strong>收敛性</strong>：仍收敛到最优策略（因策略改进步保证方向正确）</li>
-</ul>
-<hr>
-<h2 id="四、算法对比与关系"><a href="#四、算法对比与关系" class="headerlink" title="四、算法对比与关系"></a>四、算法对比与关系</h2><h3 id="统一框架分析"><a href="#统一框架分析" class="headerlink" title="统一框架分析"></a>统一框架分析</h3><table>
-<thead>
-<tr>
-<th><strong>算法</strong></th>
-<th><strong>策略评估精度</strong></th>
-<th><strong>策略改进方式</strong></th>
-<th><strong>计算效率</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>值迭代</strong></td>
-<td>单次迭代（近似）</td>
-<td>最大化动作值</td>
-<td>⭐⭐高</td>
-</tr>
-<tr>
-<td><strong>策略迭代</strong></td>
-<td>精确求解（无限次迭代）</td>
-<td>贪心策略</td>
-<td>⭐低</td>
-</tr>
-<tr>
-<td><strong>截断策略迭代</strong></td>
-<td>有限次迭代（可调精度）</td>
-<td>贪心策略</td>
-<td>⭐⭐中等</td>
-</tr>
-</tbody></table>
-<h3 id="数学等价性"><a href="#数学等价性" class="headerlink" title="数学等价性"></a>数学等价性</h3><ul>
-<li><strong>值迭代</strong> &#x3D; 策略迭代中策略评估仅进行 <strong>1 次迭代</strong> 的特例  </li>
-<li><strong>策略迭代</strong> &#x3D; 截断策略迭代中 $j_{\text{truncate}} \to \infty$ 的特例</li>
-</ul>
-<h3 id="迭代过程对比"><a href="#迭代过程对比" class="headerlink" title="迭代过程对比"></a>迭代过程对比</h3><ul>
-<li><strong>策略迭代</strong>：$\pi_0 \xrightarrow{\text{PE}} v_{\pi_0} \xrightarrow{\text{PI}} \pi_1 \xrightarrow{\text{PE}} v_{\pi_1} \cdots$  </li>
-<li><strong>值迭代</strong>：$v_0 \xrightarrow{\text{PU}} \pi_1 \xrightarrow{\text{VU}} v_1 \xrightarrow{\text{PU}} \pi_2 \cdots$  </li>
-<li><strong>截断策略迭代</strong>：$\pi_k \xrightarrow{\text{PE (j次)}} \tilde{v}_{\pi_k} \xrightarrow{\text{PI}} \pi_{k+1}$</li>
-</ul>
-<blockquote>
-<p><strong>注</strong>：PE&#x3D;策略评估, PI&#x3D;策略改进, PU&#x3D;策略更新, VU&#x3D;值更新  </p>
-</blockquote>
-<p>具体来说就是：</p>
-<p>$$<br>\begin{aligned}<br>\color{red}{v_{\pi_1}^{(0)}} &amp;\color{red}{&#x3D; v_0  }\\<br>\text{值迭代}\leftarrow \color{red}{v_1\leftarrow} v_{\pi_1}^{(1)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(0)}\\<br>\vdots\\<br>v_{\pi1}^{(2)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(1)}\\<br>\text{截断策略迭代}\leftarrow\color{red}{\tilde{v}_1\leftarrow} v_{\pi_1}^{(j)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(j-1)}\\<br>\vdots\\<br>\text{策略迭代}\leftarrow \color{red}{v_{\pi_1}\leftarrow} v_{\pi_1}^{(\infty)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(\infty)}<br>\end{aligned}<br>$$</p>
-<hr>
-<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="核心公式回顾"><a href="#核心公式回顾" class="headerlink" title="核心公式回顾"></a>核心公式回顾</h3><table>
-<thead>
-<tr>
-<th><strong>算法</strong></th>
-<th><strong>关键更新方程</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>值迭代</td>
-<td>$ v_{k+1}(s) &#x3D; \max_a \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k(s’) \right] $</td>
-</tr>
-<tr>
-<td>策略迭代</td>
-<td>$ v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k} $</td>
-</tr>
-<tr>
-<td>截断策略迭代</td>
-<td>$ v_k^{(j+1)}(s) &#x3D; \sum_a \pi_k(a|s) \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k^{(j)}(s’) \right] $</td>
-</tr>
-</tbody></table>
-<h3 id="应用场景建议"><a href="#应用场景建议" class="headerlink" title="应用场景建议"></a>应用场景建议</h3><ul>
-<li><strong>小规模问题</strong>：策略迭代（精确解）  </li>
-<li><strong>大规模问题</strong>：值迭代或截断策略迭代（计算高效）  </li>
-<li><strong>在线学习</strong>：结合值迭代与实时更新（如Q-learning）</li>
-</ul>
-<h3 id="理论意义"><a href="#理论意义" class="headerlink" title="理论意义"></a>理论意义</h3><p>三大算法构成了<strong>广义策略迭代（GPI）框架</strong>，统一了动态规划求解MDP的核心思想：<strong>策略评估与改进的交替循环 → 收敛至最优策略</strong>  </p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -3842,10 +3913,16 @@ for k=0,1,2,... until convergence:
   <entry>
     <title>Reinforcement-Learning-L6</title>
     <url>/2025/07/28/Reinforcement-Learning-L6/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="随机逼近与随机梯度下降读书笔记"><a href="#随机逼近与随机梯度下降读书笔记" class="headerlink" title="随机逼近与随机梯度下降读书笔记"></a>随机逼近与随机梯度下降读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/06.png" style="width: 175px; margin-right: 20px;">
+  <p>随机逼近（RM算法）和随机梯度下降（SGD）是强化学习的优化基础。本文推导RM算法的收敛条件，对比BGD/SGD/MBGD的收敛特性，建立与TD学习的理论桥梁，解释优化中的两阶段行为。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="随机逼近与随机梯度下降读书笔记"><a href="#随机逼近与随机梯度下降读书笔记" class="headerlink" title="随机逼近与随机梯度下降读书笔记"></a>随机逼近与随机梯度下降读书笔记</h1><h2 id="一、引言：核心概念与学习目标"><a href="#一、引言：核心概念与学习目标" class="headerlink" title="一、引言：核心概念与学习目标"></a>一、引言：核心概念与学习目标</h2><h3 id="背景与意义"><a href="#背景与意义" class="headerlink" title="背景与意义"></a>背景与意义</h3><ul>
+
+
+<h2 id="一、引言：核心概念与学习目标"><a href="#一、引言：核心概念与学习目标" class="headerlink" title="一、引言：核心概念与学习目标"></a>一、引言：核心概念与学习目标</h2><h3 id="背景与意义"><a href="#背景与意义" class="headerlink" title="背景与意义"></a>背景与意义</h3><ul>
 <li><strong>知识衔接</strong>：本讲是蒙特卡洛学习与时序差分(TD)学习的<strong>桥梁</strong>  </li>
 <li><strong>核心问题</strong>：解决时序差分学习中的知识空白（为何有效、如何设计）  </li>
 <li><strong>主要内容</strong>：  <ul>
@@ -4035,7 +4112,12 @@ for k=0,1,2,... until convergence:
 <li><strong>机器学习</strong>：神经网络训练、在线学习  </li>
 <li><strong>统计估计</strong>：大规模数据集的参数估计</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -4045,10 +4127,16 @@ for k=0,1,2,... until convergence:
   <entry>
     <title>Reinforcement-Learning-L7</title>
     <url>/2025/07/28/Reinforcement-Learning-L7/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="时序差分学习（TD-Learning）读书笔记"><a href="#时序差分学习（TD-Learning）读书笔记" class="headerlink" title="时序差分学习（TD Learning）读书笔记"></a>时序差分学习（TD Learning）读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/07.png" style="width: 175px; margin-right: 20px;">
+  <p>TD学习结合蒙特卡洛和动态规划的优势，实现在线、低方差的值估计。本文解析TD(0)、Sarsa、Q-learning等算法的更新规则与收敛性，讨论n步回报的偏差-方差权衡，并建立与随机逼近的理论联系。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="时序差分学习（TD-Learning）读书笔记"><a href="#时序差分学习（TD-Learning）读书笔记" class="headerlink" title="时序差分学习（TD Learning）读书笔记"></a>时序差分学习（TD Learning）读书笔记</h1><h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><h3 id="1-TD学习的定位与意义"><a href="#1-TD学习的定位与意义" class="headerlink" title="1. TD学习的定位与意义"></a>1. TD学习的定位与意义</h3><ul>
+
+
+<h2 id="一、核心概念与学习目标"><a href="#一、核心概念与学习目标" class="headerlink" title="一、核心概念与学习目标"></a>一、核心概念与学习目标</h2><h3 id="1-TD学习的定位与意义"><a href="#1-TD学习的定位与意义" class="headerlink" title="1. TD学习的定位与意义"></a>1. TD学习的定位与意义</h3><ul>
 <li><strong>模型无关性</strong>：TD学习是继蒙特卡洛（MC）后的第二种<strong>无模型强化学习方法</strong>  </li>
 <li><strong>时序差分特性</strong>：通过相邻状态间的值差异进行增量更新  </li>
 <li><strong>核心优势</strong>：  <ul>
@@ -4251,7 +4339,12 @@ for k=0,1,2,... until convergence:
 <li><strong>探索关键场景</strong>：Q-learning需配合高$\varepsilon$行为策略  </li>
 <li><strong>偏差-方差权衡</strong>：n步Sarsa为折中方案</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -4261,10 +4354,16 @@ for k=0,1,2,... until convergence:
   <entry>
     <title>Reinforcement-Learning-L8</title>
     <url>/2025/07/28/Reinforcement-Learning-L8/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="值函数逼近方法读书笔记"><a href="#值函数逼近方法读书笔记" class="headerlink" title="值函数逼近方法读书笔记"></a>值函数逼近方法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/08.png" style="width: 175px; margin-right: 20px;">
+  <p>值函数逼近处理连续/大规模状态空间。本文推导线性逼近和神经网络的SGD更新规则，将Sarsa、Q-learning扩展为函数逼近形式，并讨论深度Q网络（DQN）中的经验回放和目标网络技术。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="值函数逼近方法读书笔记"><a href="#值函数逼近方法读书笔记" class="headerlink" title="值函数逼近方法读书笔记"></a>值函数逼近方法读书笔记</h1><h2 id="一、动机：从表格表示到函数逼近"><a href="#一、动机：从表格表示到函数逼近" class="headerlink" title="一、动机：从表格表示到函数逼近"></a>一、动机：从表格表示到函数逼近</h2><h3 id="传统表格表示的局限性"><a href="#传统表格表示的局限性" class="headerlink" title="传统表格表示的局限性"></a>传统表格表示的局限性</h3><ol>
+
+
+<h2 id="一、动机：从表格表示到函数逼近"><a href="#一、动机：从表格表示到函数逼近" class="headerlink" title="一、动机：从表格表示到函数逼近"></a>一、动机：从表格表示到函数逼近</h2><h3 id="传统表格表示的局限性"><a href="#传统表格表示的局限性" class="headerlink" title="传统表格表示的局限性"></a>传统表格表示的局限性</h3><ol>
 <li><strong>存储问题</strong>：  <ul>
 <li>状态值表：需存储 $|\mathcal{S}|$ 个值<br>$$<br>\begin{array}{c|c|c|c}<br>\text{State} &amp; s_1 &amp; \cdots &amp; s_n \\ \hline<br>\text{Value} &amp; v_\pi(s_1) &amp; \cdots &amp; v_\pi(s_n)<br>\end{array}<br>$$  </li>
 <li>动作值表：需存储 $|\mathcal{S}| \times |\mathcal{A}|$ 个值<br>$$<br>\begin{array}{c|c|c|c}<br>s \backslash a &amp; a_1 &amp; \cdots &amp; a_m \\ \hline<br>s_1 &amp; q_\pi(s_1,a_1) &amp; \cdots &amp; q_\pi(s_1,a_m) \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br>s_n &amp; q_\pi(s_n,a_1) &amp; \cdots &amp; q_\pi(s_n,a_m)<br>\end{array}<br>$$</li>
@@ -4395,7 +4494,12 @@ for 每幕：
 </ul>
 </li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>
@@ -4405,10 +4509,16 @@ for 每幕：
   <entry>
     <title>Reinforcement-Learning-L9</title>
     <url>/2025/07/28/Reinforcement-Learning-L9/</url>
-    <content><![CDATA[<h1 id="强化学习的数学基础"><a href="#强化学习的数学基础" class="headerlink" title="强化学习的数学基础"></a>强化学习的数学基础</h1><p><del>这是之前的遗产捏，还需要整理</del></p>
+    <content><![CDATA[<h1 id="策略梯度方法读书笔记"><a href="#策略梯度方法读书笔记" class="headerlink" title="策略梯度方法读书笔记"></a>策略梯度方法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/09.png" style="width: 200px; margin-right: 20px;">
+  <p>策略梯度直接优化参数化策略。本文对比表格与函数表示，推导策略梯度定理，分析平均状态值和平均奖励两种度量，给出REINFORCE算法的实现框架，讨论探索-利用平衡机制。</p>
+</div>
+
 <span id="more"></span>
 
-<h1 id="策略梯度方法读书笔记"><a href="#策略梯度方法读书笔记" class="headerlink" title="策略梯度方法读书笔记"></a>策略梯度方法读书笔记</h1><h2 id="一、策略梯度基本思想"><a href="#一、策略梯度基本思想" class="headerlink" title="一、策略梯度基本思想"></a>一、策略梯度基本思想</h2><h3 id="1-策略表示方法演进"><a href="#1-策略表示方法演进" class="headerlink" title="1. 策略表示方法演进"></a>1. 策略表示方法演进</h3><h4 id="1-传统表格表示"><a href="#1-传统表格表示" class="headerlink" title="(1) 传统表格表示"></a>(1) 传统表格表示</h4><ul>
+
+
+<h2 id="一、策略梯度基本思想"><a href="#一、策略梯度基本思想" class="headerlink" title="一、策略梯度基本思想"></a>一、策略梯度基本思想</h2><h3 id="1-策略表示方法演进"><a href="#1-策略表示方法演进" class="headerlink" title="1. 策略表示方法演进"></a>1. 策略表示方法演进</h3><h4 id="1-传统表格表示"><a href="#1-传统表格表示" class="headerlink" title="(1) 传统表格表示"></a>(1) 传统表格表示</h4><ul>
 <li><strong>存储方式</strong>：二维表格存储每个状态-动作对的概率<br>$$<br>\begin{array}{c|ccccc}<br>s \backslash a &amp; a_1 &amp; a_2 &amp; \cdots &amp; a_m \\ \hline<br>s_1 &amp; \pi(a_1|s_1) &amp; \pi(a_2|s_1) &amp; \cdots &amp; \pi(a_m|s_1) \\<br>\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\<br>s_n &amp; \pi(a_1|s_n) &amp; \pi(a_2|s_n) &amp; \cdots &amp; \pi(a_m|s_n)<br>\end{array}<br>$$  </li>
 <li><strong>局限性</strong>：  <ul>
 <li>存储开销大（需存储 $|\mathcal{S}| \times |\mathcal{A}|$ 个条目）  </li>
@@ -4552,7 +4662,12 @@ for 每幕：
 <li><strong>确定性策略梯度</strong>（DPG）：处理连续动作空间  </li>
 <li><strong>自然策略梯度</strong>：改进优化轨迹的收敛性</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>Learning</category>
         <category>ReinForcement Learning</category>

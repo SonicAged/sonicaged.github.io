@@ -1,20 +1,27 @@
 ---
-title: Reinforcement-Learning-L1
+title: Basic Concepts
 categories:
   - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:38:01
 tags:
+  - ReinForcement Learning
 ---
 
-# 强化学习的数学基础
+# 强化学习基础概念读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/01.png" style="width: 175px; margin-right: 20px;">
+  <p>本文定义状态、动作、奖励、策略等核心概念，形式化MDP五元组框架。通过网格世界示例说明状态转移、回报计算和任务分类（分幕vs连续），为后续算法提供统一的数学建模基础。</p>
+</div>
+
+
+
 
 <!-- more -->
 
-# 强化学习基础概念读书笔记  
+
 
 ## 网格世界示例 (Grid-World Example)  
 - **环境结构**：  
@@ -24,6 +31,8 @@ tags:
   从任意起点找到通往目标区域 $s_9$ 的“优质”路径。  
   - “优质”定义：避免进入禁区、减少绕路、不触碰边界。  
 
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/grid%20world.png" alt="grid world" style="zoom: 30%;" />
+
 ---
 
 ## 核心概念与数学形式化  
@@ -32,7 +41,11 @@ tags:
 - **状态空间 (State Space)**：  
   $$\mathcal{S} = \{s_i\}_{i=1}^{9} = \{s_1, s_2, \dots, s_9\}$$  
 
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/state.png" alt="state" style="zoom:23%;" />
+
 ### 动作 (Action)  
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L1/action.png" alt="image-20250729124818727" style="zoom:33%;" />
+
 - **定义**：智能体在状态 $s_i$ 下可执行的操作  
 - **动作空间 (Action Space)**：  
   $$\mathcal{A}(s_i) = \{a_k\}_{k=1}^{5} = \{a_1: \text{向上}, a_2: \text{向右}, a_3: \text{向下}, a_4: \text{向左}, a_5: \text{静止}\}$$  
@@ -149,3 +162,10 @@ s8 -->|a2, r=1| s9((s9))
 | MDP框架           | 统一建模强化学习问题                           | $\langle \mathcal{S}, \mathcal{A}, P, R, \gamma \rangle$ |  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>

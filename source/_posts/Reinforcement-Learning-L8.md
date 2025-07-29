@@ -8,13 +8,16 @@ date: 2025-07-28 11:55:07
 tags:
 ---
 
-# 强化学习的数学基础
+# 值函数逼近方法读书笔记  
 
-~~这是之前的遗产捏，还需要整理~~
+<div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/08.png" style="width: 175px; margin-right: 20px;">
+  <p>值函数逼近处理连续/大规模状态空间。本文推导线性逼近和神经网络的SGD更新规则，将Sarsa、Q-learning扩展为函数逼近形式，并讨论深度Q网络（DQN）中的经验回放和目标网络技术。</p>
+</div>
 
 <!-- more -->
 
-# 值函数逼近方法读书笔记  
+
 
 ## 一、动机：从表格表示到函数逼近  
 ### 传统表格表示的局限性  
@@ -179,3 +182,10 @@ for 每幕：
   - 逼近误差可能导致策略退化  
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
+
+<a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>
