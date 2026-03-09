@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/17/Query-Related-Attention/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -128,7 +128,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/17/Query-Related-Attention/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/19/Hypergraph/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -146,7 +146,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/19/Graph-Transformer/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/16/General-Attention/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -155,7 +155,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/16/General-Attention/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/19/Graph-Transformer/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -200,7 +200,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/26/CDR-model-part2/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -209,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/26/CDR-model-part2/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/27/CDR-model-part3/</loc>
     
     <lastmod>2025-07-28</lastmod>
     
@@ -299,6 +299,34 @@
 
   
   <url>
+    <loc>https://blog.sonic-aged.site/tags/CDR/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/graph-theory/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/tags/model/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -328,34 +356,6 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/attention/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/CDR/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/Data-Analysis/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/%E5%8F%AF%E8%83%BD%E6%9C%89%E7%82%B9%E7%94%A8/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/graph-theory/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -453,27 +453,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/tags/deeplearning/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/graphtheory/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/%E4%B9%90%E5%AD%90/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/tags/Python/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -496,6 +475,27 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/%E5%A4%A7%E6%A6%82%E7%8E%87%E6%B2%A1%E7%94%A8/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/%E4%B9%90%E5%AD%90/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/deeplearning/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/graphtheory/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -525,6 +525,13 @@
 
   
   <url>
+    <loc>https://blog.sonic-aged.site/categories/CDR/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/categories/Learning/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -532,7 +539,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/</loc>
+    <loc>https://blog.sonic-aged.site/categories/CDR/Model/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -553,21 +567,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/Model/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Model/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Python/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -581,14 +581,14 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Hypergraph/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Learning/ReinForcement-Learning/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Python/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Model/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -602,14 +602,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Learning/ReinForcement-Learning/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Model/Attention/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Hypergraph/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -617,6 +610,13 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/categories/Learning/ReinForcement-Learning/Mathmatical-Foundation/</loc>
+    <lastmod>2026-03-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/Learning/Deep-Learning/Model/Attention/</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

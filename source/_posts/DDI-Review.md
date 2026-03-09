@@ -107,3 +107,6 @@ date: 2026-03-29 23:12:02
 最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：
 $$ P(r \mid A, B) = \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}\_{structure}(G\_A) \oplus \text{GNN}\_{structure}(G\_B) \oplus \mathbf{h}\_{KG} \oplus \mathbf{t}\_{KG} \big] + \mathbf{b} \Big) $$
 其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。
+
+## 数据集不同引出的模型构造思路的不同
+
