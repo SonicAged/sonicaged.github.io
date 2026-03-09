@@ -1,5 +1,5 @@
 ---
-title: Reinforcement-Learning-L2
+title: Bellman Equation
 categories:
   - Learning
   - ReinForcement Learning
@@ -19,7 +19,7 @@ tags:
 
 
 
-## 一、核心概念与学习目标  
+## 核心概念与学习目标  
 - **核心概念**：状态值（State Value）  
 - **基本工具**：贝尔曼方程（Bellman Equation）  
 - **学习内容**：  
@@ -29,7 +29,7 @@ tags:
 
 ---
 
-## 二、动机示例：为什么回报（Return）重要？  
+## 动机示例：为什么回报（Return）重要？  
 ### 问题背景  
 在网格世界中，从起点 $s_1$ 出发，评估三个策略的优劣：  
 - **策略1**（左）：避开禁区直接走向目标  
@@ -37,18 +37,11 @@ tags:
 - **策略3**（右）：随机选择动作（50%概率进入禁区）  
 
 ### 回报计算（$\gamma = 0.9$）  
-1. **策略1**（确定性）：  
-   $$
-   G_1 = 0 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots = \frac{\gamma}{1-\gamma} = 9
-   $$
-2. **策略2**（确定性）：  
-   $$
-   G_2 = -1 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots = -1 + \frac{\gamma}{1-\gamma} = 8
-   $$
-3. **策略3**（随机性）：  
-   $$
-   G_3 = 0.5 \times (-1 + 9) + 0.5 \times 9 = -0.5 + 9 = 8.5
-   $$
+1. **策略1**（确定性）：$G_1 = 0 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots = \frac{\gamma}{1-\gamma} = 9$
+2. **策略2**（确定性）：$G_2 = -1 + \gamma \cdot 1 + \gamma^2 \cdot 1 + \cdots = -1 + \frac{\gamma}{1-\gamma} = 8$
+3. **策略3**（随机性）：$G_3 = 0.5 \times (-1 + 9) + 0.5 \times 9 = -0.5 + 9 = 8.5$
+
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L2/return.png" alt="return" style="zoom:30%;" />
 
 ### 关键结论  
 - **策略优劣**：$G_1 > G_3 > G_2$（策略1最优，策略2最差）  
@@ -59,17 +52,29 @@ tags:
 
 ---
 
-## 三、状态值（State Value）的定义  
+## 状态值（State Value）的定义
+
 ### 数学形式  
 - **符号定义**：  
   - $S_t$：时刻 $t$ 的状态  
   - $A_t$：时刻 $t$ 的动作  
   - $R_{t+1}$：动作 $A_t$ 的即时奖励  
   - $G_t$：折扣回报 $G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots$  
+  
+- **一步状态转换**：
+  $$
+  S_t \xrightarrow{A_t} R_{t+1},S_{t+}
+  $$
+  其中，
+  $S_t \rightarrow A_t$由策略 $\pi(A_t=a\mid S_t=s)$ 决定，
+  $S_{t}, A_t \rightarrow R_{t+1}$由动态模型 $p(R_{t+1}=r \mid S_t=s,A_{t}=a)$ 决定，
+  $S_t, A_t \rightarrow S_{t+1}$由动态模型 $p(S_{t+1}=s' \mid S_t=s,A_{t}=a)$ 决定。
+  
+
 - **状态值函数**：  
   $$
   v_\pi(s) = \mathbb{E}[G_t \mid S_t = s]
-  $$  
+  $$
   > 表示从状态 $s$ 出发，遵循策略 $\pi$ 的期望累积回报  
 
 ### 核心性质  
@@ -81,35 +86,51 @@ tags:
 
 ---
 
-## 四、贝尔曼方程（Bellman Equation）的推导  
+## 贝尔曼方程（Bellman Equation）的推导  
 ### 回报分解  
 将 $G_t$ 拆分为即时奖励和未来折扣回报：  
 $$
-G_t = R_{t+1} + \gamma G_{t+1}
-$$  
+\begin{aligned}
+G_{t}&=R_{t+1}+\gamma R_{t+2}+\gamma^{2}R_{t+3}+\ldots\\\\
+&=R_{t+1}+\gamma(R_{t+2}+\gamma R_{t+3}+\ldots),\\\\
+&=\color{blue}{R_{t+1}+\gamma G_{t+1}}
+\end{aligned}
+$$
 
 ### 状态值分解  
 代入状态值定义：  
 $$
-v_\pi(s) = \mathbb{E}[R_{t+1} \mid S_t = s] + \gamma \mathbb{E}[G_{t+1} \mid S_t = s]
-$$  
+\begin{aligned}
+v_\pi(s) =& \mathbb{E}[G_t \mid S_t = s] \\\\
+&= \mathbb{E}[R_{t+1} + \gamma G_{t+1} \mid S_t = s] \\\\
+&= \color{blue}{\mathbb{E}[R_{t+1} \mid S_t = s] + \gamma \mathbb{E}[G_{t+1} \mid S_t = s]}
+\end{aligned}
+$$
 
 #### 1. 即时奖励项（Immediate Reward）  
 $$
-\mathbb{E}[R_{t+1} \mid S_t = s] = \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r
-$$  
+\begin{aligned}
+\mathbb{E}[R_{t+1} \mid S_t = s] &= \sum_a \pi(a \mid s) \mathbb{E}[R_{t+1} \mid S_t = s, A_t=a] \\\\
+&= \color{blue}{\sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r}
+\end{aligned}
+$$
 > 策略 $\pi$ 下所有可能动作的奖励期望  
 
 #### 2. 未来奖励项（Future Reward）  
 $$
-\mathbb{E}[G_{t+1} \mid S_t = s] = \sum_a \pi(a \mid s) \sum_{s'} p(s' \mid s,a) v_\pi(s')
-$$  
+\begin{aligned}
+\mathbb{E}[G_{t+1} \mid S_t = s] &= \sum_{s'} p(s' \mid s) \mathbb{E}[G_{t+1} \mid S_t = s, S_{t+1} = s'] \\\\
+&= \sum_{s'} p(s' \mid s) \mathbb{E}[G_{t+1} \mid S_{t+1} = s'] \\\\
+&= \sum_{s'} p(s' \mid s) v_\pi(s')\\\\
+&= \color{blue}{\sum_a \pi(a \mid s) \sum_{s'} p(s' \mid s,a) v_\pi(s')}
+\end{aligned}
+$$
 > 马尔可夫性质保证：未来奖励仅依赖下一状态 $s'$  
 
 #### 3. 最终形式  
 $$
 v_\pi(s) = \sum_a \pi(a \mid s) \left[ \sum_r p(r \mid s,a) r + \gamma \sum_{s'} p(s' \mid s,a) v_\pi(s') \right]
-$$  
+$$
 
 ### 关键特性  
 - **自举（Bootstrapping）**：状态值 $v_\pi(s)$ 依赖其他状态值 $v_\pi(s')$  
@@ -118,12 +139,12 @@ $$
 
 ---
 
-## 五、贝尔曼方程的矩阵形式  
+## 贝尔曼方程的矩阵形式  
 ### 符号定义  
 - **策略相关奖励**：  
   $$
   r_\pi(s) = \sum_a \pi(a \mid s) \sum_r p(r \mid s,a) r
-  $$  
+  $$
 - **策略相关状态转移矩阵**：  
   $$
   p_\pi(s' \mid s) = \sum_a \pi(a \mid s) p(s' \mid s,a)
@@ -131,12 +152,12 @@ $$
 
   $$
   P\_\pi \in \mathbb{R}^{n \times n}, \quad [P\_\pi]\_{ij} = p\_\pi(s\_j \mid s\_i)
-  $$  
+  $$
 
 ### 矩阵方程  
 $$
 v_\pi = r_\pi + \gamma P_\pi v_\pi
-$$  
+$$
 其中：  
 - $v_\pi = [v_\pi(s_1), \dots, v_\pi(s_n)]^T$  
 - $r_\pi = [r_\pi(s_1), \dots, r_\pi(s_n)]^T$  
@@ -169,26 +190,26 @@ v_\pi(s_2) \\\\
 v_\pi(s_3) \\\\
 v_\pi(s_4)
 \end{bmatrix}
-$$  
+$$
 
 ---
 
-## 六、贝尔曼方程的求解方法  
+## 贝尔曼方程的求解方法  
 ### 1. 闭式解（Closed-Form Solution）  
 $$
 v_\pi = (I - \gamma P_\pi)^{-1} r_\pi
-$$  
+$$
 > 要求矩阵 $I - \gamma P_\pi$ 可逆（当 $\gamma < 1$ 时成立）  
 
 ### 2. 迭代解（Iterative Solution）  
 迭代更新直至收敛：  
 $$
 v_{k+1} = r_\pi + \gamma P_\pi v_k
-$$  
+$$
 > **收敛性证明**：定义误差 $\delta_k = v_k - v_\pi$，则  
   $$
   \delta_{k+1} = \gamma P_\pi \delta_k \to 0 \quad (k \to \infty)
-  $$  
+  $$
   因 $\gamma < 1$ 且 $P_\pi$ 为概率矩阵（谱半径 $\leq 1$)  
 
 #### 网格世界求解示例  
@@ -197,22 +218,22 @@ $$
 
 ---
 
-## 七、动作值（Action Value）  
+## 动作值（Action Value）  
 ### 定义  
 $$
 q_\pi(s,a) = \mathbb{E}[G_t \mid S_t = s, A_t = a]
-$$  
+$$
 > 表示在状态 $s$ 执行动作 $a$ 后，遵循策略 $\pi$ 的期望回报  
 
 ### 与状态值的关系  
 1. **状态值分解为动作值**：  
    $$
    v_\pi(s) = \sum_a \pi(a \mid s) q_\pi(s,a)
-   $$  
+   $$
 2. **动作值的贝尔曼方程**：  
    $$
    q_\pi(s,a) = \sum_r p(r \mid s,a) r + \gamma \sum_{s'} p(s' \mid s,a) v_\pi(s')
-   $$  
+   $$
 
 ### 重要性  
 - **动作评估**：直接量化动作的长期收益（如 $q_\pi(s_1, a_3) = \gamma v_\pi(s_3)$）  
@@ -220,7 +241,7 @@ $$
 
 ---
 
-## 八、总结  
+## 总结  
 ### 核心概念  
 | **概念**       | **定义**                                | **数学表示**                                                                 |
 |----------------|----------------------------------------|-----------------------------------------------------------------------------|

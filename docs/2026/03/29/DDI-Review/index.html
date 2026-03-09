@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="DDI 总览这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：  DDI 的任务主要是什么 DDI 的难点（创新点出现（希望）的位置） 药物处理方面与 CDR 有什么不同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Overview of Drug-Drug Interaction">
+<meta property="og:url" content="https://blog.sonic-aged.site/2026/03/29/DDI-Review/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="DDI 总览这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：  DDI 的任务主要是什么 DDI 的难点（创新点出现（希望）的位置） 药物处理方面与 CDR 有什么不同">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-29T15:12:02.000Z">
+<meta property="article:modified_time" content="2026-03-09T05:46:48.165Z">
+<meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="attention">
+<meta property="article:tag" content="model framework">
+<meta property="article:tag" content="practice">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="DDI">
+<meta property="article:tag" content="Knowledge Graph">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2026/03/29/DDI-Review/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/03/29/DDI-Review/","path":"2026/03/29/DDI-Review/","title":"The Overview of Drug-Drug Interaction"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>The Overview of Drug-Drug Interaction | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DDI-%E6%80%BB%E8%A7%88"><span class="nav-number">1.</span> <span class="nav-text">DDI 总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-DDI"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 DDI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">常用数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.1.2.</span> <span class="nav-text">不同的实验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8D%AF%E7%89%A9%E5%92%8C%E5%85%B3%E7%B3%BB%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">药物和关系的表示方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB%E4%B8%8E%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95-Relation-KG-Representation"><span class="nav-number">1.2.1.</span> <span class="nav-text">关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-%E7%BF%BB%E8%AF%91%E8%B7%9D%E7%A6%BB%E6%A8%A1%E5%9E%8B-Translational-Models-%E5%A6%82-TransE-TransH-TransR"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E5%BC%A0%E9%87%8F%E5%88%86%E8%A7%A3-%E8%AF%AD%E4%B9%89%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B-Tensor-Factorization-%E5%A6%82-RESCAL-DistMult-ComplEx"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%B8%AD%E7%9A%84%E8%81%94%E5%90%88%E6%89%93%E5%88%86-Fusion-Prediction-Layer"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="mailto:18011185053@163.com" title="163 → mailto:18011185053@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope-circle-user fa-fw"></i>163</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/382388784" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;382388784" rel="noopener me" target="_blank"><i class="fab fa-bilibili fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://whaleblog.github.io/" title="https:&#x2F;&#x2F;whaleblog.github.io" rel="noopener" target="_blank">WhaleFall's Blog</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/03/29/DDI-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="The Overview of Drug-Drug Interaction | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Overview of Drug-Drug Interaction<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/DDI-Review.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2026-03-29 23:12:02" itemprop="dateCreated datePublished" datetime="2026-03-29T23:12:02+08:00">2026-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-03-09 13:46:48" itemprop="dateModified" datetime="2026-03-09T13:46:48+08:00">2026-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DDI/" itemprop="url" rel="index"><span itemprop="name">DDI</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DDI/Review/" itemprop="url" rel="index"><span itemprop="name">Review</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="DDI-总览"><a href="#DDI-总览" class="headerlink" title="DDI 总览"></a>DDI 总览</h1><p>这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：</p>
+<ol>
+<li>DDI 的任务主要是什么</li>
+<li>DDI 的难点（创新点出现（希望）的位置）</li>
+<li>药物处理方面与 CDR 有什么不同</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="什么是-DDI"><a href="#什么是-DDI" class="headerlink" title="什么是 DDI"></a>什么是 DDI</h2><p>目前，DDI 讨论还是<strong>两</strong>种药物之间的相互作用（$G_x, G_y, r_{xy}$），即一种药物的效用因为另一种药物的存在而发生改变的现象。</p>
+<h3 id="常用数据集"><a href="#常用数据集" class="headerlink" title="常用数据集"></a>常用数据集</h3><p>在构建 DDI 预测模型时，数据往往分布在异构的网络中。最核心的数据集通常分为机制类和表型类：</p>
+<ul>
+<li><strong>DrugBank</strong>：最权威且使用最为频繁的数据集。主要包含药物之间的代谢层面影响（例如药物 A 抑制了代谢药物 B 的酶）。通常包含高度确定的相互作用类型。</li>
+<li><strong>TWOSIDES</strong>：侧重于表型层面（Phenotypic）的信息。它记录了同时服用两种药物产生的、且在单药服用时不会出现的副作用（如恶心、心痛等）。</li>
+<li><strong>DRKG (Drug Repurposing Knowledge Graph) &#x2F; Hetionet</strong>：大型的综合生物医学知识图谱。除了包含只属于药物间的关系外，还整合了药物与基因、蛋白质、疾病之间的复杂关系。</li>
+</ul>
+<h3 id="不同的实验"><a href="#不同的实验" class="headerlink" title="不同的实验"></a>不同的实验</h3><p>由于 DDI 所引入的药物数量实际上远多于 CDR，这也就引出了其与 CDR（正常）的 <em>第一个</em> 不同：<em>DDI 经常讨论测试集中药物不存在与训练集中的情况</em>，具体来说，我们可以将其分为：</p>
+<ul>
+<li><strong>直推式 (Transductive &#x2F; Warm-start)</strong>：测试集中的药物分子在训练集中出现过，我们只是预测已知药物之间的新边（关系）。</li>
+<li><strong>归纳式 (Inductive &#x2F; Cold-start)</strong>：模型在部署时遇到的是结构、特征全新的、从未见过的药物分子（未见分布 OOD），需要仅凭其化学特征来预测交互。</li>
+</ul>
+<hr>
+<h2 id="药物和关系的表示方法"><a href="#药物和关系的表示方法" class="headerlink" title="药物和关系的表示方法"></a>药物和关系的表示方法</h2><p>要把化学物质喂给机器学习模型，我们首先得把它们变成计算机理解的代数对象。与CDR不同的是，有很多 paper 都倾向于使用多种表示方法进行多模态的学习，主要有以下四个维度的表征：</p>
+<ol>
+<li><p>二进制&#x2F;指纹表示法 (Binary Fingerprints)<br>最传统的表示方式（如 MACCS, PubChem, Morgan Fingerprints）。通过检测药物内部是否包含特定的化学子结构，将其转化为定长的独热（One-hot）&#x2F;布尔向量。</p>
+<ul>
+<li><strong>数学表示</strong>：设药物数量为 $N$，特征维度为 $D$（如 MACCS 为 166 维，PubChem 为 881 维）。药物分子可以直接表示为一个特征向量：<br>$$<br>\mathbf{x} \in \{0, 1\}^D<br>$$<br> 其中 $x_i &#x3D; 1$ 表示存在第 $i$ 个子结构。</li>
+</ul>
+</li>
+<li><p>序列表示法 (Sequence &#x2F; SMILES Representation)<br>使用 SMILES 字符串，把 2D 分子结构转化为一维的 ASCII 字符序列（把它当成一段本文来处理），常用 NLP 中的 Transformer &#x2F; LSTM 提取特征。</p>
+<ul>
+<li><strong>数学表示</strong>：药物图被展平为由词表 $\mathcal{V}_{vocab}$ 中标记组成的序列：<br> $$ S &#x3D;[s_1, s_2, \dots, s_L], \quad s_i \in \mathcal{V}_{vocab} $$<br>其中 $L$ 是字符串的长度。</li>
+</ul>
+</li>
+<li><p>二维分子图表示 (2D Graph Representation) (当前最热门)<br>用<strong>图结构数据</strong>直接描述分子，原子是节点，化学键是边。利用 GNN (Graph Neural Networks) 进行消息传递。</p>
+<ul>
+<li><strong>数学表示</strong>：一个药物分子定义为一个图 $G &#x3D; (\mathcal{V}, \mathcal{E})$。</li>
+</ul>
+<ul>
+<li>节点特征矩阵：$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times F_v}$（每一行 $\mathbf{x}_i$ 是第 $i$ 个原子的特征向量，如电荷数、杂化状态）。</li>
+<li>边类型&#x2F;特征矩阵：$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times F_e}$（$\mathbf{e}_{ij}$ 为键的类型，如单键、双键）。</li>
+<li>邻接矩阵：$\mathbf{A} \in \{0, 1\}^{|\mathcal{V}| \times |\mathcal{V}|}$。</li>
+</ul>
+</li>
+<li><p>三维构象表示 (3D Structure)</p>
+</li>
+<li><p>除了分子拓扑连接外，还包含空间原子的相对位置（坐标）。</p>
+<ul>
+<li><strong>数学表示</strong>：除了 2D 的 $\mathbf{X}$ 以外，还引入空间坐标矩阵模型：<br> $$ \mathbf{R} \in \mathbb{R}^{|\mathcal{V}| \times 3} $$</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="关联关系与知识图谱的表示方法-Relation-KG-Representation"><a href="#关联关系与知识图谱的表示方法-Relation-KG-Representation" class="headerlink" title="关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)"></a>关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</h3><p>为了预测交互作用，两两药物的关系不仅需要依据自身结构，还依赖于外界丰富知识网络的嵌入（Knowledge Graph Embedding, KGE）。</p>
+<p>我们要构建一个包含了实体（药物、蛋白、疾病等）和它们之间关系的异构图谱 $\mathcal{G}_{KG}$：</p>
+<ul>
+<li><strong>知识库的基础单元</strong>：由成千上万个<strong>三元组 (Triples)</strong> 构成：<br>$$ \mathcal{G}_{KG} &#x3D; {(h, r, t) \mid h \in \mathcal{E}, t \in \mathcal{E}, r \in \mathcal{R}} $$<br>其中 $\mathcal{E}$ 是所有实体（Entities）的集合，$\mathcal{R}$ 是所有相互作用关系（Relations）的集合。$h$ 是头实体，$t$ 是尾实体。</li>
+</ul>
+<p>有了图谱结构后，使用 KGE 算法将离散的网络空间映射到连续的低维向量空间 $\mathbb{R}^d$中。论文中总结了几大流派（附经典打分函数 $f(h, r, t)$）：</p>
+<h4 id="A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR"><a href="#A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR" class="headerlink" title="A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)"></a>A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</h4><p>思想：两个实体之间的关系被视为向量空间中的一种几何<strong>平移 (Translation)</strong>。</p>
+<ul>
+<li><strong>数学表示 (以 TransE 为例)</strong>：<br>令投影后的连续向量为 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{R}^d$。<br>目标是使得 $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$。<br>其打分函数为（得分越高表示越不可能是真实的 DDI 边，需加负号）：<br>$$ f(h, r, t) &#x3D; - |\mathbf{h} + \mathbf{r} - \mathbf{t}|_{1&#x2F;2} $$</li>
+</ul>
+<h4 id="B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx"><a href="#B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx" class="headerlink" title="B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)"></a>B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</h4><p>思想：不找平移距离，而是利用矩阵&#x2F;张量乘法，衡量头尾实体在某关系下的相似度及相互匹配性。这是预测 DDI 最经典的 KGE 手段。</p>
+<ul>
+<li><strong>数学表示 (以 RESCAL 或其简化版 DistMult 为例)</strong>：<br>实体编码为 $\mathbf{h}, \mathbf{t} \in \mathbb{R}^d$。关系被表示为对角矩阵 $\mathbf{M}_r &#x3D; \text{diag}(\mathbf{r})$（其中 $\mathbf{r} \in \mathbb{R}^d$）。<br>打分函数定义为双线性内积：<br>$$ f(h, r, t) &#x3D; \mathbf{h}^\top \mathbf{M}_r \mathbf{t} &#x3D; \sum_{i&#x3D;1}^{d} h_i \cdot r_i \cdot t_i $$<br>（在更复杂的 ComplEx 模型中，向量会被映射到复数域 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{C}^d$，以解决 DDI 关系中的非对称性问题）。</li>
+</ul>
+<h4 id="C-数据分析中的联合打分-Fusion-Prediction-Layer"><a href="#C-数据分析中的联合打分-Fusion-Prediction-Layer" class="headerlink" title="C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)"></a>C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</h4><p>最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：<br>$$ P(r \mid A, B) &#x3D; \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}_{structure}(G_A) \oplus \text{GNN}_{structure}(G_B) \oplus \mathbf{h}_{KG} \oplus \mathbf{t}_{KG} \big] + \mathbf{b} \Big) $$<br>其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/model-framework/" rel="tag"># model framework</a>
+              <a href="/tags/practice/" rel="tag"># practice</a>
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/DDI/" rel="tag"># DDI</a>
+              <a href="/tags/Knowledge-Graph/" rel="tag"># Knowledge Graph</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/28/Reinforcement-Learning-L10/" rel="prev" title="Reinforcement-Learning-L10">
+                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L10
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">55k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">3:20</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -21,15 +21,18 @@
 
     <meta name="description" content="值迭代与策略迭代算法读书笔记      值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Reinforcement-Learning-L4">
+<meta property="og:title" content="Value Iteration and Policy Iteration">
 <meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L4/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
 <meta property="og:description" content="值迭代与策略迭代算法读书笔记      值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/04.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183547455.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183711027.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183826039.png">
 <meta property="og:image" content="https://blog.sonic-aged.site/icon/github.svg">
 <meta property="article:published_time" content="2025-07-28T03:54:52.000Z">
-<meta property="article:modified_time" content="2025-07-29T16:50:08.847Z">
+<meta property="article:modified_time" content="2025-08-05T08:05:33.824Z">
 <meta property="article:author" content="Sonic Aged">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/04.png">
@@ -38,10 +41,10 @@
 <link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L4/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L4/","path":"2025/07/28/Reinforcement-Learning-L4/","title":"Reinforcement-Learning-L4"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L4/","path":"2025/07/28/Reinforcement-Learning-L4/","title":"Value Iteration and Policy Iteration"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Reinforcement-Learning-L4 | Sonic Aged's Blog</title>
+<title>Value Iteration and Policy Iteration | Sonic Aged's Blog</title>
   
 
 
@@ -176,7 +179,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%BC%E8%BF%AD%E4%BB%A3%E4%B8%8E%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">值迭代与策略迭代算法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%EF%BC%88Value-Iteration%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">一、值迭代算法（Value Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">1.1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4%EF%BC%88%E5%85%83%E7%B4%A0%E5%BD%A2%E5%BC%8F%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法步骤（元素形式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.3.</span> <span class="nav-text">伪代码流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC%E4%B8%96%E7%95%8C%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.4.</span> <span class="nav-text">网格世界示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%EF%BC%88Policy-Iteration%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">二、策略迭代算法（Policy Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%80%A7%E8%B4%A8"><span class="nav-number">1.2.3.</span> <span class="nav-text">关键性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC%E4%B8%96%E7%95%8C%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">网格世界示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%88%AA%E6%96%AD%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%EF%BC%88Truncated-Policy-Iteration%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">三、截断策略迭代（Truncated Policy Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E4%BF%9D%E8%AF%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">理论保证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94%E4%B8%8E%E5%85%B3%E7%B3%BB"><span class="nav-number">1.4.</span> <span class="nav-text">四、算法对比与关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%A1%86%E6%9E%B6%E5%88%86%E6%9E%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">统一框架分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E7%AD%89%E4%BB%B7%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">数学等价性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E8%BF%87%E7%A8%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">1.4.3.</span> <span class="nav-text">迭代过程对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">五、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.1.</span> <span class="nav-text">核心公式回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.5.2.</span> <span class="nav-text">应用场景建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E6%84%8F%E4%B9%89"><span class="nav-number">1.5.3.</span> <span class="nav-text">理论意义</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%BC%E8%BF%AD%E4%BB%A3%E4%B8%8E%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">值迭代与策略迭代算法读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%80%BC%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%EF%BC%88Value-Iteration%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">值迭代算法（Value Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3"><span class="nav-number">1.1.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4%EF%BC%88%E5%85%83%E7%B4%A0%E5%BD%A2%E5%BC%8F%EF%BC%89"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法步骤（元素形式）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.3.</span> <span class="nav-text">伪代码流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC%E4%B8%96%E7%95%8C%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.4.</span> <span class="nav-text">网格世界示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%E7%AE%97%E6%B3%95%EF%BC%88Policy-Iteration%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">策略迭代算法（Policy Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">伪代码流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%80%A7%E8%B4%A8"><span class="nav-number">1.2.4.</span> <span class="nav-text">关键性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E6%A0%BC%E4%B8%96%E7%95%8C%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">1.2.5.</span> <span class="nav-text">网格世界示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%88%AA%E6%96%AD%E7%AD%96%E7%95%A5%E8%BF%AD%E4%BB%A3%EF%BC%88Truncated-Policy-Iteration%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">三、截断策略迭代（Truncated Policy Iteration）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">核心思想</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E4%BF%9D%E8%AF%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">理论保证</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94%E4%B8%8E%E5%85%B3%E7%B3%BB"><span class="nav-number">1.4.</span> <span class="nav-text">四、算法对比与关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%A1%86%E6%9E%B6%E5%88%86%E6%9E%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">统一框架分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%A6%E7%AD%89%E4%BB%B7%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">数学等价性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E8%BF%87%E7%A8%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">1.4.3.</span> <span class="nav-text">迭代过程对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">五、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.5.1.</span> <span class="nav-text">核心公式回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.5.2.</span> <span class="nav-text">应用场景建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E6%84%8F%E4%B9%89"><span class="nav-number">1.5.3.</span> <span class="nav-text">理论意义</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -191,18 +194,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -270,12 +273,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Reinforcement-Learning-L4 | Sonic Aged's Blog">
+      <meta itemprop="name" content="Value Iteration and Policy Iteration | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Reinforcement-Learning-L4<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L4.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          Value Iteration and Policy Iteration<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L4.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -293,7 +296,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-30 00:50:08" itemprop="dateModified" datetime="2025-07-30T00:50:08+08:00">2025-07-30</time>
+      <time title="Modified: 2025-08-05 16:05:33" itemprop="dateModified" datetime="2025-08-05T16:05:33+08:00">2025-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,7 +330,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.5k</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -353,7 +356,7 @@
 
 
 
-<h2 id="一、值迭代算法（Value-Iteration）"><a href="#一、值迭代算法（Value-Iteration）" class="headerlink" title="一、值迭代算法（Value Iteration）"></a>一、值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^<em>$，并提取最优策略 $\pi^</em>$  </p>
+<h2 id="值迭代算法（Value-Iteration）"><a href="#值迭代算法（Value-Iteration）" class="headerlink" title="值迭代算法（Value Iteration）"></a>值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^*$，并提取最优策略 $\pi^*$  </p>
 <h3 id="算法步骤（元素形式）"><a href="#算法步骤（元素形式）" class="headerlink" title="算法步骤（元素形式）"></a>算法步骤（元素形式）</h3><ol>
 <li><p><strong>初始化</strong>：  </p>
 <ul>
@@ -363,19 +366,13 @@
 </li>
 <li><p><strong>迭代更新</strong>：<br><strong>重复直到收敛</strong>（$|v_k - v_{k-1}| &lt; \varepsilon$）:  </p>
 <ul>
-<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$  </li>
+<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$</li>
 <li><strong>值更新</strong>（Value Update）：<br>$$<br>v_{k+1}(s) &#x3D; \max_a q_k(s,a)<br>$$</li>
 </ul>
 </li>
 </ol>
-<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><pre><code>while ||v_k - v_&#123;k-1&#125;|| &gt; threshold:  
-    for each state s:  
-        for each action a:  
-            q(s,a) = Σ [p(r|s,a)*r] + γ * Σ [p(s&#39;|s,a)*v_k(s&#39;)]  
-        a* = argmax_a q(s,a)  
-        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
-        v_&#123;k+1&#125;(s) = max_a q(s,a)  
-</code></pre>
+<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183547455.png" alt="Pseudocode: Value iteration algorithm" style="zoom:50%;" />
+
 <h3 id="网格世界示例"><a href="#网格世界示例" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
 <li><strong>奖励设置</strong>：边界&#x2F;禁区 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
 <li><strong>初始值</strong>：$v_0(s_1)&#x3D;v_0(s_2)&#x3D;v_0(s_3)&#x3D;v_0(s_4)&#x3D;0$  </li>
@@ -387,7 +384,7 @@
 </li>
 </ul>
 <hr>
-<h2 id="二、策略迭代算法（Policy-Iteration）"><a href="#二、策略迭代算法（Policy-Iteration）" class="headerlink" title="二、策略迭代算法（Policy Iteration）"></a>二、策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
+<h2 id="策略迭代算法（Policy-Iteration）"><a href="#策略迭代算法（Policy-Iteration）" class="headerlink" title="策略迭代算法（Policy Iteration）"></a>策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
 <ol>
 <li><strong>策略评估</strong>（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  </li>
 <li><strong>策略改进</strong>（Policy Improvement）：基于 $v_{\pi_k}$ 生成更优策略 $\pi_{k+1}$</li>
@@ -400,6 +397,8 @@
 </ul>
 </li>
 </ol>
+<h3 id="伪代码流程-1"><a href="#伪代码流程-1" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183711027.png" alt="Pseudocode: Policy iteration algorithm" style="zoom:50%;" />
+
 <h3 id="关键性质"><a href="#关键性质" class="headerlink" title="关键性质"></a>关键性质</h3><ul>
 <li><strong>策略改进定理</strong>：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  </li>
 <li><strong>收敛性</strong>：序列 ${v_{\pi_k}}$ 收敛到最优值 $v^*$</li>
@@ -411,19 +410,8 @@
 </ul>
 <hr>
 <h2 id="三、截断策略迭代（Truncated-Policy-Iteration）"><a href="#三、截断策略迭代（Truncated-Policy-Iteration）" class="headerlink" title="三、截断策略迭代（Truncated Policy Iteration）"></a>三、截断策略迭代（Truncated Policy Iteration）</h2><h3 id="核心思想-2"><a href="#核心思想-2" class="headerlink" title="核心思想"></a>核心思想</h3><p>在策略评估阶段<strong>有限次迭代</strong>（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  </p>
-<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><pre><code>初始化：策略 $\pi_0$，值函数 $v_&#123;-1&#125;$  
-for k=0,1,2,... until convergence:  
-    # 策略评估（截断）  
-    v_k^&#123;(0)&#125; = v_&#123;k-1&#125;   # 继承上轮值  
-    for j=0 to j_truncate-1:  
-        v_k^&#123;(j+1)&#125;(s) = Σ_a π_k(a|s)[ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k^&#123;(j)&#125;(s&#39;) ]  
-    v_k = v_k^&#123;(j_truncate)&#125;  
-      
-    # 策略改进  
-    for each s:  
-        a* = argmax_a [ Σ_r p(r|s,a)r + γ Σ_s&#39; p(s&#39;|s,a)v_k(s&#39;) ]  
-        π_&#123;k+1&#125;(a|s) = 1 if a=a* else 0  
-</code></pre>
+<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183826039.png" alt="Pseudocode: Truncated policy iteration algorithm" style="zoom:50%;" />
+
 <h3 id="理论保证"><a href="#理论保证" class="headerlink" title="理论保证"></a>理论保证</h3><ul>
 <li><strong>值单调性</strong>：若初始值 $v_k^{(0)} &#x3D; v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  </li>
 <li><strong>收敛性</strong>：仍收敛到最优策略（因策略改进步保证方向正确）</li>
@@ -516,13 +504,13 @@ for k=0,1,2,... until convergence:
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/07/28/Reinforcement-Learning-L3/" rel="prev" title="Reinforcement-Learning-L3">
-                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L3
+                <a href="/2025/07/28/Reinforcement-Learning-L3/" rel="prev" title="Bellman Optimality Equation">
+                  <i class="fa fa-angle-left"></i> Bellman Optimality Equation
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/07/28/Reinforcement-Learning-L5/" rel="next" title="Reinforcement-Learning-L5">
-                  Reinforcement-Learning-L5 <i class="fa fa-angle-right"></i>
+                <a href="/2025/07/28/Reinforcement-Learning-L5/" rel="next" title="Monte Carlo Methods">
+                  Monte Carlo Methods <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -543,7 +531,7 @@ for k=0,1,2,... until convergence:
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2025</span>
+    <span itemprop="copyrightYear">2026</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -554,13 +542,13 @@ for k=0,1,2,... until convergence:
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">53k</span>
+    <span title="Word count total">55k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">3:13</span>
+    <span title="Reading time total">3:20</span>
   </span>
 </div>
 <div class="busuanzi-count">

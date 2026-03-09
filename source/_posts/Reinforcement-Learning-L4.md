@@ -1,5 +1,5 @@
 ---
-title: Reinforcement-Learning-L4
+title: Value Iteration and Policy Iteration
 categories:
   - Learning
   - ReinForcement Learning
@@ -19,13 +19,13 @@ tags:
 
 
 
-## 一、值迭代算法（Value Iteration）  
+## 值迭代算法（Value Iteration）  
 ### 核心思想  
 通过迭代求解贝尔曼最优方程（BOE）:  
 $$
 v_{k+1} = \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)
-$$  
-逐步逼近最优状态值 $v^*$，并提取最优策略 $\pi^*$  
+$$
+逐步逼近最优状态值 $v^\*$，并提取最优策略 $\pi^\*$  
 
 ### 算法步骤（元素形式）  
 1. **初始化**：  
@@ -41,26 +41,18 @@ $$
      1 & a = \arg\max_a q_k(s,a) \\\\
      0 & \text{否则}
      \end{cases}
-     $$  
+     $$
      其中动作值函数：  
      $$
      q_k(s,a) = \sum_r p(r|s,a) r + \gamma \sum_{s'} p(s'|s,a) v_k(s')
-     $$  
+     $$
    - **值更新**（Value Update）：  
      $$
      v_{k+1}(s) = \max_a q_k(s,a)
-     $$  
+     $$
 
 ### 伪代码流程  
-```  
-while ||v_k - v_{k-1}|| > threshold:  
-    for each state s:  
-        for each action a:  
-            q(s,a) = Σ [p(r|s,a)*r] + γ * Σ [p(s'|s,a)*v_k(s')]  
-        a* = argmax_a q(s,a)  
-        π_{k+1}(a|s) = 1 if a=a* else 0  
-        v_{k+1}(s) = max_a q(s,a)  
-```  
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183547455.png" alt="Pseudocode: Value iteration algorithm" style="zoom:50%;" />
 
 ### 网格世界示例  
 - **奖励设置**：边界/禁区 $r=-1$，目标 $r=+1$，$\gamma=0.9$  
@@ -72,7 +64,7 @@ while ||v_k - v_{k-1}|| > threshold:
 
 ---
 
-## 二、策略迭代算法（Policy Iteration）  
+## 策略迭代算法（Policy Iteration）  
 ### 核心思想  
 交替执行：  
 1. **策略评估**（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  
@@ -84,12 +76,12 @@ while ||v_k - v_{k-1}|| > threshold:
    - **策略评估**（求解贝尔曼方程）：  
      $$
      v_{\pi_k}^{(j+1)} = r_{\pi_k} + \gamma P_{\pi_k} v_{\pi_k}^{(j)}
-     $$  
+     $$
      闭式解：$v_{\pi_k} = (I - \gamma P_{\pi_k})^{-1} r_{\pi_k}$  
    - **策略改进**（贪心策略）：  
      $$
      \pi_{k+1} = \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v_{\pi_k})
-     $$  
+     $$
      元素形式：  
      $$
      \pi_{k+1}(a|s) = 
@@ -97,9 +89,14 @@ while ||v_k - v_{k-1}|| > threshold:
      1 & a = \arg\max_a q_{\pi_k}(s,a) \\\\
      0 & \text{否则}
      \end{cases}
-     $$  
+     $$
 
-### 关键性质  
+### 伪代码流程
+
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183711027.png" alt="Pseudocode: Policy iteration algorithm" style="zoom:50%;" />
+
+### 关键性质
+
 - **策略改进定理**：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  
 - **收敛性**：序列 $\{v_{\pi_k}\}$ 收敛到最优值 $v^*$  
 
@@ -111,7 +108,7 @@ while ||v_k - v_{k-1}|| > threshold:
   v_{\pi_0}(s_1) = -1 + \gamma v_{\pi_0}(s_1) \\\\
   v_{\pi_0}(s_2) = \gamma v_{\pi_0}(s_1)
   \end{cases}
-  $$  
+  $$
   解得 $v_{\pi_0}(s_1)=-10, v_{\pi_0}(s_2)=-9$  
 - **策略改进**：计算 $q_{\pi_0}$ → 新策略 $\pi_1$ 在 $s_1$ 选择向右（$a_r$)  
 
@@ -122,20 +119,7 @@ while ||v_k - v_{k-1}|| > threshold:
 在策略评估阶段**有限次迭代**（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  
 
 ### 算法流程  
-```  
-初始化：策略 $\pi_0$，值函数 $v_{-1}$  
-for k=0,1,2,... until convergence:  
-    # 策略评估（截断）  
-    v_k^{(0)} = v_{k-1}   # 继承上轮值  
-    for j=0 to j_truncate-1:  
-        v_k^{(j+1)}(s) = Σ_a π_k(a|s)[ Σ_r p(r|s,a)r + γ Σ_s' p(s'|s,a)v_k^{(j)}(s') ]  
-    v_k = v_k^{(j_truncate)}  
-      
-    # 策略改进  
-    for each s:  
-        a* = argmax_a [ Σ_r p(r|s,a)r + γ Σ_s' p(s'|s,a)v_k(s') ]  
-        π_{k+1}(a|s) = 1 if a=a* else 0  
-```  
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183826039.png" alt="Pseudocode: Truncated policy iteration algorithm" style="zoom:50%;" />
 
 ### 理论保证  
 - **值单调性**：若初始值 $v_k^{(0)} = v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  

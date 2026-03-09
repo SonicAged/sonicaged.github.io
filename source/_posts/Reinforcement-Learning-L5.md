@@ -1,5 +1,5 @@
 ---
-title: Reinforcement-Learning-L5
+title: Monte Carlo Methods
 categories:
   - Learning
   - ReinForcement Learning

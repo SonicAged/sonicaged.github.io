@@ -1,5 +1,5 @@
 ---
-title: Reinforcement-Learning-L3
+title: Bellman Optimality Equation
 categories:
   - Learning
   - ReinForcement Learning
@@ -19,23 +19,25 @@ tags:
 
 
 
-## 一、动机示例：动作值驱动的策略改进  
+## 动机示例：动作值驱动的策略改进  
 ### 场景描述  
 在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  
 - **状态值**（$\gamma=0.9$）：  
   $$
   v_\pi(s_1)=8,\quad v_\pi(s_2)=10,\quad v_\pi(s_3)=10,\quad v_\pi(s_4)=10
-  $$  
+  $$
 - **动作值**（状态 $s_1$）：  
   $$
   \begin{align*}
-  q_\pi(s_1, a_1) &= 6.2, \\\\
-  q_\pi(s_1, a_2) &= 8, \\\\
-  q_\pi(s_1, a_3) &= 9, \\\\
-  q_\pi(s_1, a_4) &= 6.2, \\\\
-  q_\pi(s_1, a_5) &= 7.2
+  q_\pi(s_1, a_1) &= -1 + \gamma v_\pi(s_1) = 6.2, \\\\
+  q_\pi(s_1, a_2) &= -1 + \gamma v_\pi(s_2) = 8, \\\\
+  q_\pi(s_1, a_3) &= 0 + \gamma v_\pi(s_3) = 9, \\\\
+  q_\pi(s_1, a_4) &= -1 + \gamma v_\pi(s_1) = 6.2, \\\\
+  q_\pi(s_1, a_5) &= 0 + \gamma v_\pi(s_1) = 7.2
   \end{align*}
-  $$  
+  $$
+
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L3/grid.png" alt="grid" style="zoom:33%;" />
 
 ### 策略改进原理  
 1. **当前策略**：在 $s_1$ 固定选择 $a_2$（向右移动）  
@@ -47,23 +49,23 @@ tags:
    1 & a = a_3 \\\\
    0 & a \neq a_3
    \end{cases}
-   $$  
+   $$
 > **关键思想**：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能  
 
 ---
 
-## 二、最优策略的数学定义  
+## 最优策略的数学定义  
 ### 核心概念  
 - **状态值偏序关系**：若对所有状态 $s \in \mathcal{S}$ 满足  
   $$
   v_{\pi_1}(s) \geq v_{\pi_2}(s)
-  $$  
+  $$
   则称策略 $\pi_1$ **优于** $\pi_2$  
 - **最优策略** $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 
 
   $$
   v\_{\pi^*}(s) \geq v\_{\pi}(s)
-  $$  
+  $$
 
 ### 理论问题  
 1. **存在性**：最优策略是否存在？  
@@ -75,17 +77,17 @@ tags:
 
 ---
 
-## 三、贝尔曼最优方程（BOE）的形式  
+## 贝尔曼最优方程（BOE）的形式  
 ### 1. 元素形式（Elementwise Form）  
 $$
-v(s) = \max_{\pi} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s'} p(s'|s,a) v(s')\right]}_{q(s,a)} 
-$$  
+v(s) = {\color{blue}{\max_{\pi}}} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s'} p(s'|s,a) v(s')\right]}_{q(s,a)} 
+$$
 其中 $q(s,a)$ 是状态-动作值函数  
 
 ### 2. 矩阵形式（Matrix Form）  
 $$
 v = \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)
-$$  
+$$
 - $v = [v(s_1), \dots, v(s_n)]^T$：状态值向量  
 - $r_\pi = [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  
 - $P_\pi$：状态转移矩阵，$[P_\pi]_{ij} = \sum_a \pi(a|s_i) p(s_j|s_i, a)$  
@@ -94,7 +96,7 @@ $$
 **定理**：最优状态值等于最大动作值  
 $$
 v(s) = \max_{a \in \mathcal{A}(s)} q(s,a)
-$$  
+$$
 - **最优策略**：确定性策略，选择使 $q(s,a)$ 最大的动作：  
   $$
   \pi^*(a|s) = 
@@ -102,22 +104,22 @@ $$
   1 & a = \arg\max_a q(s,a) \\\\
   0 & \text{否则}
   \end{cases}
-  $$  
+  $$
 
 ---
 
-## 四、BOE的求解：压缩映射理论  
+## BOE的求解：压缩映射理论  
 ### 关键步骤  
 1. **定义映射函数**：  
    $$
    f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)
-   $$  
+   $$
    BOE 转化为不动点方程 $v = f(v)$  
    
 2. **压缩映射性质**：  
    $$
    \|f(v_1) - f(v_2)\| \leq \gamma \|v_1 - v_2\|
-   $$  
+   $$
    > 证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质  
 
 ### 解的存在性与唯一性  
@@ -127,19 +129,19 @@ $$
 3. **迭代求解**：对任意初始 $v_0$，序列  
    $$
    v_{k+1} = f(v_k) = \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)
-   $$  
+   $$
    指数收敛到 $v^*$（值迭代算法）  
 
 ---
 
-## 五、BOE与最优策略的关系  
+## BOE与最优策略的关系  
 ### 最优性定理  
 若 $v^*$ 是 BOE 的解，则：  
 1. **对应策略**：贪心策略 $\pi^* = \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  
 2. **策略最优性**：对所有策略 $\pi$ 和状态 $s$ 满足  
    $$
    v^*(s) \geq v_{\pi}(s)
-   $$  
+   $$
 
 ### 确定性策略充分性  
 **定理**：确定性策略足以达到最优性能  
@@ -147,19 +149,19 @@ $$
 
 ---
 
-## 六、最优策略的影响因素分析  
+## 最优策略的影响因素分析  
 ### 1. 奖励设计（Reward Design）  
 - **绝对数值不影响策略**：奖励仿射变换 $r \to ar + b$ ($a > 0$) 不改变最优策略  
   $$
   v' = a v^* + \frac{b}{1-\gamma} \mathbf{1}
-  $$  
+  $$
 - **相对值决定策略**：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  
   - 示例：当 $r_{\text{forbidden}} = -10$（原为 $-1$），最优策略避开禁区  
 
 ### 2. 折扣率 $\gamma$  
 - $\gamma \approx 1$：**长远规划**，愿承担风险穿越禁区  
 - $\gamma \approx 0$：**短视行为**，回避所有风险（可能无法到达目标）  
-    
+  
 
 ### 3. 绕路惩罚机制  
 - **隐含惩罚**：折扣率 $\gamma$ 天然惩罚长路径  
@@ -168,7 +170,7 @@ $$
 
 ---
 
-## 七、总结：贝尔曼最优方程的意义  
+## 总结：贝尔曼最优方程的意义  
 | **问题**         | **BOE的解答**                                                                 |
 |------------------|-----------------------------------------------------------------------------|
 | **最优策略存在性** | BOE解存在 → 最优策略 $\pi^*$ 存在                                          |
@@ -181,15 +183,15 @@ $$
 1. **BOE元素形式**：  
    $$
    v(s) = \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s'} p(s'|s,a) v(s') \right]
-   $$  
+   $$
 2. **值迭代更新**：  
    $$
    v_{k+1}(s) = \max_{a} \left[ r(s,a) + \gamma \sum_{s'} p(s'|s,a) v_k(s') \right]
-   $$  
+   $$
 3. **最优策略**：  
    $$
    \pi^*(s) = \arg\max_{a} q(s,a)
-   $$  
+   $$
 
 # 📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒
 

@@ -21,15 +21,16 @@
 
     <meta name="description" content="最优策略与贝尔曼最优方程读书笔记      贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Reinforcement-Learning-L3">
+<meta property="og:title" content="Bellman Optimality Equation">
 <meta property="og:url" content="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
 <meta property="og:description" content="最优策略与贝尔曼最优方程读书笔记      贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/03.png">
+<meta property="og:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/Reinforcement-Learning-L3/grid.png">
 <meta property="og:image" content="https://blog.sonic-aged.site/icon/github.svg">
 <meta property="article:published_time" content="2025-07-28T03:54:49.000Z">
-<meta property="article:modified_time" content="2025-07-29T16:50:06.408Z">
+<meta property="article:modified_time" content="2025-08-04T09:56:40.034Z">
 <meta property="article:author" content="Sonic Aged">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.sonic-aged.site/img/reinforcement-learning/03.png">
@@ -38,10 +39,10 @@
 <link rel="canonical" href="https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/","path":"2025/07/28/Reinforcement-Learning-L3/","title":"Reinforcement-Learning-L3"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L3/","path":"2025/07/28/Reinforcement-Learning-L3/","title":"Bellman Optimality Equation"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Reinforcement-Learning-L3 | Sonic Aged's Blog</title>
+<title>Bellman Optimality Equation | Sonic Aged's Blog</title>
   
 
 
@@ -176,7 +177,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E4%B8%8E%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">最优策略与贝尔曼最优方程读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8A%A8%E6%9C%BA%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%8A%A8%E4%BD%9C%E5%80%BC%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B"><span class="nav-number">1.1.</span> <span class="nav-text">一、动机示例：动作值驱动的策略改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">场景描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">策略改进原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E6%95%B0%E5%AD%A6%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">二、最优策略的数学定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.2.</span> <span class="nav-text">理论问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%EF%BC%88BOE%EF%BC%89%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">三、贝尔曼最优方程（BOE）的形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%83%E7%B4%A0%E5%BD%A2%E5%BC%8F%EF%BC%88Elementwise-Form%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 元素形式（Elementwise Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%EF%BC%88Matrix-Form%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 矩阵形式（Matrix Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%80%E5%A4%A7%E5%8C%96%E7%AE%80%E5%8C%96%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 最大化简化形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81BOE%E7%9A%84%E6%B1%82%E8%A7%A3%EF%BC%9A%E5%8E%8B%E7%BC%A9%E6%98%A0%E5%B0%84%E7%90%86%E8%AE%BA"><span class="nav-number">1.4.</span> <span class="nav-text">四、BOE的求解：压缩映射理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.4.1.</span> <span class="nav-text">关键步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7%E4%B8%8E%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">解的存在性与唯一性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81BOE%E4%B8%8E%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.5.</span> <span class="nav-text">五、BOE与最优策略的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E6%80%A7%E5%AE%9A%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">最优性定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E5%85%85%E5%88%86%E6%80%A7"><span class="nav-number">1.5.2.</span> <span class="nav-text">确定性策略充分性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">六、最优策略的影响因素分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A5%96%E5%8A%B1%E8%AE%BE%E8%AE%A1%EF%BC%88Reward-Design%EF%BC%89"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. 奖励设计（Reward Design）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%98%E6%89%A3%E7%8E%87-gamma"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 折扣率 $\gamma$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BB%95%E8%B7%AF%E6%83%A9%E7%BD%9A%E6%9C%BA%E5%88%B6"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 绕路惩罚机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93%EF%BC%9A%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">1.7.</span> <span class="nav-text">七、总结：贝尔曼最优方程的意义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.7.1.</span> <span class="nav-text">关键公式回顾</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E4%B8%8E%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">最优策略与贝尔曼最优方程读书笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA%E7%A4%BA%E4%BE%8B%EF%BC%9A%E5%8A%A8%E4%BD%9C%E5%80%BC%E9%A9%B1%E5%8A%A8%E7%9A%84%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B"><span class="nav-number">1.1.</span> <span class="nav-text">动机示例：动作值驱动的策略改进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">场景描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E6%94%B9%E8%BF%9B%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.2.</span> <span class="nav-text">策略改进原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E6%95%B0%E5%AD%A6%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">最优策略的数学定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.2.</span> <span class="nav-text">理论问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%EF%BC%88BOE%EF%BC%89%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">贝尔曼最优方程（BOE）的形式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%83%E7%B4%A0%E5%BD%A2%E5%BC%8F%EF%BC%88Elementwise-Form%EF%BC%89"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 元素形式（Elementwise Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%EF%BC%88Matrix-Form%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 矩阵形式（Matrix Form）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%9C%80%E5%A4%A7%E5%8C%96%E7%AE%80%E5%8C%96%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 最大化简化形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOE%E7%9A%84%E6%B1%82%E8%A7%A3%EF%BC%9A%E5%8E%8B%E7%BC%A9%E6%98%A0%E5%B0%84%E7%90%86%E8%AE%BA"><span class="nav-number">1.4.</span> <span class="nav-text">BOE的求解：压缩映射理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.4.1.</span> <span class="nav-text">关键步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7%E4%B8%8E%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">1.4.2.</span> <span class="nav-text">解的存在性与唯一性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOE%E4%B8%8E%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.5.</span> <span class="nav-text">BOE与最优策略的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E6%80%A7%E5%AE%9A%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">最优性定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%AD%96%E7%95%A5%E5%85%85%E5%88%86%E6%80%A7"><span class="nav-number">1.5.2.</span> <span class="nav-text">确定性策略充分性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BC%98%E7%AD%96%E7%95%A5%E7%9A%84%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0%E5%88%86%E6%9E%90"><span class="nav-number">1.6.</span> <span class="nav-text">最优策略的影响因素分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%A5%96%E5%8A%B1%E8%AE%BE%E8%AE%A1%EF%BC%88Reward-Design%EF%BC%89"><span class="nav-number">1.6.1.</span> <span class="nav-text">1. 奖励设计（Reward Design）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%98%E6%89%A3%E7%8E%87-gamma"><span class="nav-number">1.6.2.</span> <span class="nav-text">2. 折扣率 $\gamma$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%BB%95%E8%B7%AF%E6%83%A9%E7%BD%9A%E6%9C%BA%E5%88%B6"><span class="nav-number">1.6.3.</span> <span class="nav-text">3. 绕路惩罚机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A%E8%B4%9D%E5%B0%94%E6%9B%BC%E6%9C%80%E4%BC%98%E6%96%B9%E7%A8%8B%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">1.7.</span> <span class="nav-text">总结：贝尔曼最优方程的意义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%85%AC%E5%BC%8F%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.7.1.</span> <span class="nav-text">关键公式回顾</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -191,18 +192,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -270,12 +271,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Reinforcement-Learning-L3 | Sonic Aged's Blog">
+      <meta itemprop="name" content="Bellman Optimality Equation | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Reinforcement-Learning-L3<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L3.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          Bellman Optimality Equation<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/Reinforcement-Learning-L3.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -293,7 +294,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-07-30 00:50:06" itemprop="dateModified" datetime="2025-07-30T00:50:06+08:00">2025-07-30</time>
+      <time title="Modified: 2025-08-04 17:56:40" itemprop="dateModified" datetime="2025-08-04T17:56:40+08:00">2025-08-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,7 +328,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.3k</span>
+      <span>1.4k</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -353,21 +354,23 @@
 
 
 
-<h2 id="一、动机示例：动作值驱动的策略改进"><a href="#一、动机示例：动作值驱动的策略改进" class="headerlink" title="一、动机示例：动作值驱动的策略改进"></a>一、动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
+<h2 id="动机示例：动作值驱动的策略改进"><a href="#动机示例：动作值驱动的策略改进" class="headerlink" title="动机示例：动作值驱动的策略改进"></a>动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
 <ul>
-<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$  </li>
-<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 7.2<br>\end{align*}<br>$$</li>
+<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$</li>
+<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; -1 + \gamma v_\pi(s_2) &#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 0 + \gamma v_\pi(s_3) &#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 0 + \gamma v_\pi(s_1) &#x3D; 7.2<br>\end{align*}<br>$$</li>
 </ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L3/grid.png" alt="grid" style="zoom:33%;" />
+
 <h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
 <li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
 <li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
-<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$  <blockquote>
+<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$<blockquote>
 <p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
 </blockquote>
 </li>
 </ol>
 <hr>
-<h2 id="二、最优策略的数学定义"><a href="#二、最优策略的数学定义" class="headerlink" title="二、最优策略的数学定义"></a>二、最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<h2 id="最优策略的数学定义"><a href="#最优策略的数学定义" class="headerlink" title="最优策略的数学定义"></a>最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
 <li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
 </li>
 <li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
@@ -384,22 +387,22 @@
 <p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
 </blockquote>
 <hr>
-<h2 id="三、贝尔曼最优方程（BOE）的形式"><a href="#三、贝尔曼最优方程（BOE）的形式" class="headerlink" title="三、贝尔曼最优方程（BOE）的形式"></a>三、贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; \max_{\pi} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
-<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$  </p>
+<h2 id="贝尔曼最优方程（BOE）的形式"><a href="#贝尔曼最优方程（BOE）的形式" class="headerlink" title="贝尔曼最优方程（BOE）的形式"></a>贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; {\color{blue}{\max_{\pi}}} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
+<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$</p>
 <ul>
 <li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
 <li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
 <li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
 </ul>
-<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$  </p>
+<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$</p>
 <ul>
 <li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
 </ul>
 <hr>
-<h2 id="四、BOE的求解：压缩映射理论"><a href="#四、BOE的求解：压缩映射理论" class="headerlink" title="四、BOE的求解：压缩映射理论"></a>四、BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
+<h2 id="BOE的求解：压缩映射理论"><a href="#BOE的求解：压缩映射理论" class="headerlink" title="BOE的求解：压缩映射理论"></a>BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
 <li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
 </li>
-<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$  </p>
+<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$</p>
 <blockquote>
 <p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
 </blockquote>
@@ -412,7 +415,7 @@
 <li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
 </ol>
 <hr>
-<h2 id="五、BOE与最优策略的关系"><a href="#五、BOE与最优策略的关系" class="headerlink" title="五、BOE与最优策略的关系"></a>五、BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
+<h2 id="BOE与最优策略的关系"><a href="#BOE与最优策略的关系" class="headerlink" title="BOE与最优策略的关系"></a>BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
 <ol>
 <li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
 <li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
@@ -422,8 +425,8 @@
 <li>随机策略不会产生比最优确定性策略更高的状态值</li>
 </ul>
 <hr>
-<h2 id="六、最优策略的影响因素分析"><a href="#六、最优策略的影响因素分析" class="headerlink" title="六、最优策略的影响因素分析"></a>六、最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
-<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$  </li>
+<h2 id="最优策略的影响因素分析"><a href="#最优策略的影响因素分析" class="headerlink" title="最优策略的影响因素分析"></a>最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
+<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$</li>
 <li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
 <li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
 </ul>
@@ -441,7 +444,7 @@
 </li>
 </ul>
 <hr>
-<h2 id="七、总结：贝尔曼最优方程的意义"><a href="#七、总结：贝尔曼最优方程的意义" class="headerlink" title="七、总结：贝尔曼最优方程的意义"></a>七、总结：贝尔曼最优方程的意义</h2><table>
+<h2 id="总结：贝尔曼最优方程的意义"><a href="#总结：贝尔曼最优方程的意义" class="headerlink" title="总结：贝尔曼最优方程的意义"></a>总结：贝尔曼最优方程的意义</h2><table>
 <thead>
 <tr>
 <th><strong>问题</strong></th>
@@ -470,8 +473,8 @@
 </tr>
 </tbody></table>
 <h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
-<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$  </li>
-<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$  </li>
+<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$</li>
+<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$</li>
 <li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
 </ol>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
@@ -492,13 +495,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/07/28/Reinforcement-Learning-L2/" rel="prev" title="Reinforcement-Learning-L2">
-                  <i class="fa fa-angle-left"></i> Reinforcement-Learning-L2
+                <a href="/2025/07/28/Reinforcement-Learning-L2/" rel="prev" title="Bellman Equation">
+                  <i class="fa fa-angle-left"></i> Bellman Equation
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/07/28/Reinforcement-Learning-L4/" rel="next" title="Reinforcement-Learning-L4">
-                  Reinforcement-Learning-L4 <i class="fa fa-angle-right"></i>
+                <a href="/2025/07/28/Reinforcement-Learning-L4/" rel="next" title="Value Iteration and Policy Iteration">
+                  Value Iteration and Policy Iteration <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -519,7 +522,7 @@
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2025</span>
+    <span itemprop="copyrightYear">2026</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
@@ -530,13 +533,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">53k</span>
+    <span title="Word count total">55k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">3:13</span>
+    <span title="Reading time total">3:20</span>
   </span>
 </div>
 <div class="busuanzi-count">
