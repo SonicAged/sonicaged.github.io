@@ -118,3 +118,7 @@ $$ P(r \mid A, B) = \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}\_{structure}(G
 
 1. 将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）
 2. 将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）
+
+## 大模型在DDI中的应用
+
+由于NLP的知识过于孱弱，完全看不懂他在干嘛，所以最近决定先去简单了解一下LLM捏
