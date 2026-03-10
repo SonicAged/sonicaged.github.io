@@ -107,3 +107,14 @@ date: 2026-03-29 23:12:02
 最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：
 $$ P(r \mid A, B) = \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}\_{structure}(G\_A) \oplus \text{GNN}\_{structure}(G\_B) \oplus \mathbf{h}\_{KG} \oplus \mathbf{t}\_{KG} \big] + \mathbf{b} \Big) $$
 其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。
+
+## 数据集不同引出的模型构造思路的不同
+
+由于前面提到的：*有直推式和归纳式的模型*，而这两种模型的区别在于：重点处理药物表示（通过自监督的方式学习特征）还是处理药物关系（通过KGE）
+
+## 超图在 DDI 中的应用
+
+超图在 DDI 中的应用主要分为两种：
+
+1. 将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）
+2. 将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）
