@@ -7,7 +7,7 @@ categories:
 tags:
   - 排序
   - 二分
-  - 前缀和
+  - 前缀和与差分
   - 双指针
   - 离散化
   - 区间合并
@@ -20,11 +20,11 @@ date: 2026-03-23 00:23:36
 
 <!-- more -->
 
-### 排序
+## 排序
 
-#### 快速排序
+### 快速排序
 
-[快速排序](https://www.acwing.com/problem/content/787/)
+#### [快速排序](https://www.acwing.com/problem/content/787/)
 
 ```cpp
 #include <iostream>
@@ -63,14 +63,14 @@ int main() {
 
 ---
 
-[第 k 个数](https://www.acwing.com/problem/content/788/)
+#### [第 k 个数](https://www.acwing.com/problem/content/788/)
 略
 
 ---
 
-#### 归并排序
+### 归并排序
 
-[归并排序](https://www.acwing.com/problem/content/789/)
+#### [归并排序](https://www.acwing.com/problem/content/789/)
 
 ```cpp
 #include <iostream>
@@ -111,7 +111,7 @@ int main() {
 
 ---
 
-[逆序对的数量](https://www.acwing.com/problem/content/790/)
+#### [逆序对的数量](https://www.acwing.com/problem/content/790/)
 
 - 在进行归并排序的过程中，出现了当两边都没遍历完且右边`j`对应的数比比左边`i`对应的数小时，则会产生比左边`i`到`mid`所有数对数，即`mid - i + 1`对的逆序对
 - 逆序对的数量会爆`int`
@@ -155,9 +155,9 @@ int main() {
 
 ---
 
-### 二分
+## 二分
 
-[数的范围](https://www.acwing.com/problem/content/791/)
+### [数的范围](https://www.acwing.com/problem/content/791/)
 
 ```cpp
 #include <iostream>
@@ -217,7 +217,7 @@ while(l < r) {
 
 ---
 
-[数的三次方根](https://www.acwing.com/problem/content/792/)
+### [数的三次方根](https://www.acwing.com/problem/content/792/)
 
 略
 
@@ -229,11 +229,11 @@ while(l < r) {
 
 ---
 
-### 前缀和与差分
+## 前缀和与差分
 
-#### 前缀和
+### 前缀和
 
-[前缀和](https://www.acwing.com/problem/content/797/)
+#### [前缀和](https://www.acwing.com/problem/content/797/)
 
 ```cpp
 #include <iostream>
@@ -260,7 +260,7 @@ int main() {
 
 ---
 
-[子矩阵的和](https://www.acwing.com/problem/content/798/)
+#### [子矩阵的和](https://www.acwing.com/problem/content/798/)
 
 ```cpp
 #include<bits/stdc++.h>
@@ -290,9 +290,9 @@ int main() {
 
 ---
 
-#### 差分
+### 差分
 
-[差分](https://www.acwing.com/problem/content/description/799/)
+#### [差分](https://www.acwing.com/problem/content/description/799/)
 
 ```cpp
 #include<bits/stdc++.h>
@@ -328,7 +328,7 @@ int main() {
 
 ---
 
-[差分矩阵](https://www.acwing.com/problem/content/description/800/)
+#### [差分矩阵](https://www.acwing.com/problem/content/description/800/)
 
 ```cpp
 #include<bits/stdc++.h>
@@ -365,9 +365,9 @@ int main() {
 
 ---
 
-### 双指针
+## 双指针
 
-[最长连续不重复子序列](https://www.acwing.com/problem/content/description/801/)
+### [最长连续不重复子序列](https://www.acwing.com/problem/content/description/801/)
 
 - `s[i]`表示值`i`出现的次数
 - `j`表示屁股，`i`表示头
@@ -397,7 +397,7 @@ int main() {
 
 ---
 
-[数组元素的目标和](https://www.acwing.com/problem/content/802/)
+### [数组元素的目标和](https://www.acwing.com/problem/content/802/)
 
 ```cpp
 #include<iostream>
@@ -432,7 +432,7 @@ int main() {
 
 ---
 
-[判断子序列](https://www.acwing.com/problem/content/2818/)
+### [判断子序列](https://www.acwing.com/problem/content/2818/)
 
 ```cpp
 #include<iostream>
@@ -466,7 +466,7 @@ int main() {
 
 ---
 
-### 离散化
+## 离散化
 
 ---
 
@@ -481,7 +481,7 @@ int main() {
 
 ---
 
-[区间和](https://www.acwing.com/problem/content/804/)
+### [区间和](https://www.acwing.com/problem/content/804/)
 
 ```cpp
 #include<iostream>
@@ -538,9 +538,9 @@ int main() {
 
 ---
 
-### 区间合并
+## 区间合并
 
-[区间合并](https://www.acwing.com/problem/content/805/)
+### [区间合并](https://www.acwing.com/problem/content/805/)
 
 ```cpp
 #include<iostream>
