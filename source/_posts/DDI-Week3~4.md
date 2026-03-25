@@ -61,7 +61,7 @@ DDI 真神奇捏。阿巴阿巴阿巴
     其中 $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V$ 是可学习的投影矩阵，$d$ 是特征维度。
 
     **扩散损失函数**：
-    $$\mathcal{L}_d = \mathbb{E}_{t, x_0, \epsilon} \left[ \frac{\alpha_{t-1} - \alpha_t}{2(1-\bar{\alpha}_{t-1})(1-\bar{\alpha}_t)} \| x_{\theta}(x_t, x_a, t) - x_0 \|^2_2 \right]$$
+    $$\mathcal{L}\_d = \mathbb{E}\_{t, x\_0, \epsilon} \left[ \frac{\alpha\_{t-1} - \alpha\_t}{2(1-\bar{\alpha}\_{t-1})(1-\bar{\alpha}\_t)} \| x\_{\theta}(x\_t, x\_a, t) - x\_0 \|^2\_2 \right]$$
 
 层次对比学习（Hierarchical Contrastive Learning）
 
@@ -70,18 +70,18 @@ DDI 真神奇捏。阿巴阿巴阿巴
 1. 超边级对比学习（Hyperedge-level Contrast）
     该层级旨在确保相同的 DDI 事件（超边）在不同视图下具有一致的表征。
     设 $h_e$ 为原始视图中事件 $e$ 的嵌入，$h'_e$ 为增强视图中的嵌入，其对比损失为：
-    $$L_h = \frac{1}{|\mathcal{E}|} \sum_{e \in \mathcal{E}} -\log \frac{\exp(\text{sim}(h_e, h'_e) / \tau)}{\sum_{j \in \mathcal{E}} \exp(\text{sim}(h_e, h'_j) / \tau)}$$
+    $$L\_h = \frac{1}{|\mathcal{E}|} \sum\_{e \in \mathcal{E}} -\log \frac{\exp(\text{sim}(h\_e, h'\_e) / \tau)}{\sum\_{j \in \mathcal{E}} \exp(\text{sim}(h\_e, h'\_j) / \tau)}$$
     其中 $\text{sim}(\cdot)$ 为余弦相似度，$\tau$ 为温度参数。
 
 2. 药物节点级对比学习（Drug-level Contrast）
     该层级旨在增强药物在 sparse（稀疏）DDI 图中的鲁棒性。
     设 $v_n$ 为原始视图中药物 $n$ 的嵌入，$v'_n$ 为增强视图中（由增强后的边特征生成的）药物嵌入：
-    $$L_n = \frac{1}{|\mathcal{V}|} \sum_{n \in \mathcal{V}} -\log \frac{\exp(\text{sim}(v_n, v'_n) / \tau)}{\sum_{k \in \mathcal{V}} \exp(\text{sim}(v_n, v'_k) / \tau)}$$
+    $$L\_n = \frac{1}{|\mathcal{V}|} \sum\_{n \in \mathcal{V}} -\log \frac{\exp(\text{sim}(v\_n, v'\_n) / \tau)}{\sum\_{k \in \mathcal{V}} \exp(\text{sim}(v\_n, v'\_k) / \tau)}$$
 
 3. 联合优化目标
-    模型最终通过加权组合监督预测损失（交叉熵 $\mathcal{L}_{sup}$）和层次对比损失进行训练：
-    $$\mathcal{L}_{total} = \mathcal{L}_{sup} + \epsilon_1 L_h + (1 - \epsilon_1) L_n$$
-    其中 $\epsilon_1$ 是用于调节超边级和节点级对比强度权重的超参数。
+    模型最终通过加权组合监督预测损失（交叉熵 $\mathcal{L}\_{sup}$）和层次对比损失进行训练：
+    $$\mathcal{L}\_{total} = \mathcal{L}\_{sup} + \epsilon\_1 L_h + (1 - \epsilon\_1) L_n$$
+    其中 $\epsilon\_1$ 是用于调节超边级和节点级对比强度权重的超参数。
 
 ### GEMCL 自适应门控特征融合 + 多视图对比学习
 
@@ -99,3 +99,19 @@ DDI 真神奇捏。阿巴阿巴阿巴
 
 1. 引入了药物和药物的乘积的概念
 2. 子结构可视化的实验
+
+### IIB-DDI OOD + 不变学习
+
+1.  **聚焦 OOD 泛化问题（Out-of-Distribution）**：
+    传统的 DDI（药物-药物相互作用）预测模型在面对未见过的新药或分布改变的数据集时，性能往往大幅下降。本文首次系统地结合了**信息瓶颈（IB）理论**和**不变学习（Invariant Learning）**，旨在解决药物子结构分布不均导致的“伪相关”问题。
+
+2.  **引入环境码本（Environment Codebook）**：
+    由于药物数据的“环境”（如不同的临床场景、不同的分子骨架背景）是未知且难以标注的，论文引入了**向量量化（Vector Quantization, VQ）**技术。通过构建一个可学习的“环境码本”，将数据中的潜环境聚类，模拟出多样化的数据分布。
+
+3.  **不变性合理化提取（Invariant Rationales）**：
+    模型不仅是寻找对预测最重要的子图，更强调寻找在**各种环境下都能保持预测一致性**的核心子结构（即 Rationale）。这确保了模型学到的是生物化学层面的本质交互，而非数据集里的统计噪音。
+
+4.  **数据集依赖的噪声注入（Dataset-dependent Noise Injection）**：
+    相比于传统的随机高斯噪声或实例依赖噪声，IIB-DDI 利用从环境码本中提取的分布作为噪声注入。这种方法能更有效地平衡互信息优化过程，使训练曲线更平滑、损失更低，同时保留了数据集相关的语义信息。
+
+### TFMD 长尾学习
