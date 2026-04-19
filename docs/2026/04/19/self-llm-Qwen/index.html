@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.jpg">
+  <link rel="mask-icon" href="/images/favicon.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="感觉从 Qwen 是不是回方便一点捏记录根据 self-llm 上的教程走一遍 Qwen 模型部署，微调等的流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="self-llm Part 1 | Something about Qwen">
+<meta property="og:url" content="https://blog.sonic-aged.site/2026/04/19/self-llm-Qwen/index.html">
+<meta property="og:site_name" content="Sonic Aged&#39;s Blog">
+<meta property="og:description" content="感觉从 Qwen 是不是回方便一点捏记录根据 self-llm 上的教程走一遍 Qwen 模型部署，微调等的流程。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/19/210029_v2-3d569b07211d04b3c9db063c349d684d_1440w.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/19/205924_ObjectionJapanesePCTrilogy.webp">
+<meta property="article:published_time" content="2026-04-19T07:38:02.000Z">
+<meta property="article:modified_time" content="2026-04-19T13:00:53.646Z">
+<meta property="article:author" content="Sonic Aged">
+<meta property="article:tag" content="DIY">
+<meta property="article:tag" content="LLMs">
+<meta property="article:tag" content="Agents">
+<meta property="article:tag" content="Qwen">
+<meta property="article:tag" content="Fine-tuning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/19/210029_v2-3d569b07211d04b3c9db063c349d684d_1440w.jpg">
+
+
+<link rel="canonical" href="https://blog.sonic-aged.site/2026/04/19/self-llm-Qwen/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/19/self-llm-Qwen/","path":"2026/04/19/self-llm-Qwen/","title":"self-llm Part 1 | Something about Qwen"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>self-llm Part 1 | Something about Qwen | Sonic Aged's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script><script src="/js/pjax.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+  <script class="next-config" data-name="pdf" type="application/json">{"object_url":{"url":"https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.3.1/pdfobject.min.js","integrity":"sha256-jI72I8ZLVflVOisZIOaLvRew3tyvzeu6aZXFm7P7dEo="},"url":"/lib/pdf/web/viewer.html"}</script>
+  <script src="/js/third-party/tags/pdf.js" defer></script>
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.7.0/mermaid.min.js","integrity":"sha256-4+IKDqhZ/sXjc8Wtl2/MsxI4e0s1KpEVdbEP7V/Lz8U="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js" defer></script>
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Sonic Aged's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">A blog about Shit and more Shit</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>links</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="Searching..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%84%9F%E8%A7%89%E4%BB%8E-Qwen-%E6%98%AF%E4%B8%8D%E6%98%AF%E5%9B%9E%E6%96%B9%E4%BE%BF%E4%B8%80%E7%82%B9%E6%8D%8F"><span class="nav-number">1.</span> <span class="nav-text">感觉从 Qwen 是不是回方便一点捏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%92%8C%E8%B0%83%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">部署和调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LoRA-%E5%BE%AE%E8%B0%83"><span class="nav-number">1.2.</span> <span class="nav-text">LoRA 微调</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFLoRA"><span class="nav-number">1.2.1.</span> <span class="nav-text">什么是LoRA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-tuning"><span class="nav-number">1.3.</span> <span class="nav-text">P-tuning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9C%E8%BD%AF%E6%8F%90%E7%A4%BA%E2%80%9D-Soft-Prompts-%EF%BC%9F"><span class="nav-number">1.3.1.</span> <span class="nav-text">核心概念：什么是“软提示” (Soft Prompts)？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AC%E6%8F%90%E7%A4%BA-Hard-Prompts-%E2%80%94%E2%80%94-%E4%BA%BA%E7%B1%BB%E7%9A%84%E5%A4%A7%E7%99%BD%E8%AF%9D"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">硬提示 (Hard Prompts) —— 人类的大白话</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#P-tuning-%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%9A%E8%BD%AF%E6%8F%90%E7%A4%BA-Soft-Prompts-%E2%80%94%E2%80%94-%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">P-tuning 的方法：软提示 (Soft Prompts) —— 模型的参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-tuning-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%EF%BC%88%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%B8%88%E8%A7%86%E8%A7%92%EF%BC%89"><span class="nav-number">1.3.2.</span> <span class="nav-text">P-tuning 的工作原理（数据分析师视角）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%AD%E6%96%AD%E4%BA%86%E6%8D%8F"><span class="nav-number">1.4.</span> <span class="nav-text">为什么中断了捏</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Sonic Aged"
+      src="/images/favicon.jpg">
+  <p class="site-author-name" itemprop="name">Sonic Aged</p>
+  <div class="site-description" itemprop="description">A blog about Shit and more Shit</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SonicAged" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;SonicAged" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:sonicaged404@gmail.com" title="E-Mail → mailto:sonicaged404@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://scholar.google.com/citations?user=wsGCGIMAAAAJ" title="Scholar → https:&#x2F;&#x2F;scholar.google.com&#x2F;citations?user&#x3D;wsGCGIMAAAAJ" rel="noopener me" target="_blank"><i class="fab fa-google-scholar fa-fw"></i>Scholar</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="sidebar-inner sidebar-blogroll">
+      <div class="links-of-blogroll animated">
+        <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+          Links
+        </div>
+        <ul class="links-of-blogroll-list">
+            <li class="links-of-blogroll-item">
+              <a href="https://whaleblog.github.io/" title="https:&#x2F;&#x2F;whaleblog.github.io" rel="noopener" target="_blank">WhaleFall's Blog</a>
+            </li>
+        </ul>
+      </div>
+    </div>
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/04/19/self-llm-Qwen/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/favicon.jpg">
+      <meta itemprop="name" content="Sonic Aged">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sonic Aged's Blog">
+      <meta itemprop="description" content="A blog about Shit and more Shit">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="self-llm Part 1 | Something about Qwen | Sonic Aged's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          self-llm Part 1 | Something about Qwen<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/self-llm-Qwen.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-19 15:38:02 / Modified: 21:00:53" itemprop="dateCreated datePublished" datetime="2026-04-19T15:38:02+08:00">2026-04-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LLMs-and-Agents/" itemprop="url" rel="index"><span itemprop="name">LLMs and Agents</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LLMs-and-Agents/LLMs/" itemprop="url" rel="index"><span itemprop="name">LLMs</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LLMs-and-Agents/LLMs/self-llm/" itemprop="url" rel="index"><span itemprop="name">self-llm</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>6 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="感觉从-Qwen-是不是回方便一点捏"><a href="#感觉从-Qwen-是不是回方便一点捏" class="headerlink" title="感觉从 Qwen 是不是回方便一点捏"></a>感觉从 Qwen 是不是回方便一点捏</h1><p>记录根据 self-llm 上的教程走一遍 Qwen 模型部署，微调等的流程。</p>
+<span id="more"></span>
+
+<h2 id="部署和调用"><a href="#部署和调用" class="headerlink" title="部署和调用"></a>部署和调用</h2><p><del>md AutoDL怎么到现在了还是那种即贵又租不到的样子捏</del></p>
+<p>无所谓，7B 的本地搞搞应该问题不大吧</p>
+<p>整体上来说，就是用 modelscope 下好模型后用<code>transformers</code>包里的<code>AutoTokenizer, AutoModelForCausalLM, GenerationConfig</code>类调用</p>
+<p>这三个类正是这一流程中的关键组件。<code>AutoTokenizer</code> 负责预处理和后处理，<code>AutoModelForCausalLM</code> 是模型主体，而 <code>GenerationConfig</code> 则精细控制模型推理的生成过程。</p>
+<ul>
+<li><p><code>AutoTokenizer</code>：数据清洗与编码&#x2F;解码工具</p>
+<ul>
+<li><strong>将文本编码为 Token ID (转为数字)：</strong> 将字符串 split 不同的语义单位（tokens），然后利用词表，将这些 tokens 映射为模型预定义的整数 ID 序列。这是把非结构化文本数据“结构化”的第一步。</li>
+<li><strong>处理特殊 Token：</strong> 模型通常不仅使用词语，还使用具有特殊含义的 ID。<code>AutoTokenizer</code> 会自动添加例如：<ul>
+<li><code>[CLS]</code> (分类特征前缀) 或 <code>&lt;s&gt;</code> (句子开始)</li>
+<li><code>[SEP]</code> (句子分隔符) 或 <code>&lt;/s&gt;</code> (句子结束)</li>
+<li><code>[PAD]</code> (填充，用于将不同长度的输入补齐到相同长度，以便批处理)</li>
+<li><code>[UNK]</code> (未知词，把词表中没有的词标记为此)</li>
+</ul>
+</li>
+<li><strong>创建 Attention Mask：</strong> 这是一个 0&#x2F;1 的矩阵（或向量），告诉模型输入中的哪些位置是实际的 tokens（值为 1），哪些位置是填充补齐的无效内容（值为 0），以便模型在计算自注意力时忽略它们。</li>
+<li><strong>将 Token ID 解码回文本 (还原数据)：</strong> 在模型生成文本后，将生成的整数 ID 序列还原为人类可读的字符串。</li>
+</ul>
+</li>
+<li><p><code>AutoModelForCausalLM</code>：因果语言模型主体<br>这是模型本身的核心架构和预训练权重的加载器。同样，带有 <code>Auto</code> 前缀，它会自动根据你提供的模型 ID，确定它是 GPT 类型、Llama 类型还是其他类型的架构，并加载对应的具体模型类（例如，如果是 “gpt2”，它会加载 <code>GPT2LMHeadModel</code>）。</p>
+</li>
+<li><p><code>GenerationConfig</code>：生成过程控制中心<br>用来系统地管理和定义这些决策逻辑的配置对象。它将这些控制参数从具体的生成调用中分离出来，使其可复用、可保存、可加载。</p>
+</li>
+</ul>
+<h2 id="LoRA-微调"><a href="#LoRA-微调" class="headerlink" title="LoRA 微调"></a>LoRA 微调</h2><h3 id="什么是LoRA"><a href="#什么是LoRA" class="headerlink" title="什么是LoRA"></a>什么是LoRA</h3><blockquote>
+<p>主要参考了<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/650197598">知乎老哥</a></p>
+</blockquote>
+<p>LoRA (<strong>Lo</strong>w-<strong>R</strong>ank <strong>A</strong>daptation) 指在优化时利用秩更低的$\Delta W$更新训练参数，具体来说，假设权重更新的过程中也有一个较低的本征秩，对于预训练的权重参数矩阵 $W0 \in R^{d \times k}$ ($d$ 为上一层输出维度，$k$ 为下一层输入维度)，使用低秩分解来表示其更新：</p>
+<p>$$<br>W_0 + {\Delta}W &#x3D; W_0 + BA \space\space  where \space B \in R^{d \times r}, A \in R^{r \times k}<br>$$</p>
+<p>在训练过程中，$W_0$冻结不更新，A、B 包含可训练参数。因此，LoRA 的前向传递函数为：</p>
+<p>$$<br>h &#x3D; W_0 x + \Delta W x &#x3D; W_0 x + B A x<br>$$</p>
+<p>在开始训练时，对 A 使用随机高斯初始化，对 B 使用零初始化，然后使用 Adam 进行优化。</p>
+<p>训练思路如图：</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/19/210029_v2-3d569b07211d04b3c9db063c349d684d_1440w.jpg" alt="LoRA"></p>
+<p>本质上来讲，LoRA是通过将参数限制在一个子空间内训练，来达到一个微调的效果</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p><del>感觉就是碉堡捏，所以以后的实现都不写了捏</del></p>
+<h2 id="P-tuning"><a href="#P-tuning" class="headerlink" title="P-tuning"></a>P-tuning</h2><h3 id="核心概念：什么是“软提示”-Soft-Prompts-？"><a href="#核心概念：什么是“软提示”-Soft-Prompts-？" class="headerlink" title="核心概念：什么是“软提示” (Soft Prompts)？"></a>核心概念：什么是“软提示” (Soft Prompts)？</h3><p>在理解 P-tuning 之前，先要明确它的前身——<strong>提示工程 (Prompt Engineering)</strong>。</p>
+<h4 id="硬提示-Hard-Prompts-——-人类的大白话"><a href="#硬提示-Hard-Prompts-——-人类的大白话" class="headerlink" title="硬提示 (Hard Prompts) —— 人类的大白话"></a>硬提示 (Hard Prompts) —— 人类的大白话</h4><p>当我们使用 GPT 或者清华的 ChatGLM 进行任务时，我们会写很多指令：</p>
+<blockquote>
+<p>“你现在是一名精通金融的数据分析师。请阅读以下文本，将所有提到的上市公司的净利润提取出来，并以 JSON 格式返回。文本内容：……”</p>
+</blockquote>
+<p>这种通过人类自然语言编写，由一个一个具体词汇组成的提示，被称为 <strong>“硬提示” (Hard Prompts)</strong>。</p>
+<ul>
+<li><strong>它的局限性：</strong> “硬提示”很难设计，一个字的差别常常导致结果天差地别（提示工程是个细活）。而且输入模型的指令会占用模型的文本输入长度（Context Window），代价昂贵，且无法从根本上修改模型的内部表示。</li>
+</ul>
+<h4 id="P-tuning-的方法：软提示-Soft-Prompts-——-模型的参数"><a href="#P-tuning-的方法：软提示-Soft-Prompts-——-模型的参数" class="headerlink" title="P-tuning 的方法：软提示 (Soft Prompts) —— 模型的参数"></a>P-tuning 的方法：软提示 (Soft Prompts) —— 模型的参数</h4><p><strong>P-tuning (Prompt Tuning) 的核心思想是：与其人工去找那些蹩脚的“硬提示”大白话，不如干脆让模型自己在高维向量空间里去“学习”一种特定的前缀指示。</strong></p>
+<p>这个“特定的前缀”不再是人类可读的文字（如“你是一个分析师”），而是几个可以被训练的、随机初始化的<strong>稠密向量 (Continuous Embedding Vectors)</strong>，我们称之为 <strong>“软提示” (Soft Prompts) 或虚拟 Token (Virtual Tokens)</strong>。</p>
+<h3 id="P-tuning-的工作原理（数据分析师视角）"><a href="#P-tuning-的工作原理（数据分析师视角）" class="headerlink" title="P-tuning 的工作原理（数据分析师视角）"></a>P-tuning 的工作原理（数据分析师视角）</h3><p>作为数据分析师，我们可以这样理解 P-tuning 的流程：</p>
+<ol>
+<li><strong>冻结 (Keep Frozen)：</strong> 我们把巨大的预训练模型（如一个 175B 的模型）的所有原本参数全部<strong>冻结</strong>。在整个 P-tuning 过程中，这些参数都不会改变。意味着，你可以同时为 100 个不同的分析任务使用同一套冻结的模型基础。</li>
+<li><strong>添加 Soft Prompts：</strong> 在我们输入任务数据（比如公司的非结构化报告）的 Embedding 表示前面，拼接上几个（例如 20 个）专门为这个任务准备的 <strong>Soft Prompts 向量</strong>。</li>
+<li><strong>少量可训练参数：</strong> P-tuning 定义了一个非常小的、专门用于学习这些 Soft Prompts 向量的 <strong>“Prompt 编码器 &#x2F; 优化器”</strong> (本质上是一个小的层，例如 LSTM 或 MLP，用于确保 Soft Prompts 在高维空间是连续稳定的)。</li>
+<li><strong>前向传递与反向传播：</strong><ul>
+<li><strong>输入流：</strong> <code>[Soft Prompts (可训练)] + [我们的报告数据 (冻结)]</code> $\rightarrow$ LLM $\rightarrow$ 模型输出。</li>
+<li>我们在特定数据集上进行训练。计算输出和真实标签（例如标准 JSON 格式）的误差。</li>
+<li>在反向传播（训练）时，<strong>梯度只会传递并更新那几个 Soft Prompts 向量的参数</strong>，主模型的几千亿个参数巍然不动。</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/19/205924_ObjectionJapanesePCTrilogy.webp" alt="异议"></p>
+<h2 id="为什么中断了捏"><a href="#为什么中断了捏" class="headerlink" title="为什么中断了捏"></a>为什么中断了捏</h2><p>鼠鼠感觉这个项目更像一个字典，告诉你现有的开源大模型调用和调参的具体步骤。因此所有的项目都大同小异。</p>
+<p>在了解基本的原理之后，感觉剩下就可以vibe了捏</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/DIY/" rel="tag"># DIY</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
+              <a href="/tags/Agents/" rel="tag"># Agents</a>
+              <a href="/tags/Qwen/" rel="tag"># Qwen</a>
+              <a href="/tags/Fine-tuning/" rel="tag"># Fine-tuning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/19/diveintoagents/" rel="prev" title="LLMs and Agents DIY Overview">
+                  <i class="fa fa-angle-left"></i> LLMs and Agents DIY Overview
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Sonic Aged</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Word count total">62k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">3:45</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

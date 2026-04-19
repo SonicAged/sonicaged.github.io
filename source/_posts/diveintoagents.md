@@ -1,9 +1,11 @@
 ---
 title: LLMs and Agents DIY Overview
 categories:
-  - LLM
+  - LLMs and Agents
 tags:
   - DIY
+  - LLMs
+  - Agents
 date: 2026-04-19 14:38:02
 ---
 
@@ -28,4 +30,9 @@ date: 2026-04-19 14:38:02
 2. 吃一下 Agents
    - [hello-agents](https://github.com/datawhalechina/hello-agents)
    - [agentic-design-patterns](https://github.com/xindoo/agentic-design-patterns)
-   - [一个一看就感觉很强的b站老哥]()
+   - [一个一看就感觉很强的b站老哥](https://space.bilibili.com/59807853)
+
+## 结算画面
+
+- [self-llm](https://github.com/datawhalechina/self-llm)
+  感觉是面向应用编程捏，更像是学了这个之后你就可以了解如何把一个模型调成你喜欢的🦆 ~~但实际上你是调不出来的捏~~。有用的部分是是他有大量的代码让你了解如何调用和微调一个开源大模型

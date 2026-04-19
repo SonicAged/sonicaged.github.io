@@ -5,25 +5,25 @@ set -e
 
 # 检查是否提供了提交信息
 if [ -z "$1" ]; then
-  echo "错误：请提供一个提交信息作为参数。"
-  echo "用法: ./git-push.sh \"你的提交信息\""
+  echo "ERROR: Please provide a commit message."
+  echo "Usage: ./deploy.sh \"Your commit message\""
   exit 1
 fi
 
-echo "Git Push 脚本"
+echo "Git Push Script"
 echo
 
-echo "正在添加所有文件..."
+echo "Adding all files..."
 git add --all
 
 echo
-echo "正在提交..."
+echo "Committing..."
 # "$*" 会将所有命令行参数作为一个单一的字符串
 git commit -m "$*"
 
 echo
-echo "正在推送到远程仓库..."
+echo "Pushing to remote repository..."
 git push -u origin main
 
 echo
-echo "完成！"
+echo "Done!"
