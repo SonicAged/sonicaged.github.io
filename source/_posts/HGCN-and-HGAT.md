@@ -1,7 +1,6 @@
 ---
 title: HGCN and HGAT
 categories:
-  - Learning
   - Deep Learning
   - Hypergraph
 tags:

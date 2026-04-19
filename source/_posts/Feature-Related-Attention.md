@@ -1,7 +1,6 @@
 ---
 title: Fufufu Relashinala
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

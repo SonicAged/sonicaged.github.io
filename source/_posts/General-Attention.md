@@ -1,7 +1,6 @@
 ---
 title: Gugugu Neralashun
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

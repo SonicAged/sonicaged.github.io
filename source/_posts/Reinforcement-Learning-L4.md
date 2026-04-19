@@ -1,7 +1,6 @@
 ---
 title: Value Iteration and Policy Iteration
 categories:
-  - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:54:52

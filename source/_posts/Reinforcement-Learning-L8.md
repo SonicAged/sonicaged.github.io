@@ -1,7 +1,6 @@
 ---
 title: Reinforcement-Learning-L8
 categories:
-  - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:55:07

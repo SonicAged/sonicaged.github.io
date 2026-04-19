@@ -1,7 +1,6 @@
 ---
 title: What Is GNN and GCN ?
 categories:
-  - Learning
   - Deep Learning
   - Model
   - GNN

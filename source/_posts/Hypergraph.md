@@ -1,7 +1,6 @@
 ---
 title: Hypergraph Introduction
 categories:
-  - Learning
   - Deep Learning
   - Hypergraph
 tags:

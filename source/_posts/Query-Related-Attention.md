@@ -1,7 +1,6 @@
 ---
 title: Quaqua Rishinala
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

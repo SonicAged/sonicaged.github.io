@@ -1,7 +1,6 @@
 ---
 title: Monte Carlo Methods
 categories:
-  - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:54:56

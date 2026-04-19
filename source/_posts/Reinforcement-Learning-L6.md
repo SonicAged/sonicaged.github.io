@@ -1,7 +1,6 @@
 ---
 title: Reinforcement-Learning-L6
 categories:
-  - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:55:00

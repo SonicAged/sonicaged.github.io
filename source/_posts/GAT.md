@@ -1,7 +1,6 @@
 ---
 title: Woc?! GAT? We're Saved!
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

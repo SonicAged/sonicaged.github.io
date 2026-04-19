@@ -1,7 +1,6 @@
 ---
 title: Trans?!and Former?!
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

@@ -1,7 +1,6 @@
 ---
 title: Attention Overview
 categories:
-  - Learning
   - Deep Learning
   - Model
   - Attention

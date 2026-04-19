@@ -1,7 +1,6 @@
 ---
 title: Basic Concepts
 categories:
-  - Learning
   - ReinForcement Learning
   - Mathmatical Foundation
 date: 2025-07-28 11:38:01
