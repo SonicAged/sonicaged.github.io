@@ -25,7 +25,7 @@ date: 2026-04-19 14:38:02
 
 1. 了解有关LLMs的基础，目前看上的是一套datawhale的项目，中间可能会去吃一些经典的论文，也一并归到此类
    - [self-llm](https://github.com/datawhalechina/self-llm)
-   - [so-large-llm](https://github.com/datawhalechina/so-large-lm)
+   - [so-large-lm](https://github.com/datawhalechina/so-large-lm)
    - [happy-llm](https://github.com/datawhalechina/happy-llm)
 2. 吃一下 Agents
    - [hello-agents](https://github.com/datawhalechina/hello-agents)
@@ -36,3 +36,5 @@ date: 2026-04-19 14:38:02
 
 - [self-llm](https://github.com/datawhalechina/self-llm)
   感觉是面向应用编程捏，更像是学了这个之后你就可以了解如何把一个模型调成你喜欢的🦆 ~~但实际上你是调不出来的捏~~。有用的部分是是他有大量的代码让你了解如何调用和微调一个开源大模型
+- [so-large-lm](https://github.com/datawhalechina/so-large-lm)
+  
