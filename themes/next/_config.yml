@@ -156,8 +156,7 @@ site_state: true
 social:
   GitHub: https://github.com/SonicAged || fab fa-github
   E-Mail: mailto:sonicaged404@gmail.com || fa fa-envelope
-  Bilibili: https://space.bilibili.com/382388784 || fab fa-bilibili
-  163: mailto:18011185053@163.com || fa fa-envelope-circle-user
+  Scholar: https://scholar.google.com/citations?user=wsGCGIMAAAAJ || fab fa-google-scholar
   #Weibo: https://weibo.com/yourname || fab fa-weibo
   #Twitter: https://twitter.com/yourname || fab fa-twitter
   #FB Page: https://www.facebook.com/yourname || fab fa-facebook

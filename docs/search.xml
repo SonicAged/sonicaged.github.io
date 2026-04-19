@@ -958,408 +958,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CDR-model In 2024 | Part 2</title>
-    <url>/2025/07/27/CDR-model-part4/</url>
-    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
-<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
-<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
-<span id="more"></span>
-
-<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
-<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
-
-<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
-<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
-<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
-<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
-<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
-<ul>
-<li><strong>输入</strong>：<ul>
-<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
-<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
-<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
-</ul>
-</li>
-<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
-</ul>
-<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
-<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
-<ul>
-<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
-</li>
-<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
-<ul>
-<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
-<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
-<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
-</ul>
-</li>
-<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
-</li>
-</ul>
-<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
-<ul>
-<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
-<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
-</ul>
-<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
-<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
-<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
-<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
-<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
-</ul>
-</li>
-</ul>
-<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
-<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
-<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
-<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
-</ul>
-<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
-<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
-<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
-<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
-<ul>
-<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
-<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
-</ul>
-<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
-<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
-<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
-<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>contrast learning</tag>
-        <tag>GAN</tag>
-        <tag>dynamic graph</tag>
-        <tag>hypergraph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The Overview of Drug-Drug Interaction</title>
-    <url>/2026/03/09/DDI-Review/</url>
-    <content><![CDATA[<h1 id="DDI-总览"><a href="#DDI-总览" class="headerlink" title="DDI 总览"></a>DDI 总览</h1><p>这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：</p>
-<ol>
-<li>DDI 的任务主要是什么</li>
-<li>DDI 的难点（创新点出现（希望）的位置）</li>
-<li>药物处理方面与 CDR 有什么不同</li>
-</ol>
-<span id="more"></span>
-
-<h2 id="什么是-DDI"><a href="#什么是-DDI" class="headerlink" title="什么是 DDI"></a>什么是 DDI</h2><p>目前，DDI 讨论还是<strong>两</strong>种药物之间的相互作用（$G_x, G_y, r_{xy}$），即一种药物的效用因为另一种药物的存在而发生改变的现象。</p>
-<h3 id="常用数据集"><a href="#常用数据集" class="headerlink" title="常用数据集"></a>常用数据集</h3><p>在构建 DDI 预测模型时，数据往往分布在异构的网络中。最核心的数据集通常分为机制类和表型类：</p>
-<ul>
-<li><strong>DrugBank</strong>：最权威且使用最为频繁的数据集。主要包含药物之间的代谢层面影响（例如药物 A 抑制了代谢药物 B 的酶）。通常包含高度确定的相互作用类型。</li>
-<li><strong>TWOSIDES</strong>：侧重于表型层面（Phenotypic）的信息。它记录了同时服用两种药物产生的、且在单药服用时不会出现的副作用（如恶心、心痛等）。</li>
-<li><strong>DRKG (Drug Repurposing Knowledge Graph) &#x2F; Hetionet</strong>：大型的综合生物医学知识图谱。除了包含只属于药物间的关系外，还整合了药物与基因、蛋白质、疾病之间的复杂关系。</li>
-</ul>
-<h3 id="不同的实验"><a href="#不同的实验" class="headerlink" title="不同的实验"></a>不同的实验</h3><p>由于 DDI 所引入的药物数量实际上远多于 CDR，这也就引出了其与 CDR（正常）的 <em>第一个</em> 不同：<em>DDI 经常讨论测试集中药物不存在与训练集中的情况</em>，具体来说，我们可以将其分为：</p>
-<ul>
-<li><strong>直推式 (Transductive &#x2F; Warm-start)</strong>：测试集中的药物分子在训练集中出现过，我们只是预测已知药物之间的新边（关系）。</li>
-<li><strong>归纳式 (Inductive &#x2F; Cold-start)</strong>：模型在部署时遇到的是结构、特征全新的、从未见过的药物分子（未见分布 OOD），需要仅凭其化学特征来预测交互。</li>
-</ul>
-<hr>
-<h2 id="药物和关系的表示方法"><a href="#药物和关系的表示方法" class="headerlink" title="药物和关系的表示方法"></a>药物和关系的表示方法</h2><p>要把化学物质喂给机器学习模型，我们首先得把它们变成计算机理解的代数对象。与CDR不同的是，有很多 paper 都倾向于使用多种表示方法进行多模态的学习，主要有以下四个维度的表征：</p>
-<ol>
-<li><p>二进制&#x2F;指纹表示法 (Binary Fingerprints)<br>最传统的表示方式（如 MACCS, PubChem, Morgan Fingerprints）。通过检测药物内部是否包含特定的化学子结构，将其转化为定长的独热（One-hot）&#x2F;布尔向量。</p>
-<ul>
-<li><strong>数学表示</strong>：设药物数量为 $N$，特征维度为 $D$（如 MACCS 为 166 维，PubChem 为 881 维）。药物分子可以直接表示为一个特征向量：<br>$$<br>\mathbf{x} \in \{0, 1\}^D<br>$$<br> 其中 $x_i &#x3D; 1$ 表示存在第 $i$ 个子结构。</li>
-</ul>
-</li>
-<li><p>序列表示法 (Sequence &#x2F; SMILES Representation)<br>使用 SMILES 字符串，把 2D 分子结构转化为一维的 ASCII 字符序列（把它当成一段本文来处理），常用 NLP 中的 Transformer &#x2F; LSTM 提取特征。</p>
-<ul>
-<li><strong>数学表示</strong>：药物图被展平为由词表 $\mathcal{V}_{vocab}$ 中标记组成的序列：<br> $$ S &#x3D;[s_1, s_2, \dots, s_L], \quad s_i \in \mathcal{V}_{vocab} $$<br>其中 $L$ 是字符串的长度。</li>
-</ul>
-</li>
-<li><p>二维分子图表示 (2D Graph Representation) (当前最热门)<br>用<strong>图结构数据</strong>直接描述分子，原子是节点，化学键是边。利用 GNN (Graph Neural Networks) 进行消息传递。</p>
-<ul>
-<li><strong>数学表示</strong>：一个药物分子定义为一个图 $G &#x3D; (\mathcal{V}, \mathcal{E})$。</li>
-</ul>
-<ul>
-<li>节点特征矩阵：$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times F_v}$（每一行 $\mathbf{x}_i$ 是第 $i$ 个原子的特征向量，如电荷数、杂化状态）。</li>
-<li>边类型&#x2F;特征矩阵：$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times F_e}$（$\mathbf{e}_{ij}$ 为键的类型，如单键、双键）。</li>
-<li>邻接矩阵：$\mathbf{A} \in \{0, 1\}^{|\mathcal{V}| \times |\mathcal{V}|}$。</li>
-</ul>
-</li>
-<li><p>三维构象表示 (3D Structure)</p>
-</li>
-<li><p>除了分子拓扑连接外，还包含空间原子的相对位置（坐标）。</p>
-<ul>
-<li><strong>数学表示</strong>：除了 2D 的 $\mathbf{X}$ 以外，还引入空间坐标矩阵模型：<br> $$ \mathbf{R} \in \mathbb{R}^{|\mathcal{V}| \times 3} $$</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h3 id="关联关系与知识图谱的表示方法-Relation-KG-Representation"><a href="#关联关系与知识图谱的表示方法-Relation-KG-Representation" class="headerlink" title="关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)"></a>关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</h3><p>为了预测交互作用，两两药物的关系不仅需要依据自身结构，还依赖于外界丰富知识网络的嵌入（Knowledge Graph Embedding, KGE）。</p>
-<p>我们要构建一个包含了实体（药物、蛋白、疾病等）和它们之间关系的异构图谱 $\mathcal{G}_{KG}$：</p>
-<ul>
-<li><strong>知识库的基础单元</strong>：由成千上万个<strong>三元组 (Triples)</strong> 构成：<br>$$ \mathcal{G}_{KG} &#x3D; {(h, r, t) \mid h \in \mathcal{E}, t \in \mathcal{E}, r \in \mathcal{R}} $$<br>其中 $\mathcal{E}$ 是所有实体（Entities）的集合，$\mathcal{R}$ 是所有相互作用关系（Relations）的集合。$h$ 是头实体，$t$ 是尾实体。</li>
-</ul>
-<p>有了图谱结构后，使用 KGE 算法将离散的网络空间映射到连续的低维向量空间 $\mathbb{R}^d$中。论文中总结了几大流派（附经典打分函数 $f(h, r, t)$）：</p>
-<h4 id="A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR"><a href="#A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR" class="headerlink" title="A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)"></a>A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</h4><p>思想：两个实体之间的关系被视为向量空间中的一种几何<strong>平移 (Translation)</strong>。</p>
-<ul>
-<li><strong>数学表示 (以 TransE 为例)</strong>：<br>令投影后的连续向量为 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{R}^d$。<br>目标是使得 $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$。<br>其打分函数为（得分越高表示越不可能是真实的 DDI 边，需加负号）：<br>$$ f(h, r, t) &#x3D; - |\mathbf{h} + \mathbf{r} - \mathbf{t}|_{1&#x2F;2} $$</li>
-</ul>
-<h4 id="B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx"><a href="#B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx" class="headerlink" title="B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)"></a>B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</h4><p>思想：不找平移距离，而是利用矩阵&#x2F;张量乘法，衡量头尾实体在某关系下的相似度及相互匹配性。这是预测 DDI 最经典的 KGE 手段。</p>
-<ul>
-<li><strong>数学表示 (以 RESCAL 或其简化版 DistMult 为例)</strong>：<br>实体编码为 $\mathbf{h}, \mathbf{t} \in \mathbb{R}^d$。关系被表示为对角矩阵 $\mathbf{M}_r &#x3D; \text{diag}(\mathbf{r})$（其中 $\mathbf{r} \in \mathbb{R}^d$）。<br>打分函数定义为双线性内积：<br>$$ f(h, r, t) &#x3D; \mathbf{h}^\top \mathbf{M}_r \mathbf{t} &#x3D; \sum_{i&#x3D;1}^{d} h_i \cdot r_i \cdot t_i $$<br>（在更复杂的 ComplEx 模型中，向量会被映射到复数域 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{C}^d$，以解决 DDI 关系中的非对称性问题）。</li>
-</ul>
-<h4 id="C-数据分析中的联合打分-Fusion-Prediction-Layer"><a href="#C-数据分析中的联合打分-Fusion-Prediction-Layer" class="headerlink" title="C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)"></a>C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</h4><p>最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：<br>$$ P(r \mid A, B) &#x3D; \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}_{structure}(G_A) \oplus \text{GNN}_{structure}(G_B) \oplus \mathbf{h}_{KG} \oplus \mathbf{t}_{KG} \big] + \mathbf{b} \Big) $$<br>其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。</p>
-<h2 id="数据集不同引出的模型构造思路的不同"><a href="#数据集不同引出的模型构造思路的不同" class="headerlink" title="数据集不同引出的模型构造思路的不同"></a>数据集不同引出的模型构造思路的不同</h2><p>由于前面提到的：<em>有直推式和归纳式的模型</em>，而这两种模型的区别在于：重点处理药物表示（通过自监督的方式学习特征）还是处理药物关系（通过KGE）</p>
-<h2 id="超图在-DDI-中的应用"><a href="#超图在-DDI-中的应用" class="headerlink" title="超图在 DDI 中的应用"></a>超图在 DDI 中的应用</h2><p>超图在 DDI 中的应用主要分为两种：</p>
-<ol>
-<li>将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）</li>
-<li>将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）</li>
-</ol>
-<h2 id="大模型在DDI中的应用"><a href="#大模型在DDI中的应用" class="headerlink" title="大模型在DDI中的应用"></a>大模型在DDI中的应用</h2><p>由于NLP的知识过于孱弱，完全看不懂他在干嘛，所以最近决定先去简单了解一下LLM捏</p>
-]]></content>
-      <categories>
-        <category>DDI</category>
-        <category>Review</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>DDI</tag>
-        <tag>Knowledge Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Half-Monthly DDI Record</title>
-    <url>/2026/03/24/DDI-Week3~4/</url>
-    <content><![CDATA[<h1 id="3-4周里入到🧠的DDI"><a href="#3-4周里入到🧠的DDI" class="headerlink" title="3~4周里入到🧠的DDI"></a>3~4周里入到🧠的DDI</h1><p>DDI 真神奇捏。阿巴阿巴阿巴</p>
-<span id="more"></span>
-
-<h2 id="这周看到的蛮不赖的几篇捏"><a href="#这周看到的蛮不赖的几篇捏" class="headerlink" title="这周看到的蛮不赖的几篇捏"></a>这周看到的蛮不赖的几篇捏</h2><table>
-<thead>
-<tr>
-<th>Title</th>
-<th align="left">Algorithm</th>
-<th align="left">Journal&#x2F;Conference</th>
-<th align="left">Motivation (challenges)</th>
-<th align="left">DMG</th>
-<th align="left">KG</th>
-<th align="left">Fusion strategy</th>
-<th align="left">etc.</th>
-<th align="left">Year</th>
-<th align="left">Objection</th>
-<th align="left">Exp</th>
-<th align="left">Drugs</th>
-<th align="left">Interactions</th>
-<th align="left">Others</th>
-<th align="left">Questions</th>
-<th align="left">LeZi</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RaHDCL: Relation-aware hypergraph diffusion contrastive learning for drug-drug interaction event prediction</td>
-<td align="left">RaHDCL</td>
-<td align="left">Knowledge-Based Systems</td>
-<td align="left">阐述了similarity-based &amp; graph-based model的缺陷; 1. 关于特征信息的化学一致性  2. 对比学习</td>
-<td align="left"></td>
-<td align="left">超图, 扩散模型, 多时间步noising denoising超图</td>
-<td align="left"></td>
-<td align="left">1. 扩散模型, 每一时间步产生noising和denoising两幅图; 2. 相同event连接多个节点构成超图, event超边是有边特征的</td>
-<td align="left">2026</td>
-<td align="left">multiclass classification</td>
-<td align="left">case study; Robustness analysis</td>
-<td align="left">SMILES (2 fingerprint)</td>
-<td align="left">Deng’s dataset; Ryu’s dataset</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">照理来说把两两关系揉在一起不是会丢失部分信息吗，可以有方法在构建超图的时候将两两关系也考虑进去吗</td>
-</tr>
-<tr>
-<td>Dual-channel heterogeneous graph framework with multi-view contrastive learning for drug–drug interaction prediction</td>
-<td align="left">GEMCL</td>
-<td align="left">Engineering Applications of Artificial Intelligence</td>
-<td align="left">1. 目前工作在实验中缺乏对 new or unseen drugs 的interaction预测; 2. 对于同时使用药物molecular graph和KG的方法, 融合策略欠缺</td>
-<td align="left">图扰动+预训练GCN</td>
-<td align="left">多生物节点KG+图扰动+GCN</td>
-<td align="left">gated feature Fusion + CL</td>
-<td align="left">1. 设计了图扰动策略和对比学习; 2. 使用预训练的GNN模型图学习. 预训练的调参方法也很新颖 in 2.4</td>
-<td align="left">2026</td>
-<td align="left">multiclass &amp; multilabel classification</td>
-<td align="left">1. 实验涵设计充分, transductive &amp; Inductive; 2. 在3.9中有模块可解释性分析. 3. case study</td>
-<td align="left">SMILES</td>
-<td align="left">DB; TWOSIDES (multilabel数据集)</td>
-<td align="left">多生物实体KG来自数据集external DRKG</td>
-<td align="left"></td>
-<td align="left">何意味？！BKG的关系有108种？？？</td>
-</tr>
-<tr>
-<td>DMCL-DDI: A dual-view molecular contrastive learning framework for drug-drug interaction prediction</td>
-<td align="left">DMCL-DDI</td>
-<td align="left">Expert Systems with Applications</td>
-<td align="left">一些方法仅考虑 single-view, 多数 dual-view 的方法则没考虑 atomic level 的特征</td>
-<td align="left">DMG 通过 GAT 提取特征, inter (药物 pair 的特征, 通过乘积构建) + intra (单个药物)</td>
-<td align="left"></td>
-<td align="left">CL</td>
-<td align="left">新颖的 drug pair 之间子结构关联的构建方式, 构建 inter grpah 是两个药物 molecular graph 的乘积</td>
-<td align="left">2026</td>
-<td align="left">binary classification</td>
-<td align="left">inductive exp; Case study 有 substructure 的交互图</td>
-<td align="left">SMILES</td>
-<td align="left">DB;TWOSIDES</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>SynCaps-DDI: A hybrid neural model combining capsule networks and syntactic graph convolution for drug–drug interaction extraction</td>
-<td align="left">SynCaps-DDI</td>
-<td align="left">Biomedical Signal Processing and Control</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">利用句法构建 KG(非 DDI 关系)</td>
-<td align="left">concat</td>
-<td align="left">利用 BioBERT 处理 token,送入并行的双分支结构(RGCN 提取句法图连接信息,CapsNetwork 提取长程依赖信息)</td>
-<td align="left">2026</td>
-<td align="left">multi-class classification</td>
-<td align="left">1.声明了不平衡数据无下采样等操作.<br/>2.外部验证.<br/>3.定量误差分析,分析模型模块与出错模式之间的关联.<br/>4.Robustness analysis</td>
-<td align="left">无;模型的输入是一句说明性的话,xx 与药物 xx 可以联用之类的</td>
-<td align="left">DDI Extraction 2013 dataset ;TAC 2018 DDI extraction dataset (外部验证)</td>
-<td align="left">输入的是一句话,交给分词模型</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>Devil in the Tail: A Multi-Modal Framework for Drug-Drug Interaction Prediction in Long Tail Distinction</td>
-<td align="left"><strong>TFMD</strong></td>
-<td align="left">CIKM ‘24</td>
-<td align="left">DDI 类型分布呈极端长尾特性；现有模型对头部类存在高度偏见；忽视了药物的多面属性及其协作互补。</td>
-<td align="left">基于图的特征（聚合邻居节点信息）</td>
-<td align="left">未直接使用外部 KG ，但融合了 Target 和 Enzyme 特征。</td>
-<td align="left"><strong>模态增强融合 (Modality Enhancement Fusion)</strong>：使用 SMILES 语义增强化学图空间特征，使用 Enzyme 增强 Target 表达。</td>
-<td align="left">引入 <strong>Tailed Focal Loss (TFL)</strong> 解决长尾分布下的梯度消失问题；使用 Transformer 提取 SMILES 序列特征。</td>
-<td align="left">2024</td>
-<td align="left">multi-class (110 &amp; 171类)</td>
-<td align="left">宏平均指标 (Accuracy, F1, AUPR 等)；长尾数据集验证。</td>
-<td align="left">SMILES, 化学图, Target, Enzyme</td>
-<td align="left">DDI-DB110, DDI-DB171, DDIMDL, MUFFIN</td>
-<td align="left">源码已开源 (GitHub)</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>DDIPrompt: Drug-Drug Interaction Event Prediction based on Graph Prompt Learning</td>
-<td align="left"><strong>DDIPrompt</strong></td>
-<td align="left">CIKM ‘24</td>
-<td align="left">DDI 事件分布高度不平衡；罕见事件的标签数据极度稀缺；现有 GNN 模型依赖大量监督。</td>
-<td align="left">双视图图注意力网络 (Capture intra-molecular structures)</td>
-<td align="left">结合预训练的生物医学知识图谱嵌入 (Pre-trained KG embedding)</td>
-<td align="left"><strong>分层预训练 + Prompt 调优</strong>：先通过相似度预测和链路预测进行预训练，再冻结模型使用类原型(Class Prototypes)作为 Prompt 。</td>
-<td align="left">提出<strong>原型增强提示机制 (Prototype-enhanced prompting)</strong>，适配少样本 (Few-shot) 场景。</td>
-<td align="left">2024</td>
-<td align="left">multi-class edge prediction</td>
-<td align="left">弱监督 (20%训练比例)；消融实验；超参数敏感性分析。</td>
-<td align="left">分子图, 知识图谱嵌入</td>
-<td align="left">Deng’s dataset, DrugBank dataset</td>
-<td align="left">首次在药物领域尝试图提示学习 (Graph Prompt Learning)</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td>IIB-DDI: Invariant Information Bottleneck Theory for Out-of-Distribution Drug-Drug Interaction Prediction</td>
-<td align="left"><strong>IIB-DDI</strong></td>
-<td align="left">IEEE TCBB (2025)</td>
-<td align="left">药物子结构分布不均导致模型依赖虚假关系；分布偏移 (OOD) 下泛化能力差。</td>
-<td align="left">使用 MPNN (消息传递神经网络) 编码分子结构</td>
-<td align="left"><strong>环境码本 (Environment Codebook)</strong>：通过矢量量化 (VQ) 学习潜在环境分布。</td>
-<td align="left"><strong>不变信息瓶颈 (Invariant IB)</strong>：利用IB理论提取核心子图，结合VQ聚类环境因素。</td>
-<td align="left">引入<strong>不变学习 (Invariant Learning)</strong> 寻找在不同环境下性能稳定的“理性”子结构；通过噪声注入优化互信息。</td>
-<td align="left">2025</td>
-<td align="left">multiclass &amp; binary</td>
-<td align="left">换能 (Transductive) 与 归纳 (Inductive, 包括Type 1&#x2F;2) 实验；OOD 场景验证。</td>
-<td align="left">分子图 (SMILES转换)</td>
-<td align="left">ZhangDDI, ChChMiner, DeepDDI, DrugBank</td>
-<td align="left">侧重于解决分布偏移和泛化性能 (OOD)</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-<h3 id="RaHDCL-超图扩散-对比学习"><a href="#RaHDCL-超图扩散-对比学习" class="headerlink" title="RaHDCL 超图扩散 + 对比学习"></a>RaHDCL 超图扩散 + 对比学习</h3><ol>
-<li>用关系构造超图，具有同一 DDI event 的药物之间连一条超边</li>
-<li>超图扩散以增强鲁棒性，之后也有对应的鲁棒性实验，但这个不是应该对比下降幅度吗？难道是结果不太好？</li>
-<li>层次对比学习。通过对原始视图和扩散增强视图进行层次化对比，模型能够学习到更具判别力的表征，充分挖掘隐藏在稀疏交互数据后的语义一致性</li>
-</ol>
-<h4 id="具体来说"><a href="#具体来说" class="headerlink" title="具体来说"></a>具体来说</h4><p>关系感知超图扩散（Relation-aware Hypergraph Diffusion）</p>
-<p>模型通过扩散过程对药物-事件关系进行增强。输入为药物 $i$ 在超图中的关系向量 $h_i \in {0, 1}^{|\mathcal{E}|}$。</p>
-<ol>
-<li><p>前向扩散过程（Forward Process）<br> 模型在 $T$ 个时间步内向原始结构 $x_0 &#x3D; h_i$ 逐步添加高斯噪声。<br> 给定噪声表（Noise Schedule） $\beta_t \in (0, 1)$，第 $t$ 步的状态分布为：<br> $$q(x_t | x_{t-1}) &#x3D; \mathcal{N}(x_t; \sqrt{1-\beta_t}x_{t-1}, \beta_t \mathbf{I})$$</p>
-<p> 利用重参数化技巧，可以直接从 $x_0$ 推导出 $x_t$ 的闭式解：<br> $$q(x_t | x_0) &#x3D; \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)\mathbf{I})$$<br> 其中 $\alpha_t &#x3D; 1 - \beta_t$，且 $\bar{\alpha}<em>t &#x3D; \prod</em>{i&#x3D;1}^t \alpha_i$。</p>
-</li>
-<li><p>关系感知逆向去噪（Reverse Denoising）<br> 去噪网络 $\theta$ 的目标是根据噪声状态 $x_t$ 和<strong>条件信息 $x_a$</strong>（药物成对关系）还原 $x_0$。<br> RaHDCL 引入了**交叉注意力机制（Cross-Attention）**来融合超图噪声状态和药物关系条件：</p>
-<p> 假设 $z_h &#x3D; \text{Linear}(x_t)$，$z_a &#x3D; \text{Linear}(x_a)$，则预测的 $x_0$ 为：<br> $$x_{\theta}(x_t, x_a, t) &#x3D; \sigma \left( z_h + \text{softmax}\left( \frac{(z_h \mathbf{W}^Q)(z_a \mathbf{W}^K)^T}{\sqrt{d}} \right) (z_h \mathbf{W}^V) \right)$$<br> 其中 $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V$ 是可学习的投影矩阵，$d$ 是特征维度。</p>
-<p> <strong>扩散损失函数</strong>：<br> $$\mathcal{L}_d &#x3D; \mathbb{E}_{t, x_0, \epsilon} \left[ \frac{\alpha_{t-1} - \alpha_t}{2(1-\bar{\alpha}_{t-1})(1-\bar{\alpha}_t)} | x_{\theta}(x_t, x_a, t) - x_0 |^2_2 \right]$$</p>
-</li>
-</ol>
-<p>层次对比学习（Hierarchical Contrastive Learning）</p>
-<p>扩散增强后的超图 $\mathcal{G}’$ 与原始超图 $\mathcal{G}$ 构成对比视图。模型在两个层级应用 InfoNCE 损失。</p>
-<ol>
-<li><p>超边级对比学习（Hyperedge-level Contrast）<br> 该层级旨在确保相同的 DDI 事件（超边）在不同视图下具有一致的表征。<br> 设 $h_e$ 为原始视图中事件 $e$ 的嵌入，$h’_e$ 为增强视图中的嵌入，其对比损失为：<br> $$L_h &#x3D; \frac{1}{|\mathcal{E}|} \sum_{e \in \mathcal{E}} -\log \frac{\exp(\text{sim}(h_e, h’_e) &#x2F; \tau)}{\sum_{j \in \mathcal{E}} \exp(\text{sim}(h_e, h’_j) &#x2F; \tau)}$$<br> 其中 $\text{sim}(\cdot)$ 为余弦相似度，$\tau$ 为温度参数。</p>
-</li>
-<li><p>药物节点级对比学习（Drug-level Contrast）<br> 该层级旨在增强药物在 sparse（稀疏）DDI 图中的鲁棒性。<br> 设 $v_n$ 为原始视图中药物 $n$ 的嵌入，$v’_n$ 为增强视图中（由增强后的边特征生成的）药物嵌入：<br> $$L_n &#x3D; \frac{1}{|\mathcal{V}|} \sum_{n \in \mathcal{V}} -\log \frac{\exp(\text{sim}(v_n, v’_n) &#x2F; \tau)}{\sum_{k \in \mathcal{V}} \exp(\text{sim}(v_n, v’_k) &#x2F; \tau)}$$</p>
-</li>
-<li><p>联合优化目标<br> 模型最终通过加权组合监督预测损失（交叉熵 $\mathcal{L}_{sup}$）和层次对比损失进行训练：<br> $$\mathcal{L}_{total} &#x3D; \mathcal{L}_{sup} + \epsilon_1 L_h + (1 - \epsilon_1) L_n$$<br> 其中 $\epsilon_1$ 是用于调节超边级和节点级对比强度权重的超参数。</p>
-</li>
-</ol>
-<h3 id="GEMCL-自适应门控特征融合-多视图对比学习"><a href="#GEMCL-自适应门控特征融合-多视图对比学习" class="headerlink" title="GEMCL 自适应门控特征融合 + 多视图对比学习"></a>GEMCL 自适应门控特征融合 + 多视图对比学习</h3><ol>
-<li>自适应门控特征融合 (Gated Feature Fusion)：设计了一个动态门控机制，能够根据不同预测场景（如已知药物 vs. 新药）自动调节结构特征与语义特征的权重。</li>
-<li>多视图对比学习 (Multi-view Contrastive Learning)：在训练阶段引入四个维度的对比损失（视图内一致性与跨通道对齐），解决了数据偏移问题并增强了表征的判别力。</li>
-<li>预训练机制：针对 DMG 采用节点遮蔽（Node Masking），针对 BKG 采用链路预测（Link Prediction），为下游任务提供了优秀的特征初始化。</li>
-</ol>
-<h4 id="关于可解释性实验"><a href="#关于可解释性实验" class="headerlink" title="关于可解释性实验"></a>关于可解释性实验</h4><ol>
-<li><strong>在 S1 场景（已知药物预测）中</strong>：的中位数约为 0.42。这说明当药物在 BKG 中有丰富的关联数据（如已知的靶点、疾病关系）时，模型认为知识图谱特征和结构特征同等重要，甚至稍微偏向利用外部知识。</li>
-<li><strong>在 S3 场景（新药-新药预测）中</strong>：的中位数显著上升至 0.87。<br>解释：对于完全没见过的新药，它们在 BKG 中通常是孤立节点，缺乏可靠的外部链接语义。此时，模型通过门控机制“自发地”意识到外部知识是不可信的（Noise），因此自动将注意力转移到药物的**内在化学结构（DMG）**上。</li>
-</ol>
-<h3 id="DMCL-DDI"><a href="#DMCL-DDI" class="headerlink" title="DMCL-DDI"></a>DMCL-DDI</h3><ol>
-<li>引入了药物和药物的乘积的概念</li>
-<li>子结构可视化的实验</li>
-</ol>
-<h3 id="IIB-DDI-OOD-不变学习"><a href="#IIB-DDI-OOD-不变学习" class="headerlink" title="IIB-DDI OOD + 不变学习"></a>IIB-DDI OOD + 不变学习</h3><ol>
-<li><p><strong>聚焦 OOD 泛化问题（Out-of-Distribution）</strong>：<br>传统的 DDI（药物-药物相互作用）预测模型在面对未见过的新药或分布改变的数据集时，性能往往大幅下降。本文首次系统地结合了<strong>信息瓶颈（IB）理论</strong>和<strong>不变学习（Invariant Learning）</strong>，旨在解决药物子结构分布不均导致的“伪相关”问题。</p>
-</li>
-<li><p><strong>引入环境码本（Environment Codebook）</strong>：<br>由于药物数据的“环境”（如不同的临床场景、不同的分子骨架背景）是未知且难以标注的，论文引入了**向量量化（Vector Quantization, VQ）**技术。通过构建一个可学习的“环境码本”，将数据中的潜环境聚类，模拟出多样化的数据分布。</p>
-</li>
-<li><p><strong>不变性合理化提取（Invariant Rationales）</strong>：<br>模型不仅是寻找对预测最重要的子图，更强调寻找在<strong>各种环境下都能保持预测一致性</strong>的核心子结构（即 Rationale）。这确保了模型学到的是生物化学层面的本质交互，而非数据集里的统计噪音。</p>
-</li>
-<li><p><strong>数据集依赖的噪声注入（Dataset-dependent Noise Injection）</strong>：<br>相比于传统的随机高斯噪声或实例依赖噪声，IIB-DDI 利用从环境码本中提取的分布作为噪声注入。这种方法能更有效地平衡互信息优化过程，使训练曲线更平滑、损失更低，同时保留了数据集相关的语义信息。</p>
-</li>
-</ol>
-<h3 id="TFMD-长尾学习"><a href="#TFMD-长尾学习" class="headerlink" title="TFMD 长尾学习"></a>TFMD 长尾学习</h3>]]></content>
-      <categories>
-        <category>DDI</category>
-        <category>Daily</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>DDI</tag>
-        <tag>Knowledge Graph</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>CDR model In 2024 | Part 1</title>
     <url>/2025/07/27/CDR-model-part3/</url>
     <content><![CDATA[<h1 id="2024年的CDR模型easy-come"><a href="#2024年的CDR模型easy-come" class="headerlink" title="2024年的CDR模型easy come"></a>2024年的CDR模型<del>easy come</del></h1><p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
@@ -1680,235 +1278,405 @@
       </tags>
   </entry>
   <entry>
-    <title>Fufufu Relashinala</title>
-    <url>/2025/07/14/Feature-Related-Attention/</url>
-    <content><![CDATA[<h1 id="在输入特征上做文章的-Attention"><a href="#在输入特征上做文章的-Attention" class="headerlink" title="在输入特征上做文章的 Attention"></a>在输入特征上做文章的 Attention</h1><p>本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。</p>
-<div style="display: flex; align-items: center;">
-  <img src="\img\Attention\Fufufu Relashinala.png" style="width: 200px; margin-right: 20px;">
-  <p>
-  具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。
-  </p>
-</div>
-
-
-
-<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+    <title>CDR-model In 2024 | Part 2</title>
+    <url>/2025/07/27/CDR-model-part4/</url>
+    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
+<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
 <span id="more"></span>
 
-<h2 id="特征多重性-Multiplicity-of-Features"><a href="#特征多重性-Multiplicity-of-Features" class="headerlink" title="特征多重性(Multiplicity of Features)"></a>特征多重性(Multiplicity of Features)</h2><p>这部分讨论了如何处理多个输入源的特征，主要分为单一特征注意力和多特征注意力机制。</p>
-<h3 id="单一特征注意力-Singular-Features-Attention"><a href="#单一特征注意力-Singular-Features-Attention" class="headerlink" title="单一特征注意力(Singular Features Attention)"></a>单一特征注意力(Singular Features Attention)</h3><p>大多数任务模型只处理单一输入(如图像、句子或声音序列)，使用单一特征注意力机制。这种机制直接对单个输入的特征向量进行注意力计算。</p>
-<h3 id="多特征注意力机制"><a href="#多特征注意力机制" class="headerlink" title="多特征注意力机制"></a>多特征注意力机制</h3><p>当模型需要同时处理多个输入源时，需要特殊的多特征注意力机制：</p>
-<p><strong>协同注意力(Co-attention)</strong></p>
-<ul>
-<li>分为 <strong>粗科粒度(Coarse-grained)</strong> 和 <strong>细颗粒度(Fine-grained)</strong> 两种</li>
-<li><strong>粗颗粒度协同</strong>注意力使用一个输入的<em>紧凑表示</em>作为查询来关注另一个输入</li>
-<li><strong>细颗粒度协同</strong>注意力使用一个输入的所有特征向量作为查询</li>
-</ul>
-<h4 id="粗颗粒度协同"><a href="#粗颗粒度协同" class="headerlink" title="粗颗粒度协同"></a>粗颗粒度协同</h4><p>论文给出的粗颗粒度协同的实例是<strong>alternating co-attention</strong></p>
-<h5 id="alternating-co-attention"><a href="#alternating-co-attention" class="headerlink" title="alternating co-attention"></a>alternating co-attention</h5><img src="/img/Attention/AlternatingCo-Attention.png" alt="alternating co-attention" width="60%" height="auto">
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
+<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
 
-<p>如上图所示，这是 alternating co-attention 的架构图，该机制交替使用两个输入的特征矩阵，先计算第一个输入的注意力，将其上下文向量作为查询计算第二个输入的注意力，然后再用第二个输入的上下文向量重新计算第一个输入的注意力。</p>
-<p>这里现给出他的 score 函数</p>
-<p>对于有序列输入的 Attention：</p>
-<p>$$<br>\mathrm{score}(\underset{d_{q}\times1}{\boldsymbol{q}},\underset{d_{k}\times1}{\boldsymbol{k}_{l}})&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{T}}\times\mathrm{act}(\underset{d_{w}\times d_{q}}{\boldsymbol{W}_{1}}\times\underset{d_{q}\times1}{\boldsymbol{q}}+\underset{d_{w}\times d_{k}}{\boldsymbol{W}_{2}}\times\underset{d_{k}\times1}{\boldsymbol{k}_{l}}+\underset{d_{w}\times1}{\boldsymbol{b}})<br>$$</p>
-<p>对于无序列输入的 Attention <del>（这是一种自注意力机制，后面会提到）</del> ：</p>
-<p>$$<br>\underset{1\times1}{e_{l}^{(0)}}&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{(1)T}}\times\operatorname{act}(\underset{d_{w}\times d_{k}^{(1)}}{\boldsymbol{W}^{(1)}}\times\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}}+\underset{d_{w}\times1}{\boldsymbol{b}^{(1)}})<br>$$</p>
-<p>对于第二层 Attention：</p>
-<p>$$<br>\underset{1\times1}{e_{l}^{(2)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(1)}\times 1}{\boldsymbol{c}^{(0)}},\underset{d_{k}^{(2)}\times1}{\boldsymbol{k}_{l}^{(2)}})<br>$$</p>
-<p>对于第三层 Attention：</p>
-<p>$$<br>\underset{1\times1}{e_{l}^{(1)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(2)}\times 1}{\boldsymbol{c}^{(2)}},\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}})<br>$$</p>
-<p>生成的上下文向量$\boldsymbol{c}^{(1)}$和$\boldsymbol{c}^{(2)}$被连接起来，并在输出模型中用于预测。交替协同注意力由于需要一个接一个地计算上下文向量，因此本质上包含了<em>一种顺序性</em>。这可能会带来计算上的劣势，因为<em>无法并行</em>化。</p>
-<h5 id="interactive-co-attention"><a href="#interactive-co-attention" class="headerlink" title="interactive co-attention"></a>interactive co-attention</h5><img src="/img/Attention/InteractiveCo-Attention.png" alt="interactive co-attention" width="60%" height="auto">
-
+<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
+<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
+<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
+<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
+<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
 <ul>
-<li>并行计算两个输入的注意力</li>
-<li>使用未加权平均的关键向量作为查询</li>
-<li>计算效率更高，可以并行处理</li>
-</ul>
-<p>$$<br>\underset{d_k^{(i)}\times1}{\bar{\boldsymbol{k}}^{(i)}}&#x3D;\frac{1}{n_f^{(i)}}\sum\limits_{l&#x3D;1}^{n_f^{(i)}}\underset{d_k^{(i)}\times1}{\boldsymbol{k}_l^{(i)}}, \quad \underset{1\times1}{e_{l}^{(i)}}&#x3D;\mathrm{score}(\underset{d_{k}^{(3-i)}\times1}{\bar{\boldsymbol{k}}^{(3-i)}},\underset{d_{k}^{(i)}\times1}{\boldsymbol{k}_{l}^{(i)}}) , \qquad i&#x3D;1,2<br>$$</p>
-<h4 id="细颗粒度协同"><a href="#细颗粒度协同" class="headerlink" title="细颗粒度协同"></a>细颗粒度协同</h4><p>虽然粗粒度的共同注意力机制使用一个输入的紧凑表示作为查询，以计算另一个输入的注意力，但细粒度的共同注意力在计算注意力分数时会单独考虑每个输入的每个元素。在这种情况下，查询变成了一个矩阵。</p>
-<h5 id="并行协同注意力-Parallel-Co-attention"><a href="#并行协同注意力-Parallel-Co-attention" class="headerlink" title="并行协同注意力(Parallel Co-attention)"></a>并行协同注意力(Parallel Co-attention)</h5><img src="/img/Attention/ParallelCo-Attention.png" alt="parallel co-attention" width="60%" height="auto">
-
-<ul>
-<li>同时计算两个输入的注意力</li>
-<li>使用亲和矩阵(Affinity Matrix)转换关键向量空间</li>
-<li>通过聚合形式计算注意力分数</li>
-</ul>
-<p>我们有两种方式生成矩阵 $\mathbf{A}$</p>
-<p>$$<br>\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{\mathbf{A}}&#x3D;\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})<br>$$</p>
-<p>$$<br>\underset{1\times1}{A_{i,j}}&#x3D;\underset{1\times3d_{k}}{\boldsymbol{w}_{A}^{T}}\times\mathrm{concat}(\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}},\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}},\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}}\circ\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}})<br>$$</p>
-<p>其中，$\circ$表示哈德曼积</p>
-<p>Affinity Matrix 可以解释为两个键矩阵列的相似性矩阵，并有助于将图像键转换到与句子中单词的键相同的空间，反之亦然。</p>
-<p>由于现在查询由向量变成了矩阵，因此 score 函数也发生了变化</p>
-<p>$$<br>e^{(1)} &#x3D;\boldsymbol{w}_{1}\times\mathrm{act}(\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)}\times\boldsymbol{A}^{T}+\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)})<br>$$</p>
-<p>$$<br>e^{(2)} &#x3D;\boldsymbol{w}_{2}\times\mathrm{act}(\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)}\times\boldsymbol{A}^{::}+\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)})<br>$$</p>
-<p>值得一提的是，之前的 score 函数实际是现在这一形式的特殊表达，也就是说，这个表达更具一般性</p>
-<p>如前所述，亲和矩阵本质上是两个注意力模块 1 和 2 的关键向量的相似性矩阵。这个意味着一种不同的确定注意力分数的方法。即，可以将一行或一列中的最大相似度值作为注意力分数。</p>
-<p>$$<br>e_{i}^{(1)}&#x3D;\max_{j&#x3D;1,\ldots,n_{f}^{(2)}}A_{i,j},\quad e_{j}^{(2)}&#x3D;\max_{i&#x3D;1,\ldots,n_{f}^{(1)}}A_{i,j}.<br>$$</p>
-<h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><p>Rotatory Attention 是一种用于处理多输入数据的注意力机制，特别适用于情感分析任务中同时考虑目标短语、左上下文和右上下文的场景。该机制通过交替关注不同输入来构建更丰富的表示。</p>
-<ul>
-<li>主要用于情感分析任务</li>
-<li>处理三个输入：目标短语 $\boldsymbol{F}^{t} &#x3D; [ \boldsymbol{f}_{1}^{t}, \ldots , \boldsymbol{f}_{n_{f}^{t}}^{t}] \in \mathbb{R} ^{d_{f}^{t}\times n_{f}^{t}}$ 、左上下文 $\boldsymbol{F^{l}} &#x3D; [ \boldsymbol{f_{1}^{l}}, \ldots , \boldsymbol{f_{n_{f}^{l}}^{l}}]\in\mathbb{R} ^{d_{f}^{l}\times n_{f}^{l}}$ 和右上下文 $\boldsymbol{F^{r}} &#x3D; [ \boldsymbol{f_{1}^{r}}, \ldots , \boldsymbol{f_{n_{f}^{r}}^{r}}]\in\mathbb{R}^{d_f^r\times n_f^r}$</li>
-<li>通过注意力机制迭代改进表示</li>
-</ul>
-<p>其大致的过程如下：</p>
-<ol>
-<li><p><strong>初始特征提取</strong></p>
-<p>首先，模型从三个输入中提取特征向量目标短语特征矩阵 $\boldsymbol{F}^{t}$ 左上下文特征矩阵 $\boldsymbol{F^{l}}$ 右上下文特征矩阵 $\boldsymbol{F^{r}}$ </p>
-</li>
-<li><p><strong>目标短语初始表示</strong></p>
-<p>计算目标短语的初始表示向量$r^{t}$，通过对特征向量取平均：</p>
-<p>$$<br>r^{t}&#x3D;\frac{1}{n_{f}^{t}}\sum_{i&#x3D;1}^{n_{f}^{t}} f_{i}^{t}<br>$$</p>
-</li>
-<li><p><strong>左上下文注意力计算</strong></p>
-<p>使用$r^{t}$作为查询，计算左上下文的注意力：</p>
-<ol>
-<li><p>提取键向量 $k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{k}^{l}}$ 和值向量 $v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{v}^{l}}$</p>
-</li>
-<li><p>计算注意力分数 $e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)$</p>
-</li>
-<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{l}$</p>
-</li>
-<li><p>计算左上下文表示向量 $r^{l}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{l}} a_{i}^{l}v_{i}^{l}$</p>
-</li>
-</ol>
-</li>
-<li><p><strong>右上下文注意力计算</strong></p>
-<p>类似地，计算右上下文的表示向量$r^{r}$：</p>
-<ol>
-<li><p>提取键向量 $k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{k}^{r}}$ 和值向量 $v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{v}^{r}}$</p>
-</li>
-<li><p>计算注意力分数 $e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)$</p>
-</li>
-<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{r}$</p>
-</li>
-<li><p>计算右上下文表示向量 $r^{r}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{r}} a_{i}^{r}v_{i}^{r}$</p>
-</li>
-</ol>
-</li>
-<li><p><strong>目标短语更新表示</strong></p>
-<p>使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：</p>
-<ol>
-<li><p>提取目标短语的键向量 $k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{k}^{t}}$ 和值向量 $v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{v}^{t}}$</p>
-</li>
-<li><p>计算左感知目标表示 $r^{l_{t}}$：</p>
-<ul>
-<li>注意力分数：$e_{i}^{l_{t}}&#x3D;\operatorname{score}\left(r^{l}, k_{i}^{t}\right)$</li>
-<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{l_{t}}$</li>
-<li>计算表示向量：$r^{l_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{l_{t}}v_{i}^{t}$</li>
+<li><strong>输入</strong>：<ul>
+<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
+<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
+<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
 </ul>
 </li>
-<li><p>计算右感知目标表示 $r^{r_{t}}$：</p>
+<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
+</ul>
+<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
+<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
 <ul>
-<li>注意力分数：$e_{i}^{r_{t}}&#x3D;\operatorname{score}\left(r^{r}, k_{i}^{t}\right)$</li>
-<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{r_{t}}$</li>
-<li>计算表示向量：$r^{r_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{r_{t}}v_{i}^{t}$</li>
+<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
+</li>
+<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
+<ul>
+<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
+<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
+<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
 </ul>
 </li>
-</ol>
+<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
 </li>
-<li><p>最终表示为 $r&#x3D;\operatorname{concat}\left(r^{l},r^{r},r^{l_{t}},r^{r_{t}}\right)$</p>
-</li>
-</ol>
-<p>Rotatory Attention 具有以下特点：</p>
-<ol>
-<li><p><strong>双向信息流动</strong>：通过从目标短语到上下文，再从上下文回到目标短语的信息流动，实现了双向的信息交互。</p>
-</li>
-<li><p><strong>层次化表示</strong>：构建了多层次的特征表示，从原始特征到上下文感知特征。</p>
-</li>
-<li><p><strong>特定任务优化</strong>：特别适合情感分析任务，能够捕捉目标短语与上下文之间的复杂关系。</p>
-</li>
-</ol>
-<p>Rotatory Attention 通过这种交替关注的方式，能够更好地理解目标短语在特定上下文中的情感倾向，从而提高了情感分类的准确性。</p>
-<h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。多层级注意力能够捕捉<strong>不同粒度</strong>上的重要信息。</p>
-<h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
-<h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><h4 id="注意力叠加-Attention-via-Attention"><a href="#注意力叠加-Attention-via-Attention" class="headerlink" title="注意力叠加(Attention-via-Attention)"></a><strong>注意力叠加(Attention-via-Attention)</strong></h4><img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
-
-<ul>
-<li>同时处理字符级和词级特征</li>
-<li>先计算词级注意力，用其上下文向量辅助计算字符级注意力</li>
-<li>最终拼接两个层级的上下文向量</li>
 </ul>
-<p>用于机器翻译任务，同时利用字符级和词级信息。其核心思想是在预测字符时，先通过词级注意力确定重要词语，再在这些词语对应的字符上施加注意力。</p>
-<p>其大致过程如下：</p>
-<ol>
-<li>输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d_{f}^{(c)}\times n_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d_{f}^{(w)}\times n_{f}^{(w)}}$</li>
-<li>字符级查询 $q^{(c)}\in \mathbb{R}^{d_{q}}$ 通过查询模型生成</li>
-<li>先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d_{v}^{(w)}}$</li>
-<li>将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询</li>
-<li>最终输出是字符级和词级上下文向量的拼接</li>
-</ol>
-<h4 id="层级注意力-Hierarchical-Attention"><a href="#层级注意力-Hierarchical-Attention" class="headerlink" title="层级注意力(Hierarchical Attention)"></a><strong>层级注意力(Hierarchical Attention)</strong></h4><img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
-
+<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
 <ul>
-<li>从最低层级开始，逐步构建高层级表示</li>
-<li>常用于文档分类：词 → 句 → 文档</li>
-<li>每个层级通过注意力机制生成摘要表示</li>
+<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
+<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
 </ul>
-<p>用于文档分类。该方法自底向上构建层级表示：从词级表示构建句级表示，再从句级表示构建文档级表示。</p>
-<p>其大致过程如下：</p>
-<ol>
-<li><p>文档包含 $n_S$ 个句子，第 $s$ 个句子包含 $n_s$ 个词</p>
+<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
+<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
+<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
+<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
+<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
+</ul>
 </li>
-<li><p>对每个句子计算词级注意力，生成句表示 $c^{(s)}\in \mathbb{R}^{d_{v}^{(S)}}$</p>
-</li>
-<li><p>将所有句表示 $C&#x3D;[c^{(1)},\ldots,c^{(n_{S})}]\in \mathbb{R}^{d_{v}^{(S)} \times n_{S}}$ 作为文档级注意力的输入</p>
-</li>
-<li><p>文档级注意力输出 $c^{(D)}\in \mathbb{R}^{d_{v}^{(D)}}$ 用于分类</p>
-</li>
-</ol>
-<h4 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h4><p>多层级注意力已成功应用于 <del>懒得做链接了捏，可以去原文找捏</del> ：</p>
+</ul>
+<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
+<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
+<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
+<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
+</ul>
+<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
+<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
+<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
+<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
 <ul>
-<li>推荐系统：建模用户长短期偏好(Ying et al., 2018)</li>
-<li>视频动作识别：捕捉不同时间尺度的运动信息(Wang et al., 2016)</li>
-<li>跨领域情感分类：学习领域共享和特定特征(Li et al., 2018)</li>
-<li>聊天机器人：生成更连贯的响应(Xing et al., 2018)</li>
-<li>人群计数：处理不同尺度的人群密度(Sindagi &amp; Patel, 2019)</li>
+<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
+<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
 </ul>
-<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示相关的注意力机制（Feature Representations），主要关注如何利用注意力机制来处理和组合不同的特征表示。这部分内容可以分为两类：单表示注意力（Single-representational attention）和多表示注意力（Multi-representational attention）。</p>
-<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>单表示注意力是最基础的注意力形式，它使用单一的特征表示模型（如词嵌入、CNN特征提取器等）来生成特征向量。这些特征向量随后被送入注意力模块进行处理。</p>
-<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><p>多表示注意力是一种更高级的技术，它允许模型同时考虑多种不同的特征表示，并通过注意力机制来学习如何最优地组合这些表示。</p>
-<h4 id="元嵌入-Meta-embeddings"><a href="#元嵌入-Meta-embeddings" class="headerlink" title="元嵌入(Meta-embeddings)"></a>元嵌入(Meta-embeddings)</h4><p>这种方法可以创建所谓的”元嵌入”（meta-embeddings）。</p>
-<ul>
-<li>整合多个嵌入表示</li>
-<li>通过注意力机制加权平均不同表示</li>
-<li>生成更高质量的特征表示</li>
-</ul>
-<p>元嵌入的创建过程大致如下：</p>
-<ol>
-<li><p><strong>输入表示</strong>：对于一个输入 $x$ （如一个词），我们有 $E$ 种不同的嵌入表示： $x^{(e_1)}, \ldots, x^{(e_E)}$ , 其中每种嵌入 $x^{(e_i)}$ 的维度为 $d_{e_i}$（$i&#x3D;1,\ldots,E$ ）。</p>
-</li>
-<li><p><strong>维度标准化</strong>：由于不同嵌入可能有不同维度，首先通过线性变换将它们映射到统一维度 $d_t$ ： $x^{(t_i)} &#x3D; W_{e_i} \times x^{(e_i)} + b_{e_i}$ ， 其中 $W_{e_i} \in \mathbb{R}^{d_t \times d_{e_i}}$ 和 $b_{e_i} \in \mathbb{R}^{d_t}$ 是可训练的参数。</p>
-</li>
-<li><p><strong>注意力加权组合</strong>：最终的元嵌入是这些标准化表示的加权和： $x^{(e)} &#x3D; \sum_{i&#x3D;1}^E a_i \times x^{(t_i)}$ 其中权重 $a_i$ 通过注意力机制计算得到。</p>
-</li>
-</ol>
-<h5 id="注意力计算"><a href="#注意力计算" class="headerlink" title="注意力计算"></a>注意力计算</h5><p>在多表示注意力中，注意力权重的计算可以视为一种自注意力机制，其查询可以理解为”哪些表示对当前任务最重要”。具体计算过程如下：</p>
-<ol>
-<li>将标准化后的表示 $x^{(t_1)}, \ldots, x^{(t_E)}$ 作为特征矩阵F的列向量</li>
-<li>由于没有显式查询，这相当于自注意力机制</li>
-<li>使用适当的注意力评分函数计算权重</li>
-<li>通过对齐函数（如softmax）得到归一化的注意力权重</li>
-</ol>
-<h3 id="技术优势"><a href="#技术优势" class="headerlink" title="技术优势"></a>技术优势</h3><ol>
-<li><strong>灵活性</strong>：可以整合来自不同来源或不同粒度的特征表示</li>
-<li><strong>适应性</strong>：通过注意力权重自动学习不同表示的重要性</li>
-<li><strong>可解释性</strong>：注意力权重可以提供关于哪些特征表示对任务更重要的见解</li>
-</ol>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
+<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
+<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
+<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
 ]]></content>
       <categories>
-        <category>Deep Learning</category>
+        <category>CDR</category>
         <category>Model</category>
-        <category>Attention</category>
-        <category>Category</category>
       </categories>
       <tags>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>deep learning</tag>
         <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>GAN</tag>
+        <tag>dynamic graph</tag>
+        <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Half-Monthly DDI Record</title>
+    <url>/2026/03/24/DDI-Week3~4/</url>
+    <content><![CDATA[<h1 id="3-4周里入到🧠的DDI"><a href="#3-4周里入到🧠的DDI" class="headerlink" title="3~4周里入到🧠的DDI"></a>3~4周里入到🧠的DDI</h1><p>DDI 真神奇捏。阿巴阿巴阿巴</p>
+<span id="more"></span>
+
+<h2 id="这周看到的蛮不赖的几篇捏"><a href="#这周看到的蛮不赖的几篇捏" class="headerlink" title="这周看到的蛮不赖的几篇捏"></a>这周看到的蛮不赖的几篇捏</h2><table>
+<thead>
+<tr>
+<th>Title</th>
+<th align="left">Algorithm</th>
+<th align="left">Journal&#x2F;Conference</th>
+<th align="left">Motivation (challenges)</th>
+<th align="left">DMG</th>
+<th align="left">KG</th>
+<th align="left">Fusion strategy</th>
+<th align="left">etc.</th>
+<th align="left">Year</th>
+<th align="left">Objection</th>
+<th align="left">Exp</th>
+<th align="left">Drugs</th>
+<th align="left">Interactions</th>
+<th align="left">Others</th>
+<th align="left">Questions</th>
+<th align="left">LeZi</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RaHDCL: Relation-aware hypergraph diffusion contrastive learning for drug-drug interaction event prediction</td>
+<td align="left">RaHDCL</td>
+<td align="left">Knowledge-Based Systems</td>
+<td align="left">阐述了similarity-based &amp; graph-based model的缺陷; 1. 关于特征信息的化学一致性  2. 对比学习</td>
+<td align="left"></td>
+<td align="left">超图, 扩散模型, 多时间步noising denoising超图</td>
+<td align="left"></td>
+<td align="left">1. 扩散模型, 每一时间步产生noising和denoising两幅图; 2. 相同event连接多个节点构成超图, event超边是有边特征的</td>
+<td align="left">2026</td>
+<td align="left">multiclass classification</td>
+<td align="left">case study; Robustness analysis</td>
+<td align="left">SMILES (2 fingerprint)</td>
+<td align="left">Deng’s dataset; Ryu’s dataset</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">照理来说把两两关系揉在一起不是会丢失部分信息吗，可以有方法在构建超图的时候将两两关系也考虑进去吗</td>
+</tr>
+<tr>
+<td>Dual-channel heterogeneous graph framework with multi-view contrastive learning for drug–drug interaction prediction</td>
+<td align="left">GEMCL</td>
+<td align="left">Engineering Applications of Artificial Intelligence</td>
+<td align="left">1. 目前工作在实验中缺乏对 new or unseen drugs 的interaction预测; 2. 对于同时使用药物molecular graph和KG的方法, 融合策略欠缺</td>
+<td align="left">图扰动+预训练GCN</td>
+<td align="left">多生物节点KG+图扰动+GCN</td>
+<td align="left">gated feature Fusion + CL</td>
+<td align="left">1. 设计了图扰动策略和对比学习; 2. 使用预训练的GNN模型图学习. 预训练的调参方法也很新颖 in 2.4</td>
+<td align="left">2026</td>
+<td align="left">multiclass &amp; multilabel classification</td>
+<td align="left">1. 实验涵设计充分, transductive &amp; Inductive; 2. 在3.9中有模块可解释性分析. 3. case study</td>
+<td align="left">SMILES</td>
+<td align="left">DB; TWOSIDES (multilabel数据集)</td>
+<td align="left">多生物实体KG来自数据集external DRKG</td>
+<td align="left"></td>
+<td align="left">何意味？！BKG的关系有108种？？？</td>
+</tr>
+<tr>
+<td>DMCL-DDI: A dual-view molecular contrastive learning framework for drug-drug interaction prediction</td>
+<td align="left">DMCL-DDI</td>
+<td align="left">Expert Systems with Applications</td>
+<td align="left">一些方法仅考虑 single-view, 多数 dual-view 的方法则没考虑 atomic level 的特征</td>
+<td align="left">DMG 通过 GAT 提取特征, inter (药物 pair 的特征, 通过乘积构建) + intra (单个药物)</td>
+<td align="left"></td>
+<td align="left">CL</td>
+<td align="left">新颖的 drug pair 之间子结构关联的构建方式, 构建 inter grpah 是两个药物 molecular graph 的乘积</td>
+<td align="left">2026</td>
+<td align="left">binary classification</td>
+<td align="left">inductive exp; Case study 有 substructure 的交互图</td>
+<td align="left">SMILES</td>
+<td align="left">DB;TWOSIDES</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>SynCaps-DDI: A hybrid neural model combining capsule networks and syntactic graph convolution for drug–drug interaction extraction</td>
+<td align="left">SynCaps-DDI</td>
+<td align="left">Biomedical Signal Processing and Control</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">利用句法构建 KG(非 DDI 关系)</td>
+<td align="left">concat</td>
+<td align="left">利用 BioBERT 处理 token,送入并行的双分支结构(RGCN 提取句法图连接信息,CapsNetwork 提取长程依赖信息)</td>
+<td align="left">2026</td>
+<td align="left">multi-class classification</td>
+<td align="left">1.声明了不平衡数据无下采样等操作.<br/>2.外部验证.<br/>3.定量误差分析,分析模型模块与出错模式之间的关联.<br/>4.Robustness analysis</td>
+<td align="left">无;模型的输入是一句说明性的话,xx 与药物 xx 可以联用之类的</td>
+<td align="left">DDI Extraction 2013 dataset ;TAC 2018 DDI extraction dataset (外部验证)</td>
+<td align="left">输入的是一句话,交给分词模型</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>Devil in the Tail: A Multi-Modal Framework for Drug-Drug Interaction Prediction in Long Tail Distinction</td>
+<td align="left"><strong>TFMD</strong></td>
+<td align="left">CIKM ‘24</td>
+<td align="left">DDI 类型分布呈极端长尾特性；现有模型对头部类存在高度偏见；忽视了药物的多面属性及其协作互补。</td>
+<td align="left">基于图的特征（聚合邻居节点信息）</td>
+<td align="left">未直接使用外部 KG ，但融合了 Target 和 Enzyme 特征。</td>
+<td align="left"><strong>模态增强融合 (Modality Enhancement Fusion)</strong>：使用 SMILES 语义增强化学图空间特征，使用 Enzyme 增强 Target 表达。</td>
+<td align="left">引入 <strong>Tailed Focal Loss (TFL)</strong> 解决长尾分布下的梯度消失问题；使用 Transformer 提取 SMILES 序列特征。</td>
+<td align="left">2024</td>
+<td align="left">multi-class (110 &amp; 171类)</td>
+<td align="left">宏平均指标 (Accuracy, F1, AUPR 等)；长尾数据集验证。</td>
+<td align="left">SMILES, 化学图, Target, Enzyme</td>
+<td align="left">DDI-DB110, DDI-DB171, DDIMDL, MUFFIN</td>
+<td align="left">源码已开源 (GitHub)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>DDIPrompt: Drug-Drug Interaction Event Prediction based on Graph Prompt Learning</td>
+<td align="left"><strong>DDIPrompt</strong></td>
+<td align="left">CIKM ‘24</td>
+<td align="left">DDI 事件分布高度不平衡；罕见事件的标签数据极度稀缺；现有 GNN 模型依赖大量监督。</td>
+<td align="left">双视图图注意力网络 (Capture intra-molecular structures)</td>
+<td align="left">结合预训练的生物医学知识图谱嵌入 (Pre-trained KG embedding)</td>
+<td align="left"><strong>分层预训练 + Prompt 调优</strong>：先通过相似度预测和链路预测进行预训练，再冻结模型使用类原型(Class Prototypes)作为 Prompt 。</td>
+<td align="left">提出<strong>原型增强提示机制 (Prototype-enhanced prompting)</strong>，适配少样本 (Few-shot) 场景。</td>
+<td align="left">2024</td>
+<td align="left">multi-class edge prediction</td>
+<td align="left">弱监督 (20%训练比例)；消融实验；超参数敏感性分析。</td>
+<td align="left">分子图, 知识图谱嵌入</td>
+<td align="left">Deng’s dataset, DrugBank dataset</td>
+<td align="left">首次在药物领域尝试图提示学习 (Graph Prompt Learning)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>IIB-DDI: Invariant Information Bottleneck Theory for Out-of-Distribution Drug-Drug Interaction Prediction</td>
+<td align="left"><strong>IIB-DDI</strong></td>
+<td align="left">IEEE TCBB (2025)</td>
+<td align="left">药物子结构分布不均导致模型依赖虚假关系；分布偏移 (OOD) 下泛化能力差。</td>
+<td align="left">使用 MPNN (消息传递神经网络) 编码分子结构</td>
+<td align="left"><strong>环境码本 (Environment Codebook)</strong>：通过矢量量化 (VQ) 学习潜在环境分布。</td>
+<td align="left"><strong>不变信息瓶颈 (Invariant IB)</strong>：利用IB理论提取核心子图，结合VQ聚类环境因素。</td>
+<td align="left">引入<strong>不变学习 (Invariant Learning)</strong> 寻找在不同环境下性能稳定的“理性”子结构；通过噪声注入优化互信息。</td>
+<td align="left">2025</td>
+<td align="left">multiclass &amp; binary</td>
+<td align="left">换能 (Transductive) 与 归纳 (Inductive, 包括Type 1&#x2F;2) 实验；OOD 场景验证。</td>
+<td align="left">分子图 (SMILES转换)</td>
+<td align="left">ZhangDDI, ChChMiner, DeepDDI, DrugBank</td>
+<td align="left">侧重于解决分布偏移和泛化性能 (OOD)</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="RaHDCL-超图扩散-对比学习"><a href="#RaHDCL-超图扩散-对比学习" class="headerlink" title="RaHDCL 超图扩散 + 对比学习"></a>RaHDCL 超图扩散 + 对比学习</h3><ol>
+<li>用关系构造超图，具有同一 DDI event 的药物之间连一条超边</li>
+<li>超图扩散以增强鲁棒性，之后也有对应的鲁棒性实验，但这个不是应该对比下降幅度吗？难道是结果不太好？</li>
+<li>层次对比学习。通过对原始视图和扩散增强视图进行层次化对比，模型能够学习到更具判别力的表征，充分挖掘隐藏在稀疏交互数据后的语义一致性</li>
+</ol>
+<h4 id="具体来说"><a href="#具体来说" class="headerlink" title="具体来说"></a>具体来说</h4><p>关系感知超图扩散（Relation-aware Hypergraph Diffusion）</p>
+<p>模型通过扩散过程对药物-事件关系进行增强。输入为药物 $i$ 在超图中的关系向量 $h_i \in {0, 1}^{|\mathcal{E}|}$。</p>
+<ol>
+<li><p>前向扩散过程（Forward Process）<br> 模型在 $T$ 个时间步内向原始结构 $x_0 &#x3D; h_i$ 逐步添加高斯噪声。<br> 给定噪声表（Noise Schedule） $\beta_t \in (0, 1)$，第 $t$ 步的状态分布为：<br> $$q(x_t | x_{t-1}) &#x3D; \mathcal{N}(x_t; \sqrt{1-\beta_t}x_{t-1}, \beta_t \mathbf{I})$$</p>
+<p> 利用重参数化技巧，可以直接从 $x_0$ 推导出 $x_t$ 的闭式解：<br> $$q(x_t | x_0) &#x3D; \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t}x_0, (1-\bar{\alpha}_t)\mathbf{I})$$<br> 其中 $\alpha_t &#x3D; 1 - \beta_t$，且 $\bar{\alpha}<em>t &#x3D; \prod</em>{i&#x3D;1}^t \alpha_i$。</p>
+</li>
+<li><p>关系感知逆向去噪（Reverse Denoising）<br> 去噪网络 $\theta$ 的目标是根据噪声状态 $x_t$ 和<strong>条件信息 $x_a$</strong>（药物成对关系）还原 $x_0$。<br> RaHDCL 引入了**交叉注意力机制（Cross-Attention）**来融合超图噪声状态和药物关系条件：</p>
+<p> 假设 $z_h &#x3D; \text{Linear}(x_t)$，$z_a &#x3D; \text{Linear}(x_a)$，则预测的 $x_0$ 为：<br> $$x_{\theta}(x_t, x_a, t) &#x3D; \sigma \left( z_h + \text{softmax}\left( \frac{(z_h \mathbf{W}^Q)(z_a \mathbf{W}^K)^T}{\sqrt{d}} \right) (z_h \mathbf{W}^V) \right)$$<br> 其中 $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V$ 是可学习的投影矩阵，$d$ 是特征维度。</p>
+<p> <strong>扩散损失函数</strong>：<br> $$\mathcal{L}_d &#x3D; \mathbb{E}_{t, x_0, \epsilon} \left[ \frac{\alpha_{t-1} - \alpha_t}{2(1-\bar{\alpha}_{t-1})(1-\bar{\alpha}_t)} | x_{\theta}(x_t, x_a, t) - x_0 |^2_2 \right]$$</p>
+</li>
+</ol>
+<p>层次对比学习（Hierarchical Contrastive Learning）</p>
+<p>扩散增强后的超图 $\mathcal{G}’$ 与原始超图 $\mathcal{G}$ 构成对比视图。模型在两个层级应用 InfoNCE 损失。</p>
+<ol>
+<li><p>超边级对比学习（Hyperedge-level Contrast）<br> 该层级旨在确保相同的 DDI 事件（超边）在不同视图下具有一致的表征。<br> 设 $h_e$ 为原始视图中事件 $e$ 的嵌入，$h’_e$ 为增强视图中的嵌入，其对比损失为：<br> $$L_h &#x3D; \frac{1}{|\mathcal{E}|} \sum_{e \in \mathcal{E}} -\log \frac{\exp(\text{sim}(h_e, h’_e) &#x2F; \tau)}{\sum_{j \in \mathcal{E}} \exp(\text{sim}(h_e, h’_j) &#x2F; \tau)}$$<br> 其中 $\text{sim}(\cdot)$ 为余弦相似度，$\tau$ 为温度参数。</p>
+</li>
+<li><p>药物节点级对比学习（Drug-level Contrast）<br> 该层级旨在增强药物在 sparse（稀疏）DDI 图中的鲁棒性。<br> 设 $v_n$ 为原始视图中药物 $n$ 的嵌入，$v’_n$ 为增强视图中（由增强后的边特征生成的）药物嵌入：<br> $$L_n &#x3D; \frac{1}{|\mathcal{V}|} \sum_{n \in \mathcal{V}} -\log \frac{\exp(\text{sim}(v_n, v’_n) &#x2F; \tau)}{\sum_{k \in \mathcal{V}} \exp(\text{sim}(v_n, v’_k) &#x2F; \tau)}$$</p>
+</li>
+<li><p>联合优化目标<br> 模型最终通过加权组合监督预测损失（交叉熵 $\mathcal{L}_{sup}$）和层次对比损失进行训练：<br> $$\mathcal{L}_{total} &#x3D; \mathcal{L}_{sup} + \epsilon_1 L_h + (1 - \epsilon_1) L_n$$<br> 其中 $\epsilon_1$ 是用于调节超边级和节点级对比强度权重的超参数。</p>
+</li>
+</ol>
+<h3 id="GEMCL-自适应门控特征融合-多视图对比学习"><a href="#GEMCL-自适应门控特征融合-多视图对比学习" class="headerlink" title="GEMCL 自适应门控特征融合 + 多视图对比学习"></a>GEMCL 自适应门控特征融合 + 多视图对比学习</h3><ol>
+<li>自适应门控特征融合 (Gated Feature Fusion)：设计了一个动态门控机制，能够根据不同预测场景（如已知药物 vs. 新药）自动调节结构特征与语义特征的权重。</li>
+<li>多视图对比学习 (Multi-view Contrastive Learning)：在训练阶段引入四个维度的对比损失（视图内一致性与跨通道对齐），解决了数据偏移问题并增强了表征的判别力。</li>
+<li>预训练机制：针对 DMG 采用节点遮蔽（Node Masking），针对 BKG 采用链路预测（Link Prediction），为下游任务提供了优秀的特征初始化。</li>
+</ol>
+<h4 id="关于可解释性实验"><a href="#关于可解释性实验" class="headerlink" title="关于可解释性实验"></a>关于可解释性实验</h4><ol>
+<li><strong>在 S1 场景（已知药物预测）中</strong>：的中位数约为 0.42。这说明当药物在 BKG 中有丰富的关联数据（如已知的靶点、疾病关系）时，模型认为知识图谱特征和结构特征同等重要，甚至稍微偏向利用外部知识。</li>
+<li><strong>在 S3 场景（新药-新药预测）中</strong>：的中位数显著上升至 0.87。<br>解释：对于完全没见过的新药，它们在 BKG 中通常是孤立节点，缺乏可靠的外部链接语义。此时，模型通过门控机制“自发地”意识到外部知识是不可信的（Noise），因此自动将注意力转移到药物的**内在化学结构（DMG）**上。</li>
+</ol>
+<h3 id="DMCL-DDI"><a href="#DMCL-DDI" class="headerlink" title="DMCL-DDI"></a>DMCL-DDI</h3><ol>
+<li>引入了药物和药物的乘积的概念</li>
+<li>子结构可视化的实验</li>
+</ol>
+<h3 id="IIB-DDI-OOD-不变学习"><a href="#IIB-DDI-OOD-不变学习" class="headerlink" title="IIB-DDI OOD + 不变学习"></a>IIB-DDI OOD + 不变学习</h3><ol>
+<li><p><strong>聚焦 OOD 泛化问题（Out-of-Distribution）</strong>：<br>传统的 DDI（药物-药物相互作用）预测模型在面对未见过的新药或分布改变的数据集时，性能往往大幅下降。本文首次系统地结合了<strong>信息瓶颈（IB）理论</strong>和<strong>不变学习（Invariant Learning）</strong>，旨在解决药物子结构分布不均导致的“伪相关”问题。</p>
+</li>
+<li><p><strong>引入环境码本（Environment Codebook）</strong>：<br>由于药物数据的“环境”（如不同的临床场景、不同的分子骨架背景）是未知且难以标注的，论文引入了**向量量化（Vector Quantization, VQ）**技术。通过构建一个可学习的“环境码本”，将数据中的潜环境聚类，模拟出多样化的数据分布。</p>
+</li>
+<li><p><strong>不变性合理化提取（Invariant Rationales）</strong>：<br>模型不仅是寻找对预测最重要的子图，更强调寻找在<strong>各种环境下都能保持预测一致性</strong>的核心子结构（即 Rationale）。这确保了模型学到的是生物化学层面的本质交互，而非数据集里的统计噪音。</p>
+</li>
+<li><p><strong>数据集依赖的噪声注入（Dataset-dependent Noise Injection）</strong>：<br>相比于传统的随机高斯噪声或实例依赖噪声，IIB-DDI 利用从环境码本中提取的分布作为噪声注入。这种方法能更有效地平衡互信息优化过程，使训练曲线更平滑、损失更低，同时保留了数据集相关的语义信息。</p>
+</li>
+</ol>
+<h3 id="TFMD-长尾学习"><a href="#TFMD-长尾学习" class="headerlink" title="TFMD 长尾学习"></a>TFMD 长尾学习</h3>]]></content>
+      <categories>
+        <category>DDI</category>
+        <category>Daily</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>DDI</tag>
+        <tag>Knowledge Graph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The Overview of Drug-Drug Interaction</title>
+    <url>/2026/03/09/DDI-Review/</url>
+    <content><![CDATA[<h1 id="DDI-总览"><a href="#DDI-总览" class="headerlink" title="DDI 总览"></a>DDI 总览</h1><p>这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：</p>
+<ol>
+<li>DDI 的任务主要是什么</li>
+<li>DDI 的难点（创新点出现（希望）的位置）</li>
+<li>药物处理方面与 CDR 有什么不同</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="什么是-DDI"><a href="#什么是-DDI" class="headerlink" title="什么是 DDI"></a>什么是 DDI</h2><p>目前，DDI 讨论还是<strong>两</strong>种药物之间的相互作用（$G_x, G_y, r_{xy}$），即一种药物的效用因为另一种药物的存在而发生改变的现象。</p>
+<h3 id="常用数据集"><a href="#常用数据集" class="headerlink" title="常用数据集"></a>常用数据集</h3><p>在构建 DDI 预测模型时，数据往往分布在异构的网络中。最核心的数据集通常分为机制类和表型类：</p>
+<ul>
+<li><strong>DrugBank</strong>：最权威且使用最为频繁的数据集。主要包含药物之间的代谢层面影响（例如药物 A 抑制了代谢药物 B 的酶）。通常包含高度确定的相互作用类型。</li>
+<li><strong>TWOSIDES</strong>：侧重于表型层面（Phenotypic）的信息。它记录了同时服用两种药物产生的、且在单药服用时不会出现的副作用（如恶心、心痛等）。</li>
+<li><strong>DRKG (Drug Repurposing Knowledge Graph) &#x2F; Hetionet</strong>：大型的综合生物医学知识图谱。除了包含只属于药物间的关系外，还整合了药物与基因、蛋白质、疾病之间的复杂关系。</li>
+</ul>
+<h3 id="不同的实验"><a href="#不同的实验" class="headerlink" title="不同的实验"></a>不同的实验</h3><p>由于 DDI 所引入的药物数量实际上远多于 CDR，这也就引出了其与 CDR（正常）的 <em>第一个</em> 不同：<em>DDI 经常讨论测试集中药物不存在与训练集中的情况</em>，具体来说，我们可以将其分为：</p>
+<ul>
+<li><strong>直推式 (Transductive &#x2F; Warm-start)</strong>：测试集中的药物分子在训练集中出现过，我们只是预测已知药物之间的新边（关系）。</li>
+<li><strong>归纳式 (Inductive &#x2F; Cold-start)</strong>：模型在部署时遇到的是结构、特征全新的、从未见过的药物分子（未见分布 OOD），需要仅凭其化学特征来预测交互。</li>
+</ul>
+<hr>
+<h2 id="药物和关系的表示方法"><a href="#药物和关系的表示方法" class="headerlink" title="药物和关系的表示方法"></a>药物和关系的表示方法</h2><p>要把化学物质喂给机器学习模型，我们首先得把它们变成计算机理解的代数对象。与CDR不同的是，有很多 paper 都倾向于使用多种表示方法进行多模态的学习，主要有以下四个维度的表征：</p>
+<ol>
+<li><p>二进制&#x2F;指纹表示法 (Binary Fingerprints)<br>最传统的表示方式（如 MACCS, PubChem, Morgan Fingerprints）。通过检测药物内部是否包含特定的化学子结构，将其转化为定长的独热（One-hot）&#x2F;布尔向量。</p>
+<ul>
+<li><strong>数学表示</strong>：设药物数量为 $N$，特征维度为 $D$（如 MACCS 为 166 维，PubChem 为 881 维）。药物分子可以直接表示为一个特征向量：<br>$$<br>\mathbf{x} \in \{0, 1\}^D<br>$$<br> 其中 $x_i &#x3D; 1$ 表示存在第 $i$ 个子结构。</li>
+</ul>
+</li>
+<li><p>序列表示法 (Sequence &#x2F; SMILES Representation)<br>使用 SMILES 字符串，把 2D 分子结构转化为一维的 ASCII 字符序列（把它当成一段本文来处理），常用 NLP 中的 Transformer &#x2F; LSTM 提取特征。</p>
+<ul>
+<li><strong>数学表示</strong>：药物图被展平为由词表 $\mathcal{V}_{vocab}$ 中标记组成的序列：<br> $$ S &#x3D;[s_1, s_2, \dots, s_L], \quad s_i \in \mathcal{V}_{vocab} $$<br>其中 $L$ 是字符串的长度。</li>
+</ul>
+</li>
+<li><p>二维分子图表示 (2D Graph Representation) (当前最热门)<br>用<strong>图结构数据</strong>直接描述分子，原子是节点，化学键是边。利用 GNN (Graph Neural Networks) 进行消息传递。</p>
+<ul>
+<li><strong>数学表示</strong>：一个药物分子定义为一个图 $G &#x3D; (\mathcal{V}, \mathcal{E})$。</li>
+</ul>
+<ul>
+<li>节点特征矩阵：$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times F_v}$（每一行 $\mathbf{x}_i$ 是第 $i$ 个原子的特征向量，如电荷数、杂化状态）。</li>
+<li>边类型&#x2F;特征矩阵：$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times F_e}$（$\mathbf{e}_{ij}$ 为键的类型，如单键、双键）。</li>
+<li>邻接矩阵：$\mathbf{A} \in \{0, 1\}^{|\mathcal{V}| \times |\mathcal{V}|}$。</li>
+</ul>
+</li>
+<li><p>三维构象表示 (3D Structure)</p>
+</li>
+<li><p>除了分子拓扑连接外，还包含空间原子的相对位置（坐标）。</p>
+<ul>
+<li><strong>数学表示</strong>：除了 2D 的 $\mathbf{X}$ 以外，还引入空间坐标矩阵模型：<br> $$ \mathbf{R} \in \mathbb{R}^{|\mathcal{V}| \times 3} $$</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="关联关系与知识图谱的表示方法-Relation-KG-Representation"><a href="#关联关系与知识图谱的表示方法-Relation-KG-Representation" class="headerlink" title="关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)"></a>关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</h3><p>为了预测交互作用，两两药物的关系不仅需要依据自身结构，还依赖于外界丰富知识网络的嵌入（Knowledge Graph Embedding, KGE）。</p>
+<p>我们要构建一个包含了实体（药物、蛋白、疾病等）和它们之间关系的异构图谱 $\mathcal{G}_{KG}$：</p>
+<ul>
+<li><strong>知识库的基础单元</strong>：由成千上万个<strong>三元组 (Triples)</strong> 构成：<br>$$ \mathcal{G}_{KG} &#x3D; {(h, r, t) \mid h \in \mathcal{E}, t \in \mathcal{E}, r \in \mathcal{R}} $$<br>其中 $\mathcal{E}$ 是所有实体（Entities）的集合，$\mathcal{R}$ 是所有相互作用关系（Relations）的集合。$h$ 是头实体，$t$ 是尾实体。</li>
+</ul>
+<p>有了图谱结构后，使用 KGE 算法将离散的网络空间映射到连续的低维向量空间 $\mathbb{R}^d$中。论文中总结了几大流派（附经典打分函数 $f(h, r, t)$）：</p>
+<h4 id="A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR"><a href="#A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR" class="headerlink" title="A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)"></a>A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</h4><p>思想：两个实体之间的关系被视为向量空间中的一种几何<strong>平移 (Translation)</strong>。</p>
+<ul>
+<li><strong>数学表示 (以 TransE 为例)</strong>：<br>令投影后的连续向量为 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{R}^d$。<br>目标是使得 $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$。<br>其打分函数为（得分越高表示越不可能是真实的 DDI 边，需加负号）：<br>$$ f(h, r, t) &#x3D; - |\mathbf{h} + \mathbf{r} - \mathbf{t}|_{1&#x2F;2} $$</li>
+</ul>
+<h4 id="B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx"><a href="#B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx" class="headerlink" title="B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)"></a>B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</h4><p>思想：不找平移距离，而是利用矩阵&#x2F;张量乘法，衡量头尾实体在某关系下的相似度及相互匹配性。这是预测 DDI 最经典的 KGE 手段。</p>
+<ul>
+<li><strong>数学表示 (以 RESCAL 或其简化版 DistMult 为例)</strong>：<br>实体编码为 $\mathbf{h}, \mathbf{t} \in \mathbb{R}^d$。关系被表示为对角矩阵 $\mathbf{M}_r &#x3D; \text{diag}(\mathbf{r})$（其中 $\mathbf{r} \in \mathbb{R}^d$）。<br>打分函数定义为双线性内积：<br>$$ f(h, r, t) &#x3D; \mathbf{h}^\top \mathbf{M}_r \mathbf{t} &#x3D; \sum_{i&#x3D;1}^{d} h_i \cdot r_i \cdot t_i $$<br>（在更复杂的 ComplEx 模型中，向量会被映射到复数域 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{C}^d$，以解决 DDI 关系中的非对称性问题）。</li>
+</ul>
+<h4 id="C-数据分析中的联合打分-Fusion-Prediction-Layer"><a href="#C-数据分析中的联合打分-Fusion-Prediction-Layer" class="headerlink" title="C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)"></a>C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</h4><p>最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：<br>$$ P(r \mid A, B) &#x3D; \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}_{structure}(G_A) \oplus \text{GNN}_{structure}(G_B) \oplus \mathbf{h}_{KG} \oplus \mathbf{t}_{KG} \big] + \mathbf{b} \Big) $$<br>其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。</p>
+<h2 id="数据集不同引出的模型构造思路的不同"><a href="#数据集不同引出的模型构造思路的不同" class="headerlink" title="数据集不同引出的模型构造思路的不同"></a>数据集不同引出的模型构造思路的不同</h2><p>由于前面提到的：<em>有直推式和归纳式的模型</em>，而这两种模型的区别在于：重点处理药物表示（通过自监督的方式学习特征）还是处理药物关系（通过KGE）</p>
+<h2 id="超图在-DDI-中的应用"><a href="#超图在-DDI-中的应用" class="headerlink" title="超图在 DDI 中的应用"></a>超图在 DDI 中的应用</h2><p>超图在 DDI 中的应用主要分为两种：</p>
+<ol>
+<li>将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）</li>
+<li>将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）</li>
+</ol>
+<h2 id="大模型在DDI中的应用"><a href="#大模型在DDI中的应用" class="headerlink" title="大模型在DDI中的应用"></a>大模型在DDI中的应用</h2><p>由于NLP的知识过于孱弱，完全看不懂他在干嘛，所以最近决定先去简单了解一下LLM捏</p>
+]]></content>
+      <categories>
+        <category>DDI</category>
+        <category>Review</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>DDI</tag>
+        <tag>Knowledge Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -2147,6 +1915,238 @@
         <tag>PyTorch</tag>
         <tag>attention</tag>
         <tag>graph theory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Fufufu Relashinala</title>
+    <url>/2025/07/14/Feature-Related-Attention/</url>
+    <content><![CDATA[<h1 id="在输入特征上做文章的-Attention"><a href="#在输入特征上做文章的-Attention" class="headerlink" title="在输入特征上做文章的 Attention"></a>在输入特征上做文章的 Attention</h1><p>本文将接着详细说明一种基于输入特征分类 Attention 的方式，并介绍在这种分类方式下关注到的不同的 Attention 的架构。</p>
+<div style="display: flex; align-items: center;">
+  <img src="\img\Attention\Fufufu Relashinala.png" style="width: 200px; margin-right: 20px;">
+  <p>
+  具体来说，本文主要探讨了基于输入特征特性的注意力机制变体。本节根据输入特征的不同特性，将特征相关的注意力机制分为三类：特征多重性(Multiplicity of Features)、特征层级(Levels of Features)和特征表示(Feature Representations)。
+  </p>
+</div>
+
+
+
+<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+<span id="more"></span>
+
+<h2 id="特征多重性-Multiplicity-of-Features"><a href="#特征多重性-Multiplicity-of-Features" class="headerlink" title="特征多重性(Multiplicity of Features)"></a>特征多重性(Multiplicity of Features)</h2><p>这部分讨论了如何处理多个输入源的特征，主要分为单一特征注意力和多特征注意力机制。</p>
+<h3 id="单一特征注意力-Singular-Features-Attention"><a href="#单一特征注意力-Singular-Features-Attention" class="headerlink" title="单一特征注意力(Singular Features Attention)"></a>单一特征注意力(Singular Features Attention)</h3><p>大多数任务模型只处理单一输入(如图像、句子或声音序列)，使用单一特征注意力机制。这种机制直接对单个输入的特征向量进行注意力计算。</p>
+<h3 id="多特征注意力机制"><a href="#多特征注意力机制" class="headerlink" title="多特征注意力机制"></a>多特征注意力机制</h3><p>当模型需要同时处理多个输入源时，需要特殊的多特征注意力机制：</p>
+<p><strong>协同注意力(Co-attention)</strong></p>
+<ul>
+<li>分为 <strong>粗科粒度(Coarse-grained)</strong> 和 <strong>细颗粒度(Fine-grained)</strong> 两种</li>
+<li><strong>粗颗粒度协同</strong>注意力使用一个输入的<em>紧凑表示</em>作为查询来关注另一个输入</li>
+<li><strong>细颗粒度协同</strong>注意力使用一个输入的所有特征向量作为查询</li>
+</ul>
+<h4 id="粗颗粒度协同"><a href="#粗颗粒度协同" class="headerlink" title="粗颗粒度协同"></a>粗颗粒度协同</h4><p>论文给出的粗颗粒度协同的实例是<strong>alternating co-attention</strong></p>
+<h5 id="alternating-co-attention"><a href="#alternating-co-attention" class="headerlink" title="alternating co-attention"></a>alternating co-attention</h5><img src="/img/Attention/AlternatingCo-Attention.png" alt="alternating co-attention" width="60%" height="auto">
+
+<p>如上图所示，这是 alternating co-attention 的架构图，该机制交替使用两个输入的特征矩阵，先计算第一个输入的注意力，将其上下文向量作为查询计算第二个输入的注意力，然后再用第二个输入的上下文向量重新计算第一个输入的注意力。</p>
+<p>这里现给出他的 score 函数</p>
+<p>对于有序列输入的 Attention：</p>
+<p>$$<br>\mathrm{score}(\underset{d_{q}\times1}{\boldsymbol{q}},\underset{d_{k}\times1}{\boldsymbol{k}_{l}})&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{T}}\times\mathrm{act}(\underset{d_{w}\times d_{q}}{\boldsymbol{W}_{1}}\times\underset{d_{q}\times1}{\boldsymbol{q}}+\underset{d_{w}\times d_{k}}{\boldsymbol{W}_{2}}\times\underset{d_{k}\times1}{\boldsymbol{k}_{l}}+\underset{d_{w}\times1}{\boldsymbol{b}})<br>$$</p>
+<p>对于无序列输入的 Attention <del>（这是一种自注意力机制，后面会提到）</del> ：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(0)}}&#x3D;\underset{1\times d_{w}}{\boldsymbol{w}^{(1)T}}\times\operatorname{act}(\underset{d_{w}\times d_{k}^{(1)}}{\boldsymbol{W}^{(1)}}\times\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}}+\underset{d_{w}\times1}{\boldsymbol{b}^{(1)}})<br>$$</p>
+<p>对于第二层 Attention：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(2)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(1)}\times 1}{\boldsymbol{c}^{(0)}},\underset{d_{k}^{(2)}\times1}{\boldsymbol{k}_{l}^{(2)}})<br>$$</p>
+<p>对于第三层 Attention：</p>
+<p>$$<br>\underset{1\times1}{e_{l}^{(1)}}&#x3D;\mathrm{score}(\underset{d_{v}^{(2)}\times 1}{\boldsymbol{c}^{(2)}},\underset{d_{k}^{(1)}\times1}{\boldsymbol{k}_{l}^{(1)}})<br>$$</p>
+<p>生成的上下文向量$\boldsymbol{c}^{(1)}$和$\boldsymbol{c}^{(2)}$被连接起来，并在输出模型中用于预测。交替协同注意力由于需要一个接一个地计算上下文向量，因此本质上包含了<em>一种顺序性</em>。这可能会带来计算上的劣势，因为<em>无法并行</em>化。</p>
+<h5 id="interactive-co-attention"><a href="#interactive-co-attention" class="headerlink" title="interactive co-attention"></a>interactive co-attention</h5><img src="/img/Attention/InteractiveCo-Attention.png" alt="interactive co-attention" width="60%" height="auto">
+
+<ul>
+<li>并行计算两个输入的注意力</li>
+<li>使用未加权平均的关键向量作为查询</li>
+<li>计算效率更高，可以并行处理</li>
+</ul>
+<p>$$<br>\underset{d_k^{(i)}\times1}{\bar{\boldsymbol{k}}^{(i)}}&#x3D;\frac{1}{n_f^{(i)}}\sum\limits_{l&#x3D;1}^{n_f^{(i)}}\underset{d_k^{(i)}\times1}{\boldsymbol{k}_l^{(i)}}, \quad \underset{1\times1}{e_{l}^{(i)}}&#x3D;\mathrm{score}(\underset{d_{k}^{(3-i)}\times1}{\bar{\boldsymbol{k}}^{(3-i)}},\underset{d_{k}^{(i)}\times1}{\boldsymbol{k}_{l}^{(i)}}) , \qquad i&#x3D;1,2<br>$$</p>
+<h4 id="细颗粒度协同"><a href="#细颗粒度协同" class="headerlink" title="细颗粒度协同"></a>细颗粒度协同</h4><p>虽然粗粒度的共同注意力机制使用一个输入的紧凑表示作为查询，以计算另一个输入的注意力，但细粒度的共同注意力在计算注意力分数时会单独考虑每个输入的每个元素。在这种情况下，查询变成了一个矩阵。</p>
+<h5 id="并行协同注意力-Parallel-Co-attention"><a href="#并行协同注意力-Parallel-Co-attention" class="headerlink" title="并行协同注意力(Parallel Co-attention)"></a>并行协同注意力(Parallel Co-attention)</h5><img src="/img/Attention/ParallelCo-Attention.png" alt="parallel co-attention" width="60%" height="auto">
+
+<ul>
+<li>同时计算两个输入的注意力</li>
+<li>使用亲和矩阵(Affinity Matrix)转换关键向量空间</li>
+<li>通过聚合形式计算注意力分数</li>
+</ul>
+<p>我们有两种方式生成矩阵 $\mathbf{A}$</p>
+<p>$$<br>\underset{n_{f}^{(1)}\times n_{f}^{(2)}}{\mathbf{A}}&#x3D;\operatorname{act}(\underset{n_{f}^{(1)}\times d_{k}^{(1)}}{\begin{array}{c}K^{(1)^{T}}\end{array}}\times\underset{d_{k}^{(1)}\times d_{k}^{(2)}}{\begin{array}{c}W_{A}\end{array}}\times\underset{d_{k}^{(2)}\times n_{f}^{(2)}}{\begin{array}{c}K^{(2)}\end{array}})<br>$$</p>
+<p>$$<br>\underset{1\times1}{A_{i,j}}&#x3D;\underset{1\times3d_{k}}{\boldsymbol{w}_{A}^{T}}\times\mathrm{concat}(\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}},\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}},\underset{d_{k}\times1}{\boldsymbol{k}_{i}^{(1)}}\circ\underset{d_{k}\times1}{\boldsymbol{k}_{j}^{(2)}})<br>$$</p>
+<p>其中，$\circ$表示哈德曼积</p>
+<p>Affinity Matrix 可以解释为两个键矩阵列的相似性矩阵，并有助于将图像键转换到与句子中单词的键相同的空间，反之亦然。</p>
+<p>由于现在查询由向量变成了矩阵，因此 score 函数也发生了变化</p>
+<p>$$<br>e^{(1)} &#x3D;\boldsymbol{w}_{1}\times\mathrm{act}(\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)}\times\boldsymbol{A}^{T}+\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)})<br>$$</p>
+<p>$$<br>e^{(2)} &#x3D;\boldsymbol{w}_{2}\times\mathrm{act}(\boldsymbol{W}_{1}\times\boldsymbol{K}^{(1)}\times\boldsymbol{A}^{::}+\boldsymbol{W}_{2}\times\boldsymbol{K}^{(2)})<br>$$</p>
+<p>值得一提的是，之前的 score 函数实际是现在这一形式的特殊表达，也就是说，这个表达更具一般性</p>
+<p>如前所述，亲和矩阵本质上是两个注意力模块 1 和 2 的关键向量的相似性矩阵。这个意味着一种不同的确定注意力分数的方法。即，可以将一行或一列中的最大相似度值作为注意力分数。</p>
+<p>$$<br>e_{i}^{(1)}&#x3D;\max_{j&#x3D;1,\ldots,n_{f}^{(2)}}A_{i,j},\quad e_{j}^{(2)}&#x3D;\max_{i&#x3D;1,\ldots,n_{f}^{(1)}}A_{i,j}.<br>$$</p>
+<h5 id="旋转注意力-Rotatory-Attention"><a href="#旋转注意力-Rotatory-Attention" class="headerlink" title="旋转注意力(Rotatory Attention)"></a>旋转注意力(Rotatory Attention)</h5><p>Rotatory Attention 是一种用于处理多输入数据的注意力机制，特别适用于情感分析任务中同时考虑目标短语、左上下文和右上下文的场景。该机制通过交替关注不同输入来构建更丰富的表示。</p>
+<ul>
+<li>主要用于情感分析任务</li>
+<li>处理三个输入：目标短语 $\boldsymbol{F}^{t} &#x3D; [ \boldsymbol{f}_{1}^{t}, \ldots , \boldsymbol{f}_{n_{f}^{t}}^{t}] \in \mathbb{R} ^{d_{f}^{t}\times n_{f}^{t}}$ 、左上下文 $\boldsymbol{F^{l}} &#x3D; [ \boldsymbol{f_{1}^{l}}, \ldots , \boldsymbol{f_{n_{f}^{l}}^{l}}]\in\mathbb{R} ^{d_{f}^{l}\times n_{f}^{l}}$ 和右上下文 $\boldsymbol{F^{r}} &#x3D; [ \boldsymbol{f_{1}^{r}}, \ldots , \boldsymbol{f_{n_{f}^{r}}^{r}}]\in\mathbb{R}^{d_f^r\times n_f^r}$</li>
+<li>通过注意力机制迭代改进表示</li>
+</ul>
+<p>其大致的过程如下：</p>
+<ol>
+<li><p><strong>初始特征提取</strong></p>
+<p>首先，模型从三个输入中提取特征向量目标短语特征矩阵 $\boldsymbol{F}^{t}$ 左上下文特征矩阵 $\boldsymbol{F^{l}}$ 右上下文特征矩阵 $\boldsymbol{F^{r}}$ </p>
+</li>
+<li><p><strong>目标短语初始表示</strong></p>
+<p>计算目标短语的初始表示向量$r^{t}$，通过对特征向量取平均：</p>
+<p>$$<br>r^{t}&#x3D;\frac{1}{n_{f}^{t}}\sum_{i&#x3D;1}^{n_{f}^{t}} f_{i}^{t}<br>$$</p>
+</li>
+<li><p><strong>左上下文注意力计算</strong></p>
+<p>使用$r^{t}$作为查询，计算左上下文的注意力：</p>
+<ol>
+<li><p>提取键向量 $k_{1}^{l},\ldots,k_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{k}^{l}}$ 和值向量 $v_{1}^{l},\ldots,v_{n_{f}^{l}}^{l}\in \mathbb{R}^{d_{v}^{l}}$</p>
+</li>
+<li><p>计算注意力分数 $e_{i}^{l}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{l}\right)$</p>
+</li>
+<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{l}$</p>
+</li>
+<li><p>计算左上下文表示向量 $r^{l}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{l}} a_{i}^{l}v_{i}^{l}$</p>
+</li>
+</ol>
+</li>
+<li><p><strong>右上下文注意力计算</strong></p>
+<p>类似地，计算右上下文的表示向量$r^{r}$：</p>
+<ol>
+<li><p>提取键向量 $k_{1}^{r},\ldots,k_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{k}^{r}}$ 和值向量 $v_{1}^{r},\ldots,v_{n_{f}^{r}}^{r}\in \mathbb{R}^{d_{v}^{r}}$</p>
+</li>
+<li><p>计算注意力分数 $e_{i}^{r}&#x3D;\operatorname{score}\left(r^{t}, k_{i}^{r}\right)$</p>
+</li>
+<li><p>使用 softmax 对齐函数计算注意力权重$a_{i}^{r}$</p>
+</li>
+<li><p>计算右上下文表示向量 $r^{r}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{r}} a_{i}^{r}v_{i}^{r}$</p>
+</li>
+</ol>
+</li>
+<li><p><strong>目标短语更新表示</strong></p>
+<p>使用左上下文表示$r^{l}$和右上下文表示$r^{r}$来更新目标短语的表示：</p>
+<ol>
+<li><p>提取目标短语的键向量 $k_{1}^{t},\ldots,k_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{k}^{t}}$ 和值向量 $v_{1}^{t},\ldots,v_{n_{f}^{t}}^{t}\in \mathbb{R}^{d_{v}^{t}}$</p>
+</li>
+<li><p>计算左感知目标表示 $r^{l_{t}}$：</p>
+<ul>
+<li>注意力分数：$e_{i}^{l_{t}}&#x3D;\operatorname{score}\left(r^{l}, k_{i}^{t}\right)$</li>
+<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{l_{t}}$</li>
+<li>计算表示向量：$r^{l_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{l_{t}}v_{i}^{t}$</li>
+</ul>
+</li>
+<li><p>计算右感知目标表示 $r^{r_{t}}$：</p>
+<ul>
+<li>注意力分数：$e_{i}^{r_{t}}&#x3D;\operatorname{score}\left(r^{r}, k_{i}^{t}\right)$</li>
+<li>使用 softmax 对齐函数计算注意力权重 $a_{i}^{r_{t}}$</li>
+<li>计算表示向量：$r^{r_{t}}&#x3D;\sum_{i&#x3D;1}^{n_{f}^{t}} a_{i}^{r_{t}}v_{i}^{t}$</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>最终表示为 $r&#x3D;\operatorname{concat}\left(r^{l},r^{r},r^{l_{t}},r^{r_{t}}\right)$</p>
+</li>
+</ol>
+<p>Rotatory Attention 具有以下特点：</p>
+<ol>
+<li><p><strong>双向信息流动</strong>：通过从目标短语到上下文，再从上下文回到目标短语的信息流动，实现了双向的信息交互。</p>
+</li>
+<li><p><strong>层次化表示</strong>：构建了多层次的特征表示，从原始特征到上下文感知特征。</p>
+</li>
+<li><p><strong>特定任务优化</strong>：特别适合情感分析任务，能够捕捉目标短语与上下文之间的复杂关系。</p>
+</li>
+</ol>
+<p>Rotatory Attention 通过这种交替关注的方式，能够更好地理解目标短语在特定上下文中的情感倾向，从而提高了情感分类的准确性。</p>
+<h2 id="特征层级-Levels-of-Features"><a href="#特征层级-Levels-of-Features" class="headerlink" title="特征层级(Levels of Features)"></a>特征层级(Levels of Features)</h2><p>这部分讨论了如何处理具有层级结构的特征，主要分为单层级注意力和多层级注意力机制。多层级注意力能够捕捉<strong>不同粒度</strong>上的重要信息。</p>
+<h3 id="单层级注意力-Single-Level-Attention"><a href="#单层级注意力-Single-Level-Attention" class="headerlink" title="单层级注意力(Single-Level Attention)"></a>单层级注意力(Single-Level Attention)</h3><p>传统注意力机制通常在单一层级上处理特征，如只关注单词级别或句子级别。</p>
+<h3 id="多层级注意力机制"><a href="#多层级注意力机制" class="headerlink" title="多层级注意力机制"></a>多层级注意力机制</h3><h4 id="注意力叠加-Attention-via-Attention"><a href="#注意力叠加-Attention-via-Attention" class="headerlink" title="注意力叠加(Attention-via-Attention)"></a><strong>注意力叠加(Attention-via-Attention)</strong></h4><img src="/img/Attention/AttentionViaAttention.png" alt="attention-via-attention" width="60%" height="auto">
+
+<ul>
+<li>同时处理字符级和词级特征</li>
+<li>先计算词级注意力，用其上下文向量辅助计算字符级注意力</li>
+<li>最终拼接两个层级的上下文向量</li>
+</ul>
+<p>用于机器翻译任务，同时利用字符级和词级信息。其核心思想是在预测字符时，先通过词级注意力确定重要词语，再在这些词语对应的字符上施加注意力。</p>
+<p>其大致过程如下：</p>
+<ol>
+<li>输入句子被编码为字符级特征矩阵 $F^{(c)}\in \mathbb{R}^{d_{f}^{(c)}\times n_{f}^{(c)}}$ 和词级特征矩阵 $F^{(w)}\in \mathbb{R}^{d_{f}^{(w)}\times n_{f}^{(w)}}$</li>
+<li>字符级查询 $q^{(c)}\in \mathbb{R}^{d_{q}}$ 通过查询模型生成</li>
+<li>先计算词级注意力，生成词级上下文向量 $c^{(w)}\in \mathbb{R}^{d_{v}^{(w)}}$</li>
+<li>将 $q^{(c)}$ 和 $c^{(w)}$ 拼接作为字符级注意力的查询</li>
+<li>最终输出是字符级和词级上下文向量的拼接</li>
+</ol>
+<h4 id="层级注意力-Hierarchical-Attention"><a href="#层级注意力-Hierarchical-Attention" class="headerlink" title="层级注意力(Hierarchical Attention)"></a><strong>层级注意力(Hierarchical Attention)</strong></h4><img src="/img/Attention/HierarchicalAttention.png" alt="hierarchical attention" width="60%" height="auto">
+
+<ul>
+<li>从最低层级开始，逐步构建高层级表示</li>
+<li>常用于文档分类：词 → 句 → 文档</li>
+<li>每个层级通过注意力机制生成摘要表示</li>
+</ul>
+<p>用于文档分类。该方法自底向上构建层级表示：从词级表示构建句级表示，再从句级表示构建文档级表示。</p>
+<p>其大致过程如下：</p>
+<ol>
+<li><p>文档包含 $n_S$ 个句子，第 $s$ 个句子包含 $n_s$ 个词</p>
+</li>
+<li><p>对每个句子计算词级注意力，生成句表示 $c^{(s)}\in \mathbb{R}^{d_{v}^{(S)}}$</p>
+</li>
+<li><p>将所有句表示 $C&#x3D;[c^{(1)},\ldots,c^{(n_{S})}]\in \mathbb{R}^{d_{v}^{(S)} \times n_{S}}$ 作为文档级注意力的输入</p>
+</li>
+<li><p>文档级注意力输出 $c^{(D)}\in \mathbb{R}^{d_{v}^{(D)}}$ 用于分类</p>
+</li>
+</ol>
+<h4 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h4><p>多层级注意力已成功应用于 <del>懒得做链接了捏，可以去原文找捏</del> ：</p>
+<ul>
+<li>推荐系统：建模用户长短期偏好(Ying et al., 2018)</li>
+<li>视频动作识别：捕捉不同时间尺度的运动信息(Wang et al., 2016)</li>
+<li>跨领域情感分类：学习领域共享和特定特征(Li et al., 2018)</li>
+<li>聊天机器人：生成更连贯的响应(Xing et al., 2018)</li>
+<li>人群计数：处理不同尺度的人群密度(Sindagi &amp; Patel, 2019)</li>
+</ul>
+<h2 id="特征表示-Feature-Representations"><a href="#特征表示-Feature-Representations" class="headerlink" title="特征表示(Feature Representations)"></a>特征表示(Feature Representations)</h2><p>这部分讨论了特征表示相关的注意力机制（Feature Representations），主要关注如何利用注意力机制来处理和组合不同的特征表示。这部分内容可以分为两类：单表示注意力（Single-representational attention）和多表示注意力（Multi-representational attention）。</p>
+<h3 id="单一表示注意力-Single-Representational-Attention"><a href="#单一表示注意力-Single-Representational-Attention" class="headerlink" title="单一表示注意力(Single-Representational Attention)"></a>单一表示注意力(Single-Representational Attention)</h3><p>单表示注意力是最基础的注意力形式，它使用单一的特征表示模型（如词嵌入、CNN特征提取器等）来生成特征向量。这些特征向量随后被送入注意力模块进行处理。</p>
+<h3 id="多表示注意力-Multi-Representational-Attention"><a href="#多表示注意力-Multi-Representational-Attention" class="headerlink" title="多表示注意力(Multi-Representational Attention)"></a>多表示注意力(Multi-Representational Attention)</h3><p>多表示注意力是一种更高级的技术，它允许模型同时考虑多种不同的特征表示，并通过注意力机制来学习如何最优地组合这些表示。</p>
+<h4 id="元嵌入-Meta-embeddings"><a href="#元嵌入-Meta-embeddings" class="headerlink" title="元嵌入(Meta-embeddings)"></a>元嵌入(Meta-embeddings)</h4><p>这种方法可以创建所谓的”元嵌入”（meta-embeddings）。</p>
+<ul>
+<li>整合多个嵌入表示</li>
+<li>通过注意力机制加权平均不同表示</li>
+<li>生成更高质量的特征表示</li>
+</ul>
+<p>元嵌入的创建过程大致如下：</p>
+<ol>
+<li><p><strong>输入表示</strong>：对于一个输入 $x$ （如一个词），我们有 $E$ 种不同的嵌入表示： $x^{(e_1)}, \ldots, x^{(e_E)}$ , 其中每种嵌入 $x^{(e_i)}$ 的维度为 $d_{e_i}$（$i&#x3D;1,\ldots,E$ ）。</p>
+</li>
+<li><p><strong>维度标准化</strong>：由于不同嵌入可能有不同维度，首先通过线性变换将它们映射到统一维度 $d_t$ ： $x^{(t_i)} &#x3D; W_{e_i} \times x^{(e_i)} + b_{e_i}$ ， 其中 $W_{e_i} \in \mathbb{R}^{d_t \times d_{e_i}}$ 和 $b_{e_i} \in \mathbb{R}^{d_t}$ 是可训练的参数。</p>
+</li>
+<li><p><strong>注意力加权组合</strong>：最终的元嵌入是这些标准化表示的加权和： $x^{(e)} &#x3D; \sum_{i&#x3D;1}^E a_i \times x^{(t_i)}$ 其中权重 $a_i$ 通过注意力机制计算得到。</p>
+</li>
+</ol>
+<h5 id="注意力计算"><a href="#注意力计算" class="headerlink" title="注意力计算"></a>注意力计算</h5><p>在多表示注意力中，注意力权重的计算可以视为一种自注意力机制，其查询可以理解为”哪些表示对当前任务最重要”。具体计算过程如下：</p>
+<ol>
+<li>将标准化后的表示 $x^{(t_1)}, \ldots, x^{(t_E)}$ 作为特征矩阵F的列向量</li>
+<li>由于没有显式查询，这相当于自注意力机制</li>
+<li>使用适当的注意力评分函数计算权重</li>
+<li>通过对齐函数（如softmax）得到归一化的注意力权重</li>
+</ol>
+<h3 id="技术优势"><a href="#技术优势" class="headerlink" title="技术优势"></a>技术优势</h3><ol>
+<li><strong>灵活性</strong>：可以整合来自不同来源或不同粒度的特征表示</li>
+<li><strong>适应性</strong>：通过注意力权重自动学习不同表示的重要性</li>
+<li><strong>可解释性</strong>：注意力权重可以提供关于哪些特征表示对任务更重要的见解</li>
+</ol>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>Model</category>
+        <category>Attention</category>
+        <category>Category</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>attention</tag>
       </tags>
   </entry>
   <entry>
@@ -3150,174 +3150,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Reinforcement-Learning-L10</title>
-    <url>/2025/07/28/Reinforcement-Learning-L10/</url>
-    <content><![CDATA[<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/10.png" style="width: 175px; margin-right: 20px;">
-  <p>Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。</p>
-</div>
-
-<span id="more"></span>
-
-<h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
-<li><strong>Actor（演员）</strong>：  <ul>
-<li>负责策略更新 $\pi(a|s,\theta)$  </li>
-<li>通过参数 $\theta$ 生成动作</li>
-</ul>
-</li>
-<li><strong>Critic（评论家）</strong>：  <ul>
-<li>负责策略评估，估计值函数 $q(s,a,w)$ 或 $v(s,w)$  </li>
-<li>通过参数 $w$ 提供反馈信号</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-策略梯度基础"><a href="#2-策略梯度基础" class="headerlink" title="2. 策略梯度基础"></a>2. 策略梯度基础</h3><p>策略梯度统一表达式：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\eta, A\sim\pi} \left[ \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]<br>$$  </p>
-<p>随机梯度更新：  </p>
-<p>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \nabla_\theta \ln \pi(a_t|s_t,\theta_t) q_t(s_t,a_t)<br>$$  </p>
-<hr>
-<h2 id="二、基础算法：QAC（最简单的Actor-Critic）"><a href="#二、基础算法：QAC（最简单的Actor-Critic）" class="headerlink" title="二、基础算法：QAC（最简单的Actor-Critic）"></a>二、基础算法：QAC（最简单的Actor-Critic）</h2><h3 id="1-算法流程"><a href="#1-算法流程" class="headerlink" title="1. 算法流程"></a>1. 算法流程</h3><pre><code class="language-python">初始化：策略函数 $\pi(a|s,\theta_0)$，值函数 $q(s,a,w_0)$  
-for 每步 $t$：  
-    # 交互  
-    根据 $\pi(\cdot|s_t,\theta_t)$ 选择动作 $a_t$  
-    执行 $a_t$，观测奖励 $r_&#123;t+1&#125;$ 和下一状态 $s_&#123;t+1&#125;$  
-    根据 $\pi(\cdot|s_&#123;t+1&#125;,\theta_t)$ 选择 $a_&#123;t+1&#125;$（仅用于Critic更新）  
-
-    # Actor更新（策略改进）  
-    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \nabla_\theta \ln \pi(a_t|s_t,\theta_t) q(s_t,a_t,w_t)$  
-
-    # Critic更新（值估计）  
-    $w_&#123;t+1&#125; = w_t + \alpha_w \left[ r_&#123;t+1&#125; + \gamma q(s_&#123;t+1&#125;,a_&#123;t+1&#125;,w_t) - q(s_t,a_t,w_t) \right] \nabla_w q(s_t,a_t,w_t)$
-</code></pre>
-<blockquote>
-<p><strong>注</strong>：Critic使用SARSA风格更新，需额外采样 $a_{t+1}$</p>
-</blockquote>
-<h3 id="2-算法特性"><a href="#2-算法特性" class="headerlink" title="2. 算法特性"></a>2. 算法特性</h3><ul>
-<li><strong>同策略（On-Policy）</strong>：行为策略与目标策略均为 $\pi(\theta_t)$  </li>
-<li><strong>双网络结构</strong>：策略网络与值函数网络独立更新  </li>
-<li><strong>Critic本质</strong>：带函数近似的SARSA算法</li>
-</ul>
-<hr>
-<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
-<h3 id="2-优势函数设计"><a href="#2-优势函数设计" class="headerlink" title="2. 优势函数设计"></a>2. 优势函数设计</h3><ul>
-<li><strong>次优基线选择</strong>：$b(s) &#x3D; v_\pi(s)$  </li>
-<li><strong>优势函数定义</strong>：<br>$$<br>\delta_t &#x3D; q_\pi(s_t,a_t) - v_\pi(s_t) \approx r_{t+1} + \gamma v(s_{t+1},w_t) - v(s_t,w_t)<br>$$  </li>
-<li><strong>梯度简化</strong>：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) \delta(S,A) \right]<br>$$</li>
-</ul>
-<h3 id="3-A2C算法流程"><a href="#3-A2C算法流程" class="headerlink" title="3. A2C算法流程"></a>3. A2C算法流程</h3><pre><code class="language-python">初始化：策略网络 $\pi(a|s,\theta_0)$，值网络 $v(s,w_0)$  
-for 每步 $t$：  
-    # 交互  
-    根据 $\pi(\cdot|s_t,\theta_t)$ 选择 $a_t$，执行后观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
-
-    # 计算TD误差  
-    $\delta_t = r_&#123;t+1&#125; + \gamma v(s_&#123;t+1&#125;,w_t) - v(s_t,w_t)$  
-
-    # Actor更新  
-    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \delta_t \nabla_\theta \ln \pi(a_t|s_t,\theta_t)$  
-
-    # Critic更新  
-    $w_&#123;t+1&#125; = w_t + \alpha_w \delta_t \nabla_w v(s_t,w_t)$
-</code></pre>
-<p><strong>核心优势</strong>：只需一个值网络（无需动作值函数），显著降低方差  </p>
-<hr>
-<h2 id="四、离策略Actor-Critic"><a href="#四、离策略Actor-Critic" class="headerlink" title="四、离策略Actor-Critic"></a>四、离策略Actor-Critic</h2><h3 id="1-重要性采样原理"><a href="#1-重要性采样原理" class="headerlink" title="1. 重要性采样原理"></a>1. 重要性采样原理</h3><ul>
-<li><p><strong>问题</strong>：行为策略 $\beta$ 生成样本，目标策略 $\pi$ 需离策略更新  </p>
-</li>
-<li><p><strong>解决方案</strong>：  </p>
-<p>$$<br>\mathbb{E}_{X\sim p_0}[f(X)] &#x3D; \mathbb{E}_{X\sim p_1} \left[ \frac{p_0(X)}{p_1(X)} f(X) \right]<br>$$  </p>
-</li>
-<li><p><strong>策略梯度修正</strong>： </p>
-<p>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\rho, A\sim\beta} \left[ \frac{\pi(A|S,\theta)}{\beta(A|S)} \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]<br>$$</p>
-</li>
-</ul>
-<h3 id="2-离策略Actor-Critic算法"><a href="#2-离策略Actor-Critic算法" class="headerlink" title="2. 离策略Actor-Critic算法"></a>2. 离策略Actor-Critic算法</h3><pre><code class="language-python">初始化：行为策略 $\beta$，目标策略 $\pi(a|s,\theta_0)$，值函数 $v(s,w_0)$  
-for 每步 $t$：  
-    # 交互（使用行为策略）  
-    根据 $\beta(\cdot|s_t)$ 选择 $a_t$，观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
-
-    # 计算TD误差  
-    $\delta_t = r_&#123;t+1&#125; + \gamma v(s_&#123;t+1&#125;,w_t) - v(s_t,w_t)$  
-
-    # Actor更新（含重要性权重）  
-    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \frac&#123;\pi(a_t|s_t,\theta_t)&#125;&#123;\beta(a_t|s_t)&#125; \delta_t \nabla_\theta \ln \pi(a_t|s_t,\theta_t)$  
-
-    # Critic更新  
-    $w_&#123;t+1&#125; = w_t + \alpha_w \frac&#123;\pi(a_t|s_t,\theta_t)&#125;&#123;\beta(a_t|s_t)&#125; \delta_t \nabla_w v(s_t,w_t)$
-</code></pre>
-<p><strong>关键点</strong>：重要性权重 $\frac{\pi}{\beta}$ 修正策略差异导致的分布偏移  </p>
-<hr>
-<h2 id="五、确定性Actor-Critic（DPG）"><a href="#五、确定性Actor-Critic（DPG）" class="headerlink" title="五、确定性Actor-Critic（DPG）"></a>五、确定性Actor-Critic（DPG）</h2><h3 id="1-确定性策略梯度定理"><a href="#1-确定性策略梯度定理" class="headerlink" title="1. 确定性策略梯度定理"></a>1. 确定性策略梯度定理</h3><ul>
-<li><strong>策略表示</strong>：$a &#x3D; \mu(s,\theta)$（确定性映射）  </li>
-<li><strong>梯度表达式</strong>：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\rho_\mu} \left[ \nabla_\theta \mu(S,\theta) \left( \nabla_a q_\mu(S,a) \right)|_{a&#x3D;\mu(S)} \right]<br>$$</li>
-</ul>
-<h3 id="2-DPG算法流程"><a href="#2-DPG算法流程" class="headerlink" title="2. DPG算法流程"></a>2. DPG算法流程</h3><pre><code class="language-python">初始化：行为策略 $\beta$，确定性目标策略 $\mu(s,\theta_0)$，动作值函数 $q(s,a,w_0)$  
-for 每步 $t$：  
-    # 交互（使用行为策略）  
-    根据 $\beta(\cdot|s_t)$ 选择 $a_t$，观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
-
-    # 计算TD误差  
-    $\delta_t = r_&#123;t+1&#125; + \gamma q(s_&#123;t+1&#125;,\mu(s_&#123;t+1&#125;,\theta_t),w_t) - q(s_t,a_t,w_t)$  
-
-    # Actor更新（沿Q梯度方向）  
-    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \nabla_\theta \mu(s_t,\theta_t) \left( \nabla_a q(s_t,a,w_t) \right)|_&#123;a=\mu(s_t)&#125;$  
-
-    # Critic更新  
-    $w_&#123;t+1&#125; = w_t + \alpha_w \delta_t \nabla_w q(s_t,a_t,w_t)$
-</code></pre>
-<p><strong>核心特性</strong>：  </p>
-<ul>
-<li>天然离策略（行为策略 $\beta$ 可独立设计）  </li>
-<li>适用于连续动作空间（如DDPG算法）</li>
-</ul>
-<hr>
-<h2 id="六、算法对比总结"><a href="#六、算法对比总结" class="headerlink" title="六、算法对比总结"></a>六、算法对比总结</h2><table>
-<thead>
-<tr>
-<th><strong>算法</strong></th>
-<th><strong>策略类型</strong></th>
-<th><strong>策略更新特点</strong></th>
-<th><strong>值估计方式</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>QAC</strong></td>
-<td>随机</td>
-<td>基于动作值 $q(s,a)$</td>
-<td>SARSA+函数近似</td>
-</tr>
-<tr>
-<td><strong>A2C</strong></td>
-<td>随机</td>
-<td>基于优势函数 $\delta &#x3D; q - v$</td>
-<td>TD误差+状态值函数</td>
-</tr>
-<tr>
-<td><strong>离策略Actor-Critic</strong></td>
-<td>随机</td>
-<td>重要性采样修正 $\pi&#x2F;\beta$</td>
-<td>TD误差+状态值函数</td>
-</tr>
-<tr>
-<td><strong>DPG</strong></td>
-<td>确定性</td>
-<td>沿 $\nabla_a q$ 梯度更新策略</td>
-<td>Q-learning+函数近似</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>关键演进脉络</strong>：  </p>
-<ul>
-<li>方差减少（A2C引入优势函数）  </li>
-<li>样本效率提升（离策略机制）  </li>
-<li>连续控制扩展（确定性策略梯度）</li>
-</ul>
-</blockquote>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Basic Concepts</title>
     <url>/2025/07/28/Reinforcement-Learning-L1/</url>
     <content><![CDATA[<h1 id="强化学习基础概念读书笔记"><a href="#强化学习基础概念读书笔记" class="headerlink" title="强化学习基础概念读书笔记"></a>强化学习基础概念读书笔记</h1><div style="display: flex; align-items: center;">
@@ -3586,6 +3418,174 @@ s8 --&gt;|a2, r&#x3D;1| s9((s9))
       </tags>
   </entry>
   <entry>
+    <title>Reinforcement-Learning-L10</title>
+    <url>/2025/07/28/Reinforcement-Learning-L10/</url>
+    <content><![CDATA[<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/10.png" style="width: 175px; margin-right: 20px;">
+  <p>Actor-Critic方法结合了策略梯度（Actor）和价值函数估计（Critic）的优势。Actor负责策略改进，Critic评估策略性能并提供反馈。本文详解QAC、A2C、离策略Actor-Critic和确定性策略梯度（DPG）等算法，分析其架构、更新规则和收敛特性，并对比不同方法的适用场景与性能差异。</p>
+</div>
+
+<span id="more"></span>
+
+<h2 id="一、Actor-Critic方法核心思想"><a href="#一、Actor-Critic方法核心思想" class="headerlink" title="一、Actor-Critic方法核心思想"></a>一、Actor-Critic方法核心思想</h2><h3 id="1-基本架构"><a href="#1-基本架构" class="headerlink" title="1. 基本架构"></a>1. 基本架构</h3><ul>
+<li><strong>Actor（演员）</strong>：  <ul>
+<li>负责策略更新 $\pi(a|s,\theta)$  </li>
+<li>通过参数 $\theta$ 生成动作</li>
+</ul>
+</li>
+<li><strong>Critic（评论家）</strong>：  <ul>
+<li>负责策略评估，估计值函数 $q(s,a,w)$ 或 $v(s,w)$  </li>
+<li>通过参数 $w$ 提供反馈信号</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-策略梯度基础"><a href="#2-策略梯度基础" class="headerlink" title="2. 策略梯度基础"></a>2. 策略梯度基础</h3><p>策略梯度统一表达式：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\eta, A\sim\pi} \left[ \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]<br>$$  </p>
+<p>随机梯度更新：  </p>
+<p>$$<br>\theta_{t+1} &#x3D; \theta_t + \alpha \nabla_\theta \ln \pi(a_t|s_t,\theta_t) q_t(s_t,a_t)<br>$$  </p>
+<hr>
+<h2 id="二、基础算法：QAC（最简单的Actor-Critic）"><a href="#二、基础算法：QAC（最简单的Actor-Critic）" class="headerlink" title="二、基础算法：QAC（最简单的Actor-Critic）"></a>二、基础算法：QAC（最简单的Actor-Critic）</h2><h3 id="1-算法流程"><a href="#1-算法流程" class="headerlink" title="1. 算法流程"></a>1. 算法流程</h3><pre><code class="language-python">初始化：策略函数 $\pi(a|s,\theta_0)$，值函数 $q(s,a,w_0)$  
+for 每步 $t$：  
+    # 交互  
+    根据 $\pi(\cdot|s_t,\theta_t)$ 选择动作 $a_t$  
+    执行 $a_t$，观测奖励 $r_&#123;t+1&#125;$ 和下一状态 $s_&#123;t+1&#125;$  
+    根据 $\pi(\cdot|s_&#123;t+1&#125;,\theta_t)$ 选择 $a_&#123;t+1&#125;$（仅用于Critic更新）  
+
+    # Actor更新（策略改进）  
+    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \nabla_\theta \ln \pi(a_t|s_t,\theta_t) q(s_t,a_t,w_t)$  
+
+    # Critic更新（值估计）  
+    $w_&#123;t+1&#125; = w_t + \alpha_w \left[ r_&#123;t+1&#125; + \gamma q(s_&#123;t+1&#125;,a_&#123;t+1&#125;,w_t) - q(s_t,a_t,w_t) \right] \nabla_w q(s_t,a_t,w_t)$
+</code></pre>
+<blockquote>
+<p><strong>注</strong>：Critic使用SARSA风格更新，需额外采样 $a_{t+1}$</p>
+</blockquote>
+<h3 id="2-算法特性"><a href="#2-算法特性" class="headerlink" title="2. 算法特性"></a>2. 算法特性</h3><ul>
+<li><strong>同策略（On-Policy）</strong>：行为策略与目标策略均为 $\pi(\theta_t)$  </li>
+<li><strong>双网络结构</strong>：策略网络与值函数网络独立更新  </li>
+<li><strong>Critic本质</strong>：带函数近似的SARSA算法</li>
+</ul>
+<hr>
+<h2 id="三、优势Actor-Critic（A2C）"><a href="#三、优势Actor-Critic（A2C）" class="headerlink" title="三、优势Actor-Critic（A2C）"></a>三、优势Actor-Critic（A2C）</h2><h3 id="1-基线不变性原理"><a href="#1-基线不变性原理" class="headerlink" title="1. 基线不变性原理"></a>1. 基线不变性原理</h3><p>策略梯度可引入基线函数 $b(S)$ 而不改变期望：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) (q_\pi(S,A) - b(S)) \right]<br>$$<br><strong>最优基线</strong>（最小化方差）：<br>$$<br>b^*(s) &#x3D; \frac{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 q_\pi(s,A) \right]}{\mathbb{E}_A \left[ |\nabla_\theta \ln \pi(A|s,\theta)|^2 \right]}<br>$$  </p>
+<h3 id="2-优势函数设计"><a href="#2-优势函数设计" class="headerlink" title="2. 优势函数设计"></a>2. 优势函数设计</h3><ul>
+<li><strong>次优基线选择</strong>：$b(s) &#x3D; v_\pi(s)$  </li>
+<li><strong>优势函数定义</strong>：<br>$$<br>\delta_t &#x3D; q_\pi(s_t,a_t) - v_\pi(s_t) \approx r_{t+1} + \gamma v(s_{t+1},w_t) - v(s_t,w_t)<br>$$  </li>
+<li><strong>梯度简化</strong>：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E} \left[ \nabla_\theta \ln \pi(A|S,\theta) \delta(S,A) \right]<br>$$</li>
+</ul>
+<h3 id="3-A2C算法流程"><a href="#3-A2C算法流程" class="headerlink" title="3. A2C算法流程"></a>3. A2C算法流程</h3><pre><code class="language-python">初始化：策略网络 $\pi(a|s,\theta_0)$，值网络 $v(s,w_0)$  
+for 每步 $t$：  
+    # 交互  
+    根据 $\pi(\cdot|s_t,\theta_t)$ 选择 $a_t$，执行后观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
+
+    # 计算TD误差  
+    $\delta_t = r_&#123;t+1&#125; + \gamma v(s_&#123;t+1&#125;,w_t) - v(s_t,w_t)$  
+
+    # Actor更新  
+    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \delta_t \nabla_\theta \ln \pi(a_t|s_t,\theta_t)$  
+
+    # Critic更新  
+    $w_&#123;t+1&#125; = w_t + \alpha_w \delta_t \nabla_w v(s_t,w_t)$
+</code></pre>
+<p><strong>核心优势</strong>：只需一个值网络（无需动作值函数），显著降低方差  </p>
+<hr>
+<h2 id="四、离策略Actor-Critic"><a href="#四、离策略Actor-Critic" class="headerlink" title="四、离策略Actor-Critic"></a>四、离策略Actor-Critic</h2><h3 id="1-重要性采样原理"><a href="#1-重要性采样原理" class="headerlink" title="1. 重要性采样原理"></a>1. 重要性采样原理</h3><ul>
+<li><p><strong>问题</strong>：行为策略 $\beta$ 生成样本，目标策略 $\pi$ 需离策略更新  </p>
+</li>
+<li><p><strong>解决方案</strong>：  </p>
+<p>$$<br>\mathbb{E}_{X\sim p_0}[f(X)] &#x3D; \mathbb{E}_{X\sim p_1} \left[ \frac{p_0(X)}{p_1(X)} f(X) \right]<br>$$  </p>
+</li>
+<li><p><strong>策略梯度修正</strong>： </p>
+<p>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\rho, A\sim\beta} \left[ \frac{\pi(A|S,\theta)}{\beta(A|S)} \nabla_\theta \ln \pi(A|S,\theta) q_\pi(S,A) \right]<br>$$</p>
+</li>
+</ul>
+<h3 id="2-离策略Actor-Critic算法"><a href="#2-离策略Actor-Critic算法" class="headerlink" title="2. 离策略Actor-Critic算法"></a>2. 离策略Actor-Critic算法</h3><pre><code class="language-python">初始化：行为策略 $\beta$，目标策略 $\pi(a|s,\theta_0)$，值函数 $v(s,w_0)$  
+for 每步 $t$：  
+    # 交互（使用行为策略）  
+    根据 $\beta(\cdot|s_t)$ 选择 $a_t$，观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
+
+    # 计算TD误差  
+    $\delta_t = r_&#123;t+1&#125; + \gamma v(s_&#123;t+1&#125;,w_t) - v(s_t,w_t)$  
+
+    # Actor更新（含重要性权重）  
+    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \frac&#123;\pi(a_t|s_t,\theta_t)&#125;&#123;\beta(a_t|s_t)&#125; \delta_t \nabla_\theta \ln \pi(a_t|s_t,\theta_t)$  
+
+    # Critic更新  
+    $w_&#123;t+1&#125; = w_t + \alpha_w \frac&#123;\pi(a_t|s_t,\theta_t)&#125;&#123;\beta(a_t|s_t)&#125; \delta_t \nabla_w v(s_t,w_t)$
+</code></pre>
+<p><strong>关键点</strong>：重要性权重 $\frac{\pi}{\beta}$ 修正策略差异导致的分布偏移  </p>
+<hr>
+<h2 id="五、确定性Actor-Critic（DPG）"><a href="#五、确定性Actor-Critic（DPG）" class="headerlink" title="五、确定性Actor-Critic（DPG）"></a>五、确定性Actor-Critic（DPG）</h2><h3 id="1-确定性策略梯度定理"><a href="#1-确定性策略梯度定理" class="headerlink" title="1. 确定性策略梯度定理"></a>1. 确定性策略梯度定理</h3><ul>
+<li><strong>策略表示</strong>：$a &#x3D; \mu(s,\theta)$（确定性映射）  </li>
+<li><strong>梯度表达式</strong>：<br>$$<br>\nabla_\theta J(\theta) &#x3D; \mathbb{E}_{S\sim\rho_\mu} \left[ \nabla_\theta \mu(S,\theta) \left( \nabla_a q_\mu(S,a) \right)|_{a&#x3D;\mu(S)} \right]<br>$$</li>
+</ul>
+<h3 id="2-DPG算法流程"><a href="#2-DPG算法流程" class="headerlink" title="2. DPG算法流程"></a>2. DPG算法流程</h3><pre><code class="language-python">初始化：行为策略 $\beta$，确定性目标策略 $\mu(s,\theta_0)$，动作值函数 $q(s,a,w_0)$  
+for 每步 $t$：  
+    # 交互（使用行为策略）  
+    根据 $\beta(\cdot|s_t)$ 选择 $a_t$，观测 $r_&#123;t+1&#125;, s_&#123;t+1&#125;$  
+
+    # 计算TD误差  
+    $\delta_t = r_&#123;t+1&#125; + \gamma q(s_&#123;t+1&#125;,\mu(s_&#123;t+1&#125;,\theta_t),w_t) - q(s_t,a_t,w_t)$  
+
+    # Actor更新（沿Q梯度方向）  
+    $\theta_&#123;t+1&#125; = \theta_t + \alpha_\theta \nabla_\theta \mu(s_t,\theta_t) \left( \nabla_a q(s_t,a,w_t) \right)|_&#123;a=\mu(s_t)&#125;$  
+
+    # Critic更新  
+    $w_&#123;t+1&#125; = w_t + \alpha_w \delta_t \nabla_w q(s_t,a_t,w_t)$
+</code></pre>
+<p><strong>核心特性</strong>：  </p>
+<ul>
+<li>天然离策略（行为策略 $\beta$ 可独立设计）  </li>
+<li>适用于连续动作空间（如DDPG算法）</li>
+</ul>
+<hr>
+<h2 id="六、算法对比总结"><a href="#六、算法对比总结" class="headerlink" title="六、算法对比总结"></a>六、算法对比总结</h2><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>策略类型</strong></th>
+<th><strong>策略更新特点</strong></th>
+<th><strong>值估计方式</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>QAC</strong></td>
+<td>随机</td>
+<td>基于动作值 $q(s,a)$</td>
+<td>SARSA+函数近似</td>
+</tr>
+<tr>
+<td><strong>A2C</strong></td>
+<td>随机</td>
+<td>基于优势函数 $\delta &#x3D; q - v$</td>
+<td>TD误差+状态值函数</td>
+</tr>
+<tr>
+<td><strong>离策略Actor-Critic</strong></td>
+<td>随机</td>
+<td>重要性采样修正 $\pi&#x2F;\beta$</td>
+<td>TD误差+状态值函数</td>
+</tr>
+<tr>
+<td><strong>DPG</strong></td>
+<td>确定性</td>
+<td>沿 $\nabla_a q$ 梯度更新策略</td>
+<td>Q-learning+函数近似</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>关键演进脉络</strong>：  </p>
+<ul>
+<li>方差减少（A2C引入优势函数）  </li>
+<li>样本效率提升（离策略机制）  </li>
+<li>连续控制扩展（确定性策略梯度）</li>
+</ul>
+</blockquote>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Bellman Equation</title>
     <url>/2025/07/28/Reinforcement-Learning-L2/</url>
     <content><![CDATA[<h1 id="强化学习基础：状态值与贝尔曼方程读书笔记"><a href="#强化学习基础：状态值与贝尔曼方程读书笔记" class="headerlink" title="强化学习基础：状态值与贝尔曼方程读书笔记"></a>强化学习基础：状态值与贝尔曼方程读书笔记</h1><div style="display: flex; align-items: center;">
@@ -3748,152 +3748,6 @@ s8 --&gt;|a2, r&#x3D;1| s9((s9))
 <li><strong>策略评估（Policy Evaluation）</strong>：计算给定策略 $\pi$ 的状态值 $v_\pi$  </li>
 <li><strong>后续基础</strong>：为策略改进（Policy Improvement）和值迭代（Value Iteration）奠定基础</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
-  </span>
-  Book-Mathematical-Foundation-of-Reinforcement-Learning
-</a>]]></content>
-      <categories>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Bellman Optimality Equation</title>
-    <url>/2025/07/28/Reinforcement-Learning-L3/</url>
-    <content><![CDATA[<h1 id="最优策略与贝尔曼最优方程读书笔记"><a href="#最优策略与贝尔曼最优方程读书笔记" class="headerlink" title="最优策略与贝尔曼最优方程读书笔记"></a>最优策略与贝尔曼最优方程读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/03.png" style="width: 175px; margin-right: 20px;">
-  <p>贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。</p>
-</div>
-
-<span id="more"></span>
-
-
-
-<h2 id="动机示例：动作值驱动的策略改进"><a href="#动机示例：动作值驱动的策略改进" class="headerlink" title="动机示例：动作值驱动的策略改进"></a>动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
-<ul>
-<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$</li>
-<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; -1 + \gamma v_\pi(s_2) &#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 0 + \gamma v_\pi(s_3) &#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 0 + \gamma v_\pi(s_1) &#x3D; 7.2<br>\end{align*}<br>$$</li>
-</ul>
-<img src="/img/reinforcement-learning/Reinforcement-Learning-L3/grid.png" alt="grid" style="zoom:33%;" />
-
-<h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
-<li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
-<li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
-<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$<blockquote>
-<p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h2 id="最优策略的数学定义"><a href="#最优策略的数学定义" class="headerlink" title="最优策略的数学定义"></a>最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
-<li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
-</li>
-<li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
-<p>$$<br>v_{\pi^*}(s) \geq v_{\pi}(s)<br>$$</p>
-</li>
-</ul>
-<h3 id="理论问题"><a href="#理论问题" class="headerlink" title="理论问题"></a>理论问题</h3><ol>
-<li><strong>存在性</strong>：最优策略是否存在？  </li>
-<li><strong>唯一性</strong>：最优策略是否唯一？  </li>
-<li><strong>确定性</strong>：最优策略是确定性还是随机性？  </li>
-<li><strong>求解方法</strong>：如何计算最优策略？</li>
-</ol>
-<blockquote>
-<p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
-</blockquote>
-<hr>
-<h2 id="贝尔曼最优方程（BOE）的形式"><a href="#贝尔曼最优方程（BOE）的形式" class="headerlink" title="贝尔曼最优方程（BOE）的形式"></a>贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; {\color{blue}{\max_{\pi}}} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
-<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$</p>
-<ul>
-<li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
-<li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
-<li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
-</ul>
-<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$</p>
-<ul>
-<li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
-</ul>
-<hr>
-<h2 id="BOE的求解：压缩映射理论"><a href="#BOE的求解：压缩映射理论" class="headerlink" title="BOE的求解：压缩映射理论"></a>BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
-<li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
-</li>
-<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$</p>
-<blockquote>
-<p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="解的存在性与唯一性"><a href="#解的存在性与唯一性" class="headerlink" title="解的存在性与唯一性"></a>解的存在性与唯一性</h3><p><strong>压缩映射定理</strong>：  </p>
-<ol>
-<li><strong>存在性</strong>：BOE 存在解 $v^*$  </li>
-<li><strong>唯一性</strong>：解 $v^*$ 唯一  </li>
-<li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
-</ol>
-<hr>
-<h2 id="BOE与最优策略的关系"><a href="#BOE与最优策略的关系" class="headerlink" title="BOE与最优策略的关系"></a>BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
-<ol>
-<li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
-<li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
-</ol>
-<h3 id="确定性策略充分性"><a href="#确定性策略充分性" class="headerlink" title="确定性策略充分性"></a>确定性策略充分性</h3><p><strong>定理</strong>：确定性策略足以达到最优性能  </p>
-<ul>
-<li>随机策略不会产生比最优确定性策略更高的状态值</li>
-</ul>
-<hr>
-<h2 id="最优策略的影响因素分析"><a href="#最优策略的影响因素分析" class="headerlink" title="最优策略的影响因素分析"></a>最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
-<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$</li>
-<li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
-<li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-折扣率-gamma"><a href="#2-折扣率-gamma" class="headerlink" title="2. 折扣率 $\gamma$"></a>2. 折扣率 $\gamma$</h3><ul>
-<li>$\gamma \approx 1$：<strong>长远规划</strong>，愿承担风险穿越禁区  </li>
-<li>$\gamma \approx 0$：<strong>短视行为</strong>，回避所有风险（可能无法到达目标）</li>
-</ul>
-<h3 id="3-绕路惩罚机制"><a href="#3-绕路惩罚机制" class="headerlink" title="3. 绕路惩罚机制"></a>3. 绕路惩罚机制</h3><ul>
-<li><strong>隐含惩罚</strong>：折扣率 $\gamma$ 天然惩罚长路径  <ul>
-<li>最优路径回报：$\frac{1}{1-\gamma}$  </li>
-<li>绕路路径回报：$\frac{\gamma^k}{1-\gamma} &lt; \frac{1}{1-\gamma}$（$k \geq 2$)</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="总结：贝尔曼最优方程的意义"><a href="#总结：贝尔曼最优方程的意义" class="headerlink" title="总结：贝尔曼最优方程的意义"></a>总结：贝尔曼最优方程的意义</h2><table>
-<thead>
-<tr>
-<th><strong>问题</strong></th>
-<th><strong>BOE的解答</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>最优策略存在性</strong></td>
-<td>BOE解存在 → 最优策略 $\pi^*$ 存在</td>
-</tr>
-<tr>
-<td><strong>策略形式</strong></td>
-<td>确定性策略足够最优：$\pi^* &#x3D; \arg\max_a q(s,a)$</td>
-</tr>
-<tr>
-<td><strong>求解算法</strong></td>
-<td>值迭代：$v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)$</td>
-</tr>
-<tr>
-<td><strong>解的唯一性</strong></td>
-<td>压缩映射保证唯一解 $v^*$</td>
-</tr>
-<tr>
-<td><strong>最优性验证</strong></td>
-<td>$v^* \geq v_{\pi}$ 对所有策略 $\pi$ 成立</td>
-</tr>
-</tbody></table>
-<h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
-<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$</li>
-<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$</li>
-<li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
-</ol>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
     <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
@@ -4279,6 +4133,152 @@ for 每个幕:
 </ul>
 </li>
 </ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
+      <categories>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Bellman Optimality Equation</title>
+    <url>/2025/07/28/Reinforcement-Learning-L3/</url>
+    <content><![CDATA[<h1 id="最优策略与贝尔曼最优方程读书笔记"><a href="#最优策略与贝尔曼最优方程读书笔记" class="headerlink" title="最优策略与贝尔曼最优方程读书笔记"></a>最优策略与贝尔曼最优方程读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/03.png" style="width: 175px; margin-right: 20px;">
+  <p>贝尔曼最优方程（BOE）是求解最优策略的核心工具。本文证明BOE解的存在唯一性，分析值迭代的收敛性，探讨奖励设计、折扣率对策略的影响，并给出确定性策略充分性的理论保证。</p>
+</div>
+
+<span id="more"></span>
+
+
+
+<h2 id="动机示例：动作值驱动的策略改进"><a href="#动机示例：动作值驱动的策略改进" class="headerlink" title="动机示例：动作值驱动的策略改进"></a>动机示例：动作值驱动的策略改进</h2><h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>在网格世界中，给定策略 $\pi$ 的状态值和动作值计算：  </p>
+<ul>
+<li><strong>状态值</strong>（$\gamma&#x3D;0.9$）：<br>$$<br>v_\pi(s_1)&#x3D;8,\quad v_\pi(s_2)&#x3D;10,\quad v_\pi(s_3)&#x3D;10,\quad v_\pi(s_4)&#x3D;10<br>$$</li>
+<li><strong>动作值</strong>（状态 $s_1$）：<br>$$<br>\begin{align*}<br>q_\pi(s_1, a_1) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_2) &amp;&#x3D; -1 + \gamma v_\pi(s_2) &#x3D; 8, \\<br>q_\pi(s_1, a_3) &amp;&#x3D; 0 + \gamma v_\pi(s_3) &#x3D; 9, \\<br>q_\pi(s_1, a_4) &amp;&#x3D; -1 + \gamma v_\pi(s_1) &#x3D; 6.2, \\<br>q_\pi(s_1, a_5) &amp;&#x3D; 0 + \gamma v_\pi(s_1) &#x3D; 7.2<br>\end{align*}<br>$$</li>
+</ul>
+<img src="/img/reinforcement-learning/Reinforcement-Learning-L3/grid.png" alt="grid" style="zoom:33%;" />
+
+<h3 id="策略改进原理"><a href="#策略改进原理" class="headerlink" title="策略改进原理"></a>策略改进原理</h3><ol>
+<li><strong>当前策略</strong>：在 $s_1$ 固定选择 $a_2$（向右移动）  </li>
+<li><strong>改进依据</strong>：选择最大化动作值的动作 $a_3$（向下移动）  </li>
+<li><strong>新策略</strong>：<br>$$<br>\pi_{\text{new}}(a|s_1) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; a_3 \\<br>0 &amp; a \neq a_3<br>\end{cases}<br>$$<blockquote>
+<p><strong>关键思想</strong>：动作值 $q_\pi(s,a)$ 量化动作的长期收益，最大化它可提升策略性能</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="最优策略的数学定义"><a href="#最优策略的数学定义" class="headerlink" title="最优策略的数学定义"></a>最优策略的数学定义</h2><h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><ul>
+<li><p><strong>状态值偏序关系</strong>：若对所有状态 $s \in \mathcal{S}$ 满足<br>$$<br>v_{\pi_1}(s) \geq v_{\pi_2}(s)<br>$$<br>则称策略 $\pi_1$ <strong>优于</strong> $\pi_2$  </p>
+</li>
+<li><p><strong>最优策略</strong> $\pi^*$ ：对所有状态 $s$ 和任意策略 $\pi$ 满足 </p>
+<p>$$<br>v_{\pi^*}(s) \geq v_{\pi}(s)<br>$$</p>
+</li>
+</ul>
+<h3 id="理论问题"><a href="#理论问题" class="headerlink" title="理论问题"></a>理论问题</h3><ol>
+<li><strong>存在性</strong>：最优策略是否存在？  </li>
+<li><strong>唯一性</strong>：最优策略是否唯一？  </li>
+<li><strong>确定性</strong>：最优策略是确定性还是随机性？  </li>
+<li><strong>求解方法</strong>：如何计算最优策略？</li>
+</ol>
+<blockquote>
+<p><strong>贝尔曼最优方程（BOE）</strong> 是回答这些问题的核心工具  </p>
+</blockquote>
+<hr>
+<h2 id="贝尔曼最优方程（BOE）的形式"><a href="#贝尔曼最优方程（BOE）的形式" class="headerlink" title="贝尔曼最优方程（BOE）的形式"></a>贝尔曼最优方程（BOE）的形式</h2><h3 id="1-元素形式（Elementwise-Form）"><a href="#1-元素形式（Elementwise-Form）" class="headerlink" title="1. 元素形式（Elementwise Form）"></a>1. 元素形式（Elementwise Form）</h3><p>$$<br>v(s) &#x3D; {\color{blue}{\max_{\pi}}} \sum_{a} \pi(a|s)  \underbrace{\left[\sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’)\right]}_{q(s,a)}<br>$$<br>其中 $q(s,a)$ 是状态-动作值函数  </p>
+<h3 id="2-矩阵形式（Matrix-Form）"><a href="#2-矩阵形式（Matrix-Form）" class="headerlink" title="2. 矩阵形式（Matrix Form）"></a>2. 矩阵形式（Matrix Form）</h3><p>$$<br>v &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$</p>
+<ul>
+<li>$v &#x3D; [v(s_1), \dots, v(s_n)]^T$：状态值向量  </li>
+<li>$r_\pi &#x3D; [\sum_a \pi(a|s_i) \sum_r p(r|s_i,a) r]^T$：期望即时奖励向量  </li>
+<li>$P_\pi$：状态转移矩阵，$[P_\pi]_{ij} &#x3D; \sum_a \pi(a|s_i) p(s_j|s_i, a)$</li>
+</ul>
+<h3 id="3-最大化简化形式"><a href="#3-最大化简化形式" class="headerlink" title="3. 最大化简化形式"></a>3. 最大化简化形式</h3><p><strong>定理</strong>：最优状态值等于最大动作值<br>$$<br>v(s) &#x3D; \max_{a \in \mathcal{A}(s)} q(s,a)<br>$$</p>
+<ul>
+<li><strong>最优策略</strong>：确定性策略，选择使 $q(s,a)$ 最大的动作：<br>$$<br>\pi^*(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
+</ul>
+<hr>
+<h2 id="BOE的求解：压缩映射理论"><a href="#BOE的求解：压缩映射理论" class="headerlink" title="BOE的求解：压缩映射理论"></a>BOE的求解：压缩映射理论</h2><h3 id="关键步骤"><a href="#关键步骤" class="headerlink" title="关键步骤"></a>关键步骤</h3><ol>
+<li><p><strong>定义映射函数</strong>：<br>$$<br>f(v) \triangleq \max_{\pi} (r_{\pi} + \gamma P_{\pi} v)<br>$$<br>BOE 转化为不动点方程 $v &#x3D; f(v)$  </p>
+</li>
+<li><p><strong>压缩映射性质</strong>：<br>$$<br>|f(v_1) - f(v_2)| \leq \gamma |v_1 - v_2|<br>$$</p>
+<blockquote>
+<p>证明依赖折扣率 $\gamma \in (0,1)$ 和概率矩阵性质</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="解的存在性与唯一性"><a href="#解的存在性与唯一性" class="headerlink" title="解的存在性与唯一性"></a>解的存在性与唯一性</h3><p><strong>压缩映射定理</strong>：  </p>
+<ol>
+<li><strong>存在性</strong>：BOE 存在解 $v^*$  </li>
+<li><strong>唯一性</strong>：解 $v^*$ 唯一  </li>
+<li><strong>迭代求解</strong>：对任意初始 $v_0$，序列<br>$$<br>v_{k+1} &#x3D; f(v_k) &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>指数收敛到 $v^*$（值迭代算法）</li>
+</ol>
+<hr>
+<h2 id="BOE与最优策略的关系"><a href="#BOE与最优策略的关系" class="headerlink" title="BOE与最优策略的关系"></a>BOE与最优策略的关系</h2><h3 id="最优性定理"><a href="#最优性定理" class="headerlink" title="最优性定理"></a>最优性定理</h3><p>若 $v^*$ 是 BOE 的解，则：  </p>
+<ol>
+<li><strong>对应策略</strong>：贪心策略 $\pi^* &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v^*)$  </li>
+<li><strong>策略最优性</strong>：对所有策略 $\pi$ 和状态 $s$ 满足<br>$$<br>v^*(s) \geq v_{\pi}(s)<br>$$</li>
+</ol>
+<h3 id="确定性策略充分性"><a href="#确定性策略充分性" class="headerlink" title="确定性策略充分性"></a>确定性策略充分性</h3><p><strong>定理</strong>：确定性策略足以达到最优性能  </p>
+<ul>
+<li>随机策略不会产生比最优确定性策略更高的状态值</li>
+</ul>
+<hr>
+<h2 id="最优策略的影响因素分析"><a href="#最优策略的影响因素分析" class="headerlink" title="最优策略的影响因素分析"></a>最优策略的影响因素分析</h2><h3 id="1-奖励设计（Reward-Design）"><a href="#1-奖励设计（Reward-Design）" class="headerlink" title="1. 奖励设计（Reward Design）"></a>1. 奖励设计（Reward Design）</h3><ul>
+<li><strong>绝对数值不影响策略</strong>：奖励仿射变换 $r \to ar + b$ ($a &gt; 0$) 不改变最优策略<br>$$<br>v’ &#x3D; a v^* + \frac{b}{1-\gamma} \mathbf{1}<br>$$</li>
+<li><strong>相对值决定策略</strong>：禁区惩罚 $r_{\text{forbidden}}$ 与目标奖励 $r_{\text{target}}$ 的相对大小影响路径选择  <ul>
+<li>示例：当 $r_{\text{forbidden}} &#x3D; -10$（原为 $-1$），最优策略避开禁区</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-折扣率-gamma"><a href="#2-折扣率-gamma" class="headerlink" title="2. 折扣率 $\gamma$"></a>2. 折扣率 $\gamma$</h3><ul>
+<li>$\gamma \approx 1$：<strong>长远规划</strong>，愿承担风险穿越禁区  </li>
+<li>$\gamma \approx 0$：<strong>短视行为</strong>，回避所有风险（可能无法到达目标）</li>
+</ul>
+<h3 id="3-绕路惩罚机制"><a href="#3-绕路惩罚机制" class="headerlink" title="3. 绕路惩罚机制"></a>3. 绕路惩罚机制</h3><ul>
+<li><strong>隐含惩罚</strong>：折扣率 $\gamma$ 天然惩罚长路径  <ul>
+<li>最优路径回报：$\frac{1}{1-\gamma}$  </li>
+<li>绕路路径回报：$\frac{\gamma^k}{1-\gamma} &lt; \frac{1}{1-\gamma}$（$k \geq 2$)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="总结：贝尔曼最优方程的意义"><a href="#总结：贝尔曼最优方程的意义" class="headerlink" title="总结：贝尔曼最优方程的意义"></a>总结：贝尔曼最优方程的意义</h2><table>
+<thead>
+<tr>
+<th><strong>问题</strong></th>
+<th><strong>BOE的解答</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>最优策略存在性</strong></td>
+<td>BOE解存在 → 最优策略 $\pi^*$ 存在</td>
+</tr>
+<tr>
+<td><strong>策略形式</strong></td>
+<td>确定性策略足够最优：$\pi^* &#x3D; \arg\max_a q(s,a)$</td>
+</tr>
+<tr>
+<td><strong>求解算法</strong></td>
+<td>值迭代：$v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)$</td>
+</tr>
+<tr>
+<td><strong>解的唯一性</strong></td>
+<td>压缩映射保证唯一解 $v^*$</td>
+</tr>
+<tr>
+<td><strong>最优性验证</strong></td>
+<td>$v^* \geq v_{\pi}$ 对所有策略 $\pi$ 成立</td>
+</tr>
+</tbody></table>
+<h3 id="关键公式回顾"><a href="#关键公式回顾" class="headerlink" title="关键公式回顾"></a>关键公式回顾</h3><ol>
+<li><strong>BOE元素形式</strong>：<br>$$<br>v(s) &#x3D; \max_{a} \left[ \sum_{r} p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v(s’) \right]<br>$$</li>
+<li><strong>值迭代更新</strong>：<br>$$<br>v_{k+1}(s) &#x3D; \max_{a} \left[ r(s,a) + \gamma \sum_{s’} p(s’|s,a) v_k(s’) \right]<br>$$</li>
+<li><strong>最优策略</strong>：<br>$$<br>\pi^*(s) &#x3D; \arg\max_{a} q(s,a)<br>$$</li>
+</ol>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
     <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
@@ -4730,6 +4730,58 @@ for 每个幕:
       </categories>
   </entry>
   <entry>
+    <title>hwadee</title>
+    <url>/2025/07/13/hwadee/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+<span id="more"></span>
+
+<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<ul>
+<li>引用 7 篇资料作为参考<ol>
+<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
+<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
+<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
+<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
+<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
+<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
+<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+</ul>
+<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
+<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
+<li>类似燃烧塑料或化学药品的味道；</li>
+<li>锯木屑混合酸味（家具中甲醛）；</li>
+<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
+<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
+<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
+</ul>
+<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
+<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
+<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
+</ul>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
+<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
+<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>SB</category>
+      </categories>
+      <tags>
+        <tag>sb</tag>
+        <tag>UESTC</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Reinforcement-Learning-L8</title>
     <url>/2025/07/28/Reinforcement-Learning-L8/</url>
     <content><![CDATA[<h1 id="值函数逼近方法读书笔记"><a href="#值函数逼近方法读书笔记" class="headerlink" title="值函数逼近方法读书笔记"></a>值函数逼近方法读书笔记</h1><div style="display: flex; align-items: center;">
@@ -4882,58 +4934,6 @@ for 每幕：
         <category>ReinForcement Learning</category>
         <category>Mathmatical Foundation</category>
       </categories>
-  </entry>
-  <entry>
-    <title>hwadee</title>
-    <url>/2025/07/13/hwadee/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
-<span id="more"></span>
-
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
-<ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
-</li>
-</ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
-</ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>SB</category>
-      </categories>
-      <tags>
-        <tag>sb</tag>
-        <tag>UESTC</tag>
-      </tags>
   </entry>
   <entry>
     <title>Reinforcement-Learning-L9</title>
