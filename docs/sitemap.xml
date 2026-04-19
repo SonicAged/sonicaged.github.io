@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.sonic-aged.site/2026/04/19/diveintoagents/</loc>
+    
+    <lastmod>2026-04-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/2025/07/28/Reinforcement-Learning-L10/</loc>
     
     <lastmod>2026-04-19</lastmod>
@@ -200,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/index.html</loc>
+    <loc>https://blog.sonic-aged.site/about/index.html</loc>
     
     <lastmod>2026-04-12</lastmod>
     
@@ -209,7 +218,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/about/index.html</loc>
+    <loc>https://blog.sonic-aged.site/categories/index.html</loc>
     
     <lastmod>2026-04-12</lastmod>
     
@@ -254,7 +263,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/26/CDR-model-part2/</loc>
+    <loc>https://blog.sonic-aged.site/2026/03/09/DDI-Review/</loc>
     
     <lastmod>2026-04-12</lastmod>
     
@@ -272,15 +281,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/</loc>
-    
-    <lastmod>2026-04-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/2026/03/24/DDI-Week3~4/</loc>
     
     <lastmod>2026-04-12</lastmod>
@@ -290,7 +290,16 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/2026/03/09/DDI-Review/</loc>
+    <loc>https://blog.sonic-aged.site/2025/07/26/CDR-model-part2/</loc>
+    
+    <lastmod>2026-04-12</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/2025/07/27/CDR-model-part4/</loc>
     
     <lastmod>2026-04-12</lastmod>
     
@@ -471,6 +480,20 @@
   </url>
   
   <url>
+    <loc>https://blog.sonic-aged.site/tags/DDI/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/tags/Knowledge-Graph/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/tags/GAN/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -486,20 +509,6 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/tags/hypergraph/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/DDI/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.sonic-aged.site/tags/Knowledge-Graph/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -569,6 +578,13 @@
   </url>
   
   <url>
+    <loc>https://blog.sonic-aged.site/tags/DIY/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.sonic-aged.site/tags/sb/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -613,13 +629,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/Deep-Learning/Model/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/categories/DDI/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -627,7 +636,7 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
+    <loc>https://blog.sonic-aged.site/categories/Deep-Learning/Model/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -635,6 +644,13 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/categories/CDR/Model/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/CDR/Data-Analysis/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -649,6 +665,13 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/categories/Deep-Learning/Hypergraph/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/DDI/Review/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -690,13 +713,6 @@
   </url>
   
   <url>
-    <loc>https://blog.sonic-aged.site/categories/DDI/Review/</loc>
-    <lastmod>2026-04-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.sonic-aged.site/categories/Deep-Learning/Model/GNN/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -719,6 +735,13 @@
   
   <url>
     <loc>https://blog.sonic-aged.site/categories/Deep-Learning/Model/Attention/Graph/</loc>
+    <lastmod>2026-04-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.sonic-aged.site/categories/LLM/</loc>
     <lastmod>2026-04-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
