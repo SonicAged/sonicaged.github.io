@@ -19,30 +19,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="大模型基础 ｜ Day 1好像是一个LLM的入门讲解捏">
+    <meta name="description" content="大模型基础 ｜ Day 2好像是一个LLM的入门讲解捏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="so-large-lm Day 1">
-<meta property="og:url" content="https://blog.sonic-aged.site/2026/04/19/so-large-llm-ch1/index.html">
+<meta property="og:title" content="so-large-lm Day 2">
+<meta property="og:url" content="https://blog.sonic-aged.site/2026/04/19/so-large-lm-ch2/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="大模型基础 ｜ Day 1好像是一个LLM的入门讲解捏">
+<meta property="og:description" content="大模型基础 ｜ Day 2好像是一个LLM的入门讲解捏">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/003233_9852D1795F390C80023FA1D0C2EA9DDD.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/175302_glam-architecture.png">
 <meta property="article:published_time" content="2026-04-19T11:38:02.000Z">
-<meta property="article:modified_time" content="2026-04-19T17:04:29.364Z">
+<meta property="article:modified_time" content="2026-04-21T16:14:40.193Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="DIY">
 <meta property="article:tag" content="LLMs">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/003233_9852D1795F390C80023FA1D0C2EA9DDD.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/175302_glam-architecture.png">
 
 
-<link rel="canonical" href="https://blog.sonic-aged.site/2026/04/19/so-large-llm-ch1/">
+<link rel="canonical" href="https://blog.sonic-aged.site/2026/04/19/so-large-lm-ch2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/19/so-large-llm-ch1/","path":"2026/04/19/so-large-llm-ch1/","title":"so-large-lm Day 1"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/19/so-large-lm-ch2/","path":"2026/04/19/so-large-lm-ch2/","title":"so-large-lm Day 2"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>so-large-lm Day 1 | Sonic Aged's Blog</title>
+<title>so-large-lm Day 2 | Sonic Aged's Blog</title>
   
 
 
@@ -177,7 +177,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-1"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%9B%9E%E5%BD%92%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-Autoregressive-Language-Models"><span class="nav-number">1.1.1.</span> <span class="nav-text">自回归语言模型(Autoregressive Language Models)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%97%E4%BA%AC%E4%BA%BA%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.1.2.</span> <span class="nav-text">北京人的工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#N-gram%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">N-gram模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">神经语言模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLM%E7%9A%84%E8%83%BD%E5%8A%9B"><span class="nav-number">1.2.</span> <span class="nav-text">LLM的能力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Language-Modeling"><span class="nav-number">1.2.1.</span> <span class="nav-text">Language Modeling</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E8%AF%8D-Tokenize"><span class="nav-number">1.3.1.</span> <span class="nav-text">分词 (Tokenize)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.2.</span> <span class="nav-text">模型分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-Only"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">Encoder-Only</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Decoder-Only"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">Decoder-Only</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-Decoder"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">Encoder-Decoder</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.3.</span> <span class="nav-text">基础架构</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-2"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">新的模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">混合专家</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Sparsely-gated mixture of experts (Lepikhin et al. 2021)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于检索的模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMs-%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">LLMs 的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">目标函数</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -192,7 +192,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -255,7 +255,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/04/19/so-large-llm-ch1/">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/04/19/so-large-lm-ch2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favicon.jpg">
@@ -268,12 +268,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="so-large-lm Day 1 | Sonic Aged's Blog">
+      <meta itemprop="name" content="so-large-lm Day 2 | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          so-large-lm Day 1<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/so-large-llm-ch1.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          so-large-lm Day 2<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/so-large-lm-ch2.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -291,7 +291,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-20 01:04:29" itemprop="dateModified" datetime="2026-04-20T01:04:29+08:00">2026-04-20</time>
+      <time title="Modified: 2026-04-22 00:14:40" itemprop="dateModified" datetime="2026-04-22T00:14:40+08:00">2026-04-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,14 +325,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1.2k</span>
+      <span>473</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -342,43 +342,52 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="大模型基础-｜-Day-1"><a href="#大模型基础-｜-Day-1" class="headerlink" title="大模型基础 ｜ Day 1"></a>大模型基础 ｜ Day 1</h1><p>好像是一个LLM的入门讲解捏</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="大模型基础-｜-Day-2"><a href="#大模型基础-｜-Day-2" class="headerlink" title="大模型基础 ｜ Day 2"></a>大模型基础 ｜ Day 2</h1><p>好像是一个LLM的入门讲解捏</p>
 <span id="more"></span>
 
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>我们将语言模型是为一种<strong>对token序列的概率分布</strong>。假设我们有一个词元集的词汇表 $V$ 。语言模型p为每个词元序列 $x_{1},…,x_{L}$ ∈ $V$ 分配一个概率（介于0和1之间的数字）：</p>
-<p>$$<br>p(x_1, \dots, x_L)<br>$$</p>
-<h3 id="自回归语言模型-Autoregressive-Language-Models"><a href="#自回归语言模型-Autoregressive-Language-Models" class="headerlink" title="自回归语言模型(Autoregressive Language Models)"></a>自回归语言模型(Autoregressive Language Models)</h3><p>将序列  $x_{1:L}$  的联合分布  $p(x_{1:L})$  的常见写法是使用概率的链式法则：</p>
-<p>$$<br>p(x_{1:L}) &#x3D; p(x_1) p(x_2 \mid x_1) p(x_3 \mid x_1, x_2) \cdots p(x_L \mid x_{1:L-1}) &#x3D; \prod_{i&#x3D;1}^L p(x_i \mid x_{1:i-1}).<br>$$</p>
-<p>特别地，我们需要理解  $p(x_{i}∣x_{1:i−1})$  是一个给定前面的记号  $x_{1:i−1}$ 后，下一个记号  $x_{i}$  的条件概率分布。在数学上，任何联合概率分布都可以通过这种方式表示。然而，自回归语言模型的特点是它可以利用例如前馈神经网络等方法有效计算出每个条件概率分布  $p(x_{i}∣x_{1:i−1})$  。在自回归语言模型  $p$  中生成整个序列 $x_{1:L}$ ，我们需要一次生成一个词元(token)，该词元基于之前以生成的词元进行计算获得：</p>
-<p>$$<br>\begin{aligned}<br>\text { for } i &amp; &#x3D;1, \ldots, L: \<br>x_i &amp; \sim p\left(x_i \mid x_{1: i-1}\right)^{1 &#x2F; T},<br>\end{aligned}<br>$$</p>
-<p>其中  $T≥0$  是一个控制我们希望从语言模型中得到多少随机性的温度参数：</p>
-<ul>
-<li>$T&#x3D;0$：确定性地在每个位置 i 选择最可能的词元 $x_{i}$</li>
-<li>$T&#x3D;1$：从纯语言模型“正常（normally）”采样</li>
-<li>$T&#x3D;∞$：从整个词汇表上的均匀分布中采样</li>
+<h2 id="新的模型架构"><a href="#新的模型架构" class="headerlink" title="新的模型架构"></a>新的模型架构</h2><h3 id="混合专家"><a href="#混合专家" class="headerlink" title="混合专家"></a>混合专家</h3><ul>
+<li>混合专家模型：我们创建一组专家。每个输入只激活一小部分专家。<ul>
+<li>直觉：类似一个由专家组成的咨询委员会，每个人都有不同的背景（如历史、数学、科学等）。</li>
 </ul>
-<p>这里的$T$指的是Temperature，我们把标准化后的这一坨成为退🔥条件概率。</p>
-<h3 id="北京人的工作"><a href="#北京人的工作" class="headerlink" title="北京人的工作"></a>北京人的工作</h3><p>来康康牢资历捏</p>
-<h4 id="N-gram模型"><a href="#N-gram模型" class="headerlink" title="N-gram模型"></a>N-gram模型</h4><p>N-gram模型。在一个n-gram模型中，关于$x_{i}$的预测只依赖于最后的 $n-1$ 个字符 $x_{i−(n−1):i−1}$ ，而不是整个历史：</p>
-<p>$$<br>p(x_i \mid x_{1:i-1}) &#x3D; p(x_i \mid x_{i-(n-1):i-1}).<br>$$</p>
-<h4 id="神经语言模型"><a href="#神经语言模型" class="headerlink" title="神经语言模型"></a>神经语言模型</h4><p>语言模型的一个重要进步是神经网络的引入。<a target="_blank" rel="noopener" href="https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">Bengio等人</a>在2003年首次提出了神经语言模型，其中 $p(x_{i}∣x_{i−(n−1):i−1})$ 由神经网络给出：</p>
-<p>$$<br>p(cheese∣ate,the)&#x3D;some-neural-network(ate,the,cheese)。<br>$$</p>
-<p>注意，上下文长度仍然受到n的限制，但现在对更大的n值估计神经语言模型在统计上是可行的。</p>
-<p>典型的例子就是RNN和Transformer捏</p>
-<h2 id="LLM的能力"><a href="#LLM的能力" class="headerlink" title="LLM的能力"></a>LLM的能力</h2><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/003233_9852D1795F390C80023FA1D0C2EA9DDD.jpg" style="width: 30%">
-<center><small>图 1  已经知道语言模型、任务模型、adaptation、上下文学习的自信的鼠鼠</small></center>
-
-<h3 id="Language-Modeling"><a href="#Language-Modeling" class="headerlink" title="Language Modeling"></a>Language Modeling</h3><p>困惑度（Perplexity）是一个重要的指标，用于衡量语言模型的性能。它可以解释为模型在预测下一个词时的平均不确定性。简单来说，如果一个模型的困惑度较低，那么它在预测下一个词的时候就会更加准确。对于给定的语言模型和一个测试数据集，困惑度被定义为：</p>
-<p>$$<br>P(X) &#x3D; P(x_1,x_2,…,x_N)^{(-1&#x2F;N)}<br>$$</p>
-<p>其中， $X&#x3D;x_{1},x_{2},…,x_{N}$ 是测试集中的词序列， $N$ 是测试集中的总词数。困惑度与语言模型的质量紧密相关。一个优秀的语言模型应能准确预测测试数据中的词序列，因此它的困惑度应较低。相反，如果语言模型经常做出错误的预测，那么它的困惑度将较高。</p>
-<p>具体来说，困惑度一般被计算为：</p>
-<p>$$<br>\text{perplexity}<em>p\left(x</em>{1: L}\right)&#x3D;\exp \left(\frac{1}{L} \sum_{i&#x3D;1}^L \log \frac{1}{p\left(x_i \mid x_{1: i-1}\right)}\right) \text {. }<br>$$</p>
-<p>困惑度可以被理解为每个标记（token）的平均”分支因子（branching factor）”。这里的“分支因子”可以理解为在每个位置，模型认为有多少种可能的词会出现。例如，若困惑度为10，那意味着每次模型在预测下一个词时，平均上会考虑10个词作为可能的选择。</p>
-<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><h3 id="分词-Tokenize"><a href="#分词-Tokenize" class="headerlink" title="分词 (Tokenize)"></a>分词 (Tokenize)</h3><p>之前已经比较详细的学习了捏</p>
-<h3 id="模型分类"><a href="#模型分类" class="headerlink" title="模型分类"></a>模型分类</h3><h4 id="Encoder-Only"><a href="#Encoder-Only" class="headerlink" title="Encoder-Only"></a>Encoder-Only</h4><p>由文本得到 Contextual Embedding。如BERT，RoBERTa。用于分类</p>
-<h4 id="Decoder-Only"><a href="#Decoder-Only" class="headerlink" title="Decoder-Only"></a>Decoder-Only</h4><p>绝大部分是鼠鼠们之前看到的自回归语言模型</p>
-<h4 id="Encoder-Decoder"><a href="#Encoder-Decoder" class="headerlink" title="Encoder-Decoder"></a>Encoder-Decoder</h4><p>Transformer</p>
-<h3 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h3><p>鼠鼠已经长大了捏，这些还是会的捏</p>
+</li>
+</ul>
+<p>$$<br>\text{input} \quad\quad\Rightarrow\quad\quad \text{expert}_1 \quad \text{expert}_2 \quad \text{expert}_3 \quad \text{expert}_4 \quad\quad\Rightarrow\quad\quad \text{output}.<br>$$</p>
+<h4 id="Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><a href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021" class="headerlink" title="Sparsely-gated mixture of experts (Lepikhin et al. 2021)"></a>Sparsely-gated mixture of experts (<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2006.16668.pdf">Lepikhin et al. 2021</a>)</h4><ul>
+<li>因此，我们将混合专家的想法应用于：<ul>
+<li>每个token</li>
+<li>每层Transformer block（或者隔层使用）</li>
+</ul>
+</li>
+<li>由于前馈层对于每个token是独立的，因此，我们将每个前馈网络转变为混合专家（MoE）前馈网络：</li>
+</ul>
+<p>$$<br>\text{MoETransformerBlock}(x_{1:L}) &#x3D; \text{AddNorm}(\text{MoEFeedForward}, \text{AddNorm}(\text{SelfAttention}, x_{1:L})).<br>$$</p>
+<ul>
+<li>隔层使用MoE Transformer block。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/175302_glam-architecture.png" alt="glam-architecture"></p>
+<p>我们将top-2专家的近似门控函数定义如下：</p>
+<ul>
+<li><p>计算第一个专家： $e_1 &#x3D; \arg\max_e g_e(x)$ 。</p>
+</li>
+<li><p>计算第二个专家： $e_2 &#x3D; \arg\max_{e \neq e_1} g_e(x)$ 。</p>
+</li>
+<li><p>始终保留第一个专家，并随机保留第二个专家：</p>
+<ul>
+<li>设 $p &#x3D; \min(2 g_{e_2}(x), 1)$ </li>
+<li>在概率为 $p$ 的情况下， $\tilde g_{e_1}(x) &#x3D; \frac{g_{e_1}(x)}{g_{e_1}(x) + g_{e_2}(x)}, \tilde g_{e_2}(x) &#x3D; \frac{g_{e_2}(x)}{g_{e_1}(x) + g_{e_2}(x)}$ 。对于其他专家 $e \not\in { e_1, e_2 }$，$\tilde g_e(x) &#x3D; 0$ 。</li>
+<li>在概率为 $1 - p$ 的情况下， $\tilde g_{e_1}(x) &#x3D; 1$。对于$e \neq e_1$，$\tilde g_e(x) &#x3D; 0 $ 。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>这里感觉需要多沉淀一下捏，后面应该会专门开一篇来学一下混合专家捏</p>
+</blockquote>
+<h3 id="基于检索的模型"><a href="#基于检索的模型" class="headerlink" title="基于检索的模型"></a>基于检索的模型</h3><p>就是RAG起手的吧，这又是一大坨了捏</p>
+<h2 id="LLMs-的数据"><a href="#LLMs-的数据" class="headerlink" title="LLMs 的数据"></a>LLMs 的数据</h2><p>就是介绍了一下常用的文本数据集捏</p>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>从两个角度来看模型训练：目标函数和优化算法</p>
+<h3 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h3><ul>
+<li>Decoder-only模型</li>
+</ul>
 
     </div>
 

@@ -1,4 +1,4 @@
----
+`---
 title: so-large-lm Day 1
 categories:
   - LLMs and Agents
@@ -14,7 +14,7 @@ date: 2026-04-19 19:38:02
 
 好像是一个LLM的入门讲解捏
 
-<!--more-->
+<!--more-->`
 
 ## 引言
 

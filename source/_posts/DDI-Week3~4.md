@@ -1,5 +1,5 @@
 ---
-title: Half-Monthly DDI Record
+title: Half-Monthly DDI Record | Series 2
 categories:
   - DDI
   - Daily

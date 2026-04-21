@@ -19,33 +19,36 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="具有一般性的 Attention      详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。     在阅读这篇博客前请">
+    <meta name="description" content="7~8周里入到🧠的DDIDDI 真神奇捏。阿巴阿巴阿巴">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Gugugu Neralashun">
-<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/16/General-Attention/index.html">
+<meta property="og:title" content="Half-Monthly DDI Record | Series 4">
+<meta property="og:url" content="https://blog.sonic-aged.site/2026/03/24/DDI-Week7~8/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="具有一般性的 Attention      详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。     在阅读这篇博客前请">
+<meta property="og:description" content="7~8周里入到🧠的DDIDDI 真神奇捏。阿巴阿巴阿巴">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/Gugugu%20Neralashun.png">
-<meta property="og:image" content="https://blog.sonic-aged.site/img/Attention/GeneralAttentionModule.png">
-<meta property="article:published_time" content="2025-07-16T14:16:14.000Z">
-<meta property="article:modified_time" content="2026-04-19T06:08:40.215Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/150321_image-20260421150321849.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/193905_image-20260421193905214.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/203816_image-20260421203816565.png">
+<meta property="article:published_time" content="2026-03-24T15:12:02.000Z">
+<meta property="article:modified_time" content="2026-04-21T14:34:25.523Z">
 <meta property="article:author" content="Sonic Aged">
-<meta property="article:tag" content="model">
-<meta property="article:tag" content="Basic">
-<meta property="article:tag" content="deep learning">
 <meta property="article:tag" content="attention">
+<meta property="article:tag" content="model framework">
+<meta property="article:tag" content="practice">
+<meta property="article:tag" content="GNN">
+<meta property="article:tag" content="DDI">
+<meta property="article:tag" content="Knowledge Graph">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog.sonic-aged.site/img/Attention/Gugugu%20Neralashun.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/150321_image-20260421150321849.png">
 
 
-<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/16/General-Attention/">
+<link rel="canonical" href="https://blog.sonic-aged.site/2026/03/24/DDI-Week7~8/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/16/General-Attention/","path":"2025/07/16/General-Attention/","title":"Gugugu Neralashun"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/03/24/DDI-Week7~8/","path":"2026/03/24/DDI-Week7~8/","title":"Half-Monthly DDI Record | Series 4"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Gugugu Neralashun | Sonic Aged's Blog</title>
+<title>Half-Monthly DDI Record | Series 4 | Sonic Aged's Blog</title>
   
 
 
@@ -180,7 +183,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B7%E6%9C%89%E4%B8%80%E8%88%AC%E6%80%A7%E7%9A%84-Attention"><span class="nav-number">1.</span> <span class="nav-text">具有一般性的 Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.1.</span> <span class="nav-text">回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E8%AF%84%E5%88%86%E5%87%BD%E6%95%B0-Attention-Scoring"><span class="nav-number">1.2.</span> <span class="nav-text">注意力评分函数(Attention Scoring)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E5%AF%B9%E9%BD%90-Attention-Alignment"><span class="nav-number">1.3.</span> <span class="nav-text">注意力对齐(Attention Alignment)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E5%8A%9B%E7%BB%B4%E5%BA%A6-Attention-Dimensionality"><span class="nav-number">1.4.</span> <span class="nav-text">注意力维度(Attention Dimensionality)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E4%B8%8E%E9%80%89%E6%8B%A9%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.5.</span> <span class="nav-text">4. 实际应用与选择建议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">2.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#7-8%E5%91%A8%E9%87%8C%E5%85%A5%E5%88%B0%F0%9F%A7%A0%E7%9A%84DDI"><span class="nav-number">1.</span> <span class="nav-text">7~8周里入到🧠的DDI</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E5%91%A8%E7%9C%8B%E5%88%B0%E7%9A%84%E8%9B%AE%E4%B8%8D%E8%B5%96%E7%9A%84%E5%87%A0%E7%AF%87%E6%8D%8F"><span class="nav-number">1.1.</span> <span class="nav-text">这周看到的蛮不赖的几篇捏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CAREDDI"><span class="nav-number">1.1.1.</span> <span class="nav-text">CAREDDI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">架构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E4%BD%93"><span class="nav-number">1.1.1.1.1.</span> <span class="nav-text">总体</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RISE-DDI"><span class="nav-number">1.1.2.</span> <span class="nav-text">RISE-DDI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PC-DDI"><span class="nav-number">1.1.3.</span> <span class="nav-text">PC-DDI</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -258,7 +261,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/16/General-Attention/">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/03/24/DDI-Week7~8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favicon.jpg">
@@ -271,12 +274,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Gugugu Neralashun | Sonic Aged's Blog">
+      <meta itemprop="name" content="Half-Monthly DDI Record | Series 4 | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Gugugu Neralashun<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/General-Attention.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          Half-Monthly DDI Record | Series 4<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/DDI-Week7~8.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -287,14 +290,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2025-07-16 22:16:14" itemprop="dateCreated datePublished" datetime="2025-07-16T22:16:14+08:00">2025-07-16</time>
+      <time title="Created: 2026-03-24 23:12:02" itemprop="dateCreated datePublished" datetime="2026-03-24T23:12:02+08:00">2026-03-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-19 14:08:40" itemprop="dateModified" datetime="2026-04-19T14:08:40+08:00">2026-04-19</time>
+      <time title="Modified: 2026-04-21 22:34:25" itemprop="dateModified" datetime="2026-04-21T22:34:25+08:00">2026-04-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -302,19 +305,11 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
+          <a href="/categories/DDI/" itemprop="url" rel="index"><span itemprop="name">DDI</span></a>
         </span>
           , 
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Deep-Learning/Model/" itemprop="url" rel="index"><span itemprop="name">Model</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Deep-Learning/Model/Attention/" itemprop="url" rel="index"><span itemprop="name">Attention</span></a>
-        </span>
-          , 
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Deep-Learning/Model/Attention/Category/" itemprop="url" rel="index"><span itemprop="name">Category</span></a>
+          <a href="/categories/DDI/Daily/" itemprop="url" rel="index"><span itemprop="name">Daily</span></a>
         </span>
     </span>
 
@@ -332,14 +327,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>1k</span>
+      <span>476</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>4 mins.</span>
+      <span>2 mins.</span>
     </span>
 </div>
 
@@ -349,94 +344,30 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="具有一般性的-Attention"><a href="#具有一般性的-Attention" class="headerlink" title="具有一般性的 Attention"></a>具有一般性的 Attention</h1><div style="display: flex; align-items: center;">
-  <img src="\img\Attention\Gugugu Neralashun.png" style="width: 200px; margin-right: 20px;">
-  <p>详细讨论了可以应用于任何类型注意力模型的基础机制，这些机制不依赖于特定的特征模型或查询模型。这一部分构成了注意力模型的核心计算框架，主要包括三个关键子方面：注意力评分函数(Attention Scoring)、注意力对齐(Attention Alignment)和注意力维度(Attention Dimensionality)。</p>
-</div>
-
-
-
-<p>在阅读这篇博客前请先阅读 <a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="7-8周里入到🧠的DDI"><a href="#7-8周里入到🧠的DDI" class="headerlink" title="7~8周里入到🧠的DDI"></a>7~8周里入到🧠的DDI</h1><p>DDI 真神奇捏。阿巴阿巴阿巴</p>
 <span id="more"></span>
 
-<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
-
-<p>如果还记得这张图的话，那便是极好的捏 <del>不记得了就回去看捏</del> 本文主要就是在说明每一个模块常见的具体实现有什么</p>
-<h2 id="注意力评分函数-Attention-Scoring"><a href="#注意力评分函数-Attention-Scoring" class="headerlink" title="注意力评分函数(Attention Scoring)"></a>注意力评分函数(Attention Scoring)</h2><p>注意力评分函数是计算查询向量$\mathbf{q}$与键向量$\mathbf{k}_l$之间相关性得分的核心组件：</p>
-<ol>
-<li><p><strong>加性评分(Additive&#x2F;Concatenate)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{w}^\top \text{act}(\mathbf{W}_1\mathbf{q} + \mathbf{W}_2\mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>其中$\mathbf{w} \in \mathbb{R}^{d_w}$, $\mathbf{W}_1 \in \mathbb{R}^{d_w \times d_q}$, $\mathbf{W}_2 \in \mathbb{R}^{d_w \times d_k}$和$\mathbf{b} \in \mathbb{R}^{d_w}$是可训练参数。</p>
-</li>
-<li><p><strong>乘性评分(Multiplicative&#x2F;Dot-Product)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{q}^\top \mathbf{k}_l<br>$$</p>
-</li>
-<li><p><strong>缩放乘性评分(Scaled Multiplicative)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \frac{\mathbf{q}^\top \mathbf{k}_l}{\sqrt{d_k}}<br>$$</p>
-</li>
-<li><p><strong>通用评分(General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top \mathbf{W} \mathbf{q}<br>$$</p>
-<p>其中$\mathbf{W} \in \mathbb{R}^{d_k \times d_q}$是权重矩阵。</p>
-</li>
-<li><p><strong>带偏置的通用评分(Biased General)</strong>：</p>
-<p>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \mathbf{k}_l^\top (\mathbf{W}\mathbf{q} + \mathbf{b})<br>$$</p>
-</li>
-<li><p><strong>激活通用评分(Activated General)</strong>：<br>$$<br>\text{score}(\mathbf{q},\mathbf{k}_l) &#x3D; \text{act}(\mathbf{k}_l^\top \mathbf{W} \mathbf{q} + b)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力对齐-Attention-Alignment"><a href="#注意力对齐-Attention-Alignment" class="headerlink" title="注意力对齐(Attention Alignment)"></a>注意力对齐(Attention Alignment)</h2><p>对齐函数将原始注意力分数$\mathbf{e} &#x3D; [e_1, \ldots, e_{n_f}]$转换为标准化权重：</p>
-<ol>
-<li><p><strong>软对齐&#x2F;全局对齐(Soft&#x2F;Global Alignment)</strong>：</p>
-<p>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;1}^{n_f} \exp(e_j)}<br>$$</p>
-</li>
-<li><p><strong>硬对齐(Hard Alignment)</strong>：<br>从多项式分布采样：</p>
-<p>$$<br>m \sim \text{Multinomial}(a_1, \ldots, a_{n_f})<br>$$</p>
-<p>然后：</p>
-<p>$$<br>\mathbf{c} &#x3D; \mathbf{v}_m<br>$$</p>
-</li>
-<li><p><strong>局部对齐(Local Alignment)</strong>：<br>窗口位置$p$的确定：<br>$$<br>p &#x3D; S \times \text{sigmoid}(\mathbf{w}_p^\top \tanh(\mathbf{W}_p \mathbf{q}))<br>$$<br>然后计算：<br>$$<br>a_l &#x3D; \frac{\exp(e_l)}{\sum_{j&#x3D;p-D}^{p+D} \exp(e_j)} \exp\left(-\frac{(l-p)^2}{2\sigma^2}\right)<br>$$</p>
-</li>
-</ol>
-<h2 id="注意力维度-Attention-Dimensionality"><a href="#注意力维度-Attention-Dimensionality" class="headerlink" title="注意力维度(Attention Dimensionality)"></a>注意力维度(Attention Dimensionality)</h2><ol>
-<li><p><strong>单维注意力(Single-Dimensional Attention)</strong>：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} a_l \mathbf{v}_l<br>$$</p>
-</li>
-<li><p><strong>多维注意力(Multi-Dimensional Attention)</strong>：<br>调整评分函数产生向量分数：</p>
-<p>$$<br>\mathbf{e}_l &#x3D; \mathbf{W}_d^\top \text{act}(\mathbf{W}_1 \mathbf{q} + \mathbf{W}_2 \mathbf{k}_l + \mathbf{b})<br>$$</p>
-<p>然后计算：</p>
-<p>$$<br>a_{l,i} &#x3D; \frac{\exp(e_{l,i})}{\sum_{j&#x3D;1}^{n_f} \exp(e_{j,i})}<br>$$</p>
-<p>最终上下文向量：</p>
-<p>$$<br>\mathbf{c} &#x3D; \sum_{l&#x3D;1}^{n_f} \mathbf{a}_l \circ \mathbf{v}_l<br>$$</p>
-<p>其中$\circ$表示逐元素乘法。</p>
-</li>
-</ol>
-<h2 id="4-实际应用与选择建议"><a href="#4-实际应用与选择建议" class="headerlink" title="4. 实际应用与选择建议"></a>4. 实际应用与选择建议</h2><p>论文提供了关于不同机制选择的实用建议：</p>
-<ol>
-<li><p><strong>评分函数选择</strong>：</p>
+<h2 id="这周看到的蛮不赖的几篇捏"><a href="#这周看到的蛮不赖的几篇捏" class="headerlink" title="这周看到的蛮不赖的几篇捏"></a>这周看到的蛮不赖的几篇捏</h2><p>Emmm，类似的表格传到Google Docs上了捏，，，，懒得动了捏</p>
+<h3 id="CAREDDI"><a href="#CAREDDI" class="headerlink" title="CAREDDI"></a>CAREDDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/150321_image-20260421150321849.png" alt="image-20260421150321849"></p>
+<p>这篇论文中提到，现有的数据集中存在虚假的药物关联关系（由于实验偏差、知识更新滞后或标注不一致）</p>
+<p>所以他把异常检测引入了DDI模型，从而增强模型在遇到spurious DDIs时的鲁棒性</p>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>(a) 部分就是一个非常常规的cross-attention捏。</p>
+<p>重点是(b)部分捏</p>
+<h5 id="总体"><a href="#总体" class="headerlink" title="总体"></a>总体</h5><p>分解为两个DDI元任务：一个用于学习有价值的标注型DDI特征分布的标注特征分布学习任务，以及一个用于确保整体预测准确性的DDI预测器任务。</p>
+<p>MCD（最小协方差矩阵） 的目标是<strong>从这 $n$ 个样本中寻找一个子集（包含 $h$ 个样本），使得这个子集的协方差矩阵的行列式（Determinant）最小。</strong></p>
+<p>提出了一种基于密度的新型特征分布学习层，用于动态适应标注DDI特征分布中的鲁棒多变量位置与离散度。</p>
 <ul>
-<li>计算效率优先：乘性或缩放乘性评分</li>
-<li>性能优先：加性评分或通用评分</li>
-<li>大维度键向量：必须使用缩放乘性评分防止梯度问题</li>
+<li><strong>位置感知聚合 (Location-aware aggregation)：</strong> 学习 DDI 特征分布的中心位置 dlocationdlocation。</li>
+<li><strong>散射感知聚合 (Scatter-aware aggregation)：</strong> 学习特征的离散程度 PscatterPscatter。</li>
+<li><strong>损失函数设计：</strong><br>  $L_{CDSL}$ (Chi-square Distribution-based Soft Loss)： 强制让标注的 DDI 特征分布逼近卡方分布 (χ2χ2)。如果一个样本偏离该分布过远，则更有可能被判定为“伪 DDI”。</li>
 </ul>
-</li>
-<li><p><strong>对齐方式选择</strong>：</p>
-<ul>
-<li>标准情况：软对齐</li>
-<li>需要严格稀疏性：硬对齐（但要注意训练难度）</li>
-<li>序列数据：考虑局部对齐</li>
-<li>需要动态选择关注区域：强化对齐</li>
-</ul>
-</li>
-<li><p><strong>维度选择</strong>：</p>
-<ul>
-<li>大多数情况：单维注意力足够</li>
-<li>需要细粒度控制：考虑多维注意力</li>
-</ul>
-</li>
+<h3 id="RISE-DDI"><a href="#RISE-DDI" class="headerlink" title="RISE-DDI"></a>RISE-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/193905_image-20260421193905214.png" alt="image-20260421193905214"></p>
+<ol>
+<li>总体架构组件</li>
 </ol>
-<p>这些通用机制可以自由组合，例如可以设计一个使用加性评分、软对齐和多维注意力的模型。论文特别指出，Transformer 模型成功的关键在于巧妙地组合了缩放乘性评分、软对齐和单维注意力（通过多头机制实现类似多维注意力的效果）。</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-<a href="/2025/07/10/Attention/" title="Attention Overview">Attention Overview</a>
+<p>模型由两个核心模块组成，子图采样器（RL Agent）和交互预测器（结构感知奖励模型）</p>
+<p>他将子图采样建模为马尔可夫决策过程，定义了对应的环境</p>
+<h3 id="PC-DDI"><a href="#PC-DDI" class="headerlink" title="PC-DDI"></a>PC-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/203816_image-20260421203816565.png" alt="image-20260421203816565"></p>
 
     </div>
 
@@ -446,23 +377,25 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/model/" rel="tag"># model</a>
-              <a href="/tags/Basic/" rel="tag"># Basic</a>
-              <a href="/tags/deep-learning/" rel="tag"># deep learning</a>
               <a href="/tags/attention/" rel="tag"># attention</a>
+              <a href="/tags/model-framework/" rel="tag"># model framework</a>
+              <a href="/tags/practice/" rel="tag"># practice</a>
+              <a href="/tags/GNN/" rel="tag"># GNN</a>
+              <a href="/tags/DDI/" rel="tag"># DDI</a>
+              <a href="/tags/Knowledge-Graph/" rel="tag"># Knowledge Graph</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/07/14/Feature-Related-Attention/" rel="prev" title="Fufufu Relashinala">
-                  <i class="fa fa-angle-left"></i> Fufufu Relashinala
+                <a href="/2026/03/23/Algorithm-Day1/" rel="prev" title="算法回顾-Day1">
+                  <i class="fa fa-angle-left"></i> 算法回顾-Day1
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/07/17/Query-Related-Attention/" rel="next" title="Quaqua Rishinala">
-                  Quaqua Rishinala <i class="fa fa-angle-right"></i>
+                <a href="/2026/03/24/DDI-Week3~4/" rel="next" title="Half-Monthly DDI Record | Series 2">
+                  Half-Monthly DDI Record | Series 2 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
