@@ -1,5 +1,5 @@
 ---
-title: so-large-lm Day 2
+title: so-large-lm Day 2～3
 categories:
   - LLMs and Agents
   - LLMs
@@ -7,10 +7,10 @@ categories:
 tags:
   - DIY
   - LLMs
-date: 2026-04-19 19:38:02
+date: 2026-04-22 00:18:02
 ---
 
-# 大模型基础 ｜ Day 2
+# 大模型基础 ｜ Day 2～3
 
 好像是一个LLM的入门讲解捏
 
@@ -65,8 +65,14 @@ $$
 
 ## 模型训练
 
-从两个角度来看模型训练：目标函数和优化算法
+从两个角度来看模型训练：**目标函数**和**优化算法**
 
 ### 目标函数
 
-- Decoder-only模型 
+#### Decoder-only 模型 
+
+*最大似然*就可以了捏
+
+#### Encoder-only 模型
+
+鼠鼠想下班了捏
