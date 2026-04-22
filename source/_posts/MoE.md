@@ -81,7 +81,7 @@ $$
 
 实验：GieGie动🉐真是又大💗又快💗捏
 
-### [DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)
+### [DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](https://arxiv.org/abs/2401.06066)
 
 - 构建了一个Fine-grained expert segmentation，就是多大的门🍵多少根💗捏
 - 一个Shared expert，不受router控制
