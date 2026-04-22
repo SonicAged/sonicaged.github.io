@@ -27,8 +27,9 @@
 <meta property="og:description" content="大模型基础 ｜ Day 2～3好像是一个LLM的入门讲解捏">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/175302_glam-architecture.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/234854_bart-transformations.png">
 <meta property="article:published_time" content="2026-04-21T16:18:02.000Z">
-<meta property="article:modified_time" content="2026-04-22T15:42:38.970Z">
+<meta property="article:modified_time" content="2026-04-22T16:27:47.240Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="DIY">
 <meta property="article:tag" content="LLMs">
@@ -177,7 +178,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-2%EF%BD%9E3"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 2～3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">新的模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">混合专家</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Sparsely-gated mixture of experts (Lepikhin et al. 2021)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于检索的模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMs-%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">LLMs 的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">目标函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Decoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Decoder-only 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">Encoder-only 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BERT"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">BERT</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-2%EF%BD%9E3"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 2～3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">新的模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">混合专家</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Sparsely-gated mixture of experts (Lepikhin et al. 2021)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于检索的模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMs-%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">LLMs 的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">目标函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Decoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Decoder-only 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">Encoder-only 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BERT"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">BERT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RoBERTa"><span class="nav-number">1.3.1.2.2.</span> <span class="nav-text">RoBERTa</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-decoder-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">Encoder-decoder 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#T5-Text-to-Text-Transfer-Transformer"><span class="nav-number">1.3.1.3.1.</span> <span class="nav-text">T5 (Text-to_Text Transfer Transformer)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">优化算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adaptation"><span class="nav-number">1.4.</span> <span class="nav-text">Adaptation</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -283,9 +284,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2026-04-22 00:18:02 / Modified: 23:42:38" itemprop="dateCreated datePublished" datetime="2026-04-22T00:18:02+08:00">2026-04-22</time>
+      <time title="Created: 2026-04-22 00:18:02" itemprop="dateCreated datePublished" datetime="2026-04-22T00:18:02+08:00">2026-04-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-23 00:27:47" itemprop="dateModified" datetime="2026-04-23T00:27:47+08:00">2026-04-23</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -319,14 +326,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>636</span>
+      <span>911</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>3 mins.</span>
     </span>
 </div>
 
@@ -389,7 +396,30 @@
 <li>Next sentence prediction：判断一个🍊是不是另一个🍊的下一句捏</li>
 </ul>
 <p>所以具体来说，他的loss就是</p>
-<p>$$<br>\mathcal{O}(\theta)&#x3D;\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}<em>{I, \tilde{x}</em>{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}<em>i \mid x</em>{1: L}\right)\right]}<em>{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x</em>{1: L}\right)<em>1\right)}</em>{\text {next sentence prediction }}<br>$$</p>
+<p>$$<br>\mathcal{O}(\theta)&#x3D;\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}_{I, \tilde{x}_{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}_i \mid x_{1: L}\right)\right]}_{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x_{1: L}\right)_1\right)}_{\text {next sentence prediction }}<br>$$</p>
+<h5 id="RoBERTa"><a href="#RoBERTa" class="headerlink" title="RoBERTa"></a>RoBERTa</h5><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1907.11692.pdf">RoBERTa</a>对BERT进行了以下改进：</p>
+<ul>
+<li>删除了下一句预测这一目标函数（发现它没有帮助）。</li>
+<li>使用更多数据训练（16GB文本  $\Rightarrow$ 160GB文本 ）。</li>
+<li>训练时间更长。</li>
+<li>RoBERTa在各种基准上显著提高了BERT的准确性（例如，在SQuAD上由81.8到89.4）。</li>
+</ul>
+<h4 id="Encoder-decoder-模型"><a href="#Encoder-decoder-模型" class="headerlink" title="Encoder-decoder 模型"></a>Encoder-decoder 模型</h4><h5 id="T5-Text-to-Text-Transfer-Transformer"><a href="#T5-Text-to-Text-Transfer-Transformer" class="headerlink" title="T5 (Text-to_Text Transfer Transformer)"></a>T5 (Text-to_Text Transfer Transformer)</h5><p>BART (<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1910.13461.pdf">Lewis et al. 2019</a>)是基于Transformer的编码器-解码器模型。</p>
+<ul>
+<li>使用与RoBERTa相同的编码器架构（12层，隐藏维度1024）。</li>
+<li>使用与RoBERTa相同的数据进行训练（160GB文本）。</li>
+</ul>
+<p>BART使用了以下变换 $A(\tilde x_{1:L} \mid x_{1:L})$ ：</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/234854_bart-transformations.png" alt="bart-transformations"></p>
+<p>基于BERT的实验，最终模型进行以下了变换：</p>
+<ul>
+<li>掩码文档中30%的token</li>
+<li>将所有子句打乱</li>
+</ul>
+<h3 id="优化算法"><a href="#优化算法" class="headerlink" title="优化算法"></a>优化算法</h3><p>都是见过的捏</p>
+<h2 id="Adaptation"><a href="#Adaptation" class="headerlink" title="Adaptation"></a>Adaptation</h2><p>就好像给南梁安一个♟️一样，他也是需要适应的。而♟️ 就是下游任务，适应就是Adaptation捏。主要有以下几个adaptation的方法捏</p>
+<p>感觉都有点老了捏，就这样吧</p>
+<p>后面就是马原部分了捏。先就这样了捏</p>
 
     </div>
 
@@ -451,7 +481,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">3:52</span>
+    <span title="Reading time total">3:53</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -95,6 +95,179 @@
       </tags>
   </entry>
   <entry>
+    <title>Attention Overview</title>
+    <url>/2025/07/10/Attention/</url>
+    <content><![CDATA[<h1 id="Is-Attention-All-My-Need"><a href="#Is-Attention-All-My-Need" class="headerlink" title="Is Attention All My Need ?"></a>Is Attention All My Need ?</h1><blockquote>
+<p>注意力机制在图神经网络中扮演着越来越重要的角色。<del>但鼠鼠现在连正常的 Attention 有哪些都不清楚捏</del>本文鼠鼠将从一般的 Attention 出发，给出 Attention 的总体结构，然后按分类介绍现有的主要的 Attention</p>
+</blockquote>
+<p>本文主要来自于一篇论文，基本可以看作<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">那篇论文</a>的阅读笔记</p>
+<span id="more"></span>
+
+<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，注意力机制已经成为一个革命性的创新，特别是在处理序列数据和图像数据方面取得了巨大成功。而在图神经网络中，注意力机制的引入不仅提高了模型的表现力，还增强了模型的可解释性。</p>
+<p>在图结构数据中应用注意力机制主要有以下优势：</p>
+<ol>
+<li>自适应性：能够根据任务动态调整不同邻居节点的重要性</li>
+<li>可解释性：通过注意力权重可以直观理解模型的决策过程</li>
+<li>长程依赖：有效缓解了传统 GNN 中的过平滑问题</li>
+<li>异质性处理：更好地处理异质图中的不同类型节点和边</li>
+</ol>
+<h2 id="📚-总览-Attention"><a href="#📚-总览-Attention" class="headerlink" title="📚 总览 Attention"></a>📚 总览 Attention</h2><p>本章节主要参考了论文<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>有兴趣的话可以看看原文捏</p>
+<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="45%" height="400" type="application/pdf">
+
+<h3 id="Attention-的一般结构"><a href="#Attention-的一般结构" class="headerlink" title="Attention 的一般结构"></a>Attention 的一般结构</h3><img src="/img/Attention/TotalModel.png" alt="TotalModel" width="60%" height="auto">
+
+<p>上图是从总体上看 Attention 在整个任务模型框架中的位置</p>
+<p>框架包含四个核心组件：</p>
+<ol>
+<li><strong>特征模型</strong>：负责输入数据的特征提取</li>
+<li><strong>查询模型</strong>：生成注意力查询向量</li>
+<li><strong>注意力模型</strong>：计算注意力权重</li>
+<li><strong>输出模型</strong>：生成最终预测结果</li>
+</ol>
+<p>接下来，我们会从 <em>输入</em> 的角度来看<strong>特征模型</strong>和<strong>查询模型</strong>，从 <em>输出</em> 的角度来看<strong>注意力模型</strong>和<strong>输出模型</strong></p>
+<h4 id="输入处理机制"><a href="#输入处理机制" class="headerlink" title="输入处理机制"></a>输入处理机制</h4><ol>
+<li><p><strong>特征模型</strong>，即将任务的输入进行 embedding</p>
+<p>对于输入矩阵 $ X \in \mathbb{R}^{d_x \times n_x} $ ，特征模型提取特征向量： $\boldsymbol{F} &#x3D; [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
+</li>
+<li><p><strong>查询模型</strong>，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的</p>
+</li>
+</ol>
+<p>一般情况下，这两个模型可以用 CNN 或 RNN</p>
+<h4 id="输出计算机制"><a href="#输出计算机制" class="headerlink" title="输出计算机制"></a>输出计算机制</h4><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
+
+<p>上图是 Attention 模型总体结构的说明，下面对这张图进行详细的说明</p>
+<ol>
+<li>特征矩阵$\boldsymbol{F} &#x3D; [\boldsymbol{f}_1, \ldots, \boldsymbol{f}_{n_f}] \in \mathbb{R}^{d_f \times n_f}$，通过<em>某些方法</em>将其分为 Keys 矩阵$\boldsymbol{K} &#x3D; [\boldsymbol{k}_1, \ldots, \boldsymbol{k}_{n_f}] \in \mathbb{R}^{d_k \times n_f}$和 Values 矩阵$\boldsymbol{V} &#x3D; [\boldsymbol{v}_1, \ldots, \boldsymbol{v}_{n_f}] \in \mathbb{R}^{d_v \times n_f}$，这里的<em>某些方法</em>，一般情况下，按以下的方式通过<strong>线性变换</strong>得到：</li>
+</ol>
+<p>$$<br>\underset{d_{k} \times n_{f}}{\boldsymbol{K}}&#x3D;\underset{d_{k} \times d_{f}}{\boldsymbol{W}_{K}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}}, \quad \underset{d_{v} \times n_{f}}{\boldsymbol{V}}&#x3D;\underset{d_{v} \times d_{f}}{\boldsymbol{W}_{V}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}} .<br>$$</p>
+<ol start="2">
+<li><p><code>Attention Scores</code>模块根据 $\boldsymbol{q}$ 计算每一个 key 向量对应的分数$\boldsymbol{e} &#x3D; [e_1, \ldots, e_{n_f}] \in \mathbb{R}^{n_f}$：</p>
+<p>$$<br>\underset{1\times 1}{e_l} &#x3D; \text{score}(\underset{d_q \times 1}{\boldsymbol{q}}, \underset{d_k \times 1}{\boldsymbol{k}_l})<br>$$</p>
+<p>如前所述，查询象征着对信息的请求。注意力分数$e_l$表示根据查询，关键向量$\boldsymbol{k}_l$中包含的信息的重要性。如果查询和关键向量的维度相同，则得分函数的一个例子是取向量的点积。</p>
+</li>
+<li><p>由于经过这么一堆操作之后，分数有很大的可能已经飞起来了捏，这个时候就需要<code>Attention Alignment</code>模块对其进行<strong>归一化</strong>之类的操作了捏</p>
+<p>$$<br>\underset{1\times 1}{a_l} &#x3D; \text{align}(\underset{d_q \times 1}{\boldsymbol{e_l}}, \underset{n_f \times 1}{\boldsymbol{e}})<br>$$</p>
+</li>
+</ol>
+<p>注意力权重$\boldsymbol{a} &#x3D; [a_1, \ldots, a_{n_f}] \in \mathbb{R}^{n_f}$为注意力模块提供了一个相当直观的解释。每个权重直接表明了每个特征向量相对于其他特征向量对于这个问题的重要性。</p>
+<ol start="4">
+<li><p>在<code>Weight Average</code>模块完成<strong>上下文生成</strong>：</p>
+<p>$$<br>\underset{d_v \times 1}{\boldsymbol{c}} &#x3D; \sum_{l &#x3D; 1}^{n_f} \underset{1 \times 1}{a_l}\times \underset{d_v \times 1}{\boldsymbol{v}_l}<br>$$</p>
+</li>
+<li><p>输出处理就想怎么搞就怎么搞了捏，例如 用于分类</p>
+<p>$$<br>\underset{d_y \times 1}{\hat{\boldsymbol{y}}} &#x3D; \text{softmax}( \underset{d_y \times d_v}{\boldsymbol{W}_c}\times \underset{d_v \times 1}{\boldsymbol{c}} + \underset{d_y \times 1}{\boldsymbol{b}_c})<br>$$</p>
+</li>
+</ol>
+<h3 id="Attention-分类"><a href="#Attention-分类" class="headerlink" title="Attention 分类"></a>Attention 分类</h3><img src="/img/Attention/Taxonomy.png" style="max-width: 100%; height: auto;">
+
+<p>论文按照上图的方式给 Attention 进行了分类</p>
+<p>由于篇幅限制，这里决定重开几个博文来分别介绍这些 Attention，链接如下：</p>
+<a href="/2025/07/14/Feature-Related-Attention/" title="Fufufu Relashinala">Fufufu Relashinala</a>
+<br/>
+<a href="/2025/07/16/General-Attention/" title="Gugugu Neralashun">Gugugu Neralashun</a>
+<br/>
+<a href="/2025/07/17/Query-Related-Attention/" title="Quaqua Rishinala">Quaqua Rishinala</a>
+
+<h3 id="怎样评价-Attention"><a href="#怎样评价-Attention" class="headerlink" title="怎样评价 Attention"></a>怎样评价 Attention</h3><h4 id="外在性能评估"><a href="#外在性能评估" class="headerlink" title="外在性能评估"></a>外在性能评估</h4><ol>
+<li><strong>领域特定的评估指标</strong></li>
+</ol>
+<p>不同领域用于评估注意力模型性能的指标：</p>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>常用评估指标</th>
+<th>典型应用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自然语言处理</td>
+<td>BLEU, METEOR, Perplexity</td>
+<td>机器翻译、文本生成</td>
+</tr>
+<tr>
+<td>语音处理</td>
+<td>词错误率(WER)、音素错误率(PER)</td>
+<td>语音识别</td>
+</tr>
+<tr>
+<td>计算机视觉</td>
+<td>PSNR, SSIM, IoU</td>
+<td>图像生成、分割</td>
+</tr>
+<tr>
+<td>通用分类</td>
+<td>准确率、精确率、召回率、F1</td>
+<td>情感分析、文档分类</td>
+</tr>
+</tbody></table>
+<ol start="2">
+<li><p><strong>消融研究</strong></p>
+<p> 论文强调了消融研究(ablation study)在评估注意力机制重要性方面的价值。典型做法包括：</p>
+<ol>
+<li>移除或替换注意力机制（如用平均池化代替注意力池化）</li>
+<li>比较模型在有无注意力机制时的性能差异</li>
+<li>分析不同注意力变体对最终性能的影响</li>
+</ol>
+<p> 这种评估方法可以明确注意力机制对模型性能的实际贡献，而不仅仅是展示最终结果。</p>
+</li>
+</ol>
+<h4 id="内在特性评估"><a href="#内在特性评估" class="headerlink" title="内在特性评估"></a>内在特性评估</h4><ol>
+<li><p><strong>注意力权重分析</strong></p>
+<ol>
+<li><strong>对齐错误率(AER)</strong>：比较模型生成的注意力权重与人工标注的”黄金”注意力权重之间的差异</li>
+<li><strong>监督注意力训练</strong>：将人工标注的注意力权重作为额外监督信号，与任务损失联合训练</li>
+<li><strong>注意力可视化</strong>：通过热图等方式直观展示模型关注区域</li>
+</ol>
+<p>这些方法可以评估注意力权重是否符合人类直觉或领域知识。</p>
+</li>
+<li><p><strong>基于人类注意力的评估</strong></p>
+<p> 论文提出了”注意力正确性”(Attention Correctness)的概念，将模型的注意力模式与真实人类注意力行为进行比较：</p>
+<ol>
+<li><strong>数据收集</strong>：记录人类在执行相同任务时的注意力模式（如眼动追踪）</li>
+<li><strong>度量计算</strong>：定义模型注意力与人类注意力的相似度指标</li>
+<li><strong>联合训练</strong>：将人类注意力数据作为监督信号</li>
+</ol>
+<p> 这种评估方法基于认知科学原理，认为好的注意力模型应该模拟人类的注意力机制。</p>
+</li>
+</ol>
+<h4 id="注意力解释性评估、"><a href="#注意力解释性评估、" class="headerlink" title="注意力解释性评估、"></a>注意力解释性评估、</h4><p>论文讨论了学术界关于”注意力是否提供解释”的争论：</p>
+<ol>
+<li><p><strong>“Attention is not Explanation”观点</strong></p>
+<ul>
+<li>注意力权重与模型决策之间缺乏稳定关联</li>
+<li>可以构造对抗性注意力分布而不改变模型输出</li>
+<li>注意力权重可能反映相关性而非因果性</li>
+</ul>
+</li>
+<li><p><strong>“Attention is not not Explanation”反驳</strong></p>
+<ul>
+<li>对抗性注意力分布通常性能更差</li>
+<li>注意力权重确实反映了输入的相对重要性</li>
+<li>在特定架构下注意力可以提供有意义的解释</li>
+</ul>
+</li>
+</ol>
+<p><del>这段比较难绷，因此把</del>原文贴在下面了捏</p>
+<blockquote>
+<p>However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].</p>
+</blockquote>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>Model</category>
+        <category>Attention</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>deep learning</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CDR Input Data Analysis</title>
     <url>/2025/07/09/CDR-data-analysis/</url>
     <content><![CDATA[<h1 id="CDR-数据源分析"><a href="#CDR-数据源分析" class="headerlink" title="CDR 数据源分析"></a>CDR 数据源分析</h1><p>本文主要是介绍一下 <strong>深度学习</strong> 在 <em>药物反应预测</em> 中运用到的数据源。<del>但由于本人比较捞</del> 本文主要从 <strong>深度学习</strong> 角度来看待这些数据源，对其在医学方面的意义<del>（主要是鼠鼠也不会捏）</del>不会有太多的描述</p>
@@ -643,12 +816,12 @@
         <category>Model</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>CDR</tag>
         <tag>graph theory</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>attention</tag>
         <tag>contrast learning</tag>
         <tag>graph signal processing</tag>
         <tag>random walk</tag>
@@ -775,186 +948,13 @@
         <category>Model</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>CDR</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>attention</tag>
         <tag>contrast learning</tag>
         <tag>multi-view</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Attention Overview</title>
-    <url>/2025/07/10/Attention/</url>
-    <content><![CDATA[<h1 id="Is-Attention-All-My-Need"><a href="#Is-Attention-All-My-Need" class="headerlink" title="Is Attention All My Need ?"></a>Is Attention All My Need ?</h1><blockquote>
-<p>注意力机制在图神经网络中扮演着越来越重要的角色。<del>但鼠鼠现在连正常的 Attention 有哪些都不清楚捏</del>本文鼠鼠将从一般的 Attention 出发，给出 Attention 的总体结构，然后按分类介绍现有的主要的 Attention</p>
-</blockquote>
-<p>本文主要来自于一篇论文，基本可以看作<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">那篇论文</a>的阅读笔记</p>
-<span id="more"></span>
-
-<h2 id="🎯-引言"><a href="#🎯-引言" class="headerlink" title="🎯 引言"></a>🎯 引言</h2><p>在深度学习领域，注意力机制已经成为一个革命性的创新，特别是在处理序列数据和图像数据方面取得了巨大成功。而在图神经网络中，注意力机制的引入不仅提高了模型的表现力，还增强了模型的可解释性。</p>
-<p>在图结构数据中应用注意力机制主要有以下优势：</p>
-<ol>
-<li>自适应性：能够根据任务动态调整不同邻居节点的重要性</li>
-<li>可解释性：通过注意力权重可以直观理解模型的决策过程</li>
-<li>长程依赖：有效缓解了传统 GNN 中的过平滑问题</li>
-<li>异质性处理：更好地处理异质图中的不同类型节点和边</li>
-</ol>
-<h2 id="📚-总览-Attention"><a href="#📚-总览-Attention" class="headerlink" title="📚 总览 Attention"></a>📚 总览 Attention</h2><p>本章节主要参考了论文<a href="/paper/Brauwers%E5%92%8CFrasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a>有兴趣的话可以看看原文捏</p>
-<embed src="/paper/Brauwers和Frasincar%20-%202023%20-%20A%20General%20Survey%20on%20Attention%20Mechanisms%20in%20Deep%20Learning.pdf" width="45%" height="400" type="application/pdf">
-
-<h3 id="Attention-的一般结构"><a href="#Attention-的一般结构" class="headerlink" title="Attention 的一般结构"></a>Attention 的一般结构</h3><img src="/img/Attention/TotalModel.png" alt="TotalModel" width="60%" height="auto">
-
-<p>上图是从总体上看 Attention 在整个任务模型框架中的位置</p>
-<p>框架包含四个核心组件：</p>
-<ol>
-<li><strong>特征模型</strong>：负责输入数据的特征提取</li>
-<li><strong>查询模型</strong>：生成注意力查询向量</li>
-<li><strong>注意力模型</strong>：计算注意力权重</li>
-<li><strong>输出模型</strong>：生成最终预测结果</li>
-</ol>
-<p>接下来，我们会从 <em>输入</em> 的角度来看<strong>特征模型</strong>和<strong>查询模型</strong>，从 <em>输出</em> 的角度来看<strong>注意力模型</strong>和<strong>输出模型</strong></p>
-<h4 id="输入处理机制"><a href="#输入处理机制" class="headerlink" title="输入处理机制"></a>输入处理机制</h4><ol>
-<li><p><strong>特征模型</strong>，即将任务的输入进行 embedding</p>
-<p>对于输入矩阵 $ X \in \mathbb{R}^{d_x \times n_x} $ ，特征模型提取特征向量： $\boldsymbol{F} &#x3D; [f_1, \ldots, f_{n_f}] \in \mathbb{R}^{d_f \times n_f}$</p>
-</li>
-<li><p><strong>查询模型</strong>，查询模型产生查询向量$ \boldsymbol{q} \in \mathbb{R}^{d_q} $，用以告诉注意力模型哪一个特征是重要的</p>
-</li>
-</ol>
-<p>一般情况下，这两个模型可以用 CNN 或 RNN</p>
-<h4 id="输出计算机制"><a href="#输出计算机制" class="headerlink" title="输出计算机制"></a>输出计算机制</h4><img src="/img/Attention/GeneralAttentionModule.png" alt="GeneralAttentionModule" width="50%" height="auto">
-
-<p>上图是 Attention 模型总体结构的说明，下面对这张图进行详细的说明</p>
-<ol>
-<li>特征矩阵$\boldsymbol{F} &#x3D; [\boldsymbol{f}_1, \ldots, \boldsymbol{f}_{n_f}] \in \mathbb{R}^{d_f \times n_f}$，通过<em>某些方法</em>将其分为 Keys 矩阵$\boldsymbol{K} &#x3D; [\boldsymbol{k}_1, \ldots, \boldsymbol{k}_{n_f}] \in \mathbb{R}^{d_k \times n_f}$和 Values 矩阵$\boldsymbol{V} &#x3D; [\boldsymbol{v}_1, \ldots, \boldsymbol{v}_{n_f}] \in \mathbb{R}^{d_v \times n_f}$，这里的<em>某些方法</em>，一般情况下，按以下的方式通过<strong>线性变换</strong>得到：</li>
-</ol>
-<p>$$<br>\underset{d_{k} \times n_{f}}{\boldsymbol{K}}&#x3D;\underset{d_{k} \times d_{f}}{\boldsymbol{W}_{K}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}}, \quad \underset{d_{v} \times n_{f}}{\boldsymbol{V}}&#x3D;\underset{d_{v} \times d_{f}}{\boldsymbol{W}_{V}} \times \underset{d_{f} \times n_{f}}{\boldsymbol{F}} .<br>$$</p>
-<ol start="2">
-<li><p><code>Attention Scores</code>模块根据 $\boldsymbol{q}$ 计算每一个 key 向量对应的分数$\boldsymbol{e} &#x3D; [e_1, \ldots, e_{n_f}] \in \mathbb{R}^{n_f}$：</p>
-<p>$$<br>\underset{1\times 1}{e_l} &#x3D; \text{score}(\underset{d_q \times 1}{\boldsymbol{q}}, \underset{d_k \times 1}{\boldsymbol{k}_l})<br>$$</p>
-<p>如前所述，查询象征着对信息的请求。注意力分数$e_l$表示根据查询，关键向量$\boldsymbol{k}_l$中包含的信息的重要性。如果查询和关键向量的维度相同，则得分函数的一个例子是取向量的点积。</p>
-</li>
-<li><p>由于经过这么一堆操作之后，分数有很大的可能已经飞起来了捏，这个时候就需要<code>Attention Alignment</code>模块对其进行<strong>归一化</strong>之类的操作了捏</p>
-<p>$$<br>\underset{1\times 1}{a_l} &#x3D; \text{align}(\underset{d_q \times 1}{\boldsymbol{e_l}}, \underset{n_f \times 1}{\boldsymbol{e}})<br>$$</p>
-</li>
-</ol>
-<p>注意力权重$\boldsymbol{a} &#x3D; [a_1, \ldots, a_{n_f}] \in \mathbb{R}^{n_f}$为注意力模块提供了一个相当直观的解释。每个权重直接表明了每个特征向量相对于其他特征向量对于这个问题的重要性。</p>
-<ol start="4">
-<li><p>在<code>Weight Average</code>模块完成<strong>上下文生成</strong>：</p>
-<p>$$<br>\underset{d_v \times 1}{\boldsymbol{c}} &#x3D; \sum_{l &#x3D; 1}^{n_f} \underset{1 \times 1}{a_l}\times \underset{d_v \times 1}{\boldsymbol{v}_l}<br>$$</p>
-</li>
-<li><p>输出处理就想怎么搞就怎么搞了捏，例如 用于分类</p>
-<p>$$<br>\underset{d_y \times 1}{\hat{\boldsymbol{y}}} &#x3D; \text{softmax}( \underset{d_y \times d_v}{\boldsymbol{W}_c}\times \underset{d_v \times 1}{\boldsymbol{c}} + \underset{d_y \times 1}{\boldsymbol{b}_c})<br>$$</p>
-</li>
-</ol>
-<h3 id="Attention-分类"><a href="#Attention-分类" class="headerlink" title="Attention 分类"></a>Attention 分类</h3><img src="/img/Attention/Taxonomy.png" style="max-width: 100%; height: auto;">
-
-<p>论文按照上图的方式给 Attention 进行了分类</p>
-<p>由于篇幅限制，这里决定重开几个博文来分别介绍这些 Attention，链接如下：</p>
-<a href="/2025/07/14/Feature-Related-Attention/" title="Fufufu Relashinala">Fufufu Relashinala</a>
-<br/>
-<a href="/2025/07/16/General-Attention/" title="Gugugu Neralashun">Gugugu Neralashun</a>
-<br/>
-<a href="/2025/07/17/Query-Related-Attention/" title="Quaqua Rishinala">Quaqua Rishinala</a>
-
-<h3 id="怎样评价-Attention"><a href="#怎样评价-Attention" class="headerlink" title="怎样评价 Attention"></a>怎样评价 Attention</h3><h4 id="外在性能评估"><a href="#外在性能评估" class="headerlink" title="外在性能评估"></a>外在性能评估</h4><ol>
-<li><strong>领域特定的评估指标</strong></li>
-</ol>
-<p>不同领域用于评估注意力模型性能的指标：</p>
-<table>
-<thead>
-<tr>
-<th>领域</th>
-<th>常用评估指标</th>
-<th>典型应用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>自然语言处理</td>
-<td>BLEU, METEOR, Perplexity</td>
-<td>机器翻译、文本生成</td>
-</tr>
-<tr>
-<td>语音处理</td>
-<td>词错误率(WER)、音素错误率(PER)</td>
-<td>语音识别</td>
-</tr>
-<tr>
-<td>计算机视觉</td>
-<td>PSNR, SSIM, IoU</td>
-<td>图像生成、分割</td>
-</tr>
-<tr>
-<td>通用分类</td>
-<td>准确率、精确率、召回率、F1</td>
-<td>情感分析、文档分类</td>
-</tr>
-</tbody></table>
-<ol start="2">
-<li><p><strong>消融研究</strong></p>
-<p> 论文强调了消融研究(ablation study)在评估注意力机制重要性方面的价值。典型做法包括：</p>
-<ol>
-<li>移除或替换注意力机制（如用平均池化代替注意力池化）</li>
-<li>比较模型在有无注意力机制时的性能差异</li>
-<li>分析不同注意力变体对最终性能的影响</li>
-</ol>
-<p> 这种评估方法可以明确注意力机制对模型性能的实际贡献，而不仅仅是展示最终结果。</p>
-</li>
-</ol>
-<h4 id="内在特性评估"><a href="#内在特性评估" class="headerlink" title="内在特性评估"></a>内在特性评估</h4><ol>
-<li><p><strong>注意力权重分析</strong></p>
-<ol>
-<li><strong>对齐错误率(AER)</strong>：比较模型生成的注意力权重与人工标注的”黄金”注意力权重之间的差异</li>
-<li><strong>监督注意力训练</strong>：将人工标注的注意力权重作为额外监督信号，与任务损失联合训练</li>
-<li><strong>注意力可视化</strong>：通过热图等方式直观展示模型关注区域</li>
-</ol>
-<p>这些方法可以评估注意力权重是否符合人类直觉或领域知识。</p>
-</li>
-<li><p><strong>基于人类注意力的评估</strong></p>
-<p> 论文提出了”注意力正确性”(Attention Correctness)的概念，将模型的注意力模式与真实人类注意力行为进行比较：</p>
-<ol>
-<li><strong>数据收集</strong>：记录人类在执行相同任务时的注意力模式（如眼动追踪）</li>
-<li><strong>度量计算</strong>：定义模型注意力与人类注意力的相似度指标</li>
-<li><strong>联合训练</strong>：将人类注意力数据作为监督信号</li>
-</ol>
-<p> 这种评估方法基于认知科学原理，认为好的注意力模型应该模拟人类的注意力机制。</p>
-</li>
-</ol>
-<h4 id="注意力解释性评估、"><a href="#注意力解释性评估、" class="headerlink" title="注意力解释性评估、"></a>注意力解释性评估、</h4><p>论文讨论了学术界关于”注意力是否提供解释”的争论：</p>
-<ol>
-<li><p><strong>“Attention is not Explanation”观点</strong></p>
-<ul>
-<li>注意力权重与模型决策之间缺乏稳定关联</li>
-<li>可以构造对抗性注意力分布而不改变模型输出</li>
-<li>注意力权重可能反映相关性而非因果性</li>
-</ul>
-</li>
-<li><p><strong>“Attention is not not Explanation”反驳</strong></p>
-<ul>
-<li>对抗性注意力分布通常性能更差</li>
-<li>注意力权重确实反映了输入的相对重要性</li>
-<li>在特定架构下注意力可以提供有意义的解释</li>
-</ul>
-</li>
-</ol>
-<p><del>这段比较难绷，因此把</del>原文贴在下面了捏</p>
-<blockquote>
-<p>However, rather than checking if the model focuses on the most important parts of the data, some use the attention weights to determine which parts of the data are most important. This would imply that attention models provide a type of explanation, which is a subject of contention among researchers. Particularly, in [120], extensive experiments are conducted for various natural language processing tasks to investigate the relation between attention weights and important information to determine whether attention can actually provide meaningful explanations. In this paper titled “Attention is not Explanation”, it is found that attention weights do not tend to correlate with important features. Additionally, the authors are able to replace the produced attention weights with completely different values while keeping the model output the same. These so-called “adversarial” attention distributions show that an attention model may focus on completely different information and still come to the same conclusions, which makes interpretation difficult. Yet, in another paper titled “Attention is not not Explanation” [121], the claim that attention is not explanation is questioned by challenging the assumptions of the previous work. It is found that the adversarial attention distributions do not perform as reliably well as the learned attention weights, indicating that it was not proved that attention is not viable for explanation. In general, the conclusion regarding the interpretability of attention models is that researchers must be extremely careful when drawing conclusions based on attention patterns. For example, problems with an attention model can be diagnosed via the attention weights if the model is found to focus on the incorrect parts of the data, if such information is available. Yet, conversely, attention weights may only be used to obtain plausible explanations for why certain parts of the data are focused on, rather than concluding that those parts are significant to the problem [121]. However, one should still be cautious as the viability of such approaches can depend on the model architecture [122].</p>
-</blockquote>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Brauwers和Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning.pdf" target="_blank">📄 Brauwers 和 Frasincar - 2023 - A General Survey on Attention Mechanisms in Deep Learning</a></p>
-]]></content>
-      <categories>
-        <category>Deep Learning</category>
-        <category>Model</category>
-        <category>Attention</category>
-      </categories>
-      <tags>
-        <tag>attention</tag>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>deep learning</tag>
-        <tag>PyTorch</tag>
       </tags>
   </entry>
   <entry>
@@ -1266,15 +1266,200 @@
         <category>Model</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>CDR</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>attention</tag>
         <tag>contrast learning</tag>
         <tag>GAN</tag>
         <tag>dynamic graph</tag>
         <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CDR-model In 2024 | Part 2</title>
+    <url>/2025/07/27/CDR-model-part4/</url>
+    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
+<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
+<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
+<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
+<span id="more"></span>
+
+<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
+<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
+<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
+
+<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
+<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
+<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
+<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
+<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
+<ul>
+<li><strong>输入</strong>：<ul>
+<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
+<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
+<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
+</ul>
+</li>
+<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
+</ul>
+<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
+<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
+<ul>
+<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
+</li>
+<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
+<ul>
+<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
+<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
+<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
+</ul>
+</li>
+<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
+</li>
+</ul>
+<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
+<ul>
+<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
+<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
+</ul>
+<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
+<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
+<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
+<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
+<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
+</ul>
+</li>
+</ul>
+<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
+<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
+<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
+<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
+</ul>
+<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
+<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
+<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
+<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
+<ul>
+<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
+<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
+</ul>
+<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
+<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
+<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
+<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
+<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
+<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
+]]></content>
+      <categories>
+        <category>CDR</category>
+        <category>Model</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>CDR</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>contrast learning</tag>
+        <tag>GAN</tag>
+        <tag>dynamic graph</tag>
+        <tag>hypergraph</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The Overview of Drug-Drug Interaction</title>
+    <url>/2026/03/09/DDI-Review/</url>
+    <content><![CDATA[<h1 id="DDI-总览"><a href="#DDI-总览" class="headerlink" title="DDI 总览"></a>DDI 总览</h1><p>这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：</p>
+<ol>
+<li>DDI 的任务主要是什么</li>
+<li>DDI 的难点（创新点出现（希望）的位置）</li>
+<li>药物处理方面与 CDR 有什么不同</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="什么是-DDI"><a href="#什么是-DDI" class="headerlink" title="什么是 DDI"></a>什么是 DDI</h2><p>目前，DDI 讨论还是<strong>两</strong>种药物之间的相互作用（$G_x, G_y, r_{xy}$），即一种药物的效用因为另一种药物的存在而发生改变的现象。</p>
+<h3 id="常用数据集"><a href="#常用数据集" class="headerlink" title="常用数据集"></a>常用数据集</h3><p>在构建 DDI 预测模型时，数据往往分布在异构的网络中。最核心的数据集通常分为机制类和表型类：</p>
+<ul>
+<li><strong>DrugBank</strong>：最权威且使用最为频繁的数据集。主要包含药物之间的代谢层面影响（例如药物 A 抑制了代谢药物 B 的酶）。通常包含高度确定的相互作用类型。</li>
+<li><strong>TWOSIDES</strong>：侧重于表型层面（Phenotypic）的信息。它记录了同时服用两种药物产生的、且在单药服用时不会出现的副作用（如恶心、心痛等）。</li>
+<li><strong>DRKG (Drug Repurposing Knowledge Graph) &#x2F; Hetionet</strong>：大型的综合生物医学知识图谱。除了包含只属于药物间的关系外，还整合了药物与基因、蛋白质、疾病之间的复杂关系。</li>
+</ul>
+<h3 id="不同的实验"><a href="#不同的实验" class="headerlink" title="不同的实验"></a>不同的实验</h3><p>由于 DDI 所引入的药物数量实际上远多于 CDR，这也就引出了其与 CDR（正常）的 <em>第一个</em> 不同：<em>DDI 经常讨论测试集中药物不存在与训练集中的情况</em>，具体来说，我们可以将其分为：</p>
+<ul>
+<li><strong>直推式 (Transductive &#x2F; Warm-start)</strong>：测试集中的药物分子在训练集中出现过，我们只是预测已知药物之间的新边（关系）。</li>
+<li><strong>归纳式 (Inductive &#x2F; Cold-start)</strong>：模型在部署时遇到的是结构、特征全新的、从未见过的药物分子（未见分布 OOD），需要仅凭其化学特征来预测交互。</li>
+</ul>
+<hr>
+<h2 id="药物和关系的表示方法"><a href="#药物和关系的表示方法" class="headerlink" title="药物和关系的表示方法"></a>药物和关系的表示方法</h2><p>要把化学物质喂给机器学习模型，我们首先得把它们变成计算机理解的代数对象。与CDR不同的是，有很多 paper 都倾向于使用多种表示方法进行多模态的学习，主要有以下四个维度的表征：</p>
+<ol>
+<li><p>二进制&#x2F;指纹表示法 (Binary Fingerprints)<br>最传统的表示方式（如 MACCS, PubChem, Morgan Fingerprints）。通过检测药物内部是否包含特定的化学子结构，将其转化为定长的独热（One-hot）&#x2F;布尔向量。</p>
+<ul>
+<li><strong>数学表示</strong>：设药物数量为 $N$，特征维度为 $D$（如 MACCS 为 166 维，PubChem 为 881 维）。药物分子可以直接表示为一个特征向量：<br>$$<br>\mathbf{x} \in \{0, 1\}^D<br>$$<br> 其中 $x_i &#x3D; 1$ 表示存在第 $i$ 个子结构。</li>
+</ul>
+</li>
+<li><p>序列表示法 (Sequence &#x2F; SMILES Representation)<br>使用 SMILES 字符串，把 2D 分子结构转化为一维的 ASCII 字符序列（把它当成一段本文来处理），常用 NLP 中的 Transformer &#x2F; LSTM 提取特征。</p>
+<ul>
+<li><strong>数学表示</strong>：药物图被展平为由词表 $\mathcal{V}_{vocab}$ 中标记组成的序列：<br> $$ S &#x3D;[s_1, s_2, \dots, s_L], \quad s_i \in \mathcal{V}_{vocab} $$<br>其中 $L$ 是字符串的长度。</li>
+</ul>
+</li>
+<li><p>二维分子图表示 (2D Graph Representation) (当前最热门)<br>用<strong>图结构数据</strong>直接描述分子，原子是节点，化学键是边。利用 GNN (Graph Neural Networks) 进行消息传递。</p>
+<ul>
+<li><strong>数学表示</strong>：一个药物分子定义为一个图 $G &#x3D; (\mathcal{V}, \mathcal{E})$。</li>
+</ul>
+<ul>
+<li>节点特征矩阵：$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times F_v}$（每一行 $\mathbf{x}_i$ 是第 $i$ 个原子的特征向量，如电荷数、杂化状态）。</li>
+<li>边类型&#x2F;特征矩阵：$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times F_e}$（$\mathbf{e}_{ij}$ 为键的类型，如单键、双键）。</li>
+<li>邻接矩阵：$\mathbf{A} \in \{0, 1\}^{|\mathcal{V}| \times |\mathcal{V}|}$。</li>
+</ul>
+</li>
+<li><p>三维构象表示 (3D Structure)</p>
+</li>
+<li><p>除了分子拓扑连接外，还包含空间原子的相对位置（坐标）。</p>
+<ul>
+<li><strong>数学表示</strong>：除了 2D 的 $\mathbf{X}$ 以外，还引入空间坐标矩阵模型：<br> $$ \mathbf{R} \in \mathbb{R}^{|\mathcal{V}| \times 3} $$</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="关联关系与知识图谱的表示方法-Relation-KG-Representation"><a href="#关联关系与知识图谱的表示方法-Relation-KG-Representation" class="headerlink" title="关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)"></a>关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</h3><p>为了预测交互作用，两两药物的关系不仅需要依据自身结构，还依赖于外界丰富知识网络的嵌入（Knowledge Graph Embedding, KGE）。</p>
+<p>我们要构建一个包含了实体（药物、蛋白、疾病等）和它们之间关系的异构图谱 $\mathcal{G}_{KG}$：</p>
+<ul>
+<li><strong>知识库的基础单元</strong>：由成千上万个<strong>三元组 (Triples)</strong> 构成：<br>$$ \mathcal{G}_{KG} &#x3D; {(h, r, t) \mid h \in \mathcal{E}, t \in \mathcal{E}, r \in \mathcal{R}} $$<br>其中 $\mathcal{E}$ 是所有实体（Entities）的集合，$\mathcal{R}$ 是所有相互作用关系（Relations）的集合。$h$ 是头实体，$t$ 是尾实体。</li>
+</ul>
+<p>有了图谱结构后，使用 KGE 算法将离散的网络空间映射到连续的低维向量空间 $\mathbb{R}^d$中。论文中总结了几大流派（附经典打分函数 $f(h, r, t)$）：</p>
+<h4 id="A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR"><a href="#A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR" class="headerlink" title="A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)"></a>A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</h4><p>思想：两个实体之间的关系被视为向量空间中的一种几何<strong>平移 (Translation)</strong>。</p>
+<ul>
+<li><strong>数学表示 (以 TransE 为例)</strong>：<br>令投影后的连续向量为 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{R}^d$。<br>目标是使得 $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$。<br>其打分函数为（得分越高表示越不可能是真实的 DDI 边，需加负号）：<br>$$ f(h, r, t) &#x3D; - |\mathbf{h} + \mathbf{r} - \mathbf{t}|_{1&#x2F;2} $$</li>
+</ul>
+<h4 id="B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx"><a href="#B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx" class="headerlink" title="B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)"></a>B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</h4><p>思想：不找平移距离，而是利用矩阵&#x2F;张量乘法，衡量头尾实体在某关系下的相似度及相互匹配性。这是预测 DDI 最经典的 KGE 手段。</p>
+<ul>
+<li><strong>数学表示 (以 RESCAL 或其简化版 DistMult 为例)</strong>：<br>实体编码为 $\mathbf{h}, \mathbf{t} \in \mathbb{R}^d$。关系被表示为对角矩阵 $\mathbf{M}_r &#x3D; \text{diag}(\mathbf{r})$（其中 $\mathbf{r} \in \mathbb{R}^d$）。<br>打分函数定义为双线性内积：<br>$$ f(h, r, t) &#x3D; \mathbf{h}^\top \mathbf{M}_r \mathbf{t} &#x3D; \sum_{i&#x3D;1}^{d} h_i \cdot r_i \cdot t_i $$<br>（在更复杂的 ComplEx 模型中，向量会被映射到复数域 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{C}^d$，以解决 DDI 关系中的非对称性问题）。</li>
+</ul>
+<h4 id="C-数据分析中的联合打分-Fusion-Prediction-Layer"><a href="#C-数据分析中的联合打分-Fusion-Prediction-Layer" class="headerlink" title="C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)"></a>C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</h4><p>最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：<br>$$ P(r \mid A, B) &#x3D; \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}_{structure}(G_A) \oplus \text{GNN}_{structure}(G_B) \oplus \mathbf{h}_{KG} \oplus \mathbf{t}_{KG} \big] + \mathbf{b} \Big) $$<br>其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。</p>
+<h2 id="数据集不同引出的模型构造思路的不同"><a href="#数据集不同引出的模型构造思路的不同" class="headerlink" title="数据集不同引出的模型构造思路的不同"></a>数据集不同引出的模型构造思路的不同</h2><p>由于前面提到的：<em>有直推式和归纳式的模型</em>，而这两种模型的区别在于：重点处理药物表示（通过自监督的方式学习特征）还是处理药物关系（通过KGE）</p>
+<h2 id="超图在-DDI-中的应用"><a href="#超图在-DDI-中的应用" class="headerlink" title="超图在 DDI 中的应用"></a>超图在 DDI 中的应用</h2><p>超图在 DDI 中的应用主要分为两种：</p>
+<ol>
+<li>将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）</li>
+<li>将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）</li>
+</ol>
+<h2 id="大模型在DDI中的应用"><a href="#大模型在DDI中的应用" class="headerlink" title="大模型在DDI中的应用"></a>大模型在DDI中的应用</h2><p>由于NLP的知识过于孱弱，完全看不懂他在干嘛，所以最近决定先去简单了解一下LLM捏</p>
+]]></content>
+      <categories>
+        <category>DDI</category>
+        <category>Review</category>
+      </categories>
+      <tags>
+        <tag>attention</tag>
+        <tag>model framework</tag>
+        <tag>practice</tag>
+        <tag>GNN</tag>
+        <tag>DDI</tag>
+        <tag>Knowledge Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -1486,197 +1671,53 @@
         <category>Daily</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>attention</tag>
         <tag>DDI</tag>
         <tag>Knowledge Graph</tag>
       </tags>
   </entry>
   <entry>
-    <title>The Overview of Drug-Drug Interaction</title>
-    <url>/2026/03/09/DDI-Review/</url>
-    <content><![CDATA[<h1 id="DDI-总览"><a href="#DDI-总览" class="headerlink" title="DDI 总览"></a>DDI 总览</h1><p>这是搞完（实际并非）CDR之后的另一个东西捏，大致有以下内容：</p>
-<ol>
-<li>DDI 的任务主要是什么</li>
-<li>DDI 的难点（创新点出现（希望）的位置）</li>
-<li>药物处理方面与 CDR 有什么不同</li>
-</ol>
+    <title>Half-Monthly DDI Record | Series 4</title>
+    <url>/2026/04/22/DDI-Week7~8/</url>
+    <content><![CDATA[<h1 id="7-8周里入到🧠的DDI"><a href="#7-8周里入到🧠的DDI" class="headerlink" title="7~8周里入到🧠的DDI"></a>7~8周里入到🧠的DDI</h1><p>DDI 真神奇捏。阿巴阿巴阿巴</p>
 <span id="more"></span>
 
-<h2 id="什么是-DDI"><a href="#什么是-DDI" class="headerlink" title="什么是 DDI"></a>什么是 DDI</h2><p>目前，DDI 讨论还是<strong>两</strong>种药物之间的相互作用（$G_x, G_y, r_{xy}$），即一种药物的效用因为另一种药物的存在而发生改变的现象。</p>
-<h3 id="常用数据集"><a href="#常用数据集" class="headerlink" title="常用数据集"></a>常用数据集</h3><p>在构建 DDI 预测模型时，数据往往分布在异构的网络中。最核心的数据集通常分为机制类和表型类：</p>
+<h2 id="这周看到的蛮不赖的几篇捏"><a href="#这周看到的蛮不赖的几篇捏" class="headerlink" title="这周看到的蛮不赖的几篇捏"></a>这周看到的蛮不赖的几篇捏</h2><p>Emmm，类似的表格传到Google Docs上了捏，，，，懒得动了捏</p>
+<h3 id="CAREDDI"><a href="#CAREDDI" class="headerlink" title="CAREDDI"></a>CAREDDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/150321_image-20260421150321849.png" alt="image-20260421150321849"></p>
+<p>这篇论文中提到，现有的数据集中存在虚假的药物关联关系（由于实验偏差、知识更新滞后或标注不一致）</p>
+<p>所以他把异常检测引入了DDI模型，从而增强模型在遇到spurious DDIs时的鲁棒性</p>
+<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>(a) 部分就是一个非常常规的cross-attention捏。</p>
+<p>重点是(b)部分捏</p>
+<h5 id="总体"><a href="#总体" class="headerlink" title="总体"></a>总体</h5><p>分解为两个DDI元任务：一个用于学习有价值的标注型DDI特征分布的标注特征分布学习任务，以及一个用于确保整体预测准确性的DDI预测器任务。</p>
+<p>MCD（最小协方差矩阵） 的目标是<strong>从这 $n$ 个样本中寻找一个子集（包含 $h$ 个样本），使得这个子集的协方差矩阵的行列式（Determinant）最小。</strong></p>
+<p>提出了一种基于密度的新型特征分布学习层，用于动态适应标注DDI特征分布中的鲁棒多变量位置与离散度。</p>
 <ul>
-<li><strong>DrugBank</strong>：最权威且使用最为频繁的数据集。主要包含药物之间的代谢层面影响（例如药物 A 抑制了代谢药物 B 的酶）。通常包含高度确定的相互作用类型。</li>
-<li><strong>TWOSIDES</strong>：侧重于表型层面（Phenotypic）的信息。它记录了同时服用两种药物产生的、且在单药服用时不会出现的副作用（如恶心、心痛等）。</li>
-<li><strong>DRKG (Drug Repurposing Knowledge Graph) &#x2F; Hetionet</strong>：大型的综合生物医学知识图谱。除了包含只属于药物间的关系外，还整合了药物与基因、蛋白质、疾病之间的复杂关系。</li>
+<li><strong>位置感知聚合 (Location-aware aggregation)：</strong> 学习 DDI 特征分布的中心位置 dlocationdlocation。</li>
+<li><strong>散射感知聚合 (Scatter-aware aggregation)：</strong> 学习特征的离散程度 PscatterPscatter。</li>
+<li><strong>损失函数设计：</strong><br>  $L_{CDSL}$ (Chi-square Distribution-based Soft Loss)： 强制让标注的 DDI 特征分布逼近卡方分布 (χ2χ2)。如果一个样本偏离该分布过远，则更有可能被判定为“伪 DDI”。</li>
 </ul>
-<h3 id="不同的实验"><a href="#不同的实验" class="headerlink" title="不同的实验"></a>不同的实验</h3><p>由于 DDI 所引入的药物数量实际上远多于 CDR，这也就引出了其与 CDR（正常）的 <em>第一个</em> 不同：<em>DDI 经常讨论测试集中药物不存在与训练集中的情况</em>，具体来说，我们可以将其分为：</p>
-<ul>
-<li><strong>直推式 (Transductive &#x2F; Warm-start)</strong>：测试集中的药物分子在训练集中出现过，我们只是预测已知药物之间的新边（关系）。</li>
-<li><strong>归纳式 (Inductive &#x2F; Cold-start)</strong>：模型在部署时遇到的是结构、特征全新的、从未见过的药物分子（未见分布 OOD），需要仅凭其化学特征来预测交互。</li>
-</ul>
-<hr>
-<h2 id="药物和关系的表示方法"><a href="#药物和关系的表示方法" class="headerlink" title="药物和关系的表示方法"></a>药物和关系的表示方法</h2><p>要把化学物质喂给机器学习模型，我们首先得把它们变成计算机理解的代数对象。与CDR不同的是，有很多 paper 都倾向于使用多种表示方法进行多模态的学习，主要有以下四个维度的表征：</p>
+<h3 id="RISE-DDI"><a href="#RISE-DDI" class="headerlink" title="RISE-DDI"></a>RISE-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/193905_image-20260421193905214.png" alt="image-20260421193905214"></p>
 <ol>
-<li><p>二进制&#x2F;指纹表示法 (Binary Fingerprints)<br>最传统的表示方式（如 MACCS, PubChem, Morgan Fingerprints）。通过检测药物内部是否包含特定的化学子结构，将其转化为定长的独热（One-hot）&#x2F;布尔向量。</p>
-<ul>
-<li><strong>数学表示</strong>：设药物数量为 $N$，特征维度为 $D$（如 MACCS 为 166 维，PubChem 为 881 维）。药物分子可以直接表示为一个特征向量：<br>$$<br>\mathbf{x} \in \{0, 1\}^D<br>$$<br> 其中 $x_i &#x3D; 1$ 表示存在第 $i$ 个子结构。</li>
-</ul>
-</li>
-<li><p>序列表示法 (Sequence &#x2F; SMILES Representation)<br>使用 SMILES 字符串，把 2D 分子结构转化为一维的 ASCII 字符序列（把它当成一段本文来处理），常用 NLP 中的 Transformer &#x2F; LSTM 提取特征。</p>
-<ul>
-<li><strong>数学表示</strong>：药物图被展平为由词表 $\mathcal{V}_{vocab}$ 中标记组成的序列：<br> $$ S &#x3D;[s_1, s_2, \dots, s_L], \quad s_i \in \mathcal{V}_{vocab} $$<br>其中 $L$ 是字符串的长度。</li>
-</ul>
-</li>
-<li><p>二维分子图表示 (2D Graph Representation) (当前最热门)<br>用<strong>图结构数据</strong>直接描述分子，原子是节点，化学键是边。利用 GNN (Graph Neural Networks) 进行消息传递。</p>
-<ul>
-<li><strong>数学表示</strong>：一个药物分子定义为一个图 $G &#x3D; (\mathcal{V}, \mathcal{E})$。</li>
-</ul>
-<ul>
-<li>节点特征矩阵：$\mathbf{X} \in \mathbb{R}^{|\mathcal{V}| \times F_v}$（每一行 $\mathbf{x}_i$ 是第 $i$ 个原子的特征向量，如电荷数、杂化状态）。</li>
-<li>边类型&#x2F;特征矩阵：$\mathbf{E} \in \mathbb{R}^{|\mathcal{E}| \times F_e}$（$\mathbf{e}_{ij}$ 为键的类型，如单键、双键）。</li>
-<li>邻接矩阵：$\mathbf{A} \in \{0, 1\}^{|\mathcal{V}| \times |\mathcal{V}|}$。</li>
-</ul>
-</li>
-<li><p>三维构象表示 (3D Structure)</p>
-</li>
-<li><p>除了分子拓扑连接外，还包含空间原子的相对位置（坐标）。</p>
-<ul>
-<li><strong>数学表示</strong>：除了 2D 的 $\mathbf{X}$ 以外，还引入空间坐标矩阵模型：<br> $$ \mathbf{R} \in \mathbb{R}^{|\mathcal{V}| \times 3} $$</li>
-</ul>
-</li>
+<li>总体架构组件</li>
 </ol>
-<hr>
-<h3 id="关联关系与知识图谱的表示方法-Relation-KG-Representation"><a href="#关联关系与知识图谱的表示方法-Relation-KG-Representation" class="headerlink" title="关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)"></a>关联关系与知识图谱的表示方法 (Relation &amp; KG Representation)</h3><p>为了预测交互作用，两两药物的关系不仅需要依据自身结构，还依赖于外界丰富知识网络的嵌入（Knowledge Graph Embedding, KGE）。</p>
-<p>我们要构建一个包含了实体（药物、蛋白、疾病等）和它们之间关系的异构图谱 $\mathcal{G}_{KG}$：</p>
-<ul>
-<li><strong>知识库的基础单元</strong>：由成千上万个<strong>三元组 (Triples)</strong> 构成：<br>$$ \mathcal{G}_{KG} &#x3D; {(h, r, t) \mid h \in \mathcal{E}, t \in \mathcal{E}, r \in \mathcal{R}} $$<br>其中 $\mathcal{E}$ 是所有实体（Entities）的集合，$\mathcal{R}$ 是所有相互作用关系（Relations）的集合。$h$ 是头实体，$t$ 是尾实体。</li>
-</ul>
-<p>有了图谱结构后，使用 KGE 算法将离散的网络空间映射到连续的低维向量空间 $\mathbb{R}^d$中。论文中总结了几大流派（附经典打分函数 $f(h, r, t)$）：</p>
-<h4 id="A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR"><a href="#A-翻译距离模型-Translational-Models-如-TransE-TransH-TransR" class="headerlink" title="A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)"></a>A. 翻译距离模型 (Translational Models, 如 TransE, TransH, TransR)</h4><p>思想：两个实体之间的关系被视为向量空间中的一种几何<strong>平移 (Translation)</strong>。</p>
-<ul>
-<li><strong>数学表示 (以 TransE 为例)</strong>：<br>令投影后的连续向量为 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{R}^d$。<br>目标是使得 $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$。<br>其打分函数为（得分越高表示越不可能是真实的 DDI 边，需加负号）：<br>$$ f(h, r, t) &#x3D; - |\mathbf{h} + \mathbf{r} - \mathbf{t}|_{1&#x2F;2} $$</li>
-</ul>
-<h4 id="B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx"><a href="#B-张量分解-语义匹配模型-Tensor-Factorization-如-RESCAL-DistMult-ComplEx" class="headerlink" title="B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)"></a>B. 张量分解&#x2F;语义匹配模型 (Tensor Factorization, 如 RESCAL, DistMult, ComplEx)</h4><p>思想：不找平移距离，而是利用矩阵&#x2F;张量乘法，衡量头尾实体在某关系下的相似度及相互匹配性。这是预测 DDI 最经典的 KGE 手段。</p>
-<ul>
-<li><strong>数学表示 (以 RESCAL 或其简化版 DistMult 为例)</strong>：<br>实体编码为 $\mathbf{h}, \mathbf{t} \in \mathbb{R}^d$。关系被表示为对角矩阵 $\mathbf{M}_r &#x3D; \text{diag}(\mathbf{r})$（其中 $\mathbf{r} \in \mathbb{R}^d$）。<br>打分函数定义为双线性内积：<br>$$ f(h, r, t) &#x3D; \mathbf{h}^\top \mathbf{M}_r \mathbf{t} &#x3D; \sum_{i&#x3D;1}^{d} h_i \cdot r_i \cdot t_i $$<br>（在更复杂的 ComplEx 模型中，向量会被映射到复数域 $\mathbf{h}, \mathbf{r}, \mathbf{t} \in \mathbb{C}^d$，以解决 DDI 关系中的非对称性问题）。</li>
-</ul>
-<h4 id="C-数据分析中的联合打分-Fusion-Prediction-Layer"><a href="#C-数据分析中的联合打分-Fusion-Prediction-Layer" class="headerlink" title="C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)"></a>C. 数据分析中的联合打分 (Fusion &amp; Prediction Layer)</h4><p>最终判断药物 A 和药物 B 会发生关系 $r$ 的概率时，我们通常会将两种模式的表征拼接，送入多层感知机 (MLP)：<br>$$ P(r \mid A, B) &#x3D; \sigma \Big( \mathbf{W} \cdot \big[\text{GNN}_{structure}(G_A) \oplus \text{GNN}_{structure}(G_B) \oplus \mathbf{h}_{KG} \oplus \mathbf{t}_{KG} \big] + \mathbf{b} \Big) $$<br>其中 $\sigma(\cdot)$ 是 Sigmoid 函数返回 $[0, 1]$ 之间的概率，$\oplus$ 代表向量拼接。</p>
-<h2 id="数据集不同引出的模型构造思路的不同"><a href="#数据集不同引出的模型构造思路的不同" class="headerlink" title="数据集不同引出的模型构造思路的不同"></a>数据集不同引出的模型构造思路的不同</h2><p>由于前面提到的：<em>有直推式和归纳式的模型</em>，而这两种模型的区别在于：重点处理药物表示（通过自监督的方式学习特征）还是处理药物关系（通过KGE）</p>
-<h2 id="超图在-DDI-中的应用"><a href="#超图在-DDI-中的应用" class="headerlink" title="超图在 DDI 中的应用"></a>超图在 DDI 中的应用</h2><p>超图在 DDI 中的应用主要分为两种：</p>
-<ol>
-<li>将关系视为节点，与两个药物构造三节点超边的超图 （SPARSE，CentSmoothie）</li>
-<li>将有相同子结构的药物之间连接一条超边的超图（HyGNN，MFHNN-DDI）</li>
-</ol>
-<h2 id="大模型在DDI中的应用"><a href="#大模型在DDI中的应用" class="headerlink" title="大模型在DDI中的应用"></a>大模型在DDI中的应用</h2><p>由于NLP的知识过于孱弱，完全看不懂他在干嘛，所以最近决定先去简单了解一下LLM捏</p>
+<p>模型由两个核心模块组成，子图采样器（RL Agent）和交互预测器（结构感知奖励模型）</p>
+<p>他将子图采样建模为马尔可夫决策过程，定义了对应的环境</p>
+<h3 id="PC-DDI"><a href="#PC-DDI" class="headerlink" title="PC-DDI"></a>PC-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/203816_image-20260421203816565.png" alt="image-20260421203816565"></p>
 ]]></content>
       <categories>
         <category>DDI</category>
-        <category>Review</category>
+        <category>Daily</category>
       </categories>
       <tags>
+        <tag>attention</tag>
         <tag>model framework</tag>
         <tag>practice</tag>
         <tag>GNN</tag>
-        <tag>attention</tag>
         <tag>DDI</tag>
         <tag>Knowledge Graph</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CDR-model In 2024 | Part 2</title>
-    <url>/2025/07/27/CDR-model-part4/</url>
-    <content><![CDATA[<h1 id="2024年的CDR模型easy-go"><a href="#2024年的CDR模型easy-go" class="headerlink" title="2024年的CDR模型easy go"></a>2024年的CDR模型<del>easy go</del></h1><p>原来没有剩多少捏，蚌</p>
-<p>想看2020到2022的可以前往<a href="/2025/07/20/CDR-model-part1/" title="CDR models From 2020 To 2022">CDR models From 2020 To 2022</a></p>
-<p>想看2023的可以前往<a href="/2025/07/26/CDR-model-part2/" title="CDR models In 2023">CDR models In 2023</a></p>
-<p>想看2024（前半截）的可以前往<a href="/2025/07/27/CDR-model-part3/" title="CDR model In 2024 | Part 1">CDR model In 2024 | Part 1</a></p>
-<span id="more"></span>
-
-<h2 id="2024"><a href="#2024" class="headerlink" title="2024"></a>2024</h2><h3 id="MultiDRP"><a href="#MultiDRP" class="headerlink" title="MultiDRP"></a><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">MultiDRP</a></h3><p>好空虚，感觉什么都没有捏</p>
-<h3 id="MCMVDRP"><a href="#MCMVDRP" class="headerlink" title="MCMVDRP"></a><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">MCMVDRP</a></h3><p>又是一篇典型的一看架构图就知道在干什么的东西捏</p>
-<img src="/img/CDR/Framework/CDR-model-part2/MCMVDRP.png" alt="MCMVDRP" style="zoom:33%;" />
-
-<h3 id="DAPM-CDR"><a href="#DAPM-CDR" class="headerlink" title="DAPM CDR"></a><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">DAPM CDR</a></h3><p>和提示词有关的，目前没有兴趣捏</p>
-<h4 id="XGraphCDS"><a href="#XGraphCDS" class="headerlink" title="XGraphCDS"></a><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">XGraphCDS</a></h4><p>将模型可解释性的，但这不是鼠鼠想关注的捏</p>
-<h3 id="RedCDR"><a href="#RedCDR" class="headerlink" title="RedCDR"></a><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">RedCDR</a></h3><p>不想看了捏（直接掏之前的笔记了捏）</p>
-<h4 id="RedCDR模型构造过程详解"><a href="#RedCDR模型构造过程详解" class="headerlink" title="RedCDR模型构造过程详解"></a>RedCDR模型构造过程详解</h4><p>RedCDR（Dual Relation Distillation for Cancer Drug Response Prediction）是一个用于癌症药物反应预测的双关系蒸馏模型。模型基于多组学数据和药物分子结构，通过并行双分支架构独立学习细胞线&#x2F;药物属性信息与细胞线-药物关联信息，并使用融合模块实现知识蒸馏。以下详细说明模型的构造过程，包括核心组件、公式和关键步骤。</p>
-<h5 id="1-模型总体框架"><a href="#1-模型总体框架" class="headerlink" title="1. 模型总体框架"></a>1. 模型总体框架</h5><p>RedCDR由三个主要模块组成：<strong>属性分支</strong>（Attribute Branch）、<strong>关联分支</strong>（Association Branch）和<strong>融合模块</strong>（Fusion Module）。整体架构如图1所示：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR.png" alt="RedCDR"></p>
-<ul>
-<li><strong>输入</strong>：<ul>
-<li>细胞线多组学数据：基因组突变（$x_i^g \in \mathbb{R}^{1 \times \text{Dim}_g}$）、转录组表达（$x_i^t \in \mathbb{R}^{1 \times \text{Dim}_t}$）、表观基因组甲基化（$x_i^e \in \mathbb{R}^{1 \times \text{Dim}_e}$）。</li>
-<li>药物分子图：$\mathcal{G}_j &#x3D; (X_j^d, A_j^d)$，其中$X_j^d \in \mathbb{R}^{N_j^d \times \text{Dim}_d}$为原子特征矩阵，$A_j^d \in \mathbb{R}^{N_j^d \times N_j^d}$为邻接矩阵。</li>
-<li>细胞线-药物响应矩阵：$R \in \mathbb{R}^{N_C \times N_D}$，$R_{ij} &#x3D; 1$表示敏感响应，$R_{ij} &#x3D; 0$表示抵抗响应。</li>
-</ul>
-</li>
-<li><strong>输出</strong>：预测响应概率$\hat{R}_{ij}^{\text{Fu}}$。</li>
-</ul>
-<h5 id="2-属性分支（Attribute-Branch）"><a href="#2-属性分支（Attribute-Branch）" class="headerlink" title="2. 属性分支（Attribute Branch）"></a>2. 属性分支（Attribute Branch）</h5><p>属性分支独立学习细胞线和药物的属性表示，包括多组学编码器和药物编码器。</p>
-<h6 id="2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）"><a href="#2-1-自适应交互多组学编码器（Adaptive-Interacting-Multi-omics-Encoder）" class="headerlink" title="2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）"></a>2.1 自适应交互多组学编码器（Adaptive Interacting Multi-omics Encoder）</h6><p>此模块整合细胞线的多组学数据，考虑组学间交互和重要性权重。结构如图2：<br><img src="/img/CDR/Framework/CDR-model-part2/RedCDR-multi-omics-encoder.png" alt="RedCDR-multi-omics-encoder" style="zoom:50%;" /></p>
-<ul>
-<li><p><strong>步骤1：基础多组学表示</strong><br>使用独立网络提取各组学潜在表示（统一维度$F$）：<br>$$<br>e_i^g &#x3D; f_g(x_i^g), \quad e_i^t &#x3D; f_t(x_i^t), \quad e_i^e &#x3D; f_e(x_i^e)<br>$$<br>其中$f_g(\cdot)$为1D卷积网络（适用于基因组数据），$f_t(\cdot)$和$f_e(\cdot)$为全连接网络。拼接后得到基础表示：<br>$$<br>h_i^b &#x3D; \text{LeakyReLU}([e_i^g | e_i^t | e_i^e] W_b + b_b)<br>$$<br>这里$W_b \in \mathbb{R}^{3F \times F}$, $b_b \in \mathbb{R}^{1 \times F}$，$|$表示向量拼接。</p>
-</li>
-<li><p><strong>步骤2：组学特定表示学习</strong><br>构建多关系图，利用细胞线间相似性增强交互：</p>
-<ul>
-<li>计算组学$m \in {g, t, e}$的相似矩阵$S^m$：<br>$$<br>S_{ij}^m &#x3D; k(e_i^m, e_j^m) &#x3D; \frac{e_i^m \cdot e_j^{mT}}{|e_i^m| |e_j^m|}<br>$$</li>
-<li>基于$S^m$构建邻接矩阵$A^m$（选择top-$k$相似细胞线）。</li>
-<li>应用多层GCN传播信息：<br>$$<br>H^{m,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}^m H^{m,(l)} W_m^{(l)})<br>$$<br>其中$\widetilde{A}^m &#x3D; (\hat{D}^m)^{-1&#x2F;2} (A^m + I) (\hat{D}^m)^{-1&#x2F;2}$为归一化邻接矩阵，$H^{m,(0)} &#x3D; [e_i^g | e_i^t | e_i^e]$。</li>
-</ul>
-</li>
-<li><p><strong>步骤3：自适应融合</strong><br>使用点积注意力机制加权融合组学表示，以$h_i^b$作为查询，组学特定表示$[h_i^g, h_i^t, h_i^e]$作为键和值：<br>$$<br>h_i^c &#x3D; \text{Softmax}(q_i k_i^T) v_i, \quad q_i &#x3D; h_i^b, \quad k_i &#x3D; v_i &#x3D; [h_i^g, h_i^t, h_i^e]<br>$$<br>最终细胞线表示：<br>$$<br>h_i^{\text{At},C} &#x3D; \text{ReLU}(h_i^c W_C^{\text{At}} + b_C^{\text{At}})<br>$$<br>其中$W_C^{\text{At}} \in \mathbb{R}^{F \times F}$, $b_C^{\text{At}} \in \mathbb{R}^{1 \times F}$。</p>
-</li>
-</ul>
-<h6 id="2-2-药物编码器（Drug-Encoder）"><a href="#2-2-药物编码器（Drug-Encoder）" class="headerlink" title="2.2 药物编码器（Drug Encoder）"></a>2.2 药物编码器（Drug Encoder）</h6><p>处理药物分子图以提取全局表示：</p>
-<ul>
-<li>应用多层GCN学习原子节点表示$H_j^d$：<br>$$<br>H_j^{d,(l+1)} &#x3D; \text{LeakyReLU}(\widetilde{A}_j^d H_j^{d,(l)} W_d^{(l)})<br>$$<br>其中$\widetilde{A}_j^d$为归一化邻接矩阵。</li>
-<li>使用全局最大池化（GMP）生成药物级表示：<br>$$<br>h_j^{\text{At},D} &#x3D; \text{GMP}(H_j^d)<br>$$</li>
-</ul>
-<h5 id="3-关联分支（Association-Branch）"><a href="#3-关联分支（Association-Branch）" class="headerlink" title="3. 关联分支（Association Branch）"></a>3. 关联分支（Association Branch）</h5><p>关联分支从细胞线-药物响应中学习表示，区分敏感和抵抗响应。</p>
-<h6 id="3-1-二分图构建"><a href="#3-1-二分图构建" class="headerlink" title="3.1 二分图构建"></a>3.1 二分图构建</h6><ul>
-<li>敏感图$\mathcal{G}^s &#x3D; (X^s, A^s)$和抵抗图$\mathcal{G}^r &#x3D; (X^r, A^r)$：<ul>
-<li>节点嵌入$X^s &#x3D; X^r &#x3D; [X^C | X^D] \in \mathbb{R}^{(N_C + N_D) \times F}$为随机初始化可训练向量。</li>
-<li>邻接矩阵：<br>$$<br>A^s &#x3D; \begin{bmatrix} 0 &amp; R^s \ (R^s)^T &amp; 0 \end{bmatrix}, \quad A^r &#x3D; \begin{bmatrix} 0 &amp; R^r \ (R^r)^T &amp; 0 \end{bmatrix}<br>$$<br>其中$R_{ij}^s &#x3D; M_{ij} R_{ij}$, $R_{ij}^r &#x3D; M_{ij} (1 - R_{ij})$，$M_{ij}$为指示矩阵（存在响应时为1）。</li>
-</ul>
-</li>
-</ul>
-<h6 id="3-2-表示学习"><a href="#3-2-表示学习" class="headerlink" title="3.2 表示学习"></a>3.2 表示学习</h6><ul>
-<li>对敏感图应用多层GCN：<br>$$<br>H^{s,(l+1)} &#x3D; \text{LeakyReLU}\left( (\hat{D}^s)^{-1&#x2F;2} A^s (\hat{D}^s)^{-1&#x2F;2} H^{s,(l)} W_s^{(l)} \right)<br>$$<br>其中$H^{s,(0)} &#x3D; X^s$。拼接所有层输出：<br>$$<br>h_i^{S,C} &#x3D; [h_i^{s,(0)} | h_i^{s,(1)} | \cdots | h_i^{s,(L)}], \quad h_j^{S,D} &#x3D; [h_j^{s,(0)} | h_j^{s,(1)} | \cdots | h_j^{s,(L)}]<br>$$</li>
-<li>同样方式学习抵抗图表示$h_i^{R,C}$和$h_j^{R,D}$。</li>
-<li>整合敏感和抵抗表示：<br>$$<br>h_i^{\text{As},C} &#x3D; \text{ReLU}([h_i^{S,C} | h_i^{R,C}] W_C^{\text{As}} + b_C^{\text{As}})<br>$$<br>$$<br>h_j^{\text{As},D} &#x3D; \text{ReLU}([h_j^{S,D} | h_j^{R,D}] W_D^{\text{As}} + b_D^{\text{As}})<br>$$</li>
-</ul>
-<h5 id="4-融合模块（Fusion-Module）与双关系蒸馏"><a href="#4-融合模块（Fusion-Module）与双关系蒸馏" class="headerlink" title="4. 融合模块（Fusion Module）与双关系蒸馏"></a>4. 融合模块（Fusion Module）与双关系蒸馏</h5><p>融合模块整合双分支表示，并通过蒸馏机制迁移知识。</p>
-<h6 id="4-1-分支融合"><a href="#4-1-分支融合" class="headerlink" title="4.1 分支融合"></a>4.1 分支融合</h6><p>拼接属性分支和关联分支的表示：<br>$$<br>h_i^{\text{Fu},C} &#x3D; \text{ReLU}([h_i^{\text{At},C} | h_i^{\text{As},C}] W_C^{\text{Fu}} + b_C^{\text{Fu}})<br>$$<br>$$<br>h_j^{\text{Fu},D} &#x3D; \text{ReLU}([h_j^{\text{At},D} | h_j^{\text{As},D}] W_D^{\text{Fu}} + b_D^{\text{Fu}})<br>$$</p>
-<h6 id="4-2-响应预测"><a href="#4-2-响应预测" class="headerlink" title="4.2 响应预测"></a>4.2 响应预测</h6><p>使用线性相关系数解码器重建响应矩阵：<br>$$<br>\rho(h_i, h_j) &#x3D; \frac{(h_i - \mu_i \mathbf{1}) (h_j - \mu_j \mathbf{1})^T}{\sqrt{(h_i - \mu_i \mathbf{1})(h_i - \mu_i \mathbf{1})^T} \sqrt{(h_j - \mu_j \mathbf{1})(h_j - \mu_j \mathbf{1})^T}}<br>$$<br>应用sigmoid函数处理不平衡样本：<br>$$<br>\phi(x) &#x3D; \frac{1}{1 + e^{-\gamma x}}<br>$$<br>最终预测：<br>$$<br>\hat{R}_{ij}^K &#x3D; \phi(\rho(h_i^{K,C}, h_j^{K,D})), \quad K \in {\text{At}, \text{As}, \text{Fu}}<br>$$</p>
-<h6 id="4-3-双关系蒸馏机制"><a href="#4-3-双关系蒸馏机制" class="headerlink" title="4.3 双关系蒸馏机制"></a>4.3 双关系蒸馏机制</h6><p>促进知识从分支迁移到融合模块：</p>
-<ul>
-<li><strong>表示蒸馏（Representation Distillation）</strong>：保持细胞线和药物间的相似关系：<br>$$<br>S_{ij}^{K,C} &#x3D; k(h_i^{K,C}, h_j^{K,C}), \quad S_{ij}^{K,D} &#x3D; k(h_i^{K,D}, h_j^{K,D})<br>$$<br>损失函数（以属性分支为例）：<br>$$<br>\mathcal{L}_{rd}^{\text{At}} &#x3D; \frac{1}{N_C^2} \sum_{c_i \in C} \sum_{c_j \in C} | S_{ij}^{\text{At},C} - S_{ij}^{\text{Fu},C} |_2^2 + \frac{1}{N_D^2} \sum_{d_i \in D} \sum_{d_j \in D} | S_{ij}^{\text{At},D} - S_{ij}^{\text{Fu},D} |_2^2<br>$$<br>总表示蒸馏损失：$\mathcal{L}_{rd} &#x3D; \mathcal{L}_{rd}^{\text{At}} + \mathcal{L}_{rd}^{\text{As}}$。</li>
-<li><strong>预测蒸馏（Prediction Distillation）</strong>：对齐分支和融合模块的预测：<br>$$<br>\mathcal{L}_{pd} &#x3D; \frac{1}{N_C N_D} \sum_{c_i \in C} \sum_{d_j \in D} \left( | \hat{R}_{ij}^{\text{At}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 + | \hat{R}_{ij}^{\text{As}} - \hat{R}_{ij}^{\text{Fu}} |_2^2 \right)<br>$$</li>
-</ul>
-<h5 id="5-优化目标"><a href="#5-优化目标" class="headerlink" title="5. 优化目标"></a>5. 优化目标</h5><p>总损失函数结合预测任务和蒸馏损失：<br>$$<br>\mathcal{L} &#x3D; \mathcal{L}_{ce} + \lambda_{rd} \mathcal{L}_{rd} + \lambda_{pd} \mathcal{L}_{pd}<br>$$<br>其中$\mathcal{L}_{ce}$为监督交叉熵损失：<br>$$<br>\mathcal{L}_{ce} &#x3D; -\frac{1}{N_M} \sum_{c_i \in C} \sum_{d_j \in D} M_{ij} \left[ R_{ij} \log(\hat{R}_{ij}^{\text{Fu}}) + (1 - R_{ij}) \log(1 - \hat{R}_{ij}^{\text{Fu}}) \right]<br>$$<br>$\lambda_{rd}$和$\lambda_{pd}$为超参数平衡权重。</p>
-<p>此构造过程使RedCDR能自适应整合多组学数据，并行学习属性与关联信息，并通过蒸馏提升预测鲁棒性。</p>
-<h3 id="MFGAN"><a href="#MFGAN" class="headerlink" title="MFGAN"></a><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">MFGAN</a></h3><p>感觉没什么东西捏</p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/CDR/2024/Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction.pdf" target="_blank">📄 Shi - MCMVDRP a multi-channel multi-view deep learning framework for cancer drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction.pdf" target="_blank">📄 Sun - 2024 - DAPM-CDR A domain adaptation prompting model for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction.pdf" target="_blank">📄 Wang - 2024 - A hierarchical attention network integrating multi-scale relationship for drug response prediction</a></p>
-<p><a href="/paper/CDR/2024/Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and.pdf" target="_blank">📄 Wang - 2024 - XGraphCDS An explainable deep learning model for predicting drug sensitivity from gene pathways and</a></p>
-<p><a href="/paper/CDR/2024/Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction.pdf" target="_blank">📄 Xu 等 - RedCDR Dual Relation Distillation for Cancer Drug Response Prediction</a></p>
-<p><a href="/paper/CDR/2024/Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti.pdf" target="_blank">📄 Zhou - 2024 - Multi-omics fusion based on attention mechanism for survival and drug response prediction in Digesti</a></p>
-]]></content>
-      <categories>
-        <category>CDR</category>
-        <category>Model</category>
-      </categories>
-      <tags>
-        <tag>CDR</tag>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
-        <tag>attention</tag>
-        <tag>contrast learning</tag>
-        <tag>GAN</tag>
-        <tag>dynamic graph</tag>
-        <tag>hypergraph</tag>
       </tags>
   </entry>
   <entry>
@@ -1905,51 +1946,10 @@
         <category>Category</category>
       </categories>
       <tags>
-        <tag>attention</tag>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>deep learning</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Half-Monthly DDI Record | Series 4</title>
-    <url>/2026/04/22/DDI-Week7~8/</url>
-    <content><![CDATA[<h1 id="7-8周里入到🧠的DDI"><a href="#7-8周里入到🧠的DDI" class="headerlink" title="7~8周里入到🧠的DDI"></a>7~8周里入到🧠的DDI</h1><p>DDI 真神奇捏。阿巴阿巴阿巴</p>
-<span id="more"></span>
-
-<h2 id="这周看到的蛮不赖的几篇捏"><a href="#这周看到的蛮不赖的几篇捏" class="headerlink" title="这周看到的蛮不赖的几篇捏"></a>这周看到的蛮不赖的几篇捏</h2><p>Emmm，类似的表格传到Google Docs上了捏，，，，懒得动了捏</p>
-<h3 id="CAREDDI"><a href="#CAREDDI" class="headerlink" title="CAREDDI"></a>CAREDDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/150321_image-20260421150321849.png" alt="image-20260421150321849"></p>
-<p>这篇论文中提到，现有的数据集中存在虚假的药物关联关系（由于实验偏差、知识更新滞后或标注不一致）</p>
-<p>所以他把异常检测引入了DDI模型，从而增强模型在遇到spurious DDIs时的鲁棒性</p>
-<h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4><p>(a) 部分就是一个非常常规的cross-attention捏。</p>
-<p>重点是(b)部分捏</p>
-<h5 id="总体"><a href="#总体" class="headerlink" title="总体"></a>总体</h5><p>分解为两个DDI元任务：一个用于学习有价值的标注型DDI特征分布的标注特征分布学习任务，以及一个用于确保整体预测准确性的DDI预测器任务。</p>
-<p>MCD（最小协方差矩阵） 的目标是<strong>从这 $n$ 个样本中寻找一个子集（包含 $h$ 个样本），使得这个子集的协方差矩阵的行列式（Determinant）最小。</strong></p>
-<p>提出了一种基于密度的新型特征分布学习层，用于动态适应标注DDI特征分布中的鲁棒多变量位置与离散度。</p>
-<ul>
-<li><strong>位置感知聚合 (Location-aware aggregation)：</strong> 学习 DDI 特征分布的中心位置 dlocationdlocation。</li>
-<li><strong>散射感知聚合 (Scatter-aware aggregation)：</strong> 学习特征的离散程度 PscatterPscatter。</li>
-<li><strong>损失函数设计：</strong><br>  $L_{CDSL}$ (Chi-square Distribution-based Soft Loss)： 强制让标注的 DDI 特征分布逼近卡方分布 (χ2χ2)。如果一个样本偏离该分布过远，则更有可能被判定为“伪 DDI”。</li>
-</ul>
-<h3 id="RISE-DDI"><a href="#RISE-DDI" class="headerlink" title="RISE-DDI"></a>RISE-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/193905_image-20260421193905214.png" alt="image-20260421193905214"></p>
-<ol>
-<li>总体架构组件</li>
-</ol>
-<p>模型由两个核心模块组成，子图采样器（RL Agent）和交互预测器（结构感知奖励模型）</p>
-<p>他将子图采样建模为马尔可夫决策过程，定义了对应的环境</p>
-<h3 id="PC-DDI"><a href="#PC-DDI" class="headerlink" title="PC-DDI"></a>PC-DDI</h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/21/203816_image-20260421203816565.png" alt="image-20260421203816565"></p>
-]]></content>
-      <categories>
-        <category>DDI</category>
-        <category>Daily</category>
-      </categories>
-      <tags>
-        <tag>model framework</tag>
-        <tag>practice</tag>
-        <tag>GNN</tag>
         <tag>attention</tag>
-        <tag>DDI</tag>
-        <tag>Knowledge Graph</tag>
       </tags>
   </entry>
   <entry>
@@ -2182,12 +2182,12 @@
         <category>Graph</category>
       </categories>
       <tags>
-        <tag>graph theory</tag>
-        <tag>attention</tag>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>deep learning</tag>
         <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
       </tags>
   </entry>
   <entry>
@@ -2383,12 +2383,12 @@
         <category>GNN</category>
       </categories>
       <tags>
-        <tag>CDR</tag>
-        <tag>graph theory</tag>
-        <tag>GNN</tag>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>PyTorch</tag>
+        <tag>CDR</tag>
+        <tag>graph theory</tag>
+        <tag>GNN</tag>
         <tag>embedding</tag>
       </tags>
   </entry>
@@ -2491,10 +2491,114 @@
         <category>Category</category>
       </categories>
       <tags>
-        <tag>attention</tag>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>deep learning</tag>
+        <tag>attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Trans?!and Former?!</title>
+    <url>/2025/07/19/Graph-Transformer/</url>
+    <content><![CDATA[<h1 id="Graph-Transformer"><a href="#Graph-Transformer" class="headerlink" title="Graph Transformer"></a>Graph Transformer</h1><p>Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处理任意结构的图数据（如社交网络、分子结构等）。其既保留了Transformer的强表示能力，又继承了GNN对图结构的归纳偏置，成为图表示学习领域的重要基线模型。</p>
+<span id="more"></span>
+
+<p>在过去，Transformer（Lin等人，2021年）在许多NLP、CV和GRL任务中取得了卓越的性能。Graph Transformer将Transformer架构推广到图表示学习中，捕捉长距离依赖关系（Ying等人，2021年）。与之前使用局部注意力的方法不同，Graph Transformer通过全局注意力直接学习高阶图属性。Graph Transformer在图深度学习领域发展迅速，特别是在中小型图的图分类任务中。进一步将Graph Transformer分为两个子类别，即标准Transformer（Ying等人，2021年）和GNNTransformer（Nguyen等人，2019年）。标准Transformer通常对输入图的所有节点使用自注意力机制，忽略节点之间的邻接关系，而GNNTransformer则使用GNN层来获取邻接信息。 </p>
+<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="90%" height="auto">
+
+<p>现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。</p>
+<h2 id="输入特征线性投影公式"><a href="#输入特征线性投影公式" class="headerlink" title="输入特征线性投影公式"></a>输入特征线性投影公式</h2><p>输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha_i \in \mathbb{R}^{d_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta_{ij} \in \mathbb{R}^{d_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta_{ij}$传递以嵌入到$d-$维隐藏特征$h^0_i$和$e^0_{ij}$。</p>
+<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad\qquad\qquad\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
+<p>其中，$A^{0} \in \mathbb{R}^{d \times d_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha_i$ 和 $\beta_{ij}$ 分别是原始节点和边特征</p>
+<h2 id="位置编码融合公式"><a href="#位置编码融合公式" class="headerlink" title="位置编码融合公式"></a>位置编码融合公式</h2><p>现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0_i$。</p>
+<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad\qquad\qquad\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
+<p>其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。</p>
+<h2 id="基础图Transformer层公式"><a href="#基础图Transformer层公式" class="headerlink" title="基础图Transformer层公式"></a>基础图Transformer层公式</h2><p>与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。</p>
+<p><strong>多头注意力输出</strong>$\hat{h}_{i}^{\ell+1} &#x3D; O_{h}^{\ell} |_{k&#x3D;1}^{H} \left( \sum_{j \in \mathcal{N}_{i}} w_{ij}^{k，\ell} V^{k，\ell} h_{j}^{\ell} \right)$</p>
+<p><strong>注意力权重计算</strong>$w_{ij}^{k，\ell} &#x3D; \text{softmax}_{j} \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right)$</p>
+<p>其中，$|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是各头的查询、键、值矩阵，$O_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵</p>
+<h2 id="前馈网络与归一化"><a href="#前馈网络与归一化" class="headerlink" title="前馈网络与归一化"></a>前馈网络与归一化</h2><p>为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:</p>
+<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\qquad\qquad\qquad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ </p>
+<p><strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
+<p>其中，$W_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。</p>
+<h2 id="带边特征的图Transformer层"><a href="#带边特征的图Transformer层" class="headerlink" title="带边特征的图Transformer层"></a>带边特征的图Transformer层</h2><p>带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。</p>
+<p>换句话说，当一个节点$i$在 <em>query</em> 和 <em>key</em> 特征投影相乘后关注节点$j$时，中间注意力得分$\hat{w}_{ij}$在softmax之前被计算出来。让将这个得分$\hat{w}_{ij}$视为关于边$&lt;i，j&gt;$的隐式信息。现在尝试注入边$&lt;i，j&gt;$的可用边信息，并改进已经计算出的隐式注意力得分$\hat{w}_{ij}$。</p>
+<p>这是通过简单地将两个值$\hat{w}_{ij}$和$e_{ij}$相乘来完成的。这种信息注入在NLPTransformer中并没有被广泛探索或应用，因为在两个单词之间通常没有可用的特征信息。</p>
+<p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
+<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
+<p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
+<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
+<p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
+<p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
+<p>实验一致表明，存在：</p>
+<ul>
+<li>Laplacian特征向量作为节点位置编码</li>
+<li>batch normalization，代替层归一化，<br>则在Transformer前馈层周围增强了Transformer在所有实验中的普遍性。</li>
+</ul>
+<p>鉴于这个架构的简单性和通用性以及与标准GNN相比的竞争性能，提出的模型可以作为进一步改进跨图应用中使用节点注意力的基线。</p>
+<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs.pdf" target="_blank">📄 Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs</a></p>
+<p><a href="/paper/Shehzad 等 - 2024 - Graph Transformers A Survey.pdf" target="_blank">📄 Shehzad 等 - 2024 - Graph Transformers A Survey</a></p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>Model</category>
+        <category>Attention</category>
+        <category>Graph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>deeplearning</tag>
+        <tag>graphtheory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HGCN and HGAT</title>
+    <url>/2025/07/20/HGCN-and-HGAT/</url>
+    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
+<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
+<span id="more"></span>
+
+<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
+<blockquote>
+<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
+<ol>
+<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
+<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
+<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
+</ul>
+</li>
+<li>特征变换：$H^{(l)}W^{(l)}$</li>
+<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
+<li>非线性变换：$\sigma(\cdot)$</li>
+</ol>
+</blockquote>
+<p>而超图也有对应的拉普拉斯矩阵</p>
+<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
+<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
+<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
+<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
+<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
+<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
+<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
+]]></content>
+      <categories>
+        <category>Deep Learning</category>
+        <category>Hypergraph</category>
+      </categories>
+      <tags>
+        <tag>model</tag>
+        <tag>Basic</tag>
+        <tag>PyTorch</tag>
+        <tag>attention</tag>
+        <tag>graph theory</tag>
+        <tag>GNN</tag>
+        <tag>hypergraph</tag>
+        <tag>embedding</tag>
       </tags>
   </entry>
   <entry>
@@ -2637,34 +2741,12 @@
         <category>Hypergraph</category>
       </categories>
       <tags>
-        <tag>graph theory</tag>
-        <tag>GNN</tag>
         <tag>model</tag>
         <tag>Basic</tag>
+        <tag>graph theory</tag>
+        <tag>GNN</tag>
         <tag>hypergraph</tag>
         <tag>embedding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>K-ON</title>
-    <url>/2025/07/19/K-ON/</url>
-    <content><![CDATA[<p>不知道写什么，先放个这个捏</p>
-<table>
-  <tr>
-    <td><center><img src="\img\k-on\屏幕截图 2025-07-19 220432.png" width="500"></center></td>
-    <td><center><img src="\img\难绷\kingzhenen.jpg" width="500"></center></td>
-  </tr>
-</table>
-
-<span id="more"></span>
-
-
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>Fun</category>
-      </categories>
-      <tags>
-        <tag>乐子</tag>
       </tags>
   </entry>
   <entry>
@@ -3000,68 +3082,167 @@
         <category>Category</category>
       </categories>
       <tags>
-        <tag>attention</tag>
         <tag>model</tag>
         <tag>Basic</tag>
         <tag>deep learning</tag>
+        <tag>attention</tag>
       </tags>
   </entry>
   <entry>
-    <title>Trans?!and Former?!</title>
-    <url>/2025/07/19/Graph-Transformer/</url>
-    <content><![CDATA[<h1 id="Graph-Transformer"><a href="#Graph-Transformer" class="headerlink" title="Graph Transformer"></a>Graph Transformer</h1><p>Graph Transformer 是传统Transformer架构在图数据上的泛化，旨在处理任意结构的图数据（如社交网络、分子结构等）。其既保留了Transformer的强表示能力，又继承了GNN对图结构的归纳偏置，成为图表示学习领域的重要基线模型。</p>
+    <title>PEP 8</title>
+    <url>/2025/07/08/PEP-8/</url>
+    <content><![CDATA[<h1 id="Style-Guide-for-Python-Code"><a href="#Style-Guide-for-Python-Code" class="headerlink" title="Style Guide for Python Code"></a>Style Guide for Python Code</h1><blockquote>
+<p><a href="https://peps.python.org/pep-0008/">PEP8</a> 是 Python 社群共通的風格指南，一開始是 Python 之父 Guido van Rossum 自己的撰碼風格，慢慢後來演變至今，目的在於幫助開發者寫出可讀性高且風格一致的程式。許多開源計畫，例如 Django 、 OpenStack 等都是以 PEP8 為基礎再加上自己的風格建議。</p>
+</blockquote>
+<p>这篇博客主要是为了在搭建自己的模型之前学习一下一些统一的规范是做的记录 <del>主要是目前读到的大多数论文的源码目命名没有规律</del> ，以加强之后搭建模型时代码的可读性</p>
+<p>另外，本博客只展示本人不太熟悉的捏</p>
 <span id="more"></span>
 
-<p>在过去，Transformer（Lin等人，2021年）在许多NLP、CV和GRL任务中取得了卓越的性能。Graph Transformer将Transformer架构推广到图表示学习中，捕捉长距离依赖关系（Ying等人，2021年）。与之前使用局部注意力的方法不同，Graph Transformer通过全局注意力直接学习高阶图属性。Graph Transformer在图深度学习领域发展迅速，特别是在中小型图的图分类任务中。进一步将Graph Transformer分为两个子类别，即标准Transformer（Ying等人，2021年）和GNNTransformer（Nguyen等人，2019年）。标准Transformer通常对输入图的所有节点使用自注意力机制，忽略节点之间的邻接关系，而GNNTransformer则使用GNN层来获取邻接信息。 </p>
-<img src="/img/Attention/GraphTransformer.png" alt="GraphTransformer" width="90%" height="auto">
+<h2 id="代码布局"><a href="#代码布局" class="headerlink" title="代码布局"></a>代码布局</h2><h3 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h3><p><strong>每个缩进级别使用 4 个空格</strong></p>
+<p>对于比较臭长的函数，可以使用<em>悬挂缩进</em></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Aligned with opening delimiter.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">                         var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add 4 spaces (an extra level of indentation) to distinguish arguments from the rest.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">        var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">        var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hanging indents should add a level.</span></span><br><span class="line">foo = long_function_name(</span><br><span class="line">    var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br></pre></td></tr></table></figure>
 
-<p>现在介绍Graph Transformer层和具有边特征的Graph Transformer层。该层架构上图所示。第一个模型是为没有显式边属性的图设计的，而第二个模型则保持一个指定的边特征管道，以整合可用的边信息，并在每一层中保持它们的抽象表示。</p>
-<h2 id="输入特征线性投影公式"><a href="#输入特征线性投影公式" class="headerlink" title="输入特征线性投影公式"></a>输入特征线性投影公式</h2><p>输入首先，准备将输入节点和边嵌入传递到Graph Transformer层。对于一个具有每个节点i的节点特征 $\alpha_i \in \mathbb{R}^{d_n\times 1}$ 和每个节点$i$和节点$j$之间的边特征$\beta_{ij} \in \mathbb{R}^{d_e\times 1}$的图G，通过线性投影将输入节点特征αi和边特征$\beta_{ij}$传递以嵌入到$d-$维隐藏特征$h^0_i$和$e^0_{ij}$。</p>
-<p><strong>节点特征投影</strong>：$\hat{h}_{i}^{0} &#x3D; A^{0}\alpha_{i} + a^{0}\qquad\qquad\qquad\qquad$ <strong>边特征投影</strong>：$e_{ij}^{0} &#x3D; B^{0}\beta_{ij} + b^{0}$</p>
-<p>其中，$A^{0} \in \mathbb{R}^{d \times d_{n}}$ 和 $B^{0} \in \mathbb{R}^{d \times d_{e}}$ 是投影矩阵，$a^{0}, b^{0} \in \mathbb{R}^{d}$ 是偏置，$\alpha_i$ 和 $\beta_{ij}$ 分别是原始节点和边特征</p>
-<h2 id="位置编码融合公式"><a href="#位置编码融合公式" class="headerlink" title="位置编码融合公式"></a>位置编码融合公式</h2><p>现在通过线性投影嵌入预先计算的节点位置编码$k$，并将其添加到节点特征$\hat{h}^0_i$。</p>
-<p><strong>位置编码投影</strong>$\lambda_{i}^{0} &#x3D; C^{0}\lambda_{i} + c^{0}\qquad\qquad\qquad\qquad$ <strong>节点特征更新</strong>$h_{i}^{0} &#x3D; \hat{h}_{i}^{0} + \lambda_{i}^{0}$</p>
-<p>其中，$C^{0} \in \mathbb{R}^{d \times k}$ 是位置编码投影矩阵，$c^{0} \in \mathbb{R}^{d}$ 是偏置项，$\lambda_i$ 是预计算的Laplacian特征向量。请注意，拉普拉斯位置编码仅在输入层添加到节点特征，而不是在中间的Graph Transformer层。</p>
-<h2 id="基础图Transformer层公式"><a href="#基础图Transformer层公式" class="headerlink" title="基础图Transformer层公式"></a>基础图Transformer层公式</h2><p>与最初在(Vaswani等人，2017)中提出的Transformer架构非常相似。现在开始定义一层的节点更新方程。</p>
-<p><strong>多头注意力输出</strong>$\hat{h}_{i}^{\ell+1} &#x3D; O_{h}^{\ell} |_{k&#x3D;1}^{H} \left( \sum_{j \in \mathcal{N}_{i}} w_{ij}^{k，\ell} V^{k，\ell} h_{j}^{\ell} \right)$</p>
-<p><strong>注意力权重计算</strong>$w_{ij}^{k，\ell} &#x3D; \text{softmax}_{j} \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right)$</p>
-<p>其中，$|$ 表示拼接操作，$Q^{k，\ell}, K^{k，\ell}, V^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是各头的查询、键、值矩阵，$O_{h}^{\ell} \in \mathbb{R}^{d \times d}$ 是输出投影矩阵</p>
-<h2 id="前馈网络与归一化"><a href="#前馈网络与归一化" class="headerlink" title="前馈网络与归一化"></a>前馈网络与归一化</h2><p>为了数值稳定性，softmax内部项的指数输出被夹在$−5$到$+5$之间。然后将注意力输出$\hat{h}^{\ell +1}_i$传递给一个前接和后接残差连接和规范化层的前馈网络(FFN)，如下所示:</p>
-<p><strong>归一化步骤</strong>$\hat{\hat{h}}_{i}^{\ell+1} &#x3D; \text{Norm}(h_{i}^{\ell} + \hat{h}_{i}^{\ell+1})\qquad\qquad\qquad$ <strong>前馈网络</strong>$\hat{\hat{\hat{h}}}_{i}^{\ell+1} &#x3D; W_{2}^{\ell} \text{ReLU}(W_{1}^{\ell} \hat{\hat{h}}_{i}^{\ell+1})\quad$ </p>
-<p><strong>最终输出</strong>$h_{i}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{h}}_{i}^{\ell+1} + \hat{\hat{\hat{h}}}_{i}^{\ell+1})$</p>
-<p>其中，$W_{1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是前馈网络参数，Norm可以是BatchNorm或LayerNorm.为了清晰起见，省略了偏差项。</p>
-<h2 id="带边特征的图Transformer层"><a href="#带边特征的图Transformer层" class="headerlink" title="带边特征的图Transformer层"></a>带边特征的图Transformer层</h2><p>带有边特征的Graph Transformer层带有边特征的Graph Transformer是为更好地利用多种图数据集中的丰富特征信息而设计的，这些信息以边属性的形式存在。由于的目标仍然是更好地利用边特征，这些特征是对应于节点对的成对得分，将这些可用的边特征与通过成对注意力计算的隐式边得分联系起来。</p>
-<p>换句话说，当一个节点$i$在 <em>query</em> 和 <em>key</em> 特征投影相乘后关注节点$j$时，中间注意力得分$\hat{w}_{ij}$在softmax之前被计算出来。让将这个得分$\hat{w}_{ij}$视为关于边$&lt;i，j&gt;$的隐式信息。现在尝试注入边$&lt;i，j&gt;$的可用边信息，并改进已经计算出的隐式注意力得分$\hat{w}_{ij}$。</p>
-<p>这是通过简单地将两个值$\hat{w}_{ij}$和$e_{ij}$相乘来完成的。这种信息注入在NLPTransformer中并没有被广泛探索或应用，因为在两个单词之间通常没有可用的特征信息。</p>
-<p>然而，在分子图或社交媒体图等图数据集中，边交互上往往有一些可用的特征信息，因此设计一种架构来利用这些信息变得自然。对于边，还维护了一个指定的节点对称边特征表示管道，用于从一层到另一层传播边属性。现在继续定义一层的层更新方程。</p>
-<p><strong>注意力分数计算</strong>$\hat{w}_{ij}^{k，\ell} &#x3D; \left( \frac{Q^{k，\ell} h_{i}^{\ell} \cdot K^{k，\ell} h_{j}^{\ell}}{\sqrt{d_{k}}} \right) \cdot E^{k，\ell} e_{ij}^{\ell}\qquad\qquad\qquad$ <strong>边特征更新</strong>$\hat{e}_{ij}^{\ell+1} &#x3D; O_{e}^{\ell} \prod_{k&#x3D;1}^{H} (\hat{w}_{ij}^{k，\ell})$</p>
-<p>其中，$E^{k，\ell} \in \mathbb{R}^{d_{k} \times d}$ 是边特征投影矩阵，$O_{e}^{\ell} \in \mathbb{R}^{d \times d}$ 是边特征输出投影矩阵</p>
-<h2 id="边特征的前馈网络"><a href="#边特征的前馈网络" class="headerlink" title="$$边特征的前馈网络"></a>$$边特征的前馈网络</h2><p><strong>边特征归一化</strong>$\hat{\hat{e}}_{ij}^{\ell+1} &#x3D; \text{Norm}(e_{ij}^{\ell} + \hat{e}_{ij}^{\ell+1})\qquad\qquad\qquad$ <strong>边特征变换</strong>$\hat{\hat{\hat{e}}}_{ij}^{\ell+1} &#x3D; W_{e，2}^{\ell} \text{ReLU}(W_{e，1}^{\ell} \hat{\hat{e}}_{ij}^{\ell+1})$ </p>
-<p><strong>最终边输出</strong>$e_{ij}^{\ell+1} &#x3D; \text{Norm}(\hat{\hat{e}}_{ij}^{\ell+1} + \hat{\hat{\hat{e}}}_{ij}^{\ell+1})$</p>
-<p>其中，$W_{e，1}^{\ell} \in \mathbb{R}^{2d \times d}$ 和 $W_{e，2}^{\ell} \in \mathbb{R}^{d \times 2d}$ 是边特征前馈网络参数</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这项工作提出了一种简单而有效的方法，将Transformer网络推广到任意图上，并引入了相应的架构。</p>
-<p>实验一致表明，存在：</p>
-<ul>
-<li>Laplacian特征向量作为节点位置编码</li>
-<li>batch normalization，代替层归一化，<br>则在Transformer前馈层周围增强了Transformer在所有实验中的普遍性。</li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Arguments on first line forbidden when not using vertical alignment.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Further indentation required as indentation is not distinguishable.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">    var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">    var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br></pre></td></tr></table></figure>
+
+<p>优先使用 <em>Tabs</em> 进行缩进， <em>Tabs</em> 和 <em>Spaces</em> 不能混用</p>
+<h3 id="每行最多字符数量"><a href="#每行最多字符数量" class="headerlink" title="每行最多字符数量"></a>每行最多字符数量</h3><p><strong>79</strong> 个</p>
+<p>合理使用反斜杠</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/you/want/to/read&#x27;</span>) <span class="keyword">as</span> file_1, \</span><br><span class="line">     <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/being/written&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> file_2:</span><br><span class="line">    file_2.write(file_1.read())</span><br></pre></td></tr></table></figure>
+
+<h3 id="二元运算符之前换行"><a href="#二元运算符之前换行" class="headerlink" title="二元运算符之前换行"></a>二元运算符之前换行</h3><p>为了更好的确定该 <code>item</code> 采取的是什么运算</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"><span class="comment"># operators sit far away from their operands</span></span><br><span class="line">income = (gross_wages +</span><br><span class="line">          taxable_interest +</span><br><span class="line">          (dividends - qualified_dividends) -</span><br><span class="line">          ira_deduction -</span><br><span class="line">          student_loan_interest)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"><span class="comment"># easy to match operators with operands</span></span><br><span class="line">income = (gross_wages</span><br><span class="line">          + taxable_interest</span><br><span class="line">          + (dividends - qualified_dividends)</span><br><span class="line">          - ira_deduction</span><br><span class="line">          - student_loan_interest)</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何空行（Blank-Lines）"><a href="#如何空行（Blank-Lines）" class="headerlink" title="如何空行（Blank Lines）"></a>如何空行（Blank Lines）</h3><p><em>顶级函数</em> 和 <em>类</em> 之间空 <strong>2</strong> 行</p>
+<p><em>类中的函数</em> 空 <strong>1</strong> 行</p>
+<h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><ul>
+<li>通常每一个库 <strong>单独一行</strong>（也有例外）</li>
 </ul>
-<p>鉴于这个架构的简单性和通用性以及与标准GNN相比的竞争性能，提出的模型可以作为进一步改进跨图应用中使用节点注意力的基线。</p>
-<h1 id="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs.pdf" target="_blank">📄 Dwivedi和Bresson - 2021 - A Generalization of Transformer Networks to Graphs</a></p>
-<p><a href="/paper/Shehzad 等 - 2024 - Graph Transformers A Survey.pdf" target="_blank">📄 Shehzad 等 - 2024 - Graph Transformers A Survey</a></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> Popen, PIPE</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>按以下顺序分组，每组间空行<ol>
+<li><strong>标准库</strong>导入</li>
+<li><strong>相关第三方库</strong>导入</li>
+<li><strong>特定的本地库</strong>导入</li>
+</ol>
+</li>
+</ul>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><blockquote>
+<p>Comments that contradict the code are worse than no comments.</p>
+</blockquote>
+<h2 id="命名约定"><a href="#命名约定" class="headerlink" title="命名约定"></a>命名约定</h2><ol>
+<li><p><strong>类名</strong> 用 <strong>大驼峰</strong></p>
+</li>
+<li><p><strong>函数名</strong> 用 <strong>小写下划线</strong></p>
+</li>
+<li><p>关于 <em>下划线</em></p>
+<ul>
+<li><em>单下划线</em> 用于占位</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(random.randint(<span class="number">1</span>, <span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><em>单下划线</em> 用于变量前表示该变量为 <strong>弱私有</strong> （语义上的 private），能调用但不能 import</li>
+<li><em>双下划线</em> 用于变量前表示该变量为 <strong>强私有</strong> （实际上也不能调用<del>实现方式是重名名</del>）<br>为了更好的说明这两点，给出以下两个测试程序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_private_vars.py</span></span><br><span class="line"><span class="string">This file is used to test the private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.public_var = <span class="string">&quot;这是公有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>._weak_private = <span class="string">&quot;这是弱私有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.__strong_private = <span class="string">&quot;这是强私有变量&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">print_all_vars</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;从内部访问:&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;公有变量: <span class="subst">&#123;self.public_var&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;弱私有变量: <span class="subst">&#123;self._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;强私有变量: <span class="subst">&#123;self.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建测试实例</span></span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 测试从类内部访问（通过方法）</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试1: 从类内部访问所有变量 ===&quot;</span>)</span><br><span class="line">test.print_all_vars()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 测试从外部直接访问</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试2: 从外部访问变量 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)  <span class="comment"># 能访问，但IDE会警告</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 测试名称改写机制</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试3: 验证强私有变量的名称改写机制 ===&quot;</span>)</span><br><span class="line"><span class="comment"># 实际上Python会将__strong_private改写为_TestClass__strong_private</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 测试导入行为</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n=== 测试4: 创建第二个文件并尝试导入 ===&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请创建 test_import.py 并运行来测试导入行为&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_import.py</span></span><br><span class="line"><span class="string">This file is used to test the import of private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> test_private_vars <span class="keyword">import</span> TestClass</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 测试导入后的访问行为 ===&quot;</span>)</span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问公有变量</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问弱私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能访问弱私有变量，但这违反了Python的约定&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试通过名称改写访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写名称访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>以下是运行 <code>python test_private_vars.py</code> 的结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试4: 创建第二个文件并尝试导入 ===</span><br><span class="line">请创建 test_import.py 并运行来测试导入行为</span><br></pre></td></tr></table></figure>
+
+<p>以下是运行 <code>python test_import.py</code> 的结果</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">=== 测试导入后的访问行为 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">注意：虽然能访问弱私有变量，但这违反了Python的约定</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法</span><br></pre></td></tr></table></figure></li>
+</ol>
 ]]></content>
       <categories>
-        <category>Deep Learning</category>
-        <category>Model</category>
-        <category>Attention</category>
-        <category>Graph</category>
+        <category>Python</category>
       </categories>
       <tags>
-        <tag>attention</tag>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>PyTorch</tag>
-        <tag>deeplearning</tag>
-        <tag>graphtheory</tag>
+        <tag>Python</tag>
+        <tag>PEP</tag>
+        <tag>闲🉐无聊</tag>
+        <tag>大概率没用</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K-ON</title>
+    <url>/2025/07/19/K-ON/</url>
+    <content><![CDATA[<p>不知道写什么，先放个这个捏</p>
+<table>
+  <tr>
+    <td><center><img src="\img\k-on\屏幕截图 2025-07-19 220432.png" width="500"></center></td>
+    <td><center><img src="\img\难绷\kingzhenen.jpg" width="500"></center></td>
+  </tr>
+</table>
+
+<span id="more"></span>
+
+
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>Fun</category>
+      </categories>
+      <tags>
+        <tag>乐子</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>so-large-lm | Ex. Mixture of Experts</title>
+    <url>/2026/04/22/MoE/</url>
+    <content><![CDATA[<h1 id="Mixture-of-Experts"><a href="#Mixture-of-Experts" class="headerlink" title="Mixture of Experts"></a>Mixture of Experts</h1><p>这是在看到<a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a>第四章的时候，觉得MoE和RAG应该单独开一坨（而且可能还不太够捏。</p>
+<p>这是MoE部分的内容，主要是鼠鼠在这几篇论文的笔记捏</p>
+<span id="more"></span>
+
+<h2 id="什么是MoE"><a href="#什么是MoE" class="headerlink" title="什么是MoE"></a>什么是MoE</h2><p>Mixture of Experts (MoE) 是一种通过牺牲“内存空间”来换取“计算效率”和“模型容量”的架构方案。它利用类似“专家分诊”的路由机制，实现了参数规模的指数级增长，同时保持了推理复杂度的线性增长。</p>
+<h2 id="开搓捏"><a href="#开搓捏" class="headerlink" title="开搓捏"></a>开搓捏</h2><h3 id="Adaptive-Mixtures-of-Local-Experts"><a href="#Adaptive-Mixtures-of-Local-Experts" class="headerlink" title="Adaptive Mixtures of Local Experts "></a><a href="https://www.cs.toronto.edu/~fritz/absps/jjnh91.pdf">Adaptive Mixtures of Local Experts </a></h3><p>开山之作，但主要是思想<del>主要是那个时候应该连深度学习都还不太流行吧</del></p>
+<h3 id="Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer"><a href="#Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer" class="headerlink" title="Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer"></a><a href="https://openreview.net/pdf?id=B1ckMDqlg">Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer</a></h3><p>正式提出了MoE layer，但那个时候好像Transformer才出来捏。鼠鼠的第一次还是想给一个和Transformer结合的捏。</p>
+<h3 id="GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding"><a href="#GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding" class="headerlink" title="GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding"></a><a href="http://arxiv.org/abs/2006.16668">GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding</a></h3><p>主要的目的是在牺牲内存占用的情况下，换取参数规模和计算效率</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/150751_image-20260422150751480.png" alt="image-20260422150751480"></p>
+<p>在这里，我们先将正常情况下FFN切分成多个小的FFN，每个FFN代表一个 Expert。然后，构建一个Router $G(x)$ 用于选择激活那些专家用于计算。</p>
+<p>具体来说，文中选用了Top2的门<del>就是一个门最多塞进两根</del>，然后MoE层输出所选专家输出的加权和。</p>
+<p>为了确保计算效率和负载均衡，GShard 引入了两个关键设计：</p>
+<ul>
+<li>专家容量 (Expert Capacity)：为了防止所有 token 都涌向同一个专家，每个专家处理的 token 数量被限制在一个阈值内。如果某个专家的 token 超过了容量限制，多余的 token 将通过残差连接直接跳过该层（即被视为“溢出”）。</li>
+<li>辅助损失 (Auxiliary Loss)：为了鼓励门控网络均匀地分配 token，模型在训练时加入了一个辅助损失函数。</li>
+</ul>
+<p>贴一个源代码方便理解捏：</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/210138_image-20260422210138341.png" alt="image-20260422210138341"></p>
+<h3 id="Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts"><a href="#Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts" class="headerlink" title="Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts"></a><a href="http://arxiv.org/abs/2002.04013">Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts</a></h3><p>提出了一种提出去中心化专家混合模型（DMoE），提出可以在不同的设备里同时做MoE（感觉是一个偏工程的东西捏</p>
+<h3 id="BASE-Layers-Simplifying-Training-of-Large-Sparse-Models"><a href="#BASE-Layers-Simplifying-Training-of-Large-Sparse-Models" class="headerlink" title="BASE Layers: Simplifying Training of Large, Sparse Models"></a><a href="http://arxiv.org/abs/2103.16716">BASE Layers: Simplifying Training of Large, Sparse Models</a></h3><p>Balanced assignment of sparse experts (BASE)将近似门控函数 $\tilde g(x)$ 定义为对batch中的所有token进行联合优化的结果。对于每一个训练的batch</p>
+<ul>
+<li><p>为每个token分配1名专家，但负载平衡是一种约束，而不是软惩罚</p>
+</li>
+<li><p>定义 $a &#x3D; [a_1, \dots, a_B] \in {1, \dots, E}^B$ 作为联合分配向量</p>
+</li>
+</ul>
+<p>$$<br>\text{maximize} \sum_{i &#x3D; 1}^B w_{a_i} \cdot x_i \quad\text{subject to}\quad \forall e: \sum_{i&#x3D;1}^B \mathbf{1}[a_i &#x3D; e] &#x3D; \frac{B}{E}.<br>$$</p>
+<ul>
+<li>这是一个可以有效求解的线性方程</li>
+<li>在测试时，只需选择top 1的专家即可<del>堡堡只能🍵一根捏</del>。</li>
+</ul>
+<h3 id="Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity"><a href="#Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity" class="headerlink" title="Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity"></a><a href="http://arxiv.org/abs/2101.03961">Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</a></h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222418_image-20260422222418461.png" alt="image-20260422222418461"></p>
+<p>简化了先前的工作，现在的门只能入一根了捏</p>
+<p>此外，提出了更加详细的模型容量的计算方式，很好理解，鼠鼠直接就是一个图的丢捏</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222833_image-20260422222833686.png" alt="image-20260422222833686"></p>
+<p>实验：GieGie动🉐真是又大💗又快💗捏</p>
+<h3 id="DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models"><a href="#DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models" class="headerlink" title="[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)"></a>[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)</h3><ul>
+<li>构建了一个Fine-grained expert segmentation，就是多大的门🍵多少根💗捏</li>
+<li>一个Shared expert，不受router控制</li>
+</ul>
+<p>emmm，感觉差不多了捏（主要是吃不动了捏</p>
+]]></content>
+      <categories>
+        <category>LLMs and Agents</category>
+        <category>LLMs</category>
+        <category>so-large-lm</category>
+      </categories>
+      <tags>
+        <tag>DIY</tag>
+        <tag>LLMs</tag>
       </tags>
   </entry>
   <entry>
@@ -3330,86 +3511,6 @@ s8 --&gt;|a2, r&#x3D;1| s9((s9))
       </categories>
       <tags>
         <tag>ReinForcement Learning</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PEP 8</title>
-    <url>/2025/07/08/PEP-8/</url>
-    <content><![CDATA[<h1 id="Style-Guide-for-Python-Code"><a href="#Style-Guide-for-Python-Code" class="headerlink" title="Style Guide for Python Code"></a>Style Guide for Python Code</h1><blockquote>
-<p><a href="https://peps.python.org/pep-0008/">PEP8</a> 是 Python 社群共通的風格指南，一開始是 Python 之父 Guido van Rossum 自己的撰碼風格，慢慢後來演變至今，目的在於幫助開發者寫出可讀性高且風格一致的程式。許多開源計畫，例如 Django 、 OpenStack 等都是以 PEP8 為基礎再加上自己的風格建議。</p>
-</blockquote>
-<p>这篇博客主要是为了在搭建自己的模型之前学习一下一些统一的规范是做的记录 <del>主要是目前读到的大多数论文的源码目命名没有规律</del> ，以加强之后搭建模型时代码的可读性</p>
-<p>另外，本博客只展示本人不太熟悉的捏</p>
-<span id="more"></span>
-
-<h2 id="代码布局"><a href="#代码布局" class="headerlink" title="代码布局"></a>代码布局</h2><h3 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h3><p><strong>每个缩进级别使用 4 个空格</strong></p>
-<p>对于比较臭长的函数，可以使用<em>悬挂缩进</em></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Aligned with opening delimiter.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">                         var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add 4 spaces (an extra level of indentation) to distinguish arguments from the rest.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">        var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">        var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hanging indents should add a level.</span></span><br><span class="line">foo = long_function_name(</span><br><span class="line">    var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Arguments on first line forbidden when not using vertical alignment.</span></span><br><span class="line">foo = long_function_name(var_one, var_two,</span><br><span class="line">    var_three, var_four)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Further indentation required as indentation is not distinguishable.</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">long_function_name</span>(<span class="params"></span></span><br><span class="line"><span class="params">    var_one, var_two, var_three,</span></span><br><span class="line"><span class="params">    var_four</span>):</span><br><span class="line">    <span class="built_in">print</span>(var_one)</span><br></pre></td></tr></table></figure>
-
-<p>优先使用 <em>Tabs</em> 进行缩进， <em>Tabs</em> 和 <em>Spaces</em> 不能混用</p>
-<h3 id="每行最多字符数量"><a href="#每行最多字符数量" class="headerlink" title="每行最多字符数量"></a>每行最多字符数量</h3><p><strong>79</strong> 个</p>
-<p>合理使用反斜杠</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/you/want/to/read&#x27;</span>) <span class="keyword">as</span> file_1, \</span><br><span class="line">     <span class="built_in">open</span>(<span class="string">&#x27;/path/to/some/file/being/written&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> file_2:</span><br><span class="line">    file_2.write(file_1.read())</span><br></pre></td></tr></table></figure>
-
-<h3 id="二元运算符之前换行"><a href="#二元运算符之前换行" class="headerlink" title="二元运算符之前换行"></a>二元运算符之前换行</h3><p>为了更好的确定该 <code>item</code> 采取的是什么运算</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Wrong:</span></span><br><span class="line"><span class="comment"># operators sit far away from their operands</span></span><br><span class="line">income = (gross_wages +</span><br><span class="line">          taxable_interest +</span><br><span class="line">          (dividends - qualified_dividends) -</span><br><span class="line">          ira_deduction -</span><br><span class="line">          student_loan_interest)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Correct:</span></span><br><span class="line"><span class="comment"># easy to match operators with operands</span></span><br><span class="line">income = (gross_wages</span><br><span class="line">          + taxable_interest</span><br><span class="line">          + (dividends - qualified_dividends)</span><br><span class="line">          - ira_deduction</span><br><span class="line">          - student_loan_interest)</span><br></pre></td></tr></table></figure>
-
-<h3 id="如何空行（Blank-Lines）"><a href="#如何空行（Blank-Lines）" class="headerlink" title="如何空行（Blank Lines）"></a>如何空行（Blank Lines）</h3><p><em>顶级函数</em> 和 <em>类</em> 之间空 <strong>2</strong> 行</p>
-<p><em>类中的函数</em> 空 <strong>1</strong> 行</p>
-<h3 id="import"><a href="#import" class="headerlink" title="import"></a>import</h3><ul>
-<li>通常每一个库 <strong>单独一行</strong>（也有例外）</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> subprocess <span class="keyword">import</span> Popen, PIPE</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>按以下顺序分组，每组间空行<ol>
-<li><strong>标准库</strong>导入</li>
-<li><strong>相关第三方库</strong>导入</li>
-<li><strong>特定的本地库</strong>导入</li>
-</ol>
-</li>
-</ul>
-<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><blockquote>
-<p>Comments that contradict the code are worse than no comments.</p>
-</blockquote>
-<h2 id="命名约定"><a href="#命名约定" class="headerlink" title="命名约定"></a>命名约定</h2><ol>
-<li><p><strong>类名</strong> 用 <strong>大驼峰</strong></p>
-</li>
-<li><p><strong>函数名</strong> 用 <strong>小写下划线</strong></p>
-</li>
-<li><p>关于 <em>下划线</em></p>
-<ul>
-<li><em>单下划线</em> 用于占位</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(random.randint(<span class="number">1</span>, <span class="number">100</span>))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><em>单下划线</em> 用于变量前表示该变量为 <strong>弱私有</strong> （语义上的 private），能调用但不能 import</li>
-<li><em>双下划线</em> 用于变量前表示该变量为 <strong>强私有</strong> （实际上也不能调用<del>实现方式是重名名</del>）<br>为了更好的说明这两点，给出以下两个测试程序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_private_vars.py</span></span><br><span class="line"><span class="string">This file is used to test the private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestClass</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.public_var = <span class="string">&quot;这是公有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>._weak_private = <span class="string">&quot;这是弱私有变量&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.__strong_private = <span class="string">&quot;这是强私有变量&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">print_all_vars</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;从内部访问:&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;公有变量: <span class="subst">&#123;self.public_var&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;弱私有变量: <span class="subst">&#123;self._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;强私有变量: <span class="subst">&#123;self.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建测试实例</span></span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 测试从类内部访问（通过方法）</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试1: 从类内部访问所有变量 ===&quot;</span>)</span><br><span class="line">test.print_all_vars()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 测试从外部直接访问</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试2: 从外部访问变量 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)  <span class="comment"># 能访问，但IDE会警告</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 测试名称改写机制</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 测试3: 验证强私有变量的名称改写机制 ===&quot;</span>)</span><br><span class="line"><span class="comment"># 实际上Python会将__strong_private改写为_TestClass__strong_private</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 测试导入行为</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n=== 测试4: 创建第二个文件并尝试导入 ===&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;请创建 test_import.py 并运行来测试导入行为&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">test_import.py</span></span><br><span class="line"><span class="string">This file is used to test the import of private variables in Python.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> test_private_vars <span class="keyword">import</span> TestClass</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 测试导入后的访问行为 ===&quot;</span>)</span><br><span class="line">test = TestClass()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问公有变量</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;访问公有变量: <span class="subst">&#123;test.public_var&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问弱私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量: <span class="subst">&#123;test._weak_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能访问弱私有变量，但这违反了Python的约定&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问弱私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量: <span class="subst">&#123;test.__strong_private&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试通过名称改写访问强私有变量</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写后的名称访问强私有变量: <span class="subst">&#123;test._TestClass__strong_private&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;通过改写名称访问强私有变量失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>以下是运行 <code>python test_private_vars.py</code> 的结果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试4: 创建第二个文件并尝试导入 ===</span><br><span class="line">请创建 test_import.py 并运行来测试导入行为</span><br></pre></td></tr></table></figure>
-
-<p>以下是运行 <code>python test_import.py</code> 的结果</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">=== 测试1: 从类内部访问所有变量 ===</span><br><span class="line">从内部访问:</span><br><span class="line">公有变量: 这是公有变量</span><br><span class="line">弱私有变量: 这是弱私有变量</span><br><span class="line">强私有变量: 这是强私有变量</span><br><span class="line"></span><br><span class="line">=== 测试2: 从外部访问变量 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line"></span><br><span class="line">=== 测试3: 验证强私有变量的名称改写机制 ===</span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">=== 测试导入后的访问行为 ===</span><br><span class="line">访问公有变量: 这是公有变量</span><br><span class="line">访问弱私有变量: 这是弱私有变量</span><br><span class="line">注意：虽然能访问弱私有变量，但这违反了Python的约定</span><br><span class="line">访问强私有变量失败: <span class="string">&#x27;TestClass&#x27;</span> object has no attribute <span class="string">&#x27;__strong_private&#x27;</span></span><br><span class="line">通过改写后的名称访问强私有变量: 这是强私有变量</span><br><span class="line">注意：虽然能通过名称改写访问强私有变量，但这是一个不推荐的做法</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-        <tag>PEP</tag>
-        <tag>闲🉐无聊</tag>
-        <tag>大概率没用</tag>
       </tags>
   </entry>
   <entry>
@@ -3733,107 +3834,6 @@ s8 --&gt;|a2, r&#x3D;1| s9((s9))
       </categories>
   </entry>
   <entry>
-    <title>HGCN and HGAT</title>
-    <url>/2025/07/20/HGCN-and-HGAT/</url>
-    <content><![CDATA[<h1 id="超图的卷积和注意力机制"><a href="#超图的卷积和注意力机制" class="headerlink" title="超图的卷积和注意力机制"></a>超图的卷积和注意力机制</h1><p>在<a href="/2025/07/19/Hypergraph/" title="Hypergraph Introduction">Hypergraph Introduction</a>中鼠鼠介绍了超图的定义以及构造方式<del>实际上是复述捏</del>，接下来将会介绍在图神经网络中如何处理超图，主要<del>纯粹</del>介绍一下HGCN和HGAT。</p>
-<p>在阅读该博客前，确保已经了解了GCN和GAT<del>之前也有相应的博客，可以看一下捏</del>。</p>
-<span id="more"></span>
-
-<h2 id="HGCN"><a href="#HGCN" class="headerlink" title="HGCN"></a>HGCN</h2><p><del>这个玩意儿实际上非常简单，让我们先回忆一下：</del></p>
-<blockquote>
-<p>$$<br>H^{(l+1)} &#x3D; \sigma(\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)})<br>$$</p>
-<ol>
-<li>引入$L_{sym} &#x3D; I - \tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$作为聚合（AGG）部分<ul>
-<li>添加自环：$\tilde{A} &#x3D; A + I_N$</li>
-<li>计算归一化系数：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}$</li>
-</ul>
-</li>
-<li>特征变换：$H^{(l)}W^{(l)}$</li>
-<li>邻域聚合：$\tilde{D}^{-\frac{1}{2}}\tilde{A}\tilde{D}^{-\frac{1}{2}}H^{(l)}W^{(l)}$</li>
-<li>非线性变换：$\sigma(\cdot)$</li>
-</ol>
-</blockquote>
-<p>而超图也有对应的拉普拉斯矩阵</p>
-<p>$$<br>\Delta&#x3D;\mathbf{I}-\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}<br>$$</p>
-<p>我们只需要把前半截一砍，换成超图的，就是HGCN了捏</p>
-<p>$$<br>\mathbf X^{(l+1)} &#x3D; \sigma(\mathbf{D}_{v}^{-1&#x2F;2}\mathbf{HWD}_{e}^{-1}\mathbf{H}^{T}\mathbf{D}_{v}^{-1&#x2F;2}\mathbf X^{(l)}\mathbf P^{(l)})<br>$$</p>
-<p>为了避免命名的重复，我们用 $\mathbf X^{(\cdot)}$ 和 $\mathbf P^{(\cdot)}$ 代替GCN中的  $H^{(\cdot)}$ 和 $W^{(\cdot)}$</p>
-<h2 id="HGAT"><a href="#HGAT" class="headerlink" title="HGAT"></a>HGAT</h2><p><del>感觉和GAT没区别捏</del></p>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><p><a href="/paper/Bai 等 - 2021 - Hypergraph convolution and hypergraph attention.pdf" target="_blank">📄 Bai 等 - 2021 - Hypergraph convolution and hypergraph attention</a></p>
-<p><a href="/paper/Feng 等 - 2019 - Hypergraph Neural Networks.pdf" target="_blank">📄 Feng 等 - 2019 - Hypergraph Neural Networks</a></p>
-<p><a href="/paper/Gao 等 - 2021 - Hypergraph Learning Methods and Practices.pdf" target="_blank">📄 Gao 等 - 2021 - Hypergraph Learning Methods and Practices</a></p>
-]]></content>
-      <categories>
-        <category>Deep Learning</category>
-        <category>Hypergraph</category>
-      </categories>
-      <tags>
-        <tag>graph theory</tag>
-        <tag>GNN</tag>
-        <tag>attention</tag>
-        <tag>model</tag>
-        <tag>Basic</tag>
-        <tag>PyTorch</tag>
-        <tag>hypergraph</tag>
-        <tag>embedding</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>so-large-lm | Ex. Mixture of Experts</title>
-    <url>/2026/04/22/MoE/</url>
-    <content><![CDATA[<h1 id="Mixture-of-Experts"><a href="#Mixture-of-Experts" class="headerlink" title="Mixture of Experts"></a>Mixture of Experts</h1><p>这是在看到<a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a>第四章的时候，觉得MoE和RAG应该单独开一坨（而且可能还不太够捏。</p>
-<p>这是MoE部分的内容，主要是鼠鼠在这几篇论文的笔记捏</p>
-<span id="more"></span>
-
-<h2 id="什么是MoE"><a href="#什么是MoE" class="headerlink" title="什么是MoE"></a>什么是MoE</h2><p>Mixture of Experts (MoE) 是一种通过牺牲“内存空间”来换取“计算效率”和“模型容量”的架构方案。它利用类似“专家分诊”的路由机制，实现了参数规模的指数级增长，同时保持了推理复杂度的线性增长。</p>
-<h2 id="开搓捏"><a href="#开搓捏" class="headerlink" title="开搓捏"></a>开搓捏</h2><h3 id="Adaptive-Mixtures-of-Local-Experts"><a href="#Adaptive-Mixtures-of-Local-Experts" class="headerlink" title="Adaptive Mixtures of Local Experts "></a><a href="https://www.cs.toronto.edu/~fritz/absps/jjnh91.pdf">Adaptive Mixtures of Local Experts </a></h3><p>开山之作，但主要是思想<del>主要是那个时候应该连深度学习都还不太流行吧</del></p>
-<h3 id="Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer"><a href="#Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer" class="headerlink" title="Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer"></a><a href="https://openreview.net/pdf?id=B1ckMDqlg">Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer</a></h3><p>正式提出了MoE layer，但那个时候好像Transformer才出来捏。鼠鼠的第一次还是想给一个和Transformer结合的捏。</p>
-<h3 id="GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding"><a href="#GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding" class="headerlink" title="GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding"></a><a href="http://arxiv.org/abs/2006.16668">GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding</a></h3><p>主要的目的是在牺牲内存占用的情况下，换取参数规模和计算效率</p>
-<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/150751_image-20260422150751480.png" alt="image-20260422150751480"></p>
-<p>在这里，我们先将正常情况下FFN切分成多个小的FFN，每个FFN代表一个 Expert。然后，构建一个Router $G(x)$ 用于选择激活那些专家用于计算。</p>
-<p>具体来说，文中选用了Top2的门<del>就是一个门最多塞进两根</del>，然后MoE层输出所选专家输出的加权和。</p>
-<p>为了确保计算效率和负载均衡，GShard 引入了两个关键设计：</p>
-<ul>
-<li>专家容量 (Expert Capacity)：为了防止所有 token 都涌向同一个专家，每个专家处理的 token 数量被限制在一个阈值内。如果某个专家的 token 超过了容量限制，多余的 token 将通过残差连接直接跳过该层（即被视为“溢出”）。</li>
-<li>辅助损失 (Auxiliary Loss)：为了鼓励门控网络均匀地分配 token，模型在训练时加入了一个辅助损失函数。</li>
-</ul>
-<p>贴一个源代码方便理解捏：</p>
-<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/210138_image-20260422210138341.png" alt="image-20260422210138341"></p>
-<h3 id="Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts"><a href="#Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts" class="headerlink" title="Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts"></a><a href="http://arxiv.org/abs/2002.04013">Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts</a></h3><p>提出了一种提出去中心化专家混合模型（DMoE），提出可以在不同的设备里同时做MoE（感觉是一个偏工程的东西捏</p>
-<h3 id="BASE-Layers-Simplifying-Training-of-Large-Sparse-Models"><a href="#BASE-Layers-Simplifying-Training-of-Large-Sparse-Models" class="headerlink" title="BASE Layers: Simplifying Training of Large, Sparse Models"></a><a href="http://arxiv.org/abs/2103.16716">BASE Layers: Simplifying Training of Large, Sparse Models</a></h3><p>Balanced assignment of sparse experts (BASE)将近似门控函数 $\tilde g(x)$ 定义为对batch中的所有token进行联合优化的结果。对于每一个训练的batch</p>
-<ul>
-<li><p>为每个token分配1名专家，但负载平衡是一种约束，而不是软惩罚</p>
-</li>
-<li><p>定义 $a &#x3D; [a_1, \dots, a_B] \in {1, \dots, E}^B$ 作为联合分配向量</p>
-</li>
-</ul>
-<p>$$<br>\text{maximize} \sum_{i &#x3D; 1}^B w_{a_i} \cdot x_i \quad\text{subject to}\quad \forall e: \sum_{i&#x3D;1}^B \mathbf{1}[a_i &#x3D; e] &#x3D; \frac{B}{E}.<br>$$</p>
-<ul>
-<li>这是一个可以有效求解的线性方程</li>
-<li>在测试时，只需选择top 1的专家即可<del>堡堡只能🍵一根捏</del>。</li>
-</ul>
-<h3 id="Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity"><a href="#Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity" class="headerlink" title="Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity"></a><a href="http://arxiv.org/abs/2101.03961">Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</a></h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222418_image-20260422222418461.png" alt="image-20260422222418461"></p>
-<p>简化了先前的工作，现在的门只能入一根了捏</p>
-<p>此外，提出了更加详细的模型容量的计算方式，很好理解，鼠鼠直接就是一个图的丢捏</p>
-<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222833_image-20260422222833686.png" alt="image-20260422222833686"></p>
-<p>实验：GieGie动🉐真是又大💗又快💗捏</p>
-<h3 id="DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models"><a href="#DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models" class="headerlink" title="[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)"></a>[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)</h3><ul>
-<li>构建了一个Fine-grained expert segmentation，就是多大的门🍵多少根💗捏</li>
-<li>一个Shared expert，不受router控制</li>
-</ul>
-<p>emmm，感觉差不多了捏（主要是吃不动了捏</p>
-]]></content>
-      <categories>
-        <category>LLMs and Agents</category>
-        <category>LLMs</category>
-        <category>so-large-lm</category>
-      </categories>
-      <tags>
-        <tag>DIY</tag>
-        <tag>LLMs</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Reinforcement-Learning-L10</title>
     <url>/2025/07/28/Reinforcement-Learning-L10/</url>
     <content><![CDATA[<h1 id="Actor-Critic方法读书笔记"><a href="#Actor-Critic方法读书笔记" class="headerlink" title="Actor-Critic方法读书笔记"></a>Actor-Critic方法读书笔记</h1><div style="display: flex; align-items: center;">
@@ -3996,6 +3996,159 @@ for 每步 $t$：
 </ul>
 </blockquote>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>ReinForcement Learning</category>
+        <category>Mathmatical Foundation</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Value Iteration and Policy Iteration</title>
+    <url>/2025/07/28/Reinforcement-Learning-L4/</url>
+    <content><![CDATA[<h1 id="值迭代与策略迭代算法读书笔记"><a href="#值迭代与策略迭代算法读书笔记" class="headerlink" title="值迭代与策略迭代算法读书笔记"></a>值迭代与策略迭代算法读书笔记</h1><div style="display: flex; align-items: center;">
+  <img src="/img/reinforcement-learning/04.png" style="width: 175px; margin-right: 20px;">
+  <p>值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。</p>
+</div>
+
+<span id="more"></span>
+
+
+
+<h2 id="值迭代算法（Value-Iteration）"><a href="#值迭代算法（Value-Iteration）" class="headerlink" title="值迭代算法（Value Iteration）"></a>值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^*$，并提取最优策略 $\pi^*$  </p>
+<h3 id="算法步骤（元素形式）"><a href="#算法步骤（元素形式）" class="headerlink" title="算法步骤（元素形式）"></a>算法步骤（元素形式）</h3><ol>
+<li><p><strong>初始化</strong>：  </p>
+<ul>
+<li>已知环境模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$  </li>
+<li>任意初始化状态值函数 $v_0(s)$</li>
+</ul>
+</li>
+<li><p><strong>迭代更新</strong>：<br><strong>重复直到收敛</strong>（$|v_k - v_{k-1}| &lt; \varepsilon$）:  </p>
+<ul>
+<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$</li>
+<li><strong>值更新</strong>（Value Update）：<br>$$<br>v_{k+1}(s) &#x3D; \max_a q_k(s,a)<br>$$</li>
+</ul>
+</li>
+</ol>
+<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183547455.png" alt="Pseudocode: Value iteration algorithm" style="zoom:50%;" />
+
+<h3 id="网格世界示例"><a href="#网格世界示例" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
+<li><strong>奖励设置</strong>：边界&#x2F;禁区 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
+<li><strong>初始值</strong>：$v_0(s_1)&#x3D;v_0(s_2)&#x3D;v_0(s_3)&#x3D;v_0(s_4)&#x3D;0$  </li>
+<li><strong>迭代过程</strong>：  <ul>
+<li><strong>k&#x3D;0</strong>：计算 $q_0$ → 策略 $\pi_1$ 选择 $a_5$（静止）→ $v_1&#x3D;[0,1,1,1]$  </li>
+<li><strong>k&#x3D;1</strong>：计算 $q_1$ → 策略 $\pi_2$ 选择 $a_3$（向下）→ $v_2&#x3D;[\gamma,1+\gamma,1+\gamma,1+\gamma]$  </li>
+<li><strong>收敛</strong>：2次迭代即得最优策略（避开禁区直达目标）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="策略迭代算法（Policy-Iteration）"><a href="#策略迭代算法（Policy-Iteration）" class="headerlink" title="策略迭代算法（Policy Iteration）"></a>策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
+<ol>
+<li><strong>策略评估</strong>（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  </li>
+<li><strong>策略改进</strong>（Policy Improvement）：基于 $v_{\pi_k}$ 生成更优策略 $\pi_{k+1}$</li>
+</ol>
+<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
+<li><strong>初始化</strong>：任意初始策略 $\pi_0$  </li>
+<li><strong>迭代直到收敛</strong>：  <ul>
+<li><strong>策略评估</strong>（求解贝尔曼方程）：<br>$$<br>v_{\pi_k}^{(j+1)} &#x3D; r_{\pi_k} + \gamma P_{\pi_k} v_{\pi_k}^{(j)}<br>$$<br>闭式解：$v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k}$  </li>
+<li><strong>策略改进</strong>（贪心策略）：<br>$$<br>\pi_{k+1} &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v_{\pi_k})<br>$$<br>元素形式：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_{\pi_k}(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
+</ul>
+</li>
+</ol>
+<h3 id="伪代码流程-1"><a href="#伪代码流程-1" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183711027.png" alt="Pseudocode: Policy iteration algorithm" style="zoom:50%;" />
+
+<h3 id="关键性质"><a href="#关键性质" class="headerlink" title="关键性质"></a>关键性质</h3><ul>
+<li><strong>策略改进定理</strong>：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  </li>
+<li><strong>收敛性</strong>：序列 ${v_{\pi_k}}$ 收敛到最优值 $v^*$</li>
+</ul>
+<h3 id="网格世界示例-1"><a href="#网格世界示例-1" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
+<li><strong>初始策略</strong> $\pi_0$：在 $s_1$ 选择向右（$a_2$）  </li>
+<li><strong>策略评估</strong>：<br>$$<br>\begin{cases}<br>v_{\pi_0}(s_1) &#x3D; -1 + \gamma v_{\pi_0}(s_1) \\<br>v_{\pi_0}(s_2) &#x3D; \gamma v_{\pi_0}(s_1)<br>\end{cases}<br>$$<br>解得 $v_{\pi_0}(s_1)&#x3D;-10, v_{\pi_0}(s_2)&#x3D;-9$  </li>
+<li><strong>策略改进</strong>：计算 $q_{\pi_0}$ → 新策略 $\pi_1$ 在 $s_1$ 选择向右（$a_r$)</li>
+</ul>
+<hr>
+<h2 id="三、截断策略迭代（Truncated-Policy-Iteration）"><a href="#三、截断策略迭代（Truncated-Policy-Iteration）" class="headerlink" title="三、截断策略迭代（Truncated Policy Iteration）"></a>三、截断策略迭代（Truncated Policy Iteration）</h2><h3 id="核心思想-2"><a href="#核心思想-2" class="headerlink" title="核心思想"></a>核心思想</h3><p>在策略评估阶段<strong>有限次迭代</strong>（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  </p>
+<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183826039.png" alt="Pseudocode: Truncated policy iteration algorithm" style="zoom:50%;" />
+
+<h3 id="理论保证"><a href="#理论保证" class="headerlink" title="理论保证"></a>理论保证</h3><ul>
+<li><strong>值单调性</strong>：若初始值 $v_k^{(0)} &#x3D; v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  </li>
+<li><strong>收敛性</strong>：仍收敛到最优策略（因策略改进步保证方向正确）</li>
+</ul>
+<hr>
+<h2 id="四、算法对比与关系"><a href="#四、算法对比与关系" class="headerlink" title="四、算法对比与关系"></a>四、算法对比与关系</h2><h3 id="统一框架分析"><a href="#统一框架分析" class="headerlink" title="统一框架分析"></a>统一框架分析</h3><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>策略评估精度</strong></th>
+<th><strong>策略改进方式</strong></th>
+<th><strong>计算效率</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>值迭代</strong></td>
+<td>单次迭代（近似）</td>
+<td>最大化动作值</td>
+<td>⭐⭐高</td>
+</tr>
+<tr>
+<td><strong>策略迭代</strong></td>
+<td>精确求解（无限次迭代）</td>
+<td>贪心策略</td>
+<td>⭐低</td>
+</tr>
+<tr>
+<td><strong>截断策略迭代</strong></td>
+<td>有限次迭代（可调精度）</td>
+<td>贪心策略</td>
+<td>⭐⭐中等</td>
+</tr>
+</tbody></table>
+<h3 id="数学等价性"><a href="#数学等价性" class="headerlink" title="数学等价性"></a>数学等价性</h3><ul>
+<li><strong>值迭代</strong> &#x3D; 策略迭代中策略评估仅进行 <strong>1 次迭代</strong> 的特例  </li>
+<li><strong>策略迭代</strong> &#x3D; 截断策略迭代中 $j_{\text{truncate}} \to \infty$ 的特例</li>
+</ul>
+<h3 id="迭代过程对比"><a href="#迭代过程对比" class="headerlink" title="迭代过程对比"></a>迭代过程对比</h3><ul>
+<li><strong>策略迭代</strong>：$\pi_0 \xrightarrow{\text{PE}} v_{\pi_0} \xrightarrow{\text{PI}} \pi_1 \xrightarrow{\text{PE}} v_{\pi_1} \cdots$  </li>
+<li><strong>值迭代</strong>：$v_0 \xrightarrow{\text{PU}} \pi_1 \xrightarrow{\text{VU}} v_1 \xrightarrow{\text{PU}} \pi_2 \cdots$  </li>
+<li><strong>截断策略迭代</strong>：$\pi_k \xrightarrow{\text{PE (j次)}} \tilde{v}_{\pi_k} \xrightarrow{\text{PI}} \pi_{k+1}$</li>
+</ul>
+<blockquote>
+<p><strong>注</strong>：PE&#x3D;策略评估, PI&#x3D;策略改进, PU&#x3D;策略更新, VU&#x3D;值更新  </p>
+</blockquote>
+<p>具体来说就是：</p>
+<p>$$<br>\begin{aligned}<br>\color{red}{v_{\pi_1}^{(0)}} &amp;\color{red}{&#x3D; v_0  }\\<br>\text{值迭代}\leftarrow \color{red}{v_1\leftarrow} v_{\pi_1}^{(1)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(0)}\\<br>\vdots\\<br>v_{\pi1}^{(2)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(1)}\\<br>\text{截断策略迭代}\leftarrow\color{red}{\tilde{v}_1\leftarrow} v_{\pi_1}^{(j)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(j-1)}\\<br>\vdots\\<br>\text{策略迭代}\leftarrow \color{red}{v_{\pi_1}\leftarrow} v_{\pi_1}^{(\infty)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(\infty)}<br>\end{aligned}<br>$$</p>
+<hr>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="核心公式回顾"><a href="#核心公式回顾" class="headerlink" title="核心公式回顾"></a>核心公式回顾</h3><table>
+<thead>
+<tr>
+<th><strong>算法</strong></th>
+<th><strong>关键更新方程</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>值迭代</td>
+<td>$ v_{k+1}(s) &#x3D; \max_a \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k(s’) \right] $</td>
+</tr>
+<tr>
+<td>策略迭代</td>
+<td>$ v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k} $</td>
+</tr>
+<tr>
+<td>截断策略迭代</td>
+<td>$ v_k^{(j+1)}(s) &#x3D; \sum_a \pi_k(a|s) \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k^{(j)}(s’) \right] $</td>
+</tr>
+</tbody></table>
+<h3 id="应用场景建议"><a href="#应用场景建议" class="headerlink" title="应用场景建议"></a>应用场景建议</h3><ul>
+<li><strong>小规模问题</strong>：策略迭代（精确解）  </li>
+<li><strong>大规模问题</strong>：值迭代或截断策略迭代（计算高效）  </li>
+<li><strong>在线学习</strong>：结合值迭代与实时更新（如Q-learning）</li>
+</ul>
+<h3 id="理论意义"><a href="#理论意义" class="headerlink" title="理论意义"></a>理论意义</h3><p>三大算法构成了<strong>广义策略迭代（GPI）框架</strong>，统一了动态规划求解MDP的核心思想：<strong>策略评估与改进的交替循环 → 收敛至最优策略</strong>  </p>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
+  <span style="display: inline-block; vertical-align: middle;">
+    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
+  </span>
+  Book-Mathematical-Foundation-of-Reinforcement-Learning
+</a>]]></content>
       <categories>
         <category>ReinForcement Learning</category>
         <category>Mathmatical Foundation</category>
@@ -4601,43 +4754,6 @@ for 每幕：
       </categories>
   </entry>
   <entry>
-    <title>LLMs and Agents DIY Overview</title>
-    <url>/2026/04/19/diveintoagents/</url>
-    <content><![CDATA[<h1 id="Agents-补-不-完计划"><a href="#Agents-补-不-完计划" class="headerlink" title="Agents 补(不)完计划"></a>Agents 补(不)完计划</h1><p><del>虽然有一种47年入国军的感觉捏</del></p>
-<p>鼠鼠最近因为换方向的原因，需要学习一些 Agents 有关的东西捏。奈何鼠鼠连 LLMs 都完全不清楚，所以只能从头开始了捏。</p>
-<p>这里是自学过程中的总览，主要包括了学习路线，做了什么事情和对应的链接，以及看完一个课程或项目的总体感想。</p>
-<span id="more"></span>
-
-<h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><p>目前主要的计划</p>
-<ol>
-<li>了解有关LLMs的基础，目前看上的是一套datawhale的项目，中间可能会去吃一些经典的论文，也一并归到此类<ul>
-<li><a href="https://github.com/datawhalechina/self-llm">self-llm</a></li>
-<li><a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a></li>
-<li><a href="https://github.com/datawhalechina/happy-llm">happy-llm</a></li>
-</ul>
-</li>
-<li>吃一下 Agents<ul>
-<li><a href="https://github.com/datawhalechina/hello-agents">hello-agents</a></li>
-<li><a href="https://github.com/xindoo/agentic-design-patterns">agentic-design-patterns</a></li>
-<li><a href="https://space.bilibili.com/59807853">一个一看就感觉很强的b站老哥</a></li>
-</ul>
-</li>
-</ol>
-<h2 id="结算画面"><a href="#结算画面" class="headerlink" title="结算画面"></a>结算画面</h2><ul>
-<li><a href="https://github.com/datawhalechina/self-llm">self-llm</a><br>感觉是面向应用编程捏，更像是学了这个之后你就可以了解如何把一个模型调成你喜欢的🦆 <del>但实际上你是调不出来的捏</del>。有用的部分是是他有大量的代码让你了解如何调用和微调一个开源大模型</li>
-<li><a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>LLMs and Agents</category>
-      </categories>
-      <tags>
-        <tag>DIY</tag>
-        <tag>LLMs</tag>
-        <tag>Agents</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Reinforcement-Learning-L9</title>
     <url>/2025/07/28/Reinforcement-Learning-L9/</url>
     <content><![CDATA[<h1 id="策略梯度方法读书笔记"><a href="#策略梯度方法读书笔记" class="headerlink" title="策略梯度方法读书笔记"></a>策略梯度方法读书笔记</h1><div style="display: flex; align-items: center;">
@@ -4793,211 +4909,6 @@ for 每幕：
 <li><strong>确定性策略梯度</strong>（DPG）：处理连续动作空间  </li>
 <li><strong>自然策略梯度</strong>：改进优化轨迹的收敛性</li>
 </ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
-  <span style="display: inline-block; vertical-align: middle;">
-    <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
-  </span>
-  Book-Mathematical-Foundation-of-Reinforcement-Learning
-</a>]]></content>
-      <categories>
-        <category>ReinForcement Learning</category>
-        <category>Mathmatical Foundation</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>hwadee</title>
-    <url>/2025/07/13/hwadee/</url>
-    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
-<span id="more"></span>
-
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
-<ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
-</li>
-</ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
-</ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
-      <categories>
-        <category>SB</category>
-      </categories>
-      <tags>
-        <tag>sb</tag>
-        <tag>UESTC</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Value Iteration and Policy Iteration</title>
-    <url>/2025/07/28/Reinforcement-Learning-L4/</url>
-    <content><![CDATA[<h1 id="值迭代与策略迭代算法读书笔记"><a href="#值迭代与策略迭代算法读书笔记" class="headerlink" title="值迭代与策略迭代算法读书笔记"></a>值迭代与策略迭代算法读书笔记</h1><div style="display: flex; align-items: center;">
-  <img src="/img/reinforcement-learning/04.png" style="width: 175px; margin-right: 20px;">
-  <p>值迭代和策略迭代是求解MDP的经典动态规划方法。本文对比两种算法的流程、收敛性和计算效率，引入截断策略迭代作为平衡方案，并通过网格世界示例演示其应用，揭示广义策略迭代（GPI）的统一框架。</p>
-</div>
-
-<span id="more"></span>
-
-
-
-<h2 id="值迭代算法（Value-Iteration）"><a href="#值迭代算法（Value-Iteration）" class="headerlink" title="值迭代算法（Value Iteration）"></a>值迭代算法（Value Iteration）</h2><h3 id="核心思想"><a href="#核心思想" class="headerlink" title="核心思想"></a>核心思想</h3><p>通过迭代求解贝尔曼最优方程（BOE）:<br>$$<br>v_{k+1} &#x3D; \max_{\pi} (r_{\pi} + \gamma P_{\pi} v_k)<br>$$<br>逐步逼近最优状态值 $v^*$，并提取最优策略 $\pi^*$  </p>
-<h3 id="算法步骤（元素形式）"><a href="#算法步骤（元素形式）" class="headerlink" title="算法步骤（元素形式）"></a>算法步骤（元素形式）</h3><ol>
-<li><p><strong>初始化</strong>：  </p>
-<ul>
-<li>已知环境模型 $p(r \mid s,a)$ 和 $p(s’ \mid s,a)$  </li>
-<li>任意初始化状态值函数 $v_0(s)$</li>
-</ul>
-</li>
-<li><p><strong>迭代更新</strong>：<br><strong>重复直到收敛</strong>（$|v_k - v_{k-1}| &lt; \varepsilon$）:  </p>
-<ul>
-<li><strong>策略更新</strong>（Policy Update）：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_k(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$<br>其中动作值函数：<br>$$<br>q_k(s,a) &#x3D; \sum_r p(r|s,a) r + \gamma \sum_{s’} p(s’|s,a) v_k(s’)<br>$$</li>
-<li><strong>值更新</strong>（Value Update）：<br>$$<br>v_{k+1}(s) &#x3D; \max_a q_k(s,a)<br>$$</li>
-</ul>
-</li>
-</ol>
-<h3 id="伪代码流程"><a href="#伪代码流程" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183547455.png" alt="Pseudocode: Value iteration algorithm" style="zoom:50%;" />
-
-<h3 id="网格世界示例"><a href="#网格世界示例" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
-<li><strong>奖励设置</strong>：边界&#x2F;禁区 $r&#x3D;-1$，目标 $r&#x3D;+1$，$\gamma&#x3D;0.9$  </li>
-<li><strong>初始值</strong>：$v_0(s_1)&#x3D;v_0(s_2)&#x3D;v_0(s_3)&#x3D;v_0(s_4)&#x3D;0$  </li>
-<li><strong>迭代过程</strong>：  <ul>
-<li><strong>k&#x3D;0</strong>：计算 $q_0$ → 策略 $\pi_1$ 选择 $a_5$（静止）→ $v_1&#x3D;[0,1,1,1]$  </li>
-<li><strong>k&#x3D;1</strong>：计算 $q_1$ → 策略 $\pi_2$ 选择 $a_3$（向下）→ $v_2&#x3D;[\gamma,1+\gamma,1+\gamma,1+\gamma]$  </li>
-<li><strong>收敛</strong>：2次迭代即得最优策略（避开禁区直达目标）</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="策略迭代算法（Policy-Iteration）"><a href="#策略迭代算法（Policy-Iteration）" class="headerlink" title="策略迭代算法（Policy Iteration）"></a>策略迭代算法（Policy Iteration）</h2><h3 id="核心思想-1"><a href="#核心思想-1" class="headerlink" title="核心思想"></a>核心思想</h3><p>交替执行：  </p>
-<ol>
-<li><strong>策略评估</strong>（Policy Evaluation）：精确计算当前策略 $\pi_k$ 的状态值 $v_{\pi_k}$  </li>
-<li><strong>策略改进</strong>（Policy Improvement）：基于 $v_{\pi_k}$ 生成更优策略 $\pi_{k+1}$</li>
-</ol>
-<h3 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a>算法步骤</h3><ol>
-<li><strong>初始化</strong>：任意初始策略 $\pi_0$  </li>
-<li><strong>迭代直到收敛</strong>：  <ul>
-<li><strong>策略评估</strong>（求解贝尔曼方程）：<br>$$<br>v_{\pi_k}^{(j+1)} &#x3D; r_{\pi_k} + \gamma P_{\pi_k} v_{\pi_k}^{(j)}<br>$$<br>闭式解：$v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k}$  </li>
-<li><strong>策略改进</strong>（贪心策略）：<br>$$<br>\pi_{k+1} &#x3D; \arg\max_{\pi} (r_{\pi} + \gamma P_{\pi} v_{\pi_k})<br>$$<br>元素形式：<br>$$<br>\pi_{k+1}(a|s) &#x3D;<br>\begin{cases}<br>1 &amp; a &#x3D; \arg\max_a q_{\pi_k}(s,a) \\<br>0 &amp; \text{否则}<br>\end{cases}<br>$$</li>
-</ul>
-</li>
-</ol>
-<h3 id="伪代码流程-1"><a href="#伪代码流程-1" class="headerlink" title="伪代码流程"></a>伪代码流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183711027.png" alt="Pseudocode: Policy iteration algorithm" style="zoom:50%;" />
-
-<h3 id="关键性质"><a href="#关键性质" class="headerlink" title="关键性质"></a>关键性质</h3><ul>
-<li><strong>策略改进定理</strong>：$v_{\pi_{k+1}} \geq v_{\pi_k}$（策略单调改进）  </li>
-<li><strong>收敛性</strong>：序列 ${v_{\pi_k}}$ 收敛到最优值 $v^*$</li>
-</ul>
-<h3 id="网格世界示例-1"><a href="#网格世界示例-1" class="headerlink" title="网格世界示例"></a>网格世界示例</h3><ul>
-<li><strong>初始策略</strong> $\pi_0$：在 $s_1$ 选择向右（$a_2$）  </li>
-<li><strong>策略评估</strong>：<br>$$<br>\begin{cases}<br>v_{\pi_0}(s_1) &#x3D; -1 + \gamma v_{\pi_0}(s_1) \\<br>v_{\pi_0}(s_2) &#x3D; \gamma v_{\pi_0}(s_1)<br>\end{cases}<br>$$<br>解得 $v_{\pi_0}(s_1)&#x3D;-10, v_{\pi_0}(s_2)&#x3D;-9$  </li>
-<li><strong>策略改进</strong>：计算 $q_{\pi_0}$ → 新策略 $\pi_1$ 在 $s_1$ 选择向右（$a_r$)</li>
-</ul>
-<hr>
-<h2 id="三、截断策略迭代（Truncated-Policy-Iteration）"><a href="#三、截断策略迭代（Truncated-Policy-Iteration）" class="headerlink" title="三、截断策略迭代（Truncated Policy Iteration）"></a>三、截断策略迭代（Truncated Policy Iteration）</h2><h3 id="核心思想-2"><a href="#核心思想-2" class="headerlink" title="核心思想"></a>核心思想</h3><p>在策略评估阶段<strong>有限次迭代</strong>（$j_{\text{truncate}}$ 次）近似计算 $v_{\pi_k}$，平衡计算效率与精度  </p>
-<h3 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h3><img src="/img/reinforcement-learning/Reinforcement-Learning-L4/image-20250804183826039.png" alt="Pseudocode: Truncated policy iteration algorithm" style="zoom:50%;" />
-
-<h3 id="理论保证"><a href="#理论保证" class="headerlink" title="理论保证"></a>理论保证</h3><ul>
-<li><strong>值单调性</strong>：若初始值 $v_k^{(0)} &#x3D; v_{k-1}$，则 $v_k^{(j+1)} \geq v_k^{(j)}$  </li>
-<li><strong>收敛性</strong>：仍收敛到最优策略（因策略改进步保证方向正确）</li>
-</ul>
-<hr>
-<h2 id="四、算法对比与关系"><a href="#四、算法对比与关系" class="headerlink" title="四、算法对比与关系"></a>四、算法对比与关系</h2><h3 id="统一框架分析"><a href="#统一框架分析" class="headerlink" title="统一框架分析"></a>统一框架分析</h3><table>
-<thead>
-<tr>
-<th><strong>算法</strong></th>
-<th><strong>策略评估精度</strong></th>
-<th><strong>策略改进方式</strong></th>
-<th><strong>计算效率</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>值迭代</strong></td>
-<td>单次迭代（近似）</td>
-<td>最大化动作值</td>
-<td>⭐⭐高</td>
-</tr>
-<tr>
-<td><strong>策略迭代</strong></td>
-<td>精确求解（无限次迭代）</td>
-<td>贪心策略</td>
-<td>⭐低</td>
-</tr>
-<tr>
-<td><strong>截断策略迭代</strong></td>
-<td>有限次迭代（可调精度）</td>
-<td>贪心策略</td>
-<td>⭐⭐中等</td>
-</tr>
-</tbody></table>
-<h3 id="数学等价性"><a href="#数学等价性" class="headerlink" title="数学等价性"></a>数学等价性</h3><ul>
-<li><strong>值迭代</strong> &#x3D; 策略迭代中策略评估仅进行 <strong>1 次迭代</strong> 的特例  </li>
-<li><strong>策略迭代</strong> &#x3D; 截断策略迭代中 $j_{\text{truncate}} \to \infty$ 的特例</li>
-</ul>
-<h3 id="迭代过程对比"><a href="#迭代过程对比" class="headerlink" title="迭代过程对比"></a>迭代过程对比</h3><ul>
-<li><strong>策略迭代</strong>：$\pi_0 \xrightarrow{\text{PE}} v_{\pi_0} \xrightarrow{\text{PI}} \pi_1 \xrightarrow{\text{PE}} v_{\pi_1} \cdots$  </li>
-<li><strong>值迭代</strong>：$v_0 \xrightarrow{\text{PU}} \pi_1 \xrightarrow{\text{VU}} v_1 \xrightarrow{\text{PU}} \pi_2 \cdots$  </li>
-<li><strong>截断策略迭代</strong>：$\pi_k \xrightarrow{\text{PE (j次)}} \tilde{v}_{\pi_k} \xrightarrow{\text{PI}} \pi_{k+1}$</li>
-</ul>
-<blockquote>
-<p><strong>注</strong>：PE&#x3D;策略评估, PI&#x3D;策略改进, PU&#x3D;策略更新, VU&#x3D;值更新  </p>
-</blockquote>
-<p>具体来说就是：</p>
-<p>$$<br>\begin{aligned}<br>\color{red}{v_{\pi_1}^{(0)}} &amp;\color{red}{&#x3D; v_0  }\\<br>\text{值迭代}\leftarrow \color{red}{v_1\leftarrow} v_{\pi_1}^{(1)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(0)}\\<br>\vdots\\<br>v_{\pi1}^{(2)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(1)}\\<br>\text{截断策略迭代}\leftarrow\color{red}{\tilde{v}_1\leftarrow} v_{\pi_1}^{(j)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(j-1)}\\<br>\vdots\\<br>\text{策略迭代}\leftarrow \color{red}{v_{\pi_1}\leftarrow} v_{\pi_1}^{(\infty)}&amp;&#x3D;r_{\pi_1}+\gamma P_{\pi_1}v_{\pi_1}^{(\infty)}<br>\end{aligned}<br>$$</p>
-<hr>
-<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><h3 id="核心公式回顾"><a href="#核心公式回顾" class="headerlink" title="核心公式回顾"></a>核心公式回顾</h3><table>
-<thead>
-<tr>
-<th><strong>算法</strong></th>
-<th><strong>关键更新方程</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>值迭代</td>
-<td>$ v_{k+1}(s) &#x3D; \max_a \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k(s’) \right] $</td>
-</tr>
-<tr>
-<td>策略迭代</td>
-<td>$ v_{\pi_k} &#x3D; (I - \gamma P_{\pi_k})^{-1} r_{\pi_k} $</td>
-</tr>
-<tr>
-<td>截断策略迭代</td>
-<td>$ v_k^{(j+1)}(s) &#x3D; \sum_a \pi_k(a|s) \left[ \sum_r p(r|s,a)r + \gamma \sum_{s’} p(s’|s,a)v_k^{(j)}(s’) \right] $</td>
-</tr>
-</tbody></table>
-<h3 id="应用场景建议"><a href="#应用场景建议" class="headerlink" title="应用场景建议"></a>应用场景建议</h3><ul>
-<li><strong>小规模问题</strong>：策略迭代（精确解）  </li>
-<li><strong>大规模问题</strong>：值迭代或截断策略迭代（计算高效）  </li>
-<li><strong>在线学习</strong>：结合值迭代与实时更新（如Q-learning）</li>
-</ul>
-<h3 id="理论意义"><a href="#理论意义" class="headerlink" title="理论意义"></a>理论意义</h3><p>三大算法构成了<strong>广义策略迭代（GPI）框架</strong>，统一了动态规划求解MDP的核心思想：<strong>策略评估与改进的交替循环 → 收敛至最优策略</strong>  </p>
 <h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1><a href="https://github.com/MathFoundationRL/Book-Mathematical-Foundation-of-Reinforcement-Learning" target="_blank">
   <span style="display: inline-block; vertical-align: middle;">
     <img src="/icon/github.svg" alt="github" style="height: 1.1em; vertical-align: text-bottom; margin-top: 16px;">
@@ -5236,6 +5147,46 @@ for 每幕：
       </categories>
   </entry>
   <entry>
+    <title>LLMs and Agents DIY Overview</title>
+    <url>/2026/04/19/diveintoagents/</url>
+    <content><![CDATA[<h1 id="Agents-补-不-完计划"><a href="#Agents-补-不-完计划" class="headerlink" title="Agents 补(不)完计划"></a>Agents 补(不)完计划</h1><p><del>虽然有一种47年入国军的感觉捏</del></p>
+<p>鼠鼠最近因为换方向的原因，需要学习一些 Agents 有关的东西捏。奈何鼠鼠连 LLMs 都完全不清楚，所以只能从头开始了捏。</p>
+<p>这里是自学过程中的总览，主要包括了学习路线，做了什么事情和对应的链接，以及看完一个课程或项目的总体感想。</p>
+<span id="more"></span>
+
+<h2 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h2><p>目前主要的计划</p>
+<ol>
+<li>了解有关LLMs的基础，目前看上的是一套datawhale的项目，中间可能会去吃一些经典的论文，也一并归到此类<ul>
+<li><a href="https://github.com/datawhalechina/self-llm">self-llm</a></li>
+<li><a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a></li>
+<li><a href="https://github.com/datawhalechina/happy-llm">happy-llm</a></li>
+</ul>
+</li>
+<li>吃一下 Agents<ul>
+<li><a href="https://github.com/datawhalechina/hello-agents">hello-agents</a></li>
+<li><a href="https://github.com/xindoo/agentic-design-patterns">agentic-design-patterns</a></li>
+<li><a href="https://space.bilibili.com/59807853">一个一看就感觉很强的b站老哥</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="结算画面"><a href="#结算画面" class="headerlink" title="结算画面"></a>结算画面</h2><ul>
+<li><p><a href="https://github.com/datawhalechina/self-llm">self-llm</a><br>感觉是面向应用编程捏，更像是学了这个之后你就可以了解如何把一个模型调成你喜欢的🦆 <del>但实际上你是调不出来的捏</del>。有用的部分是是他有大量的代码让你了解如何调用和微调一个开源大模型</p>
+</li>
+<li><p><a href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a></p>
+<p>可以让你比较全面的了解LLM，但也仅限于了解，并且里面的东西已经有点👴了捏</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>LLMs and Agents</category>
+      </categories>
+      <tags>
+        <tag>DIY</tag>
+        <tag>LLMs</tag>
+        <tag>Agents</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>self-llm Part 1 | Something about Qwen</title>
     <url>/2026/04/19/self-llm-Qwen/</url>
     <content><![CDATA[<h1 id="感觉从-Qwen-是不是回方便一点捏"><a href="#感觉从-Qwen-是不是回方便一点捏" class="headerlink" title="感觉从 Qwen 是不是回方便一点捏"></a>感觉从 Qwen 是不是回方便一点捏</h1><p>记录根据 self-llm 上的教程走一遍 Qwen 模型部署，微调等的流程。</p>
@@ -5373,7 +5324,30 @@ for 每幕：
 <li>Next sentence prediction：判断一个🍊是不是另一个🍊的下一句捏</li>
 </ul>
 <p>所以具体来说，他的loss就是</p>
-<p>$$<br>\mathcal{O}(\theta)&#x3D;\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}<em>{I, \tilde{x}</em>{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}<em>i \mid x</em>{1: L}\right)\right]}<em>{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x</em>{1: L}\right)<em>1\right)}</em>{\text {next sentence prediction }}<br>$$</p>
+<p>$$<br>\mathcal{O}(\theta)&#x3D;\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}_{I, \tilde{x}_{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}_i \mid x_{1: L}\right)\right]}_{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x_{1: L}\right)_1\right)}_{\text {next sentence prediction }}<br>$$</p>
+<h5 id="RoBERTa"><a href="#RoBERTa" class="headerlink" title="RoBERTa"></a>RoBERTa</h5><p><a href="https://arxiv.org/pdf/1907.11692.pdf">RoBERTa</a>对BERT进行了以下改进：</p>
+<ul>
+<li>删除了下一句预测这一目标函数（发现它没有帮助）。</li>
+<li>使用更多数据训练（16GB文本  $\Rightarrow$ 160GB文本 ）。</li>
+<li>训练时间更长。</li>
+<li>RoBERTa在各种基准上显著提高了BERT的准确性（例如，在SQuAD上由81.8到89.4）。</li>
+</ul>
+<h4 id="Encoder-decoder-模型"><a href="#Encoder-decoder-模型" class="headerlink" title="Encoder-decoder 模型"></a>Encoder-decoder 模型</h4><h5 id="T5-Text-to-Text-Transfer-Transformer"><a href="#T5-Text-to-Text-Transfer-Transformer" class="headerlink" title="T5 (Text-to_Text Transfer Transformer)"></a>T5 (Text-to_Text Transfer Transformer)</h5><p>BART (<a href="https://arxiv.org/pdf/1910.13461.pdf">Lewis et al. 2019</a>)是基于Transformer的编码器-解码器模型。</p>
+<ul>
+<li>使用与RoBERTa相同的编码器架构（12层，隐藏维度1024）。</li>
+<li>使用与RoBERTa相同的数据进行训练（160GB文本）。</li>
+</ul>
+<p>BART使用了以下变换 $A(\tilde x_{1:L} \mid x_{1:L})$ ：</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/234854_bart-transformations.png" alt="bart-transformations"></p>
+<p>基于BERT的实验，最终模型进行以下了变换：</p>
+<ul>
+<li>掩码文档中30%的token</li>
+<li>将所有子句打乱</li>
+</ul>
+<h3 id="优化算法"><a href="#优化算法" class="headerlink" title="优化算法"></a>优化算法</h3><p>都是见过的捏</p>
+<h2 id="Adaptation"><a href="#Adaptation" class="headerlink" title="Adaptation"></a>Adaptation</h2><p>就好像给南梁安一个♟️一样，他也是需要适应的。而♟️ 就是下游任务，适应就是Adaptation捏。主要有以下几个adaptation的方法捏</p>
+<p>感觉都有点老了捏，就这样吧</p>
+<p>后面就是马原部分了捏。先就这样了捏</p>
 ]]></content>
       <categories>
         <category>LLMs and Agents</category>
@@ -5383,6 +5357,58 @@ for 每幕：
       <tags>
         <tag>DIY</tag>
         <tag>LLMs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hwadee</title>
+    <url>/2025/07/13/hwadee/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+<span id="more"></span>
+
+<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<ul>
+<li>引用 7 篇资料作为参考<ol>
+<li><a href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
+<li><a href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
+<li><a href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
+<li><a href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
+<li><a href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
+<li><a href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
+<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
+<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+</ul>
+<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
+<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
+<li>类似燃烧塑料或化学药品的味道；</li>
+<li>锯木屑混合酸味（家具中甲醛）；</li>
+<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
+<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
+<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
+</ul>
+<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
+<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
+<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
+</ul>
+<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
+<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
+<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
+</ul>
+<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>]]></content>
+      <categories>
+        <category>SB</category>
+      </categories>
+      <tags>
+        <tag>sb</tag>
+        <tag>UESTC</tag>
       </tags>
   </entry>
 </search>

@@ -36,5 +36,7 @@ date: 2026-04-19 14:38:02
 
 - [self-llm](https://github.com/datawhalechina/self-llm)
   感觉是面向应用编程捏，更像是学了这个之后你就可以了解如何把一个模型调成你喜欢的🦆 ~~但实际上你是调不出来的捏~~。有用的部分是是他有大量的代码让你了解如何调用和微调一个开源大模型
+  
 - [so-large-lm](https://github.com/datawhalechina/so-large-lm)
   
+  可以让你比较全面的了解LLM，但也仅限于了解，并且里面的东西已经有点👴了捏

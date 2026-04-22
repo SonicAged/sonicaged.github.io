@@ -87,5 +87,44 @@ $$
 所以具体来说，他的loss就是
 
 $$
-\mathcal{O}(\theta)=\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}_{I, \tilde{x}_{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}_i \mid x_{1: L}\right)\right]}_{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x_{1: L}\right)_1\right)}_{\text {next sentence prediction }}
+\mathcal{O}(\theta)=\sum\_{\left(x\_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}\_{I, \tilde{x}\_{1: L} \sim A\left(\cdot \mid x\_{1: L} I\right)}\left[\sum\_{i \in I}-\log p\_\theta\left(\tilde{x}\_i \mid x\_{1: L}\right)\right]}\_{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x\_{1: L}\right)\_1\right)}\_{\text {next sentence prediction }}
 $$
+
+##### RoBERTa
+
+[RoBERTa](https://arxiv.org/pdf/1907.11692.pdf)对BERT进行了以下改进：
+
+- 删除了下一句预测这一目标函数（发现它没有帮助）。
+- 使用更多数据训练（16GB文本  $\Rightarrow$ 160GB文本 ）。
+- 训练时间更长。
+- RoBERTa在各种基准上显著提高了BERT的准确性（例如，在SQuAD上由81.8到89.4）。
+
+#### Encoder-decoder 模型
+
+##### T5 (Text-to_Text Transfer Transformer)
+
+BART ([Lewis et al. 2019](https://arxiv.org/pdf/1910.13461.pdf))是基于Transformer的编码器-解码器模型。
+
+- 使用与RoBERTa相同的编码器架构（12层，隐藏维度1024）。
+- 使用与RoBERTa相同的数据进行训练（160GB文本）。
+
+BART使用了以下变换 $A(\tilde x_{1:L} \mid x_{1:L})$ ：
+
+![bart-transformations](https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/234854_bart-transformations.png)
+
+基于BERT的实验，最终模型进行以下了变换：
+
+- 掩码文档中30%的token
+- 将所有子句打乱
+
+### 优化算法
+
+都是见过的捏
+
+## Adaptation
+
+就好像给南梁安一个♟️一样，他也是需要适应的。而♟️ 就是下游任务，适应就是Adaptation捏。主要有以下几个adaptation的方法捏
+
+感觉都有点老了捏，就这样吧
+
+后面就是马原部分了捏。先就这样了捏
