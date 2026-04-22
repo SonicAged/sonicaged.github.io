@@ -21,14 +21,14 @@
 
     <meta name="description" content="大模型基础 ｜ Day 2～3好像是一个LLM的入门讲解捏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="so-large-lm Day 2～3">
+<meta property="og:title" content="so-large-lm | Day 2～3">
 <meta property="og:url" content="https://blog.sonic-aged.site/2026/04/22/so-large-lm-ch2/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
 <meta property="og:description" content="大模型基础 ｜ Day 2～3好像是一个LLM的入门讲解捏">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/20/175302_glam-architecture.png">
 <meta property="article:published_time" content="2026-04-21T16:18:02.000Z">
-<meta property="article:modified_time" content="2026-04-21T16:19:12.068Z">
+<meta property="article:modified_time" content="2026-04-22T15:42:38.970Z">
 <meta property="article:author" content="Sonic Aged">
 <meta property="article:tag" content="DIY">
 <meta property="article:tag" content="LLMs">
@@ -39,10 +39,10 @@
 <link rel="canonical" href="https://blog.sonic-aged.site/2026/04/22/so-large-lm-ch2/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/22/so-large-lm-ch2/","path":"2026/04/22/so-large-lm-ch2/","title":"so-large-lm Day 2～3"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/22/so-large-lm-ch2/","path":"2026/04/22/so-large-lm-ch2/","title":"so-large-lm | Day 2～3"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>so-large-lm Day 2～3 | Sonic Aged's Blog</title>
+<title>so-large-lm | Day 2～3 | Sonic Aged's Blog</title>
   
 
 
@@ -177,7 +177,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-2%EF%BD%9E3"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 2～3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">新的模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">混合专家</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Sparsely-gated mixture of experts (Lepikhin et al. 2021)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于检索的模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMs-%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">LLMs 的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">目标函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Decoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Decoder-only 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">Encoder-only 模型</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80-%EF%BD%9C-Day-2%EF%BD%9E3"><span class="nav-number">1.</span> <span class="nav-text">大模型基础 ｜ Day 2～3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">新的模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E4%B8%93%E5%AE%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">混合专家</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sparsely-gated-mixture-of-experts-Lepikhin-et-al-2021"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Sparsely-gated mixture of experts (Lepikhin et al. 2021)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E6%A3%80%E7%B4%A2%E7%9A%84%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">基于检索的模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLMs-%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">LLMs 的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="nav-number">1.3.</span> <span class="nav-text">模型训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0"><span class="nav-number">1.3.1.</span> <span class="nav-text">目标函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Decoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">Decoder-only 模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Encoder-only-%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">Encoder-only 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#BERT"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">BERT</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -192,7 +192,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -268,12 +268,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="so-large-lm Day 2～3 | Sonic Aged's Blog">
+      <meta itemprop="name" content="so-large-lm | Day 2～3 | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          so-large-lm Day 2～3<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/so-large-lm-ch2.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          so-large-lm | Day 2～3<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/so-large-lm-ch2.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -285,7 +285,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-04-22 00:18:02 / Modified: 00:19:12" itemprop="dateCreated datePublished" datetime="2026-04-22T00:18:02+08:00">2026-04-22</time>
+      <time title="Created: 2026-04-22 00:18:02 / Modified: 23:42:38" itemprop="dateCreated datePublished" datetime="2026-04-22T00:18:02+08:00">2026-04-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -319,7 +319,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>494</span>
+      <span>636</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -380,7 +380,16 @@
 <h2 id="LLMs-的数据"><a href="#LLMs-的数据" class="headerlink" title="LLMs 的数据"></a>LLMs 的数据</h2><p>就是介绍了一下常用的文本数据集捏</p>
 <h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>从两个角度来看模型训练：<strong>目标函数</strong>和<strong>优化算法</strong></p>
 <h3 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h3><h4 id="Decoder-only-模型"><a href="#Decoder-only-模型" class="headerlink" title="Decoder-only 模型"></a>Decoder-only 模型</h4><p><em>最大似然</em>就可以了捏</p>
-<h4 id="Encoder-only-模型"><a href="#Encoder-only-模型" class="headerlink" title="Encoder-only 模型"></a>Encoder-only 模型</h4><p>鼠鼠想下班了捏</p>
+<h4 id="Encoder-only-模型"><a href="#Encoder-only-模型" class="headerlink" title="Encoder-only 模型"></a>Encoder-only 模型</h4><blockquote>
+<p>鼠鼠想下班了捏</p>
+</blockquote>
+<h5 id="BERT"><a href="#BERT" class="headerlink" title="BERT"></a>BERT</h5><p>由于BERT最初的构想是做一个可迁移的通用模型，所以在任务上也是分作两个的：</p>
+<ul>
+<li>Masked language modeling：完形填空捏</li>
+<li>Next sentence prediction：判断一个🍊是不是另一个🍊的下一句捏</li>
+</ul>
+<p>所以具体来说，他的loss就是</p>
+<p>$$<br>\mathcal{O}(\theta)&#x3D;\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}<em>{I, \tilde{x}</em>{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}<em>i \mid x</em>{1: L}\right)\right]}<em>{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x</em>{1: L}\right)<em>1\right)}</em>{\text {next sentence prediction }}<br>$$</p>
 
     </div>
 
@@ -403,8 +412,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/04/22/DDI-Week7~8/" rel="next" title="Half-Monthly DDI Record | Series 4">
-                  Half-Monthly DDI Record | Series 4 <i class="fa fa-angle-right"></i>
+                <a href="/2026/04/22/MoE/" rel="next" title="so-large-lm | Ex. Mixture of Experts">
+                  so-large-lm | Ex. Mixture of Experts <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -436,13 +445,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="Word count total">63k</span>
+    <span title="Word count total">64k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">3:49</span>
+    <span title="Reading time total">3:52</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -1,5 +1,5 @@
 `---
-title: so-large-lm Day 1
+title: so-large-lm | Day 1
 categories:
   - LLMs and Agents
   - LLMs

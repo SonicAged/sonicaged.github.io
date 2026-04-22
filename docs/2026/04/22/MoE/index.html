@@ -19,28 +19,33 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.sonic-aged.site","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI">
+    <meta name="description" content="Mixture of Experts这是在看到so-large-lm第四章的时候，觉得MoE和RAG应该单独开一坨（而且可能还不太够捏。 这是MoE部分的内容，主要是鼠鼠在这几篇论文的笔记捏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hwadee">
-<meta property="og:url" content="https://blog.sonic-aged.site/2025/07/13/hwadee/index.html">
+<meta property="og:title" content="so-large-lm | Ex. Mixture of Experts">
+<meta property="og:url" content="https://blog.sonic-aged.site/2026/04/22/MoE/index.html">
 <meta property="og:site_name" content="Sonic Aged&#39;s Blog">
-<meta property="og:description" content="先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI">
+<meta property="og:description" content="Mixture of Experts这是在看到so-large-lm第四章的时候，觉得MoE和RAG应该单独开一坨（而且可能还不太够捏。 这是MoE部分的内容，主要是鼠鼠在这几篇论文的笔记捏">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-07-13T13:56:45.000Z">
-<meta property="article:modified_time" content="2026-04-12T04:43:07.328Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/150751_image-20260422150751480.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/210138_image-20260422210138341.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222418_image-20260422222418461.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222833_image-20260422222833686.png">
+<meta property="article:published_time" content="2026-04-22T06:18:02.000Z">
+<meta property="article:modified_time" content="2026-04-22T15:35:52.439Z">
 <meta property="article:author" content="Sonic Aged">
-<meta property="article:tag" content="sb">
-<meta property="article:tag" content="UESTC">
+<meta property="article:tag" content="DIY">
+<meta property="article:tag" content="LLMs">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/150751_image-20260422150751480.png">
 
 
-<link rel="canonical" href="https://blog.sonic-aged.site/2025/07/13/hwadee/">
+<link rel="canonical" href="https://blog.sonic-aged.site/2026/04/22/MoE/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2025/07/13/hwadee/","path":"2025/07/13/hwadee/","title":"hwadee"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://blog.sonic-aged.site/2026/04/22/MoE/","path":"2026/04/22/MoE/","title":"so-large-lm | Ex. Mixture of Experts"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>hwadee | Sonic Aged's Blog</title>
+<title>so-large-lm | Ex. Mixture of Experts | Sonic Aged's Blog</title>
   
 
 
@@ -175,7 +180,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%B2%E9%86%9B%E6%9C%89%E6%B0%94%E5%91%B3%E5%90%97"><span class="nav-number">2.</span> <span class="nav-text">甲醛有气味吗</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%8E%E6%B5%93%E5%BA%A6%E6%97%B6%E9%80%9A%E5%B8%B8%E6%97%A0%E5%91%B3"><span class="nav-number">2.0.1.</span> <span class="nav-text">1. 低浓度时通常无味</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%AB%98%E6%B5%93%E5%BA%A6%E6%97%B6%E6%9C%89%E5%BC%BA%E7%83%88%E5%88%BA%E6%BF%80%E6%80%A7%E6%B0%94%E5%91%B3"><span class="nav-number">2.0.2.</span> <span class="nav-text">2. 高浓度时有强烈刺激性气味</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%AA%E4%BD%93%E5%B7%AE%E5%BC%82%E6%98%BE%E8%91%97"><span class="nav-number">2.0.3.</span> <span class="nav-text">3. 个体差异显著</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%B8%8E%E5%85%B6%E4%BB%96%E8%A3%85%E4%BF%AE%E6%B0%94%E5%91%B3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.0.4.</span> <span class="nav-text">4. 与其他装修气味的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">2.0.5.</span> <span class="nav-text">5. 注意事项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%9A-%F0%9D%92%A5%F0%9D%91%92%F0%9D%92%BB%F0%9D%91%92%F0%9D%93%87%F0%9D%91%92%F0%9D%93%83%F0%9D%92%B8%F0%9D%91%92"><span class="nav-number">3.</span> <span class="nav-text">📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mixture-of-Experts"><span class="nav-number">1.</span> <span class="nav-text">Mixture of Experts</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFMoE"><span class="nav-number">1.1.</span> <span class="nav-text">什么是MoE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%90%93%E6%8D%8F"><span class="nav-number">1.2.</span> <span class="nav-text">开搓捏</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Adaptive-Mixtures-of-Local-Experts"><span class="nav-number">1.2.1.</span> <span class="nav-text">Adaptive Mixtures of Local Experts </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer"><span class="nav-number">1.2.2.</span> <span class="nav-text">Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding"><span class="nav-number">1.2.3.</span> <span class="nav-text">GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts"><span class="nav-number">1.2.4.</span> <span class="nav-text">Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BASE-Layers-Simplifying-Training-of-Large-Sparse-Models"><span class="nav-number">1.2.5.</span> <span class="nav-text">BASE Layers: Simplifying Training of Large, Sparse Models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity"><span class="nav-number">1.2.6.</span> <span class="nav-text">Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models"><span class="nav-number">1.2.7.</span> <span class="nav-text">[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -253,7 +258,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2025/07/13/hwadee/">
+    <link itemprop="mainEntityOfPage" href="https://blog.sonic-aged.site/2026/04/22/MoE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/favicon.jpg">
@@ -266,12 +271,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="hwadee | Sonic Aged's Blog">
+      <meta itemprop="name" content="so-large-lm | Ex. Mixture of Experts | Sonic Aged's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          hwadee<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/hwadee.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+          so-large-lm | Ex. Mixture of Experts<a href="https://github.com/SonicAged/sonicaged.github.io/tree/main/source/_posts/MoE.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
         </h1>
 
         <div class="post-meta-container">
@@ -281,15 +286,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2025-07-13 21:56:45" itemprop="dateCreated datePublished" datetime="2025-07-13T21:56:45+08:00">2025-07-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2026-04-12 12:43:07" itemprop="dateModified" datetime="2026-04-12T12:43:07+08:00">2026-04-12</time>
+      <time title="Created: 2026-04-22 14:18:02 / Modified: 23:35:52" itemprop="dateCreated datePublished" datetime="2026-04-22T14:18:02+08:00">2026-04-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -297,7 +296,15 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/SB/" itemprop="url" rel="index"><span itemprop="name">SB</span></a>
+          <a href="/categories/LLMs-and-Agents/" itemprop="url" rel="index"><span itemprop="name">LLMs and Agents</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LLMs-and-Agents/LLMs/" itemprop="url" rel="index"><span itemprop="name">LLMs</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/LLMs-and-Agents/LLMs/so-large-lm/" itemprop="url" rel="index"><span itemprop="name">so-large-lm</span></a>
         </span>
     </span>
 
@@ -315,14 +322,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Word count in article: </span>
-      <span>650</span>
+      <span>864</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">Reading time &asymp;</span>
-      <span>2 mins.</span>
+      <span>3 mins.</span>
     </span>
 </div>
 
@@ -332,47 +339,48 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>先放在这里，懒得喷，以下是鼠鼠和室友在争论某问题时问的AI</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Mixture-of-Experts"><a href="#Mixture-of-Experts" class="headerlink" title="Mixture of Experts"></a>Mixture of Experts</h1><p>这是在看到<a target="_blank" rel="noopener" href="https://github.com/datawhalechina/so-large-lm">so-large-lm</a>第四章的时候，觉得MoE和RAG应该单独开一坨（而且可能还不太够捏。</p>
+<p>这是MoE部分的内容，主要是鼠鼠在这几篇论文的笔记捏</p>
 <span id="more"></span>
 
-<h1 id="甲醛有气味吗"><a href="#甲醛有气味吗" class="headerlink" title="甲醛有气味吗"></a>甲醛有气味吗</h1><p>Qus:<br>甲醛有气味吗<br>Ans:</p>
+<h2 id="什么是MoE"><a href="#什么是MoE" class="headerlink" title="什么是MoE"></a>什么是MoE</h2><p>Mixture of Experts (MoE) 是一种通过牺牲“内存空间”来换取“计算效率”和“模型容量”的架构方案。它利用类似“专家分诊”的路由机制，实现了参数规模的指数级增长，同时保持了推理复杂度的线性增长。</p>
+<h2 id="开搓捏"><a href="#开搓捏" class="headerlink" title="开搓捏"></a>开搓捏</h2><h3 id="Adaptive-Mixtures-of-Local-Experts"><a href="#Adaptive-Mixtures-of-Local-Experts" class="headerlink" title="Adaptive Mixtures of Local Experts "></a><a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~fritz/absps/jjnh91.pdf">Adaptive Mixtures of Local Experts </a></h3><p>开山之作，但主要是思想<del>主要是那个时候应该连深度学习都还不太流行吧</del></p>
+<h3 id="Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer"><a href="#Outrageously-Large-Neural-Networks-The-Sparsely-Gated-Mixture-of-Experts-Layer" class="headerlink" title="Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer"></a><a target="_blank" rel="noopener" href="https://openreview.net/pdf?id=B1ckMDqlg">Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer</a></h3><p>正式提出了MoE layer，但那个时候好像Transformer才出来捏。鼠鼠的第一次还是想给一个和Transformer结合的捏。</p>
+<h3 id="GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding"><a href="#GShard-Scaling-Giant-Models-with-Conditional-Computation-and-Automatic-Sharding" class="headerlink" title="GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding"></a><a target="_blank" rel="noopener" href="http://arxiv.org/abs/2006.16668">GShard: Scaling Giant Models with Conditional  Computation and Automatic Sharding</a></h3><p>主要的目的是在牺牲内存占用的情况下，换取参数规模和计算效率</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/150751_image-20260422150751480.png" alt="image-20260422150751480"></p>
+<p>在这里，我们先将正常情况下FFN切分成多个小的FFN，每个FFN代表一个 Expert。然后，构建一个Router $G(x)$ 用于选择激活那些专家用于计算。</p>
+<p>具体来说，文中选用了Top2的门<del>就是一个门最多塞进两根</del>，然后MoE层输出所选专家输出的加权和。</p>
+<p>为了确保计算效率和负载均衡，GShard 引入了两个关键设计：</p>
 <ul>
-<li>引用 7 篇资料作为参考<ol>
-<li><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%94%B2%E9%86%9B/167033?fr=aladdin">甲醛（有机化合物）_百度百科</a></li>
-<li><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E6%B0%B4%E9%93%B6/572967?fromModule=lemma_inlink">汞（是常温常压下唯一以液态存在的金属）_百度百科</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.cndzys.com/ylcore/wendanew_info/11es473224.html">【甲醛有味吗】_徐信群_主任医师 - 大众养生网</a></li>
-<li><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzA4ODA4MjY4MA==&mid=2650899715&idx=2&sn=19f245dad403038c8fcbd5cc242b82c6&chksm=8a413842f16d27e52c9809f4dc290c194d4bdd131d46559db9eb9591a59757398eea9bb2a724#rd">装修完的新家闻不见味儿，就是没甲醛了？</a></li>
-<li><a target="_blank" rel="noopener" href="http://mp.weixin.qq.com/s?__biz=MzA5MDY2NTMzNg==&mid=2676835975&idx=3&sn=f0b45599c2c3427a8824a0f99159cc71&chksm=8bbb6131ad4acdd4f1b70ed654da5089241c06a940b56adc749d86160352f04e1d9f6b41e620#rd">甲醛有味道吗，甲醛的气味像什么？</a></li>
-<li><a target="_blank" rel="noopener" href="https://m.youlai.cn/sjingbian/article/5B3495gV5qk.html">甲醛有味还是无味-有来医生</a></li>
-<li><a target="_blank" rel="noopener" href="https://m.jia.com/zixun/article/1144566.html">装修的味道是甲醛吗_齐家网</a><br>甲醛的气味特性与其浓度密切相关，具体表现如下：</li>
-</ol>
+<li>专家容量 (Expert Capacity)：为了防止所有 token 都涌向同一个专家，每个专家处理的 token 数量被限制在一个阈值内。如果某个专家的 token 超过了容量限制，多余的 token 将通过残差连接直接跳过该层（即被视为“溢出”）。</li>
+<li>辅助损失 (Auxiliary Loss)：为了鼓励门控网络均匀地分配 token，模型在训练时加入了一个辅助损失函数。</li>
+</ul>
+<p>贴一个源代码方便理解捏：</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/210138_image-20260422210138341.png" alt="image-20260422210138341"></p>
+<h3 id="Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts"><a href="#Towards-Crowdsourced-Training-of-Large-Neural-Networks-using-Decentralized-Mixture-of-Experts" class="headerlink" title="Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts"></a><a target="_blank" rel="noopener" href="http://arxiv.org/abs/2002.04013">Towards Crowdsourced Training of Large Neural Networks using Decentralized Mixture-of-Experts</a></h3><p>提出了一种提出去中心化专家混合模型（DMoE），提出可以在不同的设备里同时做MoE（感觉是一个偏工程的东西捏</p>
+<h3 id="BASE-Layers-Simplifying-Training-of-Large-Sparse-Models"><a href="#BASE-Layers-Simplifying-Training-of-Large-Sparse-Models" class="headerlink" title="BASE Layers: Simplifying Training of Large, Sparse Models"></a><a target="_blank" rel="noopener" href="http://arxiv.org/abs/2103.16716">BASE Layers: Simplifying Training of Large, Sparse Models</a></h3><p>Balanced assignment of sparse experts (BASE)将近似门控函数 $\tilde g(x)$ 定义为对batch中的所有token进行联合优化的结果。对于每一个训练的batch</p>
+<ul>
+<li><p>为每个token分配1名专家，但负载平衡是一种约束，而不是软惩罚</p>
+</li>
+<li><p>定义 $a &#x3D; [a_1, \dots, a_B] \in {1, \dots, E}^B$ 作为联合分配向量</p>
 </li>
 </ul>
-<h3 id="1-低浓度时通常无味"><a href="#1-低浓度时通常无味" class="headerlink" title="1. 低浓度时通常无味"></a>1. 低浓度时通常无味</h3><ul>
-<li>甲醛在极低浓度（如低于0.08毫克&#x2F;立方米）时，是一种无色无味的气体，难以通过嗅觉直接察觉。</li>
-<li>许多人误以为“没味道&#x3D;没甲醛”，但实际上低浓度甲醛可能仍然存在，只是不易被闻到。</li>
+<p>$$<br>\text{maximize} \sum_{i &#x3D; 1}^B w_{a_i} \cdot x_i \quad\text{subject to}\quad \forall e: \sum_{i&#x3D;1}^B \mathbf{1}[a_i &#x3D; e] &#x3D; \frac{B}{E}.<br>$$</p>
+<ul>
+<li>这是一个可以有效求解的线性方程</li>
+<li>在测试时，只需选择top 1的专家即可<del>堡堡只能🍵一根捏</del>。</li>
 </ul>
-<h3 id="2-高浓度时有强烈刺激性气味"><a href="#2-高浓度时有强烈刺激性气味" class="headerlink" title="2. 高浓度时有强烈刺激性气味"></a>2. 高浓度时有强烈刺激性气味</h3><ul>
-<li>当甲醛浓度超过0.1毫克&#x2F;立方米时，会与空气中的水、氧气反应，生成具有刺鼻气味的化合物，常被描述为：<ul>
-<li>类似燃烧塑料或化学药品的味道；</li>
-<li>锯木屑混合酸味（家具中甲醛）；</li>
-<li>汽油味或烧焦塑料味（布料、窗帘中甲醛）；</li>
-<li>部分人可能感知到淡淡的甜味，但主要仍是刺激性。</li>
+<h3 id="Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity"><a href="#Switch-Transformers-Scaling-to-Trillion-Parameter-Models-with-Simple-and-Efficient-Sparsity" class="headerlink" title="Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity"></a><a target="_blank" rel="noopener" href="http://arxiv.org/abs/2101.03961">Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</a></h3><p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222418_image-20260422222418461.png" alt="image-20260422222418461"></p>
+<p>简化了先前的工作，现在的门只能入一根了捏</p>
+<p>此外，提出了更加详细的模型容量的计算方式，很好理解，鼠鼠直接就是一个图的丢捏</p>
+<p><img src="https://raw.githubusercontent.com/SonicAged/uPic-public/master/2026/04/22/222833_image-20260422222833686.png" alt="image-20260422222833686"></p>
+<p>实验：GieGie动🉐真是又大💗又快💗捏</p>
+<h3 id="DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models"><a href="#DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models-DeepSeekMoE-Towards-Ultimate-Expert-Specialization-in-Mixture-of-Experts-Language-Models" class="headerlink" title="[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)"></a>[DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models](DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models)</h3><ul>
+<li>构建了一个Fine-grained expert segmentation，就是多大的门🍵多少根💗捏</li>
+<li>一个Shared expert，不受router控制</li>
 </ul>
-</li>
-</ul>
-<h3 id="3-个体差异显著"><a href="#3-个体差异显著" class="headerlink" title="3. 个体差异显著"></a>3. 个体差异显著</h3><ul>
-<li>不同人对甲醛气味的敏感度差异较大，有些人可能在较低浓度就能察觉，而另一些人需要更高浓度才会感到不适。</li>
-</ul>
-<h3 id="4-与其他装修气味的区别"><a href="#4-与其他装修气味的区别" class="headerlink" title="4. 与其他装修气味的区别"></a>4. 与其他装修气味的区别</h3><ul>
-<li>装修后的刺鼻气味常被误认为全是甲醛，但实际上可能混合了**苯系物（油漆味）、氨气（厕所味）、TVOC（化学溶剂味）**等。</li>
-<li>甲醛的刺激性更偏向黏膜反应（如眼痒、喉咙痛），而苯系物等可能带有更明显的“化学香味”。</li>
-</ul>
-<h3 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h3><ul>
-<li>不能依赖嗅觉判断甲醛安全性：即使闻不到，甲醛仍可能超标（尤其来自人造板材的长期释放）。</li>
-<li>科学检测更可靠：家用检测仪易受环境干扰，建议通过专业机构检测。<br>总结：甲醛在低浓度下无味，高浓度时呈现刺鼻气味，但气味并非判断其存在的唯一标准，需结合专业检测和通风措施保障健康。</li>
-</ul>
-<h1 id="📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"><a href="#📚-𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒" class="headerlink" title="📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒"></a>📚 𝒥𝑒𝒻𝑒𝓇𝑒𝓃𝒸𝑒</h1>
+<p>emmm，感觉差不多了捏（主要是吃不动了捏</p>
+
     </div>
 
     
@@ -381,21 +389,21 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/sb/" rel="tag"># sb</a>
-              <a href="/tags/UESTC/" rel="tag"># UESTC</a>
+              <a href="/tags/DIY/" rel="tag"># DIY</a>
+              <a href="/tags/LLMs/" rel="tag"># LLMs</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/07/10/Attention/" rel="prev" title="Attention Overview">
-                  <i class="fa fa-angle-left"></i> Attention Overview
+                <a href="/2026/04/22/so-large-lm-ch2/" rel="prev" title="so-large-lm | Day 2～3">
+                  <i class="fa fa-angle-left"></i> so-large-lm | Day 2～3
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/07/14/Feature-Related-Attention/" rel="next" title="Fufufu Relashinala">
-                  Fufufu Relashinala <i class="fa fa-angle-right"></i>
+                <a href="/2026/04/22/DDI-Week7~8/" rel="next" title="Half-Monthly DDI Record | Series 4">
+                  Half-Monthly DDI Record | Series 4 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

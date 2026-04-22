@@ -1,5 +1,5 @@
 ---
-title: so-large-lm Day 2～3
+title: so-large-lm | Day 2～3
 categories:
   - LLMs and Agents
   - LLMs
@@ -75,4 +75,17 @@ $$
 
 #### Encoder-only 模型
 
-鼠鼠想下班了捏
+> 鼠鼠想下班了捏
+
+##### BERT
+
+由于BERT最初的构想是做一个可迁移的通用模型，所以在任务上也是分作两个的：
+
+- Masked language modeling：完形填空捏
+- Next sentence prediction：判断一个🍊是不是另一个🍊的下一句捏
+
+所以具体来说，他的loss就是
+
+$$
+\mathcal{O}(\theta)=\sum_{\left(x_{1: L} c\right) \in \mathcal{D}} \underbrace{\mathbb{E}_{I, \tilde{x}_{1: L} \sim A\left(\cdot \mid x_{1: L} I\right)}\left[\sum_{i \in I}-\log p_\theta\left(\tilde{x}_i \mid x_{1: L}\right)\right]}_{\text {masked language modeling }}+\underbrace{-\log p\left(c \mid \phi\left(x_{1: L}\right)_1\right)}_{\text {next sentence prediction }}
+$$
